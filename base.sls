@@ -42,14 +42,16 @@ admin:
 openssh-server:
   pkg.installed: []
 
-sshd:
-  service.running:
-    - require:
-      - pkg: openssh-server
-
 /etc/ssh/sshd_config:
   file:
     - managed
     - source: salt://base/sshd/sshd_config
     - require:
       - pkg: openssh-server
+
+sshd:
+  service.running:
+    - enable: True
+    - require:
+      - pkg: openssh-server
+      - file: /etc/ssh/sshd_config
