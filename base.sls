@@ -36,6 +36,18 @@ admin:
       - file: /home/admin/.ssh
 
 #
+# SaltStack repository
+#
+
+/etc/yum.repos.d/saltstack.repo:
+  file:
+    - managed
+    - source: salt://base/repos/saltstack.repo
+    - user: root
+    - group: root
+    - mode: 0644
+
+#
 # SSH daemon
 #
 
