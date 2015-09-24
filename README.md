@@ -99,6 +99,14 @@ a ```test.ping``` operation:
 
     $ sudo salt salt.flo test.ping
 
+### Application server
+
+This role requires that the filesystem containing the Moodle installation has
+support for Linux ACLs. If you're using ```xfs```, which is the default
+filesystem as of CentOS 7, ACLs are always enabled and you don't need to do
+anything. If you're using ```ext*```, you'll need to add the ```acl``` option to
+the corresponding mountpoint in ```/etc/fstab``` and remount the volume.
+
 ### Salt master
 
 Install the Salt master and some tools for managing our configuration:

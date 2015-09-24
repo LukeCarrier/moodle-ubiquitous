@@ -46,6 +46,7 @@ nginx:
     - enable: True
     - require:
       - pkg: nginx
+      - file: /etc/nginx/conf.d/default.conf
 
 #
 # PHP
@@ -76,3 +77,56 @@ public:
       - http
       - ssh
 
+#
+# SELinux
+#
+
+httpd_read_user_content:
+  selinux.boolean:
+    - value: True
+    - persist: True
+
+#
+# Moodle
+#
+
+moodle:
+  user.present:
+    - fullname: Moodle user
+    - shell: /bin/bash
+    - home: /home/moodle
+    - uid: 1001
+    - gid_from_name: true
+
+/etc/nginx/conf.d/default.conf:
+  file:
+    - managed
+    - source: salt://app/nginx/default.conf
+    - user: root
+    - group: root
+    - mode: 0644
+    - require:
+      - pkg: nginx
+
+/home:
+  acl.present:
+    - acl_type: user
+    - acl_name: nginx
+    - perms: rx
+
+/home/moodle:
+  acl.present:
+    - acl_type: user
+    - acl_name: nginx
+    - perms: rx
+
+/home/moodle/htdocs:
+  file.directory:
+    - user: moodle
+    - group: moodle
+    - mode: 0750
+  acl.present:
+    - acl_type: user
+    - acl_name: nginx
+    - perms: rx
+    - recurse: True
