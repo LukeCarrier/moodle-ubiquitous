@@ -8,3 +8,5 @@
 base:
   '*':
     - base
+  'salt.*':
+    - salt
