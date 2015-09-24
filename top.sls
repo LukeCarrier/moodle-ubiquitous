@@ -8,5 +8,7 @@
 base:
   '*':
     - base
+  'app-*.*':
+    - app
   'salt.*':
     - salt
