@@ -58,6 +58,7 @@ php.packages:
     - pkgs:
       - php56w
       - php56w-cli
+      - php56w-fpm
       - php56w-gd
       - php56w-intl
       - php56w-mbstring
@@ -67,6 +68,27 @@ php.packages:
       - php56w-soap
       - php56w-xml
       - php56w-xmlrpc
+
+/etc/php-fpm.d/www.conf:
+  file.absent: []
+
+/etc/php-fpm.d/moodle.conf:
+  file.managed:
+    - source: salt://app/php-fpm/moodle.conf
+    - owner: root
+    - group: root
+    - mode: 0644
+    - require:
+      - pkg: php.packages
+
+php-fpm:
+  service.running:
+    - enable: True
+    - reload: True
+    - require:
+      - pkg: nginx
+      - pkg: php.packages
+      - file: /etc/php-fpm.d/moodle.conf
 
 #
 # Firewall
