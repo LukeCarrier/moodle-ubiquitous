@@ -64,6 +64,7 @@ openssh-server:
 sshd:
   service.running:
     - enable: True
+    - reload: True
     - require:
       - pkg: openssh-server
       - file: /etc/ssh/sshd_config

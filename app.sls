@@ -44,6 +44,7 @@ nginx:
       - pkg: nginx-release-centos
   service.running:
     - enable: True
+    - reload: True
     - require:
       - pkg: nginx
       - file: /etc/nginx/conf.d/default.conf

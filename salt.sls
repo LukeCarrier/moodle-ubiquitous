@@ -13,6 +13,7 @@ salt-master:
   pkg.installed: []
   service.running:
     - enable: True
+    - reload: True
     - require:
       - pkg: salt-master
 
@@ -34,5 +35,6 @@ public:
 firewalld:
   service.running:
     - enable: True
+    - reload: True
     - require:
       - firewalld: public
