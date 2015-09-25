@@ -47,7 +47,7 @@ nginx:
     - reload: True
     - require:
       - pkg: nginx
-      - file: /etc/nginx/conf.d/default.conf
+      - file: /etc/nginx/conf.d/moodle.conf
 
 #
 # PHP
@@ -100,9 +100,11 @@ moodle:
     - gid_from_name: true
 
 /etc/nginx/conf.d/default.conf:
-  file:
-    - managed
-    - source: salt://app/nginx/default.conf
+  file.absent: []
+
+/etc/nginx/conf.d/moodle.conf:
+  file.managed:
+    - source: salt://app/nginx/moodle.conf
     - user: root
     - group: root
     - mode: 0644
