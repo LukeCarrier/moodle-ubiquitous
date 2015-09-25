@@ -16,9 +16,10 @@ details.
 
 ### IP addresses
 
-| IP address    | Hostname       | Server role |
-| ------------- | -------------- | ----------- |
-| 192.168.120.5 | ```salt.flo``` | Salt master |
+| IP address           | Hostname        | Server role        |
+| --------------       | --------------- | ------------------ |
+| ```192.168.120.5```  | ```salt.flo```  | Salt master        |
+| ```192.168.120.50``` | ```app-1.flo``` | Application server |
 
 ### Configuration values
 
