@@ -4,7 +4,8 @@ A work in progress sample Moodle configuration comprised of:
 
 * Configuration management with [Salt](https://docs.saltstack.com/en/getstarted/)
 * Static file serving with [nginx](http://nginx.org/)
-* [PHP 5.6](http://php.net/), with OPcache
+* [PHP 5.6](http://php.net/), with the FPM SAPI and OPcache
+* [PostgreSQL 9.4](http://www.postgresql.org/)
 
 * * *
 
@@ -16,10 +17,11 @@ details.
 
 ### IP addresses
 
-| IP address           | Hostname        | Server role        |
-| --------------       | --------------- | ------------------ |
-| ```192.168.120.5```  | ```salt.flo```  | Salt master        |
-| ```192.168.120.50``` | ```app-1.flo``` | Application server |
+| IP address            | Hostname        | Server role        |
+| --------------------- | --------------- | ------------------ |
+| ```192.168.120.5```   | ```salt.flo```  | Salt master        |
+| ```192.168.120.50```  | ```app-1.flo``` | Application server |
+| ```192.168.120.150``` | ```db-1.flo```  | PostgreSQL server  |
 
 ### Configuration values
 
