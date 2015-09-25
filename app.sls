@@ -10,8 +10,7 @@
 #
 
 epel-release:
-  pkg:
-    - installed
+  pkg.installed:
     - allow_updates: True
     - sources:
       - epel-release: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
@@ -21,8 +20,7 @@ epel-release:
 #
 
 webtatic-release:
-  pkg:
-    - installed
+  pkg.installed:
     - allow_updates: True
     - sources:
       - webtatic-release: https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
@@ -32,8 +30,7 @@ webtatic-release:
 #
 
 nginx-release-centos:
-  pkg:
-    - installed
+  pkg.installed:
     - allow_updates: True
     - sources:
       - nginx-release-centos: http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm
