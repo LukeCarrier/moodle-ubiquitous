@@ -31,6 +31,7 @@ details.
 ## Future tasks
 
 * Configure the Salt master to run in a [non-root configuration](https://docs.saltstack.com/en/latest/ref/configuration/nonroot.html).
+* Allow updating Salt minion configuration from a template on each host and handle service reloads
 
 ## New server configuration
 
