@@ -137,6 +137,10 @@ moodle:
     - perms: rx
 
 /home/moodle:
+  file.directory:
+    - user: moodle
+    - group: moodle
+    - mode: 0700
   acl.present:
     - acl_type: user
     - acl_name: nginx
@@ -152,3 +156,16 @@ moodle:
     - acl_name: nginx
     - perms: rx
     - recurse: True
+
+/home/moodle/data:
+  file.directory:
+    - user: moodle
+    - group: moodle
+    - mode: 0770
+
+# Set the SELinux security context on Moodle's data directory so that we're able
+# to write to it.
+'semanage fcontext -a -t httpd_cache_t "/home/moodle/data(/.*)?" && restorecon -R /home/moodle/data':
+  cmd.run:
+    - require:
+      - file: /home/moodle/data
