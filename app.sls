@@ -106,6 +106,13 @@ httpd_read_user_content:
     - value: True
     - persist: True
 
+# Set the SELinux security context on Moodle's data directory so that we're able
+# to write to it.
+'semanage fcontext -a -t httpd_cache_t "/home/moodle/data(/.*)?" && restorecon -R /home/moodle/data':
+  cmd.run:
+    - require:
+      - file: /home/moodle/data
+
 #
 # Moodle
 #
@@ -162,10 +169,3 @@ moodle:
     - user: moodle
     - group: moodle
     - mode: 0770
-
-# Set the SELinux security context on Moodle's data directory so that we're able
-# to write to it.
-'semanage fcontext -a -t httpd_cache_t "/home/moodle/data(/.*)?" && restorecon -R /home/moodle/data':
-  cmd.run:
-    - require:
-      - file: /home/moodle/data
