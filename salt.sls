@@ -25,6 +25,8 @@ salt-master:
   file:
     - managed
     - source: salt://salt/firewalld/salt-master.xml
+    - require_in:
+      - service: firewalld
 
 public:
   firewalld.present:
@@ -35,6 +37,3 @@ public:
 firewalld:
   service.running:
     - enable: True
-    - reload: True
-    - require:
-      - firewalld: public
