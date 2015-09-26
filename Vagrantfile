@@ -9,6 +9,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.define "salt", primary: true do |salt|
     salt.vm.network "private_network", ip: "192.168.120.5"
+    salt.vm.hostname = "salt.flo"
 
     salt.vm.network "forwarded_port", guest: 22, host: 2223
     salt.ssh.port = 2223
@@ -38,9 +39,12 @@ Vagrant.configure(2) do |config|
 
   config.vm.define "app-1" do |app1|
     app1.vm.network "private_network", ip: "192.168.120.50"
+    app1.vm.hostname = "app-1.flo"
 
     app1.vm.network "forwarded_port", guest: 22, host: 2224
     app1.ssh.port = 2224
+
+    app1.vm.network "forwarded_port", guest: 80, host: 2280
 
     app1.vm.synced_folder "./vagrant", "/vagrant", type: "rsync"
     app1.vm.provision "app-1-salt", type: "shell", path: "vagrant/salt/install.sh", args: [ "--minion", "app-1", "--root", "/vagrant/salt" ]
@@ -55,6 +59,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.define "db-1" do |db1|
     db1.vm.network "private_network", ip: "192.168.120.150"
+    db1.vm.hostname = "db-1.flo"
 
     db1.vm.network "forwarded_port", guest: 22, host: 2225
     db1.ssh.port = 2225
