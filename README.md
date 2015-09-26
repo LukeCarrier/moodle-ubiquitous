@@ -30,6 +30,15 @@ details.
 | Administrative user                | ```admin```                                           |
 | Salt master public key fingerprint | ```3e:91:ad:e7:be:1f:63:16:c2:be:60:2b:7d:d5:f8:42``` |
 
+## Known issues
+
+* Until [this bug](https://github.com/saltstack/salt/issues/27435) is fixed,
+  ```firewalld``` zones will not be configured correctly. Execute the following
+  commands manually to resolve these issues:
+    * ```salt```: ```$ sudo firewall-cmd --permanent --zone=public --add-service=salt-master && sudo firewall-cmd --reload```
+    * ```app-1```: ```$ sudo firewall-cmd --permanent --zone=public --add-service=http && sudo firewall-cmd --reload```
+    * ```db-1```: ```$ sudo firewall-cmd --permanent --zone=public --add-service=postgresql && sudo firewall-cmd --reload```
+
 ## Future tasks
 
 * Configure the Salt master to run in a [non-root configuration](https://docs.saltstack.com/en/latest/ref/configuration/nonroot.html).
