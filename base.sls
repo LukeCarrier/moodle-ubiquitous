@@ -14,7 +14,6 @@ admin:
     - fullname: Administrative user
     - shell: /bin/bash
     - home: /home/admin
-    - uid: 1000
     - gid_from_name: True
     - groups:
       - wheel
