@@ -67,6 +67,7 @@ Configure the server as a Salt minion:
 
     $ sudo yum install -y salt-minion
     $ sudo sed -i "s/#master:.*/master: 192.168.120.5/" /etc/salt/minion
+    $ sudo sed -i "s/#id:.*/id: salt" /etc/salt/minion
 
 The minion and master now need to exchange public keys to verify their
 respective identities. Substitute the key below for the one you obtained from
