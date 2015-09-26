@@ -36,6 +36,22 @@ details.
 * Allow updating Salt minion configuration from a template on each host and handle service reloads.
 * Harden the firewall configuration, with a new zone for local-only services.
 
+## Testing
+
+We've got you covered. A complete end-to-end test of the setup process can be
+achieved easily with Vagrant, just:
+
+    $ vagrant up
+
+All of our guests use the official ```centos/7``` base box hosted on Atlas, and
+they'll be configured with addresses consistent with the above network layout.
+
+Note that becase of a [Vagrant bug](https://github.com/mitchellh/vagrant/issues/5973)
+we're presently installing the Salt packages on the guests by ourselves. We
+could alternatively work around this by authenticating as root rather than the
+vagrant user, but this isn't possible as the root passwords for the CentOS cloud
+images have not been publicised.
+
 ## New server configuration
 
 All servers in the cluster will be configured as Salt minions. Salt will handle
