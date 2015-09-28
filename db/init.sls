@@ -66,7 +66,7 @@ pg-initdb:
   cmd.wait:
     - name: /usr/pgsql-9.4/bin/initdb -D /var/lib/pgsql/9.4/data -E UTF8 --locale C
     - user: postgres
-    - watch: 
+    - watch:
       - pkg: postgresql94-server
     - unless: ls /var/lib/pgsql/9.4/data/base
     - require:
@@ -77,11 +77,11 @@ moodle:
     - user: postgres
     - password: Password123
     - require:
-      - service: postgresql-9.4
+      - cmd: pg-initdb
   postgres_database.present:
     - user: postgres
     - encoding: utf8
     - owner: moodle
     - require:
       - postgres_user: moodle
-      - service: postgresql-9.4
+      - cmd: pg-initdb
