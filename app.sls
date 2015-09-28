@@ -117,6 +117,7 @@ httpd_read_user_content:
   cmd.run:
     - require:
       - file: /home/moodle/data
+      - pkg: policycoreutils-python
 
 #
 # Moodle
@@ -156,20 +157,28 @@ moodle:
     - acl_type: user
     - acl_name: nginx
     - perms: rx
+    - require:
+      - file: /home/moodle
 
 /home/moodle/htdocs:
   file.directory:
     - user: moodle
     - group: moodle
     - mode: 0750
+    - require:
+      - file: /home/moodle
   acl.present:
     - acl_type: user
     - acl_name: nginx
     - perms: rx
     - recurse: True
+    - require:
+      - file: /home/moodle/htdocs
 
 /home/moodle/data:
   file.directory:
     - user: moodle
     - group: moodle
     - mode: 0770
+    - require:
+      - file: /home/moodle

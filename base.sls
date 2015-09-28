@@ -67,3 +67,10 @@ sshd:
     - require:
       - pkg: openssh-server
       - file: /etc/ssh/sshd_config
+
+#
+# SELinux
+#
+
+policycoreutils-python:
+  pkg.installed: []
