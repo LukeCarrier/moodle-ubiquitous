@@ -127,7 +127,6 @@ moodle:
     - fullname: Moodle user
     - shell: /bin/bash
     - home: /home/moodle
-    - uid: 1001
     - gid_from_name: true
 
 /etc/nginx/conf.d/default.conf:
