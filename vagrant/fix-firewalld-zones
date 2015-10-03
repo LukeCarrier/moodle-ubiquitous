@@ -1,0 +1,15 @@
+#!/bin/sh
+
+#
+# The Perfect Cluster: Moodle
+#
+# @author Luke Carrier <luke.carrier@floream.com>
+# @copyright 2015 Floream Limited
+#
+
+add_svc_cmd="sudo firewall-cmd --permanent --zone=public --add-service="
+reload_cmd="sudo firewall-cmd --reload"
+
+vagrant ssh salt  --command "${add_svc_cmd}salt-master && ${reload_cmd}"
+vagrant ssh app-1 --command "${add_svc_cmd}http        && ${reload_cmd}"
+vagrant ssh db-1  --command "${add_svc_cmd}postgresql  && ${reload_cmd}"

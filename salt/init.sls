@@ -33,7 +33,3 @@ public:
     - services:
       - salt-master
       - ssh
-
-firewalld:
-  service.running:
-    - enable: True

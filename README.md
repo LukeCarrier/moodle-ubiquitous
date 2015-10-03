@@ -52,6 +52,13 @@ achieved easily with Vagrant, just:
 
     $ vagrant up
 
+    # These steps are necessary because of a bug in the Salt firewalld state
+    $ vagrant ssh --command "sudo salt '*' state.highstate"
+    $ vagrant/fix-firewalld-zones
+    $ vagrant reload
+
+    $ vagrant ssh --command "sudo salt '*' state.highstate"
+
 All of our guests use the official ```centos/7``` base box hosted on Atlas, and
 they'll be configured with addresses consistent with the above network layout.
 

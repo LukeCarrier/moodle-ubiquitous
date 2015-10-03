@@ -69,6 +69,15 @@ sshd:
       - file: /etc/ssh/sshd_config
 
 #
+# FirewallD
+#
+
+firewalld:
+  service.running:
+    - name: firewalld
+    - enable: True
+
+#
 # SELinux
 #
 
