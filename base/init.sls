@@ -27,8 +27,7 @@ admin:
       - user: admin
 
 /home/admin/.ssh/authorized_keys:
-  file:
-    - managed
+  file.managed:
     - source: salt://base/admin/authorized_keys
     - require:
       - user: admin
@@ -54,8 +53,7 @@ openssh-server:
   pkg.installed: []
 
 /etc/ssh/sshd_config:
-  file:
-    - managed
+  file.managed:
     - source: salt://base/sshd/sshd_config
     - require:
       - pkg: openssh-server
