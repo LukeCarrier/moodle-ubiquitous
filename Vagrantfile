@@ -16,7 +16,7 @@ Vagrant.configure(2) do |config|
 
     salt.vm.synced_folder ".", "/srv/salt", type: "rsync"
 
-    salt.vm.provision "salt-salt", type: "shell", path: "vagrant/salt/install.sh", args: [ "--master", "app-1,db-1,salt", "--minion", "salt", "--root", "/srv/salt/vagrant/salt" ]
+    salt.vm.provision "salt-salt", type: "shell", path: "vagrant/salt/install", args: [ "--master", "app-1,db-1,salt", "--minion", "salt", "--root", "/srv/salt/vagrant/salt" ]
 
     # salt.vm.provision "salt" do |salt|
     #   salt.install_master = true
@@ -47,7 +47,7 @@ Vagrant.configure(2) do |config|
     app1.vm.network "forwarded_port", guest: 80, host: 2280
 
     app1.vm.synced_folder "./vagrant", "/vagrant", type: "rsync"
-    app1.vm.provision "app-1-salt", type: "shell", path: "vagrant/salt/install.sh", args: [ "--minion", "app-1", "--root", "/vagrant/salt" ]
+    app1.vm.provision "app-1-salt", type: "shell", path: "vagrant/salt/install", args: [ "--minion", "app-1", "--root", "/vagrant/salt" ]
 
     # app1.vm.provision "salt" do |salt|
     #   salt.minion_config = "vagrant/salt/minions/app-1"
@@ -65,7 +65,7 @@ Vagrant.configure(2) do |config|
     db1.ssh.port = 2225
 
     db1.vm.synced_folder "./vagrant", "/vagrant", type: "rsync"
-    db1.vm.provision "app-1-salt", type: "shell", path: "vagrant/salt/install.sh", args: [ "--minion", "db-1", "--root", "/vagrant/salt" ]
+    db1.vm.provision "app-1-salt", type: "shell", path: "vagrant/salt/install", args: [ "--minion", "db-1", "--root", "/vagrant/salt" ]
 
     # db1.vm.provision "salt" do |salt|
     #   salt.minion_config = "vagrant/salt/minions/db-1"
