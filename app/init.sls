@@ -143,20 +143,26 @@ moodle:
       - pkg: nginx
 
 /home:
-  acl.present:
-    - acl_type: user
-    - acl_name: nginx
-    - perms: rx
+  cmd.run:
+    - name: 'setfacl -m user:nginx:rx /home'
+  # acl.present:
+  #   - acl_type: user
+  #   - acl_name: nginx
+  #   - perms: rx
 
 /home/moodle:
   file.directory:
     - user: moodle
     - group: moodle
     - mode: 0700
-  acl.present:
-    - acl_type: user
-    - acl_name: nginx
-    - perms: rx
+    - require:
+      - user: moodle
+  # acl.present:
+  #   - acl_type: user
+  #   - acl_name: nginx
+  #   - perms: rx
+  cmd.run:
+    - name: 'setfacl -m user:nginx:rx /home/moodle'
     - require:
       - file: /home/moodle
 
@@ -167,11 +173,28 @@ moodle:
     - mode: 0750
     - require:
       - file: /home/moodle
-  acl.present:
-    - acl_type: user
-    - acl_name: nginx
-    - perms: rx
-    - recurse: True
+
+/home/moodle/htdocs.acl:
+  # acl.present:
+  #   - name: /home/moodle/htdocs
+  #   - acl_type: user
+  #   - acl_name: nginx
+  #   - perms: rx
+  #   - recurse: True
+  cmd.run:
+    - name: 'setfacl -Rm user:nginx:rx /home/moodle/htdocs'
+    - require:
+      - file: /home/moodle/htdocs
+
+/home/moodle/htdocs.default-acl:
+  # acl.present:
+  #   - name: /home/moodle/htdocs
+  #   - acl_type: default:user
+  #   - acl_name: nginx
+  #   - perms: rx
+  #   - recurse: False
+  cmd.run:
+    - name: 'setfacl -m default:user:nginx:rx /home/moodle/htdocs'
     - require:
       - file: /home/moodle/htdocs
 
