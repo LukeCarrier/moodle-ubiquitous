@@ -38,8 +38,7 @@ admin:
 #
 
 /etc/yum.repos.d/saltstack.repo:
-  file:
-    - managed
+  file.managed:
     - source: salt://base/repos/saltstack.repo
     - user: root
     - group: root
