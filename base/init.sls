@@ -80,3 +80,21 @@ firewalld:
 
 policycoreutils-python:
   pkg.installed: []
+
+#
+# NTP daemon
+#
+
+ntpd.packages:
+  pkg.installed:
+    - pkgs:
+      - ntp
+      - ntpdate
+
+ntpd.service:
+  service.running:
+    - name: ntpd
+    - enable: True
+    - reload: True
+    - require:
+      - pkg: ntpd.packages
