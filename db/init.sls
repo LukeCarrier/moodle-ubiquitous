@@ -39,6 +39,7 @@ postgresql-9.4:
     - require:
       - cmd: pg-initdb
       - pkg: postgresql94-server
+    - watch:
       - file: /var/lib/pgsql/9.4/data/postgresql.conf
       - file: /var/lib/pgsql/9.4/data/pg_hba.conf
 
