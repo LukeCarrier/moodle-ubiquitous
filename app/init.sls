@@ -44,6 +44,7 @@ nginx:
     - reload: True
     - require:
       - pkg: nginx
+    - watch:
       - file: /etc/nginx/conf.d/moodle.conf
 
 #
@@ -72,7 +73,7 @@ php.packages:
 /etc/php-fpm.d/moodle.conf:
   file.managed:
     - source: salt://app/php-fpm/moodle.conf
-    - owner: root
+    - user: root
     - group: root
     - mode: 0644
     - require:
@@ -85,6 +86,7 @@ php-fpm:
     - require:
       - pkg: nginx
       - pkg: php.packages
+    - watch:
       - file: /etc/php-fpm.d/moodle.conf
 
 #
