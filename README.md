@@ -50,13 +50,19 @@ details.
 We've got you covered. A complete end-to-end test of the setup process can be
 achieved easily with Vagrant, just:
 
+    # Bring up all of the machines, installing and configuring Salt for later
+    # provisioning
     $ vagrant up
 
-    # These steps are necessary because of a bug in the Salt firewalld state
-    $ vagrant ssh --command "sudo salt '*' state.highstate"
+    # Open up the necessary ports (as only SSH is available at this point):
     $ vagrant/fix-firewalld-zones
-    $ vagrant reload
 
+    # Provision the Salt master first, opening the ports necessary for
+    # master-minion configuration
+    $ vagrant ssh --command "sudo salt 'salt' state.highstate"
+    $ vagrant reload salt
+
+    # Then converge the rest of the machines
     $ vagrant ssh --command "sudo salt '*' state.highstate"
 
 All of our guests use the official ```centos/7``` base box hosted on Atlas, and

@@ -7,9 +7,10 @@
 # @copyright 2015 Floream Limited
 #
 
+enable_cmd="sudo systemctl start firewalld && sudo systemctl enable firewalld"
 add_svc_cmd="sudo firewall-cmd --permanent --zone=public --add-service="
 reload_cmd="sudo firewall-cmd --reload"
 
-vagrant ssh salt  --command "${add_svc_cmd}salt-master && ${reload_cmd}"
-vagrant ssh app-1 --command "${add_svc_cmd}http        && ${reload_cmd}"
-vagrant ssh db-1  --command "${add_svc_cmd}postgresql  && ${reload_cmd}"
+vagrant ssh salt  --command "${enable_cmd} && ${add_svc_cmd}salt-master && ${reload_cmd}"
+vagrant ssh app-1 --command "${enable_cmd} && ${add_svc_cmd}http        && ${reload_cmd}"
+vagrant ssh db-1  --command "${enable_cmd} && ${add_svc_cmd}postgresql  && ${reload_cmd}"
