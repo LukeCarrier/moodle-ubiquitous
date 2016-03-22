@@ -1,4 +1,4 @@
-# The Perfect Cluster: Moodle
+# Ubiquitous Moodle
 
 A work in progress sample Moodle configuration comprised of:
 
