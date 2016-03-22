@@ -33,3 +33,9 @@ public:
     - services:
       - salt-master
       - ssh
+
+'salt: firewall-cmd --runtime-to-permanent':
+  cmd.run:
+    - name: firewall-cmd --runtime-to-permanent
+    - require:
+      - firewalld: public

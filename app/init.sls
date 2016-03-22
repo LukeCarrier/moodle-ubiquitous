@@ -99,6 +99,12 @@ public:
       - http
       - ssh
 
+'app: firewall-cmd --runtime-to-permanent':
+  cmd.run:
+    - name: firewall-cmd --runtime-to-permanent
+    - require:
+      - firewalld: public
+
 #
 # SELinux
 #

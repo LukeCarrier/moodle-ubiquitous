@@ -17,6 +17,12 @@ public:
     - require:
       - pkg: postgresql94-server
 
+'init: firewall-cmd --runtime-to-permanent':
+  cmd.run:
+    - name: firewall-cmd --runtime-to-permanent
+    - require:
+      - firewalld: public
+
 #
 # PostgreSQL server
 #

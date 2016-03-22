@@ -74,6 +74,12 @@ firewalld:
     - name: firewalld
     - enable: True
 
+'base: firewall-cmd --runtime-to-permanent':
+  cmd.run:
+    - name: firewall-cmd --runtime-to-permanent
+    - require:
+      - firewalld: public
+
 #
 # SELinux
 #
