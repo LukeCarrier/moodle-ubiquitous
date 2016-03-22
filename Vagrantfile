@@ -9,7 +9,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.define "salt", primary: true do |salt|
     salt.vm.network "private_network", ip: "192.168.120.5"
-    salt.vm.hostname = "salt.flo"
+    salt.vm.hostname = "salt.moodle"
 
     salt.ssh.port = 2223
     salt.vm.network "forwarded_port", guest: 22, host: salt.ssh.port
@@ -39,7 +39,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.define "app-1" do |app1|
     app1.vm.network "private_network", ip: "192.168.120.50"
-    app1.vm.hostname = "app-1.flo"
+    app1.vm.hostname = "app-1.moodle"
 
     app1.ssh.port = 2224
     app1.vm.network "forwarded_port", guest: 22, host: app1.ssh.port
@@ -59,7 +59,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.define "db-1" do |db1|
     db1.vm.network "private_network", ip: "192.168.120.150"
-    db1.vm.hostname = "db-1.flo"
+    db1.vm.hostname = "db-1.moodle"
 
     db1.ssh.port = 2225
     db1.vm.network "forwarded_port", guest: 22, host: db1.ssh.port

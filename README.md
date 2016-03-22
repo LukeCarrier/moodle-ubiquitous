@@ -19,9 +19,9 @@ details.
 
 | IP address            | Hostname        | Server role        |
 | --------------------- | --------------- | ------------------ |
-| ```192.168.120.5```   | ```salt.flo```  | Salt master        |
-| ```192.168.120.50```  | ```app-1.flo``` | Application server |
-| ```192.168.120.150``` | ```db-1.flo```  | PostgreSQL server  |
+| ```192.168.120.5```   | ```salt.moodle```  | Salt master        |
+| ```192.168.120.50```  | ```app-1.moodle``` | Application server |
+| ```192.168.120.150``` | ```db-1.moodle```  | PostgreSQL server  |
 
 ### Configuration values
 
@@ -123,19 +123,19 @@ following command to list all keys:
     $ sudo salt-key -l all
 
 In the "Unaccepted Keys" section, you should see the hostname of the server
-you've been working on (in our case, ```salt.flo```). To verify its public key:
+you've been working on (in our case, ```salt.moodle```). To verify its public key:
 
-    $ sudo salt-key -f salt.flo
+    $ sudo salt-key -f salt.moodle
 
 Assuming these two fingerprints are identical, we'll want to approve the key,
 and hit ```[Return]``` when prompted to confirm:
 
-    $ sudo salt-key -a salt.flo
+    $ sudo salt-key -a salt.moodle
 
 To confirm everything's working correctly, we'll finish by sending the server
 a ```test.ping``` operation:
 
-    $ sudo salt salt.flo test.ping
+    $ sudo salt salt.moodle test.ping
 
 ### Application server
 
