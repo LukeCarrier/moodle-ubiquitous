@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env ruby
 
 #
 # Ubiquitous Moodle
@@ -7,10 +7,20 @@
 # @copyright 2015 Floream Limited
 #
 
-enable_cmd="sudo systemctl start firewalld && sudo systemctl enable firewalld"
-add_svc_cmd="sudo firewall-cmd --permanent --zone=public --add-service="
-reload_cmd="sudo firewall-cmd --reload"
+enable_cmd  = "sudo systemctl start firewalld && sudo systemctl enable firewalld"
+add_svc_cmd = "sudo firewall-cmd --permanent --zone=public --add-service="
+reload_cmd  = "sudo firewall-cmd --reload"
 
-vagrant ssh salt  --command "${enable_cmd} && ${add_svc_cmd}salt-master && ${reload_cmd}"
-vagrant ssh app-1 --command "${enable_cmd} && ${add_svc_cmd}http        && ${reload_cmd}"
-vagrant ssh db-1  --command "${enable_cmd} && ${add_svc_cmd}postgresql  && ${reload_cmd}"
+rules = {
+  "salt"  => ["salt-master"],
+  "app-1" => ["http"],
+  "db-1"  => ["postgresql"],
+}
+
+rules.each do |vm, services|
+  cmd =  "#{enable_cmd}"
+  services.each {|service| cmd << " && #{add_svc_cmd}#{service}"}
+  cmd << " && #{reload_cmd}"
+
+  system("vagrant", "ssh", vm, "--command", cmd)
+end
