@@ -54,13 +54,13 @@ achieved easily with Vagrant, just:
     # provisioning
     $ vagrant up
 
-    # Open up the necessary ports (as only SSH is available at this point):
-    $ vagrant/fix-firewalld-zones
-
     # Provision the Salt master first, opening the ports necessary for
     # master-minion configuration
-    $ vagrant ssh --command "sudo salt 'salt' state.highstate"
+    $ vagrant ssh --command "sudo salt salt state.highstate"
     $ vagrant reload salt
+
+    # Open up the necessary ports (as only SSH is available at this point):
+    $ vagrant/fix-firewalld-zones
 
     # Then converge the rest of the machines
     $ vagrant ssh --command "sudo salt '*' state.highstate"
