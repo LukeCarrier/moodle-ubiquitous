@@ -52,9 +52,6 @@ Vagrant.configure(2) do |config|
     app1.vm.synced_folder "../moodle", "/home/moodle/htdocs", type: "rsync", owner: 'moodle', group: 'moodle',
                           rsync__exclude: ".git/",
                           rsync__args: ["--rsync-path='sudo rsync'", "--archive", "--compress", "--delete"]
-    app1.vm.synced_folder "../data", "/home/moodle/data", type: "rsync", owner: 'moodle', group: 'moodle',
-                          rsync__exclude: ".git/",
-                          rsync__args: ["--rsync-path='sudo rsync'", "--archive", "--compress", "--delete"]
 
     # app1.vm.provision "salt" do |salt|
     #   salt.minion_config = "vagrant/salt/minions/app-1"
