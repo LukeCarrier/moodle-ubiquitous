@@ -10,6 +10,9 @@ base:
     - base
   'app-*':
     - app
+  'app-debug-*':
+    - app
+    - app-debug
   'db-*':
     - db
   'salt':

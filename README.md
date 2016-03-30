@@ -17,11 +17,11 @@ details.
 
 ### IP addresses
 
-| IP address            | Hostname        | Server role        |
-| --------------------- | --------------- | ------------------ |
-| ```192.168.120.5```   | ```salt.moodle```  | Salt master        |
-| ```192.168.120.50```  | ```app-1.moodle``` | Application server |
-| ```192.168.120.150``` | ```db-1.moodle```  | PostgreSQL server  |
+| IP address            | Hostname                 | Server role                     |
+| --------------------- | ------------------------ | ------------------------------- |
+| ```192.168.120.5```   | ```salt.moodle```        | Salt master                     |
+| ```192.168.120.50```  | ```app-debug-1.moodle``` | Application server (with debug) |
+| ```192.168.120.150``` | ```db-1.moodle```        | PostgreSQL server               |
 
 ### Configuration values
 
@@ -36,7 +36,7 @@ details.
   ```firewalld``` zones will not be configured correctly. Execute the following
   commands manually to resolve these issues:
     * ```salt```: ```$ sudo firewall-cmd --permanent --zone=public --add-service=salt-master && sudo firewall-cmd --reload```
-    * ```app-1```: ```$ sudo firewall-cmd --permanent --zone=public --add-service=http && sudo firewall-cmd --reload```
+    * ```app-debug-1```: ```$ sudo firewall-cmd --permanent --zone=public --add-service=http && sudo firewall-cmd --reload```
     * ```db-1```: ```$ sudo firewall-cmd --permanent --zone=public --add-service=postgresql && sudo firewall-cmd --reload```
 
 ## Future tasks
@@ -80,10 +80,22 @@ Ensure that all of the Behat-related options are present in your Moodle
 ```config.php```, then execute the following command to bootstrap your test
 site:
 
-    $ vagrant ssh app-1 --command 'sudo -u moodle php ~moodle/htdocs/admin/tool/behat/cli/init.php'
+    $ vagrant ssh app-debug-1 --command 'sudo -u moodle php ~moodle/htdocs/admin/tool/behat/cli/init.php'
 
 The acceptance test site will then be accessible from each of the application
 servers at ```/behat```.
+
+### PHPUnit
+
+With the PHPUnit-related options present in your Moodle ```config.php```, run
+the following to enable PHPUnit:
+
+    $ vagrant ssh app-debug-1 --command "sudo -u moodle php ~moodle/htdocs/admin/tool/phpunit/cli/init.php"
+
+### Xdebug
+
+Servers with the ```app-debug``` role assigned will have Xdebug installed and
+configured, allowing remote debugging.
 
 ## New server configuration
 

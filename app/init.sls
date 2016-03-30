@@ -41,11 +41,10 @@ nginx:
       - pkg: nginx-release-centos
   service.running:
     - enable: True
-    - reload: True
     - require:
       - pkg: nginx
     - watch:
-      - file: /etc/nginx/conf.d/moodle.conf
+      - file: /etc/nginx/*
 
 #
 # PHP
@@ -73,6 +72,7 @@ php.packages:
 /etc/php-fpm.d/moodle.conf:
   file.managed:
     - source: salt://app/php-fpm/moodle.conf
+    - template: jinja
     - user: root
     - group: root
     - mode: 0644
@@ -87,7 +87,7 @@ php-fpm:
       - pkg: nginx
       - pkg: php.packages
     - watch:
-      - file: /etc/php-fpm.d/moodle.conf
+      - file: /etc/php*
 
 #
 # Default document root

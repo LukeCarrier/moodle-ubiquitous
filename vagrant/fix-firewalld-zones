@@ -12,9 +12,9 @@ add_svc_cmd = "sudo firewall-cmd --permanent --zone=public --add-service="
 reload_cmd  = "sudo firewall-cmd --reload"
 
 rules = {
-  "salt"  => ["salt-master"],
-  "app-1" => ["http"],
-  "db-1"  => ["postgresql"],
+  "salt"        => ["salt-master"],
+  "app-debug-1" => ["http"],
+  "db-1"        => ["postgresql"],
 }
 
 rules.each do |vm, services|
