@@ -74,6 +74,17 @@ could alternatively work around this by authenticating as root rather than the
 vagrant user, but this isn't possible as the root passwords for the CentOS cloud
 images have not been publicised.
 
+### Behat
+
+Ensure that all of the Behat-related options are present in your Moodle
+```config.php```, then execute the following command to bootstrap your test
+site:
+
+    $ vagrant ssh app-1 --command 'sudo -u moodle php ~moodle/htdocs/admin/tool/behat/cli/init.php'
+
+The acceptance test site will then be accessible from each of the application
+servers at ```/behat```.
+
 ## New server configuration
 
 All servers in the cluster will be configured as Salt minions. Salt will handle

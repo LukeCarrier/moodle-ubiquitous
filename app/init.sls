@@ -90,6 +90,47 @@ php-fpm:
       - file: /etc/php-fpm.d/moodle.conf
 
 #
+# Default document root
+#
+
+/home/moodle/htdocs-root:
+  file.directory:
+    - user: moodle
+    - group: moodle
+    - mode: 0750
+    - require:
+      - file: /home/moodle
+  # acl.present:
+  #   - acl_type: user
+  #   - acl_name: nginx
+  #   - perms: rx
+  #   - require:
+  #     - file: /home/moodle/htdocs-root
+  cmd.run:
+    - name: 'setfacl -m user:nginx:rx /home/moodle/htdocs-root'
+    - require:
+      - file: /home/moodle/htdocs-root
+
+/home/moodle/htdocs-root/index.html:
+  file.managed:
+    - source: salt://app/htdocs-root/index.html
+    - user: moodle
+    - group: moodle
+    - mode: 0644
+    - require:
+      - file: /home/moodle/htdocs-root
+  # acl.present:
+  #   - acl_type: user
+  #   - acl_name: nginx
+  #   - perms: r
+  #   - require:
+  #     - file: /home/moodle/htdocs-root/index.html
+  cmd.run:
+    - name: 'setfacl -m user:nginx:r /home/moodle/htdocs-root/index.html'
+    - require:
+      - file: /home/moodle/htdocs-root/index.html
+
+#
 # Firewall
 #
 
@@ -181,8 +222,6 @@ moodle:
     - mode: 0750
     - require:
       - file: /home/moodle
-
-/home/moodle/htdocs.acl:
   # acl.present:
   #   - name: /home/moodle/htdocs
   #   - acl_type: user
@@ -195,6 +234,7 @@ moodle:
       - file: /home/moodle/htdocs
 
 /home/moodle/htdocs.default-acl:
+  # See saltstack/salt#22142
   # acl.present:
   #   - name: /home/moodle/htdocs
   #   - acl_type: default:user
