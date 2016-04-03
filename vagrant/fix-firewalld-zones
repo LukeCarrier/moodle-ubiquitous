@@ -18,6 +18,7 @@ rules = {
 }
 
 rules.each do |vm, services|
+  puts "fixing #{vm}..."
   cmd =  "#{enable_cmd}"
   services.each {|service| cmd << " && #{add_svc_cmd}#{service}"}
   cmd << " && #{reload_cmd}"
