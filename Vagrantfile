@@ -16,7 +16,7 @@ Vagrant.configure(2) do |config|
 
     salt.vm.synced_folder ".", "/srv/salt", type: "rsync"
 
-    salt.vm.provision "salt-salt", type: "shell", path: "vagrant/salt/install", args: [ "--master", "app-debug-1,db-1,salt", "--minion", "salt", "--root", "/srv/salt/vagrant/salt" ]
+    salt.vm.provision "salt-salt", type: "shell", path: "vagrant/salt/install", args: [ "--master", "app-debug-1,db-1,mail-debug,salt", "--minion", "salt", "--root", "/srv/salt/vagrant/salt" ]
 
     # salt.vm.provision "salt" do |salt|
     #   salt.install_master = true
@@ -72,6 +72,27 @@ Vagrant.configure(2) do |config|
     db1.vm.provision "db-1-salt", type: "shell", path: "vagrant/salt/install", args: [ "--minion", "db-1", "--root", "/vagrant/salt" ]
 
     # db1.vm.provision "salt" do |salt|
+    #   salt.minion_config = "vagrant/salt/minions/db-1"
+    #   salt.minion_id = "db-1"
+    #   salt.minion_key = "vagrant/salt/minions/db-1.pem"
+    #   salt.minion_pub = "vagrant/salt/minions/db-1.pub"
+    # end
+  end
+
+  config.vm.define "mail-debug" do |maildebug|
+    maildebug.vm.network "private_network", ip: "192.168.120.200"
+    maildebug.vm.hostname = "mail-debug.moodle"
+
+    maildebug.ssh.port = 2226
+    maildebug.vm.network "forwarded_port", guest: 22, host: maildebug.ssh.port
+
+    maildebug.vm.network "forwarded_port", guest: 1025, host: 2325
+    maildebug.vm.network "forwarded_port", guest: 1080, host: 2380
+
+    maildebug.vm.synced_folder "./vagrant", "/vagrant", type: "rsync"
+    maildebug.vm.provision "db-1-salt", type: "shell", path: "vagrant/salt/install", args: [ "--minion", "mail-debug", "--root", "/vagrant/salt" ]
+
+    # maildebug.vm.provision "salt" do |salt|
     #   salt.minion_config = "vagrant/salt/minions/db-1"
     #   salt.minion_id = "db-1"
     #   salt.minion_key = "vagrant/salt/minions/db-1.pem"

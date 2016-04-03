@@ -15,5 +15,7 @@ base:
     - app-debug
   'db-*':
     - db
+  'mail-debug':
+    - mail-debug
   'salt':
     - salt

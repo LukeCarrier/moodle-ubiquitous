@@ -15,6 +15,7 @@ rules = {
   "salt"        => ["salt-master"],
   "app-debug-1" => ["http"],
   "db-1"        => ["postgresql"],
+  "mail-debug"  => ["mailcatcher"],
 }
 
 rules.each do |vm, services|

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>MailCatcher</short>
+  <description>Catches mail and serves it through a dream</description>
+  <port protocol="tcp" port="1025" />
+  <port protocol="tcp" port="1080" />
+</service>
