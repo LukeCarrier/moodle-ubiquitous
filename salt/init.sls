@@ -22,8 +22,7 @@ salt-master:
 #
 
 /etc/firewalld/services/salt-master.xml:
-  file:
-    - managed
+  file.managed:
     - source: salt://salt/firewalld/salt-master.xml
     - require_in:
       - service: firewalld
