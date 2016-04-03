@@ -534,7 +534,7 @@ hash_type: sha256
 # Fingerprint of the master public key to validate the identity of your Salt master
 # before the initial key exchange. The master fingerprint can be found by running
 # "salt-key -F master" on the Salt master.
-master_finger: 'dc:f5:6e:55:33:35:1a:2c:2f:69:3f:f3:82:37:4a:df:0e:73:9f:45:d8:ce:44:2e:f9:5a:88:fa:43:70:56:3c'
+master_finger: '56:83:00:a4:cd:96:59:47:73:66:88:6e:db:77:db:72:1b:c8:0f:93:2d:b4:f9:41:5c:80:e6:7c:d9:a4:01:74'
 
 
 ######         Thread settings        #####
