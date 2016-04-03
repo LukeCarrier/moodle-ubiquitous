@@ -30,6 +30,13 @@ php56w-pecl-xdebug:
     - mode: 0644
 
 #
+# MailCatcher SMTP port
+#
+
+'semanage port -a -t smtp_port_t -p tcp 1025':
+  cmd.run: []
+
+#
 # SELinux troubleshooting
 #
 

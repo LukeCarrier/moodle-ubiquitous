@@ -155,6 +155,11 @@ httpd_can_network_connect_db:
     - value: True
     - persist: True
 
+httpd_can_sendmail:
+  selinux.boolean:
+    - value: True
+    - persist: True
+
 httpd_read_user_content:
   selinux.boolean:
     - value: True
