@@ -33,7 +33,7 @@ php56w-pecl-xdebug:
 # MailCatcher SMTP port
 #
 
-'semanage port -a -t smtp_port_t -p tcp 1025':
+'semanage port -a -t smtp_port_t -p tcp 1025 || true':
   cmd.run
 
 #
