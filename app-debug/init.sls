@@ -10,7 +10,7 @@
 #
 
 php56w-pecl-xdebug:
-  pkg.installed: []
+  pkg.installed
 
 /etc/php.d/xdebug.ini:
   file.managed:
@@ -34,18 +34,18 @@ php56w-pecl-xdebug:
 #
 
 'semanage port -a -t smtp_port_t -p tcp 1025':
-  cmd.run: []
+  cmd.run
 
 #
 # SELinux troubleshooting
 #
 
 setroubleshoot-server:
-  pkg.installed: []
+  pkg.installed
 
 #
 # Vim
 #
 
 vim-enhanced:
-  pkg.installed: []
+  pkg.installed

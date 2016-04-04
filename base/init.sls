@@ -49,7 +49,7 @@ admin:
 #
 
 openssh-server:
-  pkg.installed: []
+  pkg.installed
 
 /etc/ssh/sshd_config:
   file.managed:
@@ -85,7 +85,7 @@ firewalld:
 #
 
 policycoreutils-python:
-  pkg.installed: []
+  pkg.installed
 
 #
 # NTP daemon

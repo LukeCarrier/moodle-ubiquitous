@@ -67,7 +67,7 @@ php.packages:
       - php56w-xmlrpc
 
 /etc/php-fpm.d/www.conf:
-  file.absent: []
+  file.absent
 
 /etc/php-fpm.d/moodle.conf:
   file.managed:
@@ -185,7 +185,7 @@ moodle:
     - gid_from_name: true
 
 /etc/nginx/conf.d/default.conf:
-  file.absent: []
+  file.absent
 
 /etc/nginx/conf.d/moodle.conf:
   file.managed:
