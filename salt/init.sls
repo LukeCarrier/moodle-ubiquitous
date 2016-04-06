@@ -10,7 +10,7 @@
 #
 
 salt-master:
-  pkg.installed
+  pkg.installed: []
   service.running:
     - enable: True
     - reload: True
