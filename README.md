@@ -17,12 +17,12 @@ details.
 
 ### IP addresses
 
-| IP address        | Hostname              | Server role                     |
-| ----------------- | --------------------- | ------------------------------- |
-| `192.168.120.5`   | `salt.moodle`         | Salt master                     |
-| `192.168.120.50`  | `app-debug-1.moodle`  | Application server (with debug) |
-| `192.168.120.150` | `db-1.moodle`         | PostgreSQL server               |
-| `192.168.120.200` | `mail-debug-1.moodle` | Mail catcher                    |
+| IP address        | Hostname             | Server role                     |
+| ----------------- | -------------------- | ------------------------------- |
+| `192.168.120.5`   | `salt.moodle`        | Salt master                     |
+| `192.168.120.50`  | `app-debug-1.moodle` | Application server (with debug) |
+| `192.168.120.150` | `db-1.moodle`        | PostgreSQL server               |
+| `192.168.120.200` | `mail-debug.moodle`  | Mail catcher                    |
 
 ### Configuration values
 
