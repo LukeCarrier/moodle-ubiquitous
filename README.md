@@ -66,6 +66,9 @@ $ vagrant/fix-firewalld-zones
 
 # Then converge the rest of the machines
 $ vagrant ssh --command "sudo salt '*' state.highstate"
+
+# Finally, ensure any newly added services are allowed through FirewallD
+$ vagrant/fix-firewalld-zones
 ```
 
 All of our guests use the official ```centos/7``` base box hosted on Atlas, and
