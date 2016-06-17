@@ -80,6 +80,24 @@ could alternatively work around this by authenticating as root rather than the
 vagrant user, but this isn't possible as the root passwords for the CentOS cloud
 images have not been publicised.
 
+### Adding your own VMs
+
+It's sometimes useful to be able to spin up additional machines with different
+configurations, for instance when unit testing against multiple platforms. This
+is possible within Vagrant environment by creating a `Vagrantfile.local` file in
+the same directory as the `Vagrantfile`.
+
+For instance, to add an additional Vagrant VM running SQL Server:
+
+```ruby
+config.vm.define "db-mssql-1" do |dbmssql1|
+  dbmssql1.vm.box = "msabramo/mssqlserver2014express"
+
+  dbmssql1.vm.network "private_network", ip: "192.168.120.160"
+  dbmssql1.vm.hostname = "db-mssql-1.moodle"
+end
+```
+
 ### Behat
 
 Ensure that all of the Behat-related options are present in your Moodle

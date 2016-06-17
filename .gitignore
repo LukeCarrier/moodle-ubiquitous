@@ -1,2 +1,5 @@
 # Vagrant
 /.vagrant/
+
+# Local Vagrantfie
+/Vagrantfile.local

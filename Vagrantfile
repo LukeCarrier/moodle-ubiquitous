@@ -60,4 +60,12 @@ Vagrant.configure(2) do |config|
     maildebug.vm.synced_folder "./vagrant", "/vagrant", type: "rsync"
     maildebug.vm.provision "mail-debug-salt", type: "shell", path: "vagrant/salt/install", args: [ "--minion", "mail-debug", "--root", "/vagrant/salt" ]
   end
+
+  # If such a file exists, load the user's local configuration.
+  #
+  # This allows developers to extend the Vagrantfile without having to duplicate
+  # the entire file.
+  if File.exist? "Vagrantfile.local"
+    instance_eval File.read("Vagrantfile.local"), "Vagrantfile.local"
+  end
 end
