@@ -19,3 +19,7 @@ base:
     - mail-debug
   'salt':
     - salt
+  'selenium-node-chrome':
+    - selenium-node-chrome
+  'selenium-node-firefox':
+    - selenium-node-firefox
