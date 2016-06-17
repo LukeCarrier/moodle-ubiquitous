@@ -16,7 +16,8 @@ Vagrant.configure(2) do |config|
 
     salt.vm.synced_folder ".", "/srv/salt", type: "rsync"
 
-    salt.vm.provision "salt-salt", type: "shell", path: "vagrant/salt/install", args: [ "--master", "app-debug-1,db-1,mail-debug,salt", "--minion", "salt", "--root", "/srv/salt/vagrant/salt" ]
+    salt.vm.provision "salt-salt", type: "shell", path: "vagrant/salt/install",
+                      args: [ "--master", "app-debug-1,db-1,mail-debug,salt,selenium-hub,selenium-node-chrome,selenium-node-firefox", "--minion", "salt", "--root", "/srv/salt/vagrant/salt" ]
   end
 
   config.vm.define "app-debug-1" do |appdebug1|
@@ -59,6 +60,39 @@ Vagrant.configure(2) do |config|
 
     maildebug.vm.synced_folder "./vagrant", "/vagrant", type: "rsync"
     maildebug.vm.provision "mail-debug-salt", type: "shell", path: "vagrant/salt/install", args: [ "--minion", "mail-debug", "--root", "/vagrant/salt" ]
+  end
+
+  config.vm.define "selenium-hub" do |seleniumhub|
+    seleniumhub.vm.network "private_network", ip: "192.168.120.100"
+    seleniumhub.vm.hostname = "selenium-hub.moodle"
+
+    seleniumhub.ssh.port = 2227
+    seleniumhub.vm.network "forwarded_port", guest: 22, host: seleniumhub.ssh.port
+
+    seleniumhub.vm.synced_folder "./vagrant", "/vagrant", type: "rsync"
+    seleniumhub.vm.provision "selenium-hub-salt", type: "shell", path: "vagrant/salt/install", args: ["--minion", "selenium-hub", "--root", "/vagrant/salt" ]
+  end
+
+  config.vm.define "selenium-node-chrome" do |seleniumnodechrome|
+    seleniumnodechrome.vm.network "private_network", ip: "192.168.120.105"
+    seleniumnodechrome.vm.hostname = "selenium-node-chrome.moodle"
+
+    seleniumnodechrome.ssh.port = 2228
+    seleniumnodechrome.vm.network "forwarded_port", guest: 22, host: seleniumnodechrome.ssh.port
+
+    seleniumnodechrome.vm.synced_folder "./vagrant", "/vagrant", type: "rsync"
+    seleniumnodechrome.vm.provision "selenium-node-chrome-salt", type: "shell", path: "vagrant/salt/install", args: ["--minion", "selenium-node-chrome", "--root", "/vagrant/salt" ]
+  end
+
+  config.vm.define "selenium-node-firefox" do |seleniumnodefirefox|
+    seleniumnodefirefox.vm.network "private_network", ip: "192.168.120.110"
+    seleniumnodefirefox.vm.hostname = "selenium-node-firefox.moodle"
+
+    seleniumnodefirefox.ssh.port = 2229
+    seleniumnodefirefox.vm.network "forwarded_port", guest: 22, host: seleniumnodefirefox.ssh.port
+
+    seleniumnodefirefox.vm.synced_folder "./vagrant", "/vagrant", type: "rsync"
+    seleniumnodefirefox.vm.provision "selenium-node-firefox-salt", type: "shell", path: "vagrant/salt/install", args: ["--minion", "selenium-node-firefox", "--root", "/vagrant/salt" ]
   end
 
   # If such a file exists, load the user's local configuration.
