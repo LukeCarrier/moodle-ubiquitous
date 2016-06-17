@@ -1,3 +1,6 @@
+# Cached binaries
+/cache/*
+
 # Vagrant
 /.vagrant/
 

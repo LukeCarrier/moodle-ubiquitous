@@ -59,6 +59,10 @@ achieved easily with Vagrant, just:
 # provisioning
 $ vagrant up
 
+# Fetch necessary binaries from the Internet; they're all checksummed on their
+# way in :)
+$ ./make-cache.rb
+
 # Provision the Salt master first, opening the ports necessary for
 # master-minion configuration
 $ vagrant ssh --command "sudo salt salt state.highstate"
