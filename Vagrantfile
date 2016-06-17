@@ -17,24 +17,6 @@ Vagrant.configure(2) do |config|
     salt.vm.synced_folder ".", "/srv/salt", type: "rsync"
 
     salt.vm.provision "salt-salt", type: "shell", path: "vagrant/salt/install", args: [ "--master", "app-debug-1,db-1,mail-debug,salt", "--minion", "salt", "--root", "/srv/salt/vagrant/salt" ]
-
-    # salt.vm.provision "salt" do |salt|
-    #   salt.install_master = true
-    #   salt.master_config = "vagrant/salt/master"
-    #   salt.master_key = "vagrant/salt/master.pem"
-    #   salt.master_pub = "vagrant/salt/master.pub"
-
-    #   salt.seed_master = {
-    #     "app-debug-1" => "vagrant/salt/minions/app-debug-1.pub",
-    #     "db-1"  => "vagrant/salt/minions/db-1.pub",
-    #     "salt"  => "vagrant/salt/minions/salt.pub"
-    #   }
-
-    #   salt.minion_config = "vagrant/salt/minions/salt"
-    #   salt.minion_id = "salt"
-    #   salt.minion_key = "vagrant/salt/minions/salt.pem"
-    #   salt.minion_pub = "vagrant/salt/minions/salt.pub"
-    # end
   end
 
   config.vm.define "app-debug-1" do |appdebug1|
@@ -52,13 +34,6 @@ Vagrant.configure(2) do |config|
     appdebug1.vm.synced_folder "../moodle", "/home/moodle/htdocs", type: "rsync", owner: 'moodle', group: 'moodle',
                           rsync__exclude: ".git/",
                           rsync__args: ["--rsync-path='sudo rsync'", "--archive", "--compress", "--delete"]
-
-    # appdebug1.vm.provision "salt" do |salt|
-    #   salt.minion_config = "vagrant/salt/minions/app-debug-1"
-    #   salt.minion_id = "app-debug-1"
-    #   salt.minion_key = "vagrant/salt/minions/app-debug-1.pem"
-    #   salt.minion_pub = "vagrant/salt/minions/app-debug-1.pub"
-    # end
   end
 
   config.vm.define "db-1" do |db1|
@@ -70,13 +45,6 @@ Vagrant.configure(2) do |config|
 
     db1.vm.synced_folder "./vagrant", "/vagrant", type: "rsync"
     db1.vm.provision "db-1-salt", type: "shell", path: "vagrant/salt/install", args: [ "--minion", "db-1", "--root", "/vagrant/salt" ]
-
-    # db1.vm.provision "salt" do |salt|
-    #   salt.minion_config = "vagrant/salt/minions/db-1"
-    #   salt.minion_id = "db-1"
-    #   salt.minion_key = "vagrant/salt/minions/db-1.pem"
-    #   salt.minion_pub = "vagrant/salt/minions/db-1.pub"
-    # end
   end
 
   config.vm.define "mail-debug" do |maildebug|
@@ -91,12 +59,5 @@ Vagrant.configure(2) do |config|
 
     maildebug.vm.synced_folder "./vagrant", "/vagrant", type: "rsync"
     maildebug.vm.provision "db-1-salt", type: "shell", path: "vagrant/salt/install", args: [ "--minion", "mail-debug", "--root", "/vagrant/salt" ]
-
-    # maildebug.vm.provision "salt" do |salt|
-    #   salt.minion_config = "vagrant/salt/minions/db-1"
-    #   salt.minion_id = "db-1"
-    #   salt.minion_key = "vagrant/salt/minions/db-1.pem"
-    #   salt.minion_pub = "vagrant/salt/minions/db-1.pub"
-    # end
   end
 end
