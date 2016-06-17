@@ -74,5 +74,19 @@ class CacheManager
 end
 
 cache = CacheManager.new(File.expand_path("../cache", __FILE__), [
+  {
+    name:     "Selenium Standalone Server 2.53.0",
+    details:  "Selenium Server binary",
+    uri:      "http://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.0.jar",
+    filename: "selenium-server-standalone-2.53.0.jar",
+    checksum: "774efe2d84987fb679f2dea038c2fa32",
+  },
+  {
+    name:     "ChromeDriver 2.22",
+    details:  "Selenium WebDriver for Chrome",
+    uri:      "http://chromedriver.storage.googleapis.com/2.22/chromedriver_linux64.zip",
+    filename: "chromedriver-linux64-2.22.zip",
+    checksum: "2a5e6ccbceb9f498788dc257334dfaa3",
+  }
 ], Logger.new(STDOUT))
 cache.process
