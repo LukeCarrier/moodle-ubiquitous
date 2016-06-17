@@ -58,6 +58,6 @@ Vagrant.configure(2) do |config|
     maildebug.vm.network "forwarded_port", guest: 1080, host: 2380
 
     maildebug.vm.synced_folder "./vagrant", "/vagrant", type: "rsync"
-    maildebug.vm.provision "db-1-salt", type: "shell", path: "vagrant/salt/install", args: [ "--minion", "mail-debug", "--root", "/vagrant/salt" ]
+    maildebug.vm.provision "mail-debug-salt", type: "shell", path: "vagrant/salt/install", args: [ "--minion", "mail-debug", "--root", "/vagrant/salt" ]
   end
 end
