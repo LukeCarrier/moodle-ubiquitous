@@ -40,6 +40,10 @@ xvfb:
       - file: /etc/systemd/system/xvfb.service
       - pkg: xorg-x11-server-Xvfb
 
+/etc/firewalld/services/selenium-node.xml:
+  file.managed:
+    - source: salt://selenium-node-base/firewalld/selenium-node.xml
+
 /etc/firewalld/services/x11vnc.xml:
   file.managed:
     - source: salt://selenium-node-base/firewalld/x11vnc.xml
@@ -47,8 +51,10 @@ xvfb:
 public:
   firewalld.present:
     - services:
+      - selenium-node
       - x11vnc
     - require:
+      - file: /etc/firewalld/services/selenium-node.xml
       - file: /etc/firewalld/services/x11vnc.xml
     - require_in:
       - firewalld.reload

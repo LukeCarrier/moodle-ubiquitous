@@ -17,8 +17,8 @@ rules = {
   "db-1"                  => ["ssh", "postgresql"],
   "mail-debug"            => ["ssh", "mailcatcher"],
   "selenium-hub"          => ["ssh", "selenium-hub"],
-  "selenium-node-chrome"  => ["ssh", "x11vnc"],
-  "selenium-node-firefox" => ["ssh", "x11vnc"],
+  "selenium-node-chrome"  => ["ssh", "selenium-node", "x11vnc"],
+  "selenium-node-firefox" => ["ssh", "selenium-node", "x11vnc"],
 }
 
 rules.each do |vm, services|
