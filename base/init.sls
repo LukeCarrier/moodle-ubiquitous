@@ -74,11 +74,28 @@ firewalld:
     - name: firewalld
     - enable: True
 
-'base: firewall-cmd --runtime-to-permanent':
+public.base:
+  firewalld.present:
+    - name: public
+    - services:
+      - ssh
+    - require:
+      - pkg: openssh-server
+    - require_in:
+      - firewalld.reload
+
+'firewall-cmd --runtime-to-permanent':
   cmd.run:
     - name: firewall-cmd --runtime-to-permanent
-    - require:
-      - firewalld: public
+    - onchanges:
+      - firewalld: '*'
+
+firewalld.reload:
+  service.running:
+    - name: firewalld
+    - reload: True
+    - watch:
+      - cmd: 'firewall-cmd --runtime-to-permanent'
 
 #
 # SELinux

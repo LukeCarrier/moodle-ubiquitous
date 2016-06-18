@@ -13,15 +13,10 @@ public:
   firewalld.present:
     - services:
       - postgresql
-      - ssh
     - require:
       - pkg: postgresql94-server
-
-'init: firewall-cmd --runtime-to-permanent':
-  cmd.run:
-    - name: firewall-cmd --runtime-to-permanent
-    - require:
-      - firewalld: public
+    - require_in:
+      - firewalld.reload
 
 #
 # PostgreSQL server

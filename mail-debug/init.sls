@@ -56,16 +56,10 @@ mailcatcher:
     - source: salt://mail-debug/firewalld/mailcatcher.xml
     - user: root
     - group: root
-    - require_in:
-      - service: firewalld
 
 public:
   firewalld.present:
     - services:
       - mailcatcher
-
-'salt: firewall-cmd --runtime-to-permanent':
-  cmd.run:
-    - name: firewall-cmd --runtime-to-permanent
     - require:
-      - firewalld: public
+      - file: /etc/firewalld/services/mailcatcher.xml

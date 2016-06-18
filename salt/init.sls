@@ -24,14 +24,15 @@ salt-master:
 /etc/firewalld/services/salt-master.xml:
   file.managed:
     - source: salt://salt/firewalld/salt-master.xml
-    - require_in:
-      - service: firewalld
 
 public:
   firewalld.present:
     - services:
       - salt-master
-      - ssh
+    - require:
+      - file: /etc/firewalld/services/salt-master.xml
+    - require_in:
+      - firewalld.reload
 
 'salt: firewall-cmd --runtime-to-permanent':
   cmd.run:
