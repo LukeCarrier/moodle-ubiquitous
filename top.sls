@@ -8,17 +8,20 @@
 base:
   '*':
     - base
+
   'app-*':
     - app
+  'db-*':
+    - db
+  'salt':
+    - salt
+
   'app-debug-*':
     - app
     - app-debug
-  'db-*':
-    - db
   'mail-debug':
     - mail-debug
-  'salt':
-    - salt
+
   'selenium-grid':
     - selenium-grid
   'selenium-node-*':
