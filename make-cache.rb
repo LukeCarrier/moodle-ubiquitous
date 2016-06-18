@@ -87,6 +87,13 @@ cache = CacheManager.new(File.expand_path("../cache", __FILE__), [
     uri:      "http://chromedriver.storage.googleapis.com/2.22/chromedriver_linux64.zip",
     filename: "chromedriver-linux64-2.22.zip",
     checksum: "2a5e6ccbceb9f498788dc257334dfaa3",
-  }
+  },
+  {
+    name:     "RepoForge repository",
+    details:  "RepoForge repository and keys",
+    uri:      "http://apt.sw.be/redhat/el7/en/x86_64/rpmforge/RPMS/rpmforge-release-0.5.3-1.el7.rf.x86_64.rpm",
+    filename: "rpmforge-release-0.5.3-1.el7.rf.x86_64.rpm",
+    checksum: "5a2176418271eabe290292b67cb1e2b2",
+  },
 ], Logger.new(STDOUT))
 cache.process

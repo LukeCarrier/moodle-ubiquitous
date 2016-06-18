@@ -17,8 +17,18 @@
     - require:
       - file: /opt/selenium
 
+rpmforge-release:
+  pkg.installed:
+    - sources:
+      - rpmforge-release: salt://cache/rpmforge-release-0.5.3-1.el7.rf.x86_64.rpm
+
 xorg-x11-server-Xvfb:
   pkg.installed
+
+x11vnc:
+  pkg.installed:
+    - require:
+      - pkg: rpmforge-release
 
 /etc/systemd/system/xvfb.service:
   file.managed:
