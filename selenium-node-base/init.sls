@@ -5,17 +5,6 @@
 # @copyright 2015 Floream Limited
 #
 
-/opt/selenium:
-  file.directory:
-    - user: root
-    - group: root
-    - mode: 0755
-
-/opt/selenium/selenium-server.jar:
-  file.managed:
-    - source: salt://cache/selenium-server-standalone-2.53.0.jar
-    - require:
-      - file: /opt/selenium
 
 rpmforge-release:
   pkg.installed:
@@ -32,7 +21,7 @@ x11vnc:
 
 /etc/systemd/system/xvfb.service:
   file.managed:
-    - source: salt://selenium-node/systemd/xvfb.service
+    - source: salt://selenium-node-base/systemd/xvfb.service
 
 xvfb:
   service.running:

@@ -22,10 +22,12 @@ base:
   'mail-debug':
     - mail-debug
 
-  'selenium-grid':
-    - selenium-grid
+  'selenium-*':
+    - selenium-base
+  'selenium-hub':
+    - selenium-hub
   'selenium-node-*':
-    - selenium-node
+    - selenium-node-base
   'selenium-node-chrome':
     - selenium-node-chrome
   'selenium-node-firefox':

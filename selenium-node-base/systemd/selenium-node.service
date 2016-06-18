@@ -1,0 +1,11 @@
+[Unit]
+Description=Selenium hub
+After=network.target syslog.target
+
+[Service]
+Type=simple
+User=selenium
+ExecStart=/usr/bin/java -jar /opt/selenium/selenium-server.jar -role node -hub http://192.168.120.100:4444/grid/register
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>Selenium hub</short>
+  <description>Hub role for Selenium grid</description>
+  <port protocol="tcp" port="4444" />
+</service>
