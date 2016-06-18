@@ -3,7 +3,6 @@ Description=MailCatcher
 After=network.service
 
 [Service]
-Type=simple
 User=mailcatcher
 Group=mailcatcher
 ExecStart=/var/mailcatcher/bin/mailcatcher --foreground --ip 0.0.0.0

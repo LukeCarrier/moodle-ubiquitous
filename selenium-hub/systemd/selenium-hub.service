@@ -3,7 +3,6 @@ Description=Selenium hub
 After=network.target syslog.target
 
 [Service]
-Type=simple
 User=selenium
 ExecStart=/usr/bin/java -jar /opt/selenium/selenium-server.jar -role hub
 
