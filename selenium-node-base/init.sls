@@ -22,7 +22,11 @@ x11vnc:
     - reload: True
     - require:
       - file: /etc/systemd/system/x11vnc.service
-      - pkg: x11vnc
+      - file: /etc/systemd/system/xvfb.service
+
+/etc/systemd/system/selenium-node.service:
+  file.managed:
+    - source: salt://selenium-node-base/systemd/selenium-node.service
 
 /etc/systemd/system/xvfb.service:
   file.managed:
@@ -32,12 +36,14 @@ x11vnc:
   file.managed:
     - source: salt://selenium-node-base/systemd/x11vnc.service
 
-xvfb:
+selenium-node:
   service.running:
     - enable: True
     - reload: True
     - require:
+      - file: /etc/systemd/system/selenium-node.service
       - file: /etc/systemd/system/xvfb.service
+      - file: /opt/selenium/selenium-server.jar
       - pkg: xorg-x11-server-Xvfb
 
 /etc/firewalld/services/selenium-node.xml:
