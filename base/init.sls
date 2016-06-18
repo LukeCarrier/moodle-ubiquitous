@@ -96,6 +96,7 @@ firewalld.reload:
     - reload: True
     - watch:
       - cmd: 'firewall-cmd --runtime-to-permanent'
+      - file: '/etc/firewalld/services/*'
 
 #
 # SELinux
