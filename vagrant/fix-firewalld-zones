@@ -12,11 +12,13 @@ add_svc_cmd = "sudo firewall-cmd --permanent --zone=public --add-service="
 reload_cmd  = "sudo firewall-cmd --reload"
 
 rules = {
-  "salt"         => ["salt-master"],
-  "app-debug-1"  => ["http"],
-  "db-1"         => ["postgresql"],
-  "mail-debug"   => ["mailcatcher"],
-  "selenium-hub" => ["selenium-hub"],
+  "salt"                  => ["ssh", "salt-master"],
+  "app-debug-1"           => ["ssh", "http"],
+  "db-1"                  => ["ssh", "postgresql"],
+  "mail-debug"            => ["ssh", "mailcatcher"],
+  "selenium-hub"          => ["ssh", "selenium-hub"],
+  "selenium-node-chrome"  => ["ssh", "x11vnc"],
+  "selenium-node-firefox" => ["ssh", "x11vnc"],
 }
 
 rules.each do |vm, services|
