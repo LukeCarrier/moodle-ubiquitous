@@ -36,6 +36,9 @@ if [ -n "$install_master" ]; then
     systemctl start salt-master
     sleep 2
     systemctl stop salt-master
+    while systemctl is-active salt-master; do
+        sleep 0.1
+    done
 
     echo "installing configuration..."
     cp "${root}/master" /etc/salt/master
