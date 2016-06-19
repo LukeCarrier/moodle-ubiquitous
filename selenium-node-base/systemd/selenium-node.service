@@ -6,7 +6,7 @@ After=network.target syslog.target xvfb.service
 [Service]
 Environment=DISPLAY=:99
 User=selenium
-ExecStart=/usr/bin/java -Djava.net.preferIPv4Stack=true -jar /opt/selenium/selenium-server.jar -role node -hub http://192.168.120.100:4444/grid/register
+ExecStart=/usr/bin/java -Djava.net.preferIPv4Stack=true -Dwebdriver.chrome.driver=/opt/selenium/chromedriver/chromedriver -jar /opt/selenium/selenium-server.jar -role node -hub http://192.168.120.100:4444/grid/register
 
 [Install]
 WantedBy=multi-user.target

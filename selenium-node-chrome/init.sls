@@ -16,3 +16,21 @@ google-chrome-stable:
   pkg.installed:
     - require:
       - file: /etc/yum.repos.d/google-chrome.repo
+
+chromedriver:
+  archive.extracted:
+    - name: /opt/selenium/chromedriver
+    - source: salt://cache/chromedriver-linux64-2.22.zip
+    - archive_format: zip
+  file.managed:
+    - name: /opt/selenium/chromedriver/chromedriver
+    - mode: 0755
+    - watch:
+      - archive: chromedriver
+
+selenium-node.restart:
+  service.running:
+    - name: selenium-node
+    - reload: True
+    - watch:
+      - archive: chromedriver
