@@ -34,3 +34,8 @@ selenium-node.restart:
     - reload: True
     - watch:
       - archive: chromedriver
+      - file: /opt/selenium/node.json
+
+/opt/selenium/node.json:
+  file.managed:
+    - source: salt://selenium-node-chrome/selenium/node.json
