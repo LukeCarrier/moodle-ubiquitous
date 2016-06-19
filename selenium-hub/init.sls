@@ -29,8 +29,8 @@ public:
       - selenium-hub
     - require:
       - file: /etc/firewalld/services/selenium-hub.xml
-    - require_in:
-      - firewalld.reload
+    - require:
+      - service: firewalld.reload
 
 'selenium-hub: firewall-cmd --runtime-to-permanent':
   cmd.run:

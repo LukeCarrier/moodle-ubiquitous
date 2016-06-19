@@ -81,7 +81,7 @@ public.base:
       - ssh
     - require:
       - pkg: openssh-server
-    - require_in:
+    - require:
       - firewalld.reload
 
 'firewall-cmd --runtime-to-permanent':
@@ -94,9 +94,8 @@ firewalld.reload:
   service.running:
     - name: firewalld
     - reload: True
-    - watch:
+    - require_in:
       - cmd: 'firewall-cmd --runtime-to-permanent'
-      - file: '/etc/firewalld/services/*'
 
 #
 # SELinux

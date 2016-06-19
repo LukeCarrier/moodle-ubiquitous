@@ -44,6 +44,7 @@ selenium-node:
       - file: /etc/systemd/system/selenium-node.service
       - file: /etc/systemd/system/xvfb.service
       - file: /opt/selenium/selenium-server.jar
+      - pkg: java-1.8.0-openjdk-headless
       - pkg: xorg-x11-server-Xvfb
 
 /etc/firewalld/services/selenium-node.xml:
@@ -62,5 +63,5 @@ public:
     - require:
       - file: /etc/firewalld/services/selenium-node.xml
       - file: /etc/firewalld/services/x11vnc.xml
-    - require_in:
-      - firewalld.reload
+    - require:
+      - service: firewalld.reload

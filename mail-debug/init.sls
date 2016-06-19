@@ -63,3 +63,4 @@ public:
       - mailcatcher
     - require:
       - file: /etc/firewalld/services/mailcatcher.xml
+      - service: firewalld.reload
