@@ -76,6 +76,10 @@ $ vagrant ssh --command "sudo salt '*' state.highstate"
 
 # Finally, ensure any newly added services are allowed through FirewallD
 $ vagrant/fix-firewalld-zones
+
+# Create the data directories, apply security contexts
+$ vagrant ssh app-debug-1 -c "sudo -u moodle mkdir ~moodle/data/{base,behat}"
+$ vagrant ssh app-debug-1 -c "sudo restorecon -R ~moodle/htdocs/"
 ```
 
 All of our guests use the official ```centos/7``` base box hosted on Atlas, and
