@@ -90,6 +90,13 @@ php-fpm:
       - file: /etc/php*
 
 #
+# Supporting packages
+#
+
+ghostscript:
+  pkg.installed
+
+#
 # Default document root
 #
 
