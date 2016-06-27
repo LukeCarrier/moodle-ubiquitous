@@ -120,7 +120,16 @@ $ vagrant ssh app-debug-1 --command 'sudo -u moodle php ~moodle/htdocs/admin/too
 ```
 
 The acceptance test site will then be accessible from each of the application
-servers at `/behat`.
+servers at `/behat`. Tests can be executed with:
+
+```
+$ vagrant ssh app-debug-1 --command 'sudo -u moodle ~moodle/htdocs/vendor/bin/behat --config ~moodle/data/behat/behat/behat.yml --profile chrome --no-colors --out ../behat/_all_moodle_progress.txt --format moodle_progress --out ../behat/_all_pretty.txt --format pretty'
+```
+
+For the time being, the test harness itself has to be run against the web
+server, as the data generator in the test harness requires access to the data
+directory. This will change once we have a networked filesystem accessible to
+both the machine running the test harness and the web server.
 
 ### PHPUnit
 
