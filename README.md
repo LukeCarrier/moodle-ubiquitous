@@ -281,7 +281,7 @@ Create the state tree based upon the contents of this repository and tighten its
 permissions to prevent writes from unauthorised users:
 
 ```
-$ sudo git clone https://github.com/LukeCarrier/moodle-cluster /srv/salt
+$ sudo git clone https://github.com/LukeCarrier/moodle-ubiquitous.git /srv/salt
 $ sudo chown -R admin:admin /srv/salt
 $ find /srv/salt -type d -exec chmod 750 {} \;
 $ find /srv/salt -type f -exec chmod 640 {} \;
