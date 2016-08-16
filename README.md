@@ -61,7 +61,7 @@ $ vagrant up
 
 # Fetch necessary binaries from the Internet; they're all checksummed on their
 # way in :)
-$ ./make-cache.rb
+$ ./make-cache
 
 # Provision the Salt master first, opening the ports necessary for
 # master-minion configuration
