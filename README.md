@@ -90,7 +90,7 @@ $ vagrant ssh app-debug-1 -c "sudo restorecon -R ~moodle/htdocs/"
 All of our guests use the official ```centos/7``` base box hosted on Atlas, and
 they'll be configured with addresses consistent with the above network layout.
 
-Note that becase of a [Vagrant bug](https://github.com/mitchellh/vagrant/issues/5973)
+Note that because of a [Vagrant bug](https://github.com/mitchellh/vagrant/issues/5973)
 we're presently installing the Salt packages on the guests by ourselves. We
 could alternatively work around this by authenticating as root rather than the
 vagrant user, but this isn't possible as the root passwords for the CentOS cloud
