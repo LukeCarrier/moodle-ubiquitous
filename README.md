@@ -9,6 +9,11 @@ A work in progress sample Moodle configuration comprised of:
 
 * * *
 
+## License
+
+Ubiquitous Moodle is released under the terms of the GPL v3. This is the same
+license as the core Moodle distribution.
+
 ## Network configuration
 
 For the purposes of this guide, we're assuming the following configuration. To
