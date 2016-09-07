@@ -5,8 +5,6 @@ Vagrant.configure(2) do |config|
   config.vm.synced_folder ".", "/vagrant", disabled: true
   config.vm.synced_folder ".", "/home/vagrant/sync", disabled: true
 
-  config.ssh.password = "vagrant"
-
   config.vm.define "salt", primary: true do |salt|
     salt.vm.network "private_network", ip: "192.168.120.5"
     salt.vm.hostname = "salt.moodle"
