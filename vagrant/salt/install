@@ -32,18 +32,10 @@ if [ -n "$install_master" ]; then
     echo "installing Salt master..."
     yum install -y salt-master >/dev/null
 
-    echo "temporarily starting master to create configuration directories..."
-    systemctl start salt-master
-    sleep 2
-    systemctl stop salt-master
-    while systemctl is-active salt-master; do
-        sleep 0.1
-    done
-
     echo "installing configuration..."
+    mkdir -p /etc/salt/pki/master/minions
     cp "${root}/master" /etc/salt/master
     cp "${root}/master.pem" "${root}/master.pub" /etc/salt/pki/master
-
     minions=($(echo $install_master | tr "," " "))
     for minion in "${minions[@]}"; do
         echo "preseeding master with minion key ${minion}..."
@@ -58,11 +50,6 @@ fi
 if [ -n "$install_minion" ]; then
     echo "installing Salt minion..."
     yum install -y salt-minion >/dev/null
-
-    echo "temporarily starting minion to create configuration directories..."
-    systemctl start salt-minion
-    sleep 2
-    systemctl stop salt-minion
 
     echo "installing minion configuration and keys..."
     cp "${root}/minions/${install_minion}" /etc/salt/minion
