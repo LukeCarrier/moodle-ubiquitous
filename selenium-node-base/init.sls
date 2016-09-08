@@ -36,6 +36,12 @@ x11vnc:
   file.managed:
     - source: salt://selenium-node-base/systemd/x11vnc.service
 
+liberation-fonts:
+  pkg.installed:
+    - pkgs:
+      - liberation-mono-fonts
+      - liberation-serif-fonts
+
 selenium-node:
   service.running:
     - enable: True
