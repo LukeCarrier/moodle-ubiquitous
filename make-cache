@@ -77,7 +77,7 @@ class CacheManager
     client = Net::HTTP.new uri.host, uri.port
     client.open_timeout = @timeout
 
-    client.request Net::HTTP::Get.new(uri.path) do |response|
+    client.request Net::HTTP::Get.new(uri.request_uri) do |response|
       response.read_body {|segment| file.write segment}
     end
   end
