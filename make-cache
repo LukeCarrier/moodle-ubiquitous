@@ -32,6 +32,7 @@ class CacheManager
     @entries.each do |entry|
       attempt = 0
       self.log :info, "Checking #{entry[:name]}..."
+      self.log :info, "\t#{entry[:details]}"
       entry[:qualified_filename] = File.join @cache_dir, entry[:filename]
 
       while !self.valid?(entry) && attempt < @attempts do
@@ -50,7 +51,7 @@ class CacheManager
     end
 
     unless self.valid_md5sum? entry[:qualified_filename], entry[:checksum]
-      self.log :warn, "\tChecksum didn't match expected #{entry[:checksum]}"
+      self.log :warn, "\tChecksum of #{entry[:filename]} didn't match expected #{entry[:checksum]}"
       return false
     end
 
