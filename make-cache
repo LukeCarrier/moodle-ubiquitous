@@ -15,11 +15,13 @@ class CacheManager
   @cache_dir = nil
   @entries   = []
   @logger    = nil
+  @attempts  = nil
 
-  def initialize(cache_dir, entries, logger)
+  def initialize(cache_dir, entries, logger, attempts=3)
     @cache_dir = cache_dir
     @entries   = entries
     @logger    = logger
+    @attempts  = attempts
   end
 
   def log(severity, message)
@@ -28,10 +30,14 @@ class CacheManager
 
   def process()
     @entries.each do |entry|
+      attempt = 0
       self.log :info, "Checking #{entry[:name]}..."
       entry[:qualified_filename] = File.join @cache_dir, entry[:filename]
 
-      until self.valid? entry do
+      while !self.valid?(entry) && attempt < @attempts do
+        attempt += 1
+
+        self.log :info, "\tDownload attempt #{attempt} of #{@attempts}"
         self.attempt entry
       end
     end
