@@ -32,19 +32,26 @@ class CacheManager
 
   def process()
     @entries.each do |entry|
-      attempt = 0
+      self.process_one entry
+    end
+  end
+
+  def process_one(entry)
       self.log :info, "Checking #{entry[:name]}..."
       self.log :info, "\t#{entry[:details]}"
       entry[:qualified_filename] = File.join @cache_dir, entry[:filename]
 
-      while !self.valid?(entry) && attempt < @attempts do
+      attempt = 0
+      while attempt < @attempts do
         attempt += 1
+        return if self.valid?(entry)
 
         self.log :info, "\tDownloading #{entry[:uri]} (attempt #{attempt} of #{@attempts})"
         self.attempt entry
       end
+
+      self.log :error, "\tFailed #{@attempts} attempts; skipping"
     end
-  end
 
   def valid?(entry)
     if !File.file? entry[:qualified_filename]
