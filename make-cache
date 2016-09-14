@@ -16,12 +16,14 @@ class CacheManager
   @entries   = []
   @logger    = nil
   @attempts  = nil
+  @timeout   = nil
 
-  def initialize(cache_dir, entries, logger, attempts=3)
+  def initialize(cache_dir, entries, logger, attempts=3, timeout=3)
     @cache_dir = cache_dir
     @entries   = entries
     @logger    = logger
     @attempts  = attempts
+    @timeout   = timeout
   end
 
   def log(severity, message)
@@ -38,7 +40,7 @@ class CacheManager
       while !self.valid?(entry) && attempt < @attempts do
         attempt += 1
 
-        self.log :info, "\tDownload attempt #{attempt} of #{@attempts}"
+        self.log :info, "\tDownloading #{entry[:uri]} (attempt #{attempt} of #{@attempts})"
         self.attempt entry
       end
     end
@@ -64,16 +66,19 @@ class CacheManager
 
     begin
       self.download URI.parse(entry[:uri]), file
+    rescue Net::OpenTimeout
+      self.log :warn, "\tConnection timed out after #{@timeout} seconds"
     ensure
       file.close
     end
   end
 
   def download(uri, file)
-    Net::HTTP.start uri.host, uri.port do |http|
-      http.request_get uri.path do |response|
-        response.read_body {|segment| file.write segment}
-      end
+    client = Net::HTTP.new uri.host, uri.port
+    client.open_timeout = @timeout
+
+    client.request Net::HTTP::Get.new(uri.path) do |response|
+      response.read_body {|segment| file.write segment}
     end
   end
 
