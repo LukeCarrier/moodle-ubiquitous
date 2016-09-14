@@ -1,8 +1,8 @@
 #
 # Ubiquitous Moodle
 #
-# @author Luke Carrier <luke.carrier@floream.com>
-# @copyright 2015 Floream Limited
+# @author Luke Carrier <luke@carrier.im>
+# @copyright 2016 Luke Carrier
 #
 
 /etc/yum.repos.d/google-chrome.repo:
