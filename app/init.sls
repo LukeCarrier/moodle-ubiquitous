@@ -53,18 +53,18 @@ nginx:
 php.packages:
   pkg.installed:
     - pkgs:
-      - php56w
-      - php56w-cli
-      - php56w-fpm
-      - php56w-gd
-      - php56w-intl
-      - php56w-mbstring
-      - php56w-opcache
-      - php56w-pdo
-      - php56w-pgsql
-      - php56w-soap
-      - php56w-xml
-      - php56w-xmlrpc
+      - php70w
+      - php70w-cli
+      - php70w-fpm
+      - php70w-gd
+      - php70w-intl
+      - php70w-mbstring
+      - php70w-opcache
+      - php70w-pdo
+      - php70w-pgsql
+      - php70w-soap
+      - php70w-xml
+      - php70w-xmlrpc
 
 /etc/php-fpm.d/www.conf:
   file.absent

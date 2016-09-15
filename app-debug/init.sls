@@ -9,8 +9,10 @@
 # Xdebug
 #
 
-php56w-pecl-xdebug:
-  pkg.installed
+php.xdebug:
+  pkg.installed:
+    - pkgs:
+      - php70w-pecl-xdebug
 
 /etc/php.d/xdebug.ini:
   file.managed:
@@ -19,7 +21,7 @@ php56w-pecl-xdebug:
     - group: root
     - mode: 0644
     - require:
-      - pkg: php56w-pecl-xdebug
+      - pkg: php.xdebug
 
 /etc/php-fpm.d/moodle.debug.conf:
   file.managed:
