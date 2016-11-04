@@ -41,7 +41,7 @@ Vagrant.configure(2) do |config|
     appdebug1.vm.provision "app-debug-1-salt", type: "shell", path: "vagrant/salt/install", args: [ "--minion", "app-debug-1", "--root", "/vagrant/salt" ]
 
     appdebug1.vm.synced_folder "../moodle", "/home/moodle/htdocs", type: "rsync", owner: 'moodle', group: 'moodle',
-                          rsync__exclude: ".git/",
+                          rsync__exclude: [".git/", "phpunit.xml"],
                           rsync__args: ["--rsync-path='sudo rsync'", "--archive", "--compress", "--delete"]
   end
 
