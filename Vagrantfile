@@ -25,6 +25,11 @@ Vagrant.configure(2) do |config|
   end
 
   config.vm.define "app-debug-1" do |appdebug1|
+    appdebug1.vm.provider "virtualbox" do |appdebug1vbox|
+      appdebug1vbox.cpus = 2
+      appdebug1vbox.memory = 1024
+    end
+
     appdebug1.vm.network "private_network", ip: "192.168.120.50",
                          netmask: "255.255.255.0"
     appdebug1.vm.hostname = "app-debug-1.moodle"
