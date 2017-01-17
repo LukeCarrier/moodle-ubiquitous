@@ -17,16 +17,14 @@ while true; do
     esac
 done
 
+SALTSTACK_GPG_KEY="http://repo.saltstack.com/yum/redhat/7/x86_64/latest/SALTSTACK-GPG-KEY.pub"
+SALTSTACK_REPO="http://repo.saltstack.com/yum/redhat/7/x86_64/saltstack-rhel7.repo"
+
 echo "installing saltstack GPG key..."
-rpm --import https://repo.saltstack.com/yum/rhel7/SALTSTACK-GPG-KEY.pub
+rpm --import "$SALTSTACK_GPG_KEY"
 
 echo "installing saltstack yum repository..."
-echo '[saltstack-repo]
-name=SaltStack repo for RHEL/CentOS $releasever
-baseurl=https://repo.saltstack.com/yum/rhel$releasever
-enabled=1
-gpgcheck=1
-gpgkey=https://repo.saltstack.com/yum/rhel$releasever/SALTSTACK-GPG-KEY.pub' > /etc/yum.repos.d/saltstack.repo
+curl -o /etc/yum.repos.d/saltstack.repo "$SALTSTACK_REPO"
 
 if [ -n "$install_master" ]; then
     echo "installing Salt master..."
