@@ -88,7 +88,7 @@ $ vagrant ssh app-debug-1 -c "sudo -u moodle mkdir ~moodle/data/{base,behat}"
 $ vagrant ssh app-debug-1 -c "sudo restorecon -R ~moodle/htdocs/"
 ```
 
-All of our guests use the official ```centos/7``` base box hosted on Atlas, and
+All of our guests use the official `centos/7` base box hosted on Atlas, and
 they'll be configured with addresses consistent with the above network layout.
 
 ### Adding your own VMs
