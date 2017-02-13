@@ -14,7 +14,7 @@ public:
     - services:
       - postgresql
     - require:
-      - pkg: postgresql94-server
+      - pkg: postgresql96-server
     - require_in:
       - firewalld.reload
 
@@ -22,29 +22,29 @@ public:
 # PostgreSQL server
 #
 
-pgdg-centos94:
+pgdg-centos96:
   pkg.installed:
     - allow_updates: True
     - sources:
-      - pgdg-centos94: http://yum.postgresql.org/9.4/redhat/rhel-7-x86_64/pgdg-centos94-9.4-1.noarch.rpm
+      - pgdg-centos96: https://download.postgresql.org/pub/repos/yum/9.6/redhat/rhel-7-x86_64/pgdg-centos96-9.6-3.noarch.rpm
 
-postgresql94-server:
+postgresql96-server:
   pkg.installed:
     - require:
-      - pkg: pgdg-centos94
+      - pkg: pgdg-centos96
 
-postgresql-9.4:
+postgresql-9.6:
   service.running:
     - enable: True
     - reload: True
     - require:
       - cmd: pg-initdb
-      - pkg: postgresql94-server
+      - pkg: postgresql96-server
     - watch:
-      - file: /var/lib/pgsql/9.4/data/postgresql.conf
-      - file: /var/lib/pgsql/9.4/data/pg_hba.conf
+      - file: /var/lib/pgsql/9.6/data/postgresql.conf
+      - file: /var/lib/pgsql/9.6/data/pg_hba.conf
 
-/var/lib/pgsql/9.4/data/postgresql.conf:
+/var/lib/pgsql/9.6/data/postgresql.conf:
   file.managed:
     - source: salt://db/postgres/postgresql.conf
     - user: postgres
@@ -52,9 +52,9 @@ postgresql-9.4:
     - mode: 0600
     - require:
       - cmd: pg-initdb
-      - pkg: postgresql94-server
+      - pkg: postgresql96-server
 
-/var/lib/pgsql/9.4/data/pg_hba.conf:
+/var/lib/pgsql/9.6/data/pg_hba.conf:
   file.managed:
     - source: salt://db/postgres/pg_hba.conf
     - user: postgres
@@ -62,17 +62,17 @@ postgresql-9.4:
     - mode: 0600
     - require:
       - cmd: pg-initdb
-      - pkg: postgresql94-server
+      - pkg: postgresql96-server
 
 pg-initdb:
   cmd.wait:
-    - name: /usr/pgsql-9.4/bin/initdb -D /var/lib/pgsql/9.4/data -E UTF8 --locale C
+    - name: /usr/pgsql-9.6/bin/initdb -D /var/lib/pgsql/9.6/data -E UTF8 --locale C
     - user: postgres
     - watch:
-      - pkg: postgresql94-server
-    - unless: ls /var/lib/pgsql/9.4/data/base
+      - pkg: postgresql96-server
+    - unless: ls /var/lib/pgsql/9.6/data/base
     - require:
-      - pkg: postgresql94-server
+      - pkg: postgresql96-server
 
 moodle:
   postgres_user.present:
