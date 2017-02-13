@@ -63,7 +63,7 @@ achieved easily with Vagrant, just:
 ```
 # Bring up all of the machines, installing and configuring Salt for later
 # provisioning
-$ vagrant up
+$ UBIQUITOUS_NO_SHARE=1 vagrant up
 
 # Fetch necessary binaries from the Internet; they're all checksummed on their
 # way in :)

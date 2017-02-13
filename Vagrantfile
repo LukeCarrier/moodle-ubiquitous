@@ -45,11 +45,13 @@ Vagrant.configure(2) do |config|
     appdebug1.vm.synced_folder "./vagrant", "/vagrant", type: "rsync"
     appdebug1.vm.provision "app-debug-1-salt", type: "shell", path: "vagrant/salt/install", args: [ "--minion", "app-debug-1", "--root", "/vagrant/salt" ]
 
-    appdebug1.vm.synced_folder "../Moodle", "/home/moodle/htdocs", type: "rsync",
-                               owner: "moodle", group: "moodle",
-                               rsync__exclude: [".git/", "phpunit.xml"],
-                               rsync__rsync_path: "sudo rsync",
-                               rsync__args: ["--archive", "--compress", "--delete"]
+    unless ENV['UBIQUITOUS_NO_SHARE']
+      appdebug1.vm.synced_folder "../Moodle", "/home/moodle/htdocs", type: "rsync",
+                                 owner: "moodle", group: "moodle",
+                                 rsync__exclude: [".git/", "phpunit.xml"],
+                                 rsync__rsync_path: "sudo rsync",
+                                 rsync__args: ["--archive", "--compress", "--delete"]
+    end
   end
 
   config.vm.define "db-1" do |db1|
@@ -113,9 +115,12 @@ Vagrant.configure(2) do |config|
     seleniumnodechrome.vm.synced_folder "./vagrant", "/vagrant", type: "rsync"
     seleniumnodechrome.vm.provision "selenium-node-chrome-salt", type: "shell", path: "vagrant/salt/install", args: ["--minion", "selenium-node-chrome", "--root", "/vagrant/salt" ]
 
-    seleniumnodechrome.vm.synced_folder "../Moodle", "/var/lib/selenium/moodle", type: "rsync", owner: 'selenium', group: 'selenium',
-                                        rsync__exclude: ".git/",
-                                        rsync__args: ["--rsync-path='sudo rsync'", "--archive", "--compress", "--delete"]
+    unless ENV['UBIQUITOUS_NO_SHARE']
+      seleniumnodechrome.vm.synced_folder "../Moodle", "/var/lib/selenium/moodle", type: "rsync",
+                                          owner: 'selenium', group: 'selenium',
+                                          rsync__exclude: ".git/",
+                                          rsync__args: ["--rsync-path='sudo rsync'", "--archive", "--compress", "--delete"]
+    end
   end
 
   config.vm.define "selenium-node-firefox" do |seleniumnodefirefox|
@@ -132,9 +137,12 @@ Vagrant.configure(2) do |config|
     seleniumnodefirefox.vm.synced_folder "./vagrant", "/vagrant", type: "rsync"
     seleniumnodefirefox.vm.provision "selenium-node-firefox-salt", type: "shell", path: "vagrant/salt/install", args: ["--minion", "selenium-node-firefox", "--root", "/vagrant/salt" ]
 
-    seleniumnodefirefox.vm.synced_folder "../Moodle", "/var/lib/selenium/moodle", type: "rsync", owner: 'selenium', group: 'selenium',
-                                         rsync__exclude: ".git/",
-                                         rsync__args: ["--rsync-path='sudo rsync'", "--archive", "--compress", "--delete"]
+    unless ENV['UBIQUITOUS_NO_SHARE']
+      seleniumnodefirefox.vm.synced_folder "../Moodle", "/var/lib/selenium/moodle", type: "rsync",
+                                           owner: 'selenium', group: 'selenium',
+                                           rsync__exclude: ".git/",
+                                           rsync__args: ["--rsync-path='sudo rsync'", "--archive", "--compress", "--delete"]
+    end
   end
 
   # If such a file exists, load the user's local configuration.
