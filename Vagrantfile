@@ -16,9 +16,6 @@ Vagrant.configure(2) do |config|
     salt.ssh.port = 2223
     salt.vm.network "forwarded_port", guest: 22, host: salt.ssh.port
 
-    # Fix host-only network adapters post Guest Additions installation
-    salt.vm.provision "salt-network", type: "shell", inline: "systemctl restart network"
-
     salt.vm.synced_folder ".", "/srv/salt", type: "rsync"
     salt.vm.provision "salt-salt", type: "shell", path: "vagrant/salt/install",
                       args: [ "--master", "app-debug-1,db-1,mail-debug,salt,selenium-hub,selenium-node-chrome,selenium-node-firefox", "--minion", "salt", "--root", "/srv/salt/vagrant/salt" ]
@@ -38,9 +35,6 @@ Vagrant.configure(2) do |config|
     appdebug1.vm.network "forwarded_port", guest: 22, host: appdebug1.ssh.port
 
     appdebug1.vm.network "forwarded_port", guest: 80, host: 2280
-
-    # Fix host-only network adapters post Guest Additions installation
-    appdebug1.vm.provision "salt-network", type: "shell", inline: "systemctl restart network"
 
     appdebug1.vm.synced_folder "./vagrant", "/vagrant", type: "rsync"
     appdebug1.vm.provision "app-debug-1-salt", type: "shell", path: "vagrant/salt/install", args: [ "--minion", "app-debug-1", "--root", "/vagrant/salt" ]
@@ -62,9 +56,6 @@ Vagrant.configure(2) do |config|
     db1.ssh.port = 2225
     db1.vm.network "forwarded_port", guest: 22, host: db1.ssh.port
 
-    # Fix host-only network adapters post Guest Additions installation
-    db1.vm.provision "salt-network", type: "shell", inline: "systemctl restart network"
-
     db1.vm.synced_folder "./vagrant", "/vagrant", type: "rsync"
     db1.vm.provision "db-1-salt", type: "shell", path: "vagrant/salt/install", args: [ "--minion", "db-1", "--root", "/vagrant/salt" ]
   end
@@ -79,9 +70,6 @@ Vagrant.configure(2) do |config|
     maildebug.vm.network "forwarded_port", guest: 1025, host: 2325
     maildebug.vm.network "forwarded_port", guest: 1080, host: 2380
 
-    # Fix host-only network adapters post Guest Additions installation
-    maildebug.vm.provision "salt-network", type: "shell", inline: "systemctl restart network"
-
     maildebug.vm.synced_folder "./vagrant", "/vagrant", type: "rsync"
     maildebug.vm.provision "mail-debug-salt", type: "shell", path: "vagrant/salt/install", args: [ "--minion", "mail-debug", "--root", "/vagrant/salt" ]
   end
@@ -94,9 +82,6 @@ Vagrant.configure(2) do |config|
     seleniumhub.ssh.port = 2227
     seleniumhub.vm.network "forwarded_port", guest: 22, host: seleniumhub.ssh.port
 
-    # Fix host-only network adapters post Guest Additions installation
-    seleniumhub.vm.provision "salt-network", type: "shell", inline: "systemctl restart network"
-
     seleniumhub.vm.synced_folder "./vagrant", "/vagrant", type: "rsync"
     seleniumhub.vm.provision "selenium-hub-salt", type: "shell", path: "vagrant/salt/install", args: ["--minion", "selenium-hub", "--root", "/vagrant/salt" ]
   end
@@ -108,9 +93,6 @@ Vagrant.configure(2) do |config|
 
     seleniumnodechrome.ssh.port = 2228
     seleniumnodechrome.vm.network "forwarded_port", guest: 22, host: seleniumnodechrome.ssh.port
-
-    # Fix host-only network adapters post Guest Additions installation
-    seleniumnodechrome.vm.provision "salt-network", type: "shell", inline: "systemctl restart network"
 
     seleniumnodechrome.vm.synced_folder "./vagrant", "/vagrant", type: "rsync"
     seleniumnodechrome.vm.provision "selenium-node-chrome-salt", type: "shell", path: "vagrant/salt/install", args: ["--minion", "selenium-node-chrome", "--root", "/vagrant/salt" ]
@@ -130,9 +112,6 @@ Vagrant.configure(2) do |config|
 
     seleniumnodefirefox.ssh.port = 2229
     seleniumnodefirefox.vm.network "forwarded_port", guest: 22, host: seleniumnodefirefox.ssh.port
-
-    # Fix host-only network adapters post Guest Additions installation
-    seleniumnodefirefox.vm.provision "salt-network", type: "shell", inline: "systemctl restart network"
 
     seleniumnodefirefox.vm.synced_folder "./vagrant", "/vagrant", type: "rsync"
     seleniumnodefirefox.vm.provision "selenium-node-firefox-salt", type: "shell", path: "vagrant/salt/install", args: ["--minion", "selenium-node-firefox", "--root", "/vagrant/salt" ]
