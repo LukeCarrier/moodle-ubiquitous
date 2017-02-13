@@ -42,8 +42,8 @@ details.
 ## Known issues
 
 * Until [this bug](https://github.com/saltstack/salt/issues/27435) is fixed,
-  `firewalld` zones will not be configured correctly. Execute the following
-  commands manually to resolve these issues:
+  `firewalld` zones will not be configured correctly. Run the following commands
+  manually to resolve these issues:
     * `salt`: `$ sudo firewall-cmd --permanent --zone=public --add-service=salt-master && sudo firewall-cmd --reload`
     * `app-debug-1`: `$ sudo firewall-cmd --permanent --zone=public --add-service=http && sudo firewall-cmd --reload`
     * `db-1`: `$ sudo firewall-cmd --permanent --zone=public --add-service=postgresql && sudo firewall-cmd --reload`
@@ -51,7 +51,8 @@ details.
 ## Future tasks
 
 * Configure the Salt master to run in a [non-root configuration](https://docs.saltstack.com/en/latest/ref/configuration/nonroot.html).
-* Allow updating Salt minion configuration from a template on each host and handle service reloads.
+* Allow updating Salt minion configuration from a template on each machine and
+  handle service reloads.
 * Harden the firewall configuration, with a new zone for local-only services.
 
 ## Testing
@@ -90,12 +91,6 @@ $ vagrant ssh app-debug-1 -c "sudo restorecon -R ~moodle/htdocs/"
 All of our guests use the official ```centos/7``` base box hosted on Atlas, and
 they'll be configured with addresses consistent with the above network layout.
 
-Note that because of a [Vagrant bug](https://github.com/mitchellh/vagrant/issues/5973)
-we're presently installing the Salt packages on the guests by ourselves. We
-could alternatively work around this by authenticating as root rather than the
-vagrant user, but this isn't possible as the root passwords for the CentOS cloud
-images have not been publicised.
-
 ### Adding your own VMs
 
 It's sometimes useful to be able to spin up additional machines with different
@@ -117,15 +112,14 @@ end
 ### Behat
 
 Ensure that all of the Behat-related options are present in your Moodle
-`config.php`, then execute the following command to bootstrap your test
-site:
+`config.php`, then run the following command to bootstrap your test site:
 
 ```
 $ vagrant ssh app-debug-1 --command 'sudo -u moodle php ~moodle/htdocs/admin/tool/behat/cli/init.php'
 ```
 
 The acceptance test site will then be accessible from each of the application
-servers at `/behat`. Tests can be executed with:
+servers at `/behat`. Run the tests with:
 
 ```
 $ vagrant ssh app-debug-1 --command 'sudo -u moodle ~moodle/htdocs/vendor/bin/behat --config ~moodle/data/behat/behat/behat.yml --profile chrome --no-colors --out ../behat/_all_moodle_progress.txt --format moodle_progress --out ../behat/_all_pretty.txt --format pretty'
@@ -152,7 +146,7 @@ configured, allowing remote debugging.
 
 ## New server configuration
 
-All servers in the cluster will be configured as Salt minions. Salt will handle
+All servers in the cluster will be configured as Salt minions. Salt will handleexecute
 configuring our servers based on roles which we'll define later. This section
 assumes a stock, minimal installation of CentOS 7 with networking correctly
 configured.
@@ -213,8 +207,8 @@ Now query its public key -- we need to verify this in the next step:
 $ sudo salt-call --local key.finger
 ```
 
-To complete the key exchange, log in to the Salt master and execute the
-following command to list all keys:
+To complete the key exchange, log in to the Salt master and run the following
+command to list all keys:
 
 ```
 $ sudo salt-key -l all
