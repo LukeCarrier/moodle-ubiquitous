@@ -29,6 +29,7 @@ public:
   firewalld.present:
     - services:
       - salt-master
+      - ssh
     - require:
       - file: /etc/firewalld/services/salt-master.xml
     - require_in:

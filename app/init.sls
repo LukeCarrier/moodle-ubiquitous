@@ -146,6 +146,7 @@ public:
   firewalld.present:
     - services:
       - http
+      - ssh
 
 #
 # SELinux

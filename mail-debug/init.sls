@@ -61,6 +61,7 @@ public:
   firewalld.present:
     - services:
       - mailcatcher
+      - ssh
     - require:
       - file: /etc/firewalld/services/mailcatcher.xml
       - service: firewalld.reload

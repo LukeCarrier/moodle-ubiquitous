@@ -65,6 +65,7 @@ public:
   firewalld.present:
     - services:
       - selenium-node
+      - ssh
       - x11vnc
     - require:
       - file: /etc/firewalld/services/selenium-node.xml

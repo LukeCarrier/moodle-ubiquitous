@@ -13,6 +13,7 @@ public:
   firewalld.present:
     - services:
       - postgresql
+      - ssh
     - require:
       - pkg: postgresql96-server
     - require_in:
