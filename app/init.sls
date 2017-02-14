@@ -59,6 +59,7 @@ php.packages:
       - php70w-gd
       - php70w-intl
       - php70w-mbstring
+      - php70w-mcrypt
       - php70w-opcache
       - php70w-pdo
       - php70w-pgsql
