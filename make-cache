@@ -103,11 +103,11 @@ cache = CacheManager.new(File.expand_path("../cache", __FILE__), [
     checksum: "31a9b1af54c6b00cc6028370e3e00a91",
   },
   {
-    name:     "ChromeDriver 2.22",
+    name:     "ChromeDriver 2.27",
     details:  "Selenium WebDriver for Chrome",
-    uri:      "http://chromedriver.storage.googleapis.com/2.22/chromedriver_linux64.zip",
-    filename: "chromedriver-linux64-2.22.zip",
-    checksum: "2a5e6ccbceb9f498788dc257334dfaa3",
+    uri:      "http://chromedriver.storage.googleapis.com/2.27/chromedriver_linux64.zip",
+    filename: "chromedriver-linux64-2.27.zip",
+    checksum: "c6d21c8fecf8bd0b880b2c36692153ef",
   },
   {
     name:     "RepoForge repository",

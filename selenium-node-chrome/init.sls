@@ -20,8 +20,9 @@ google-chrome-stable:
 chromedriver:
   archive.extracted:
     - name: /opt/selenium/chromedriver
-    - source: salt://cache/chromedriver-linux64-2.22.zip
+    - source: salt://cache/chromedriver-linux64-2.27.zip
     - archive_format: zip
+    - enforce_toplevel: False
   file.managed:
     - name: /opt/selenium/chromedriver/chromedriver
     - mode: 0755
