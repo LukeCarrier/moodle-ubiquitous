@@ -16,8 +16,13 @@ selenium-hub:
     - require:
       - file: /etc/systemd/system/selenium-hub.service
       - file: /opt/selenium/selenium-server.jar
+      - file: /opt/selenium/hub.json
       - pkg: java-1.8.0-openjdk-headless
       - user: selenium
+
+/opt/selenium/hub.json:
+  file.managed:
+    - source: salt://selenium-hub/selenium/hub.json
 
 /etc/firewalld/services/selenium-hub.xml:
   file.managed:
@@ -27,9 +32,9 @@ public:
   firewalld.present:
     - services:
       - selenium-hub
+      - ssh
     - require:
       - file: /etc/firewalld/services/selenium-hub.xml
-    - require:
       - service: firewalld.reload
 
 'selenium-hub: firewall-cmd --runtime-to-permanent':

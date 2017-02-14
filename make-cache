@@ -96,11 +96,11 @@ end
 
 cache = CacheManager.new(File.expand_path("../cache", __FILE__), [
   {
-    name:     "Selenium Standalone Server 2.53.0",
+    name:     "Selenium Standalone Server 3.0.1",
     details:  "Selenium Server binary",
-    uri:      "http://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.0.jar",
-    filename: "selenium-server-standalone-2.53.0.jar",
-    checksum: "774efe2d84987fb679f2dea038c2fa32",
+    uri:      "http://selenium-release.storage.googleapis.com/3.0/selenium-server-standalone-3.0.1.jar",
+    filename: "selenium-server-standalone-3.0.1.jar",
+    checksum: "31a9b1af54c6b00cc6028370e3e00a91",
   },
   {
     name:     "ChromeDriver 2.22",

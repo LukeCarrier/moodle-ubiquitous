@@ -13,7 +13,7 @@
 
 /opt/selenium/selenium-server.jar:
   file.managed:
-    - source: salt://cache/selenium-server-standalone-2.53.0.jar
+    - source: salt://cache/selenium-server-standalone-3.0.1.jar
     - require:
       - file: /opt/selenium
 
