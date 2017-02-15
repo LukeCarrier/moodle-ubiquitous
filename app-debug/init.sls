@@ -32,6 +32,43 @@ php.xdebug:
     - mode: 0644
 
 #
+# nginx
+#
+
+/home/moodle/data:
+  # acl.present:
+  #   - acl_type: user
+  #   - acl_name: nginx
+  #   - perms: rx
+  #   - require:
+  #     - file: /home/moodle/data
+  cmd.run:
+    - name: 'setfacl -m user:nginx:rx /home/moodle/data'
+    - require:
+      - file: /home/moodle/data
+
+/home/moodle/data/behat-faildump:
+  # acl.present:
+  #   - acl_type: user
+  #   - acl_name: nginx
+  #   - perms: rx
+  #   - require:
+  #     - file: /home/moodle/data/behat-faildump
+  cmd.run:
+    - name: 'setfacl -m user:nginx:rx /home/moodle/data/behat-faildump'
+    - require:
+      - file: /home/moodle/data/behat-faildump
+
+/etc/nginx/conf.d/moodle.debug.conf:
+  file.managed:
+    - source: salt://app/nginx/moodle.debug.conf
+    - user: root
+    - group: root
+    - mode: 0644
+    - require:
+      - pkg: nginx
+
+#
 # MailCatcher SMTP port
 #
 
