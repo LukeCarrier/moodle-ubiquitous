@@ -11,35 +11,43 @@
 
 admin:
   user.present:
+    - name: {{ pillar['admin']['name'] }}
+    - password: {{ pillar['admin']['password'] }}
     - fullname: Administrative user
     - shell: /bin/bash
-    - home: /home/admin
+    - home: {{ pillar['admin']['home'] }}
     - gid_from_name: True
-    - groups:
-      - wheel
+    - groups: {{ pillar['admin']['groups'] }}
 
-/home/admin/.ssh:
+admin.ssh:
   file.directory:
-    - user: admin
+    - name: {{ pillar['admin']['home'] }}/.ssh
+    - user: {{ pillar['admin']['name'] }}
     - group: admin
     - mode: 0700
     - require:
-      - user: admin
+      - user: {{ pillar['admin']['name'] }}
 
-/home/admin/.ssh/authorized_keys:
+{% if 'authorized_keys' in pillar['admin'] %}
+admin.ssh.authorized_keys:
   file.managed:
-    - source: salt://base/admin/authorized_keys
+    - name: {{ pillar['admin']['home'] }}/.ssh/authorized_keys
+    - template: jinja
+    - source: salt://base/admin/authorized_keys.jinja
+    - user: {{ pillar['admin']['name'] }}
+    - group: {{ pillar['admin']['name'] }}
+    - mode: 0600
     - require:
-      - user: admin
-      - file: /home/admin/.ssh
+      - file: admin.ssh
+{% endif %}
 
 #
-# SaltStack repository
+# SaltStack APT repository
 #
 
-/etc/yum.repos.d/saltstack.repo:
+/etc/apt/sources.list.d/saltstack.list:
   file.managed:
-    - source: salt://base/repos/saltstack.repo
+    - source: salt://base/lists/saltstack.list
     - user: root
     - group: root
     - mode: 0644
@@ -48,76 +56,33 @@ admin:
 # SSH daemon
 #
 
-openssh-server:
-  pkg.installed
-
-/etc/ssh/sshd_config:
+ssh:
+  pkg.installed:
+    - name: openssh-server
   file.managed:
+    - name: /etc/ssh/sshd_config
     - source: salt://base/sshd/sshd_config
     - require:
       - pkg: openssh-server
-
-sshd:
   service.running:
     - enable: True
     - reload: True
     - require:
       - pkg: openssh-server
+    - watch:
       - file: /etc/ssh/sshd_config
-
-#
-# FirewallD
-#
-
-firewalld:
-  service.running:
-    - name: firewalld
-    - enable: True
-
-public.base:
-  firewalld.present:
-    - name: public
-    - services:
-      - ssh
-    - require:
-      - pkg: openssh-server
-    - require:
-      - firewalld.reload
-
-'firewall-cmd --runtime-to-permanent':
-  cmd.run:
-    - name: firewall-cmd --runtime-to-permanent
-    - onchanges:
-      - firewalld: '*'
-
-firewalld.reload:
-  service.running:
-    - name: firewalld
-    - reload: True
-    - require_in:
-      - cmd: 'firewall-cmd --runtime-to-permanent'
-
-#
-# SELinux
-#
-
-policycoreutils-python:
-  pkg.installed
 
 #
 # NTP daemon
 #
 
-ntpd.packages:
+ntp:
   pkg.installed:
     - pkgs:
       - ntp
       - ntpdate
-
-ntpd.service:
   service.running:
-    - name: ntpd
+    - name: ntp
     - enable: True
-    - reload: True
     - require:
-      - pkg: ntpd.packages
+      - pkg: ntp
