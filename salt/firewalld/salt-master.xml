@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<service>
-  <short>Salt master</short>
-  <description>Python-based open source configuration management and remote execution application</description>
-  <port protocol="tcp" port="4505" />
-  <port protocol="tcp" port="4506" />
-</service>
