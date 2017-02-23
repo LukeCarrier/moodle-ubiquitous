@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 #
 # Ubiquitous Moodle
@@ -7,6 +7,9 @@
 # @copyright 2016 Luke Carrier
 #
 
+install_master=''
+install_minion=''
+root=''
 eval set -- "$(getopt -o "air:" --long "master:,minion:,root:" -- "$@")"
 while true; do
     case "$1" in
@@ -17,47 +20,50 @@ while true; do
     esac
 done
 
+set -euo pipefail
+IFS=$'\n\t'
+
 SALTSTACK_GPG_KEY="http://repo.saltstack.com/yum/redhat/7/x86_64/latest/SALTSTACK-GPG-KEY.pub"
 SALTSTACK_REPO="http://repo.saltstack.com/yum/redhat/7/x86_64/saltstack-rhel7.repo"
 
-echo "installing saltstack GPG key..."
+echo 'installing saltstack GPG key...'
 rpm --import "$SALTSTACK_GPG_KEY"
 
-echo "installing saltstack yum repository..."
+echo 'installing saltstack yum repository...'
 curl -o /etc/yum.repos.d/saltstack.repo "$SALTSTACK_REPO"
 
 if [ -n "$install_master" ]; then
-    echo "installing Salt master..."
+    echo 'installing Salt master...'
     yum install -y salt-master >/dev/null
 
-    echo "installing configuration..."
+    echo 'installing configuration...'
     mkdir -p /etc/salt/pki/master/minions
     cp "${root}/master" /etc/salt/master
     cp "${root}/master.pem" "${root}/master.pub" /etc/salt/pki/master
-    minions=($(echo $install_master | tr "," " "))
+    minions=($(echo $install_master | tr ',' $'\n'))
     for minion in "${minions[@]}"; do
         echo "preseeding master with minion key ${minion}..."
         cp "${root}/minions/${minion}.pub" "/etc/salt/pki/master/minions/${minion}"
     done
 
-    echo "enabling and starting master daemon..."
+    echo 'enabling and starting master daemon...'
     systemctl enable salt-master 2>/dev/null
     systemctl start salt-master
 fi
 
 if [ -n "$install_minion" ]; then
-    echo "installing Salt minion..."
+    echo 'installing Salt minion...'
     yum install -y salt-minion >/dev/null
 
-    echo "installing minion configuration and keys..."
+    echo 'installing minion configuration and keys...'
     cp "${root}/minions/${install_minion}" /etc/salt/minion
     cp "${root}/minions/${install_minion}.pem" /etc/salt/pki/minion/minion.pem
     cp "${root}/minions/${install_minion}.pub" /etc/salt/pki/minion/minion.pub
 
-    echo "preseeding minion with master key..."
+    echo 'preseeding minion with master key...'
     cp "${root}/master.pub" /etc/salt/pki/minion/minion_master.pub
 
-    echo "enabling and starting minion daemon..."
+    echo 'enabling and starting minion daemon...'
     systemctl enable salt-minion 2>/dev/null
     systemctl start salt-minion
 fi
