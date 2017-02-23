@@ -6,3 +6,6 @@
 
 # Local Vagrantfie
 /Vagrantfile.local
+
+# VM console logs
+/*-console.log
