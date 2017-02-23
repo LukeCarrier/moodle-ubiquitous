@@ -23,18 +23,24 @@ done
 set -euo pipefail
 IFS=$'\n\t'
 
+export DEBIAN_FRONTEND='noninteractive'
+
+SALTSTACK_GPG_KEY='https://repo.saltstack.com/apt/ubuntu/16.04/amd64/latest/SALTSTACK-GPG-KEY.pub'
+SALTSTACK_SOURCES='deb http://repo.saltstack.com/apt/ubuntu/16.04/amd64/latest xenial main'
+SALTSTACK_SOURCES_LIST='/etc/apt/sources.list.d/saltstack.list'
+
 SALTSTACK_GPG_KEY="http://repo.saltstack.com/yum/redhat/7/x86_64/latest/SALTSTACK-GPG-KEY.pub"
 SALTSTACK_REPO="http://repo.saltstack.com/yum/redhat/7/x86_64/saltstack-rhel7.repo"
 
 echo 'installing saltstack GPG key...'
-rpm --import "$SALTSTACK_GPG_KEY"
+curl -s "$SALTSTACK_GPG_KEY" | sudo apt-key add -
 
-echo 'installing saltstack yum repository...'
-curl -o /etc/yum.repos.d/saltstack.repo "$SALTSTACK_REPO"
+echo 'installing saltstack APT repository...'
+echo "$SALTSTACK_SOURCES" >"$SALTSTACK_SOURCES_LIST"
 
 if [ -n "$install_master" ]; then
     echo 'installing Salt master...'
-    yum install -y salt-master >/dev/null
+    apt-get install -y salt-master >/dev/null
 
     echo 'installing configuration...'
     mkdir -p /etc/salt/pki/master/minions
@@ -53,7 +59,7 @@ fi
 
 if [ -n "$install_minion" ]; then
     echo 'installing Salt minion...'
-    yum install -y salt-minion >/dev/null
+    apt-get install -y salt-minion >/dev/null
 
     echo 'installing minion configuration and keys...'
     cp "${root}/minions/${install_minion}" /etc/salt/minion
