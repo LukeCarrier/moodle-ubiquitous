@@ -6,9 +6,6 @@
 #
 
 base:
-  '*':
-    - base
-
   'app-*':
     - app
   'db-*':

@@ -5,6 +5,9 @@
 # @copyright 2016 Luke Carrier
 #
 
+include:
+  - base
+
 #
 # Salt master
 #
@@ -13,30 +16,29 @@ salt-master:
   pkg.installed: []
   service.running:
     - enable: True
-    - reload: True
     - require:
       - pkg: salt-master
 
-#
-# Firewall
-#
-
-/etc/firewalld/services/salt-master.xml:
-  file.managed:
-    - source: salt://salt/firewalld/salt-master.xml
-
-public:
-  firewalld.present:
-    - services:
-      - salt-master
-      - ssh
+salt-master.iptables.publish:
+  iptables.append:
+    - chain: INPUT
+    - jump: ACCEPT
+    - proto: tcp
+    - dport: 4505
+    - save: True
     - require:
-      - file: /etc/firewalld/services/salt-master.xml
+      - iptables: iptables.default.input.established
     - require_in:
-      - firewalld.reload
+      - iptables: iptables.default.input.drop
 
-'salt: firewall-cmd --runtime-to-permanent':
-  cmd.run:
-    - name: firewall-cmd --runtime-to-permanent
+salt-master.iptables.ret:
+  iptables.append:
+    - chain: INPUT
+    - jump: ACCEPT
+    - proto: tcp
+    - dport: 4506
+    - save: True
     - require:
-      - firewalld: public
+      - iptables: iptables.default.input.established
+    - require_in:
+      - iptables: iptables.default.input.drop
