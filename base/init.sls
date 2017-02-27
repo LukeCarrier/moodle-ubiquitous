@@ -124,6 +124,18 @@ ssh:
       - iptables.default.input.drop
 
 #
+# Useful administrative tools
+#
+
+admin.utilities:
+  pkg.installed:
+    - pkgs:
+      - git
+      - htop
+      - tree
+      - vim
+
+#
 # NTP daemon
 #
 
