@@ -54,7 +54,7 @@ if [ -n "$install_master" ]; then
 
     echo 'enabling and starting master daemon...'
     systemctl enable salt-master 2>/dev/null
-    systemctl start salt-master
+    systemctl restart salt-master
 fi
 
 if [ -n "$install_minion" ]; then
@@ -71,5 +71,5 @@ if [ -n "$install_minion" ]; then
 
     echo 'enabling and starting minion daemon...'
     systemctl enable salt-minion 2>/dev/null
-    systemctl start salt-minion
+    systemctl restart salt-minion
 fi
