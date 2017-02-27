@@ -1,0 +1,33 @@
+[{{ domain }}]
+
+listen = /var/run/php/php7.0-fpm-{{ platform['basename'] }}.sock
+listen.backlog = 128
+listen.allowed_clients = 127.0.0.1
+listen.owner = {{ pillar['nginx']['user'] }}
+listen.group = {{ pillar['nginx']['user'] }}
+listen.mode = 0600
+
+user = {{ platform['user']['name'] }}
+group = {{ platform['user']['name'] }}
+
+pm = {{ platform['php']['fpm']['pm'] }}
+pm.max_children = {{ platform['php']['fpm']['pm.max_children'] }}
+pm.start_servers = {{ platform['php']['fpm']['pm.start_servers'] }}
+pm.min_spare_servers = {{ platform['php']['fpm']['pm.min_spare_servers'] }}
+pm.max_spare_servers = {{ platform['php']['fpm']['pm.max_spare_servers'] }}
+pm.max_requests = {{ platform['php']['fpm']['pm.max_requests'] }}
+pm.status_path = /status
+
+ping.path = /ping
+ping.response = pong
+
+catch_workers_output = yes
+
+security.limit_extensions = .php
+
+env[HOSTNAME]       = "{{ grains.nodename }}"
+env[PATH]           = $PATH
+
+{% for option, value in platform['php']['values'].items() %}
+php_value[{{ option }}] = {{ value }}
+{% endfor %}

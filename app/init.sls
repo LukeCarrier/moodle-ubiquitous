@@ -5,46 +5,59 @@
 # @copyright 2016 Luke Carrier
 #
 
-#
-# EPEL release
-#
-
-epel-release:
-  pkg.installed:
-    - allow_updates: True
-    - sources:
-      - epel-release: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+include:
+  - base
 
 #
-# Webtatic package repository
+# nginx
 #
-
-webtatic-release:
-  pkg.installed:
-    - allow_updates: True
-    - sources:
-      - webtatic-release: https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
-
-#
-# HTTP server
-#
-
-nginx-release-centos:
-  pkg.installed:
-    - allow_updates: True
-    - sources:
-      - nginx-release-centos: http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm
 
 nginx:
-  pkg.installed:
-    - require:
-      - pkg: nginx-release-centos
+  pkg.installed: []
   service.running:
     - enable: True
     - require:
       - pkg: nginx
-    - watch:
-      - file: /etc/nginx/*
+
+nginx.iptables.http:
+  iptables.append:
+    - chain: INPUT
+    - jump: ACCEPT
+    - proto: tcp
+    - dport: 80
+    - save: True
+    - require:
+      - iptables: iptables.default.input.established
+    - require_in:
+      - iptables: iptables.default.input.drop
+
+nginx.iptables.https:
+  iptables.append:
+    - chain: INPUT
+    - jump: ACCEPT
+    - proto: tcp
+    - dport: 443
+    - save: True
+    - require:
+      - iptables: iptables.default.input.established
+    - require_in:
+      - iptables: iptables.default.input.drop
+
+nginx.reload:
+  service.running:
+    - name: nginx
+    - reload: True
+
+/etc/nginx/sites-enabled/default:
+  file.absent:
+    - require:
+      - pkg: nginx
+
+/etc/nginx/sites-available/default:
+  file.absent:
+    - require:
+      - file: /etc/nginx/sites-enabled/default
+      - pkg: nginx
 
 #
 # PHP
@@ -53,42 +66,39 @@ nginx:
 php.packages:
   pkg.installed:
     - pkgs:
-      - php70w
-      - php70w-cli
-      - php70w-fpm
-      - php70w-gd
-      - php70w-intl
-      - php70w-mbstring
-      - php70w-mcrypt
-      - php70w-opcache
-      - php70w-pdo
-      - php70w-pgsql
-      - php70w-soap
-      - php70w-xml
-      - php70w-xmlrpc
+      - php7.0-cli
+      - php7.0-curl
+      - php7.0-fpm
+      - php7.0-gd
+      - php7.0-intl
+      - php7.0-json
+      - php7.0-mbstring
+      - php7.0-mcrypt
+      - php7.0-opcache
+      - php7.0-pdo
+      - php7.0-pgsql
+      - php7.0-soap
+      - php7.0-xml
+      - php7.0-xmlrpc
+      - php7.0-zip
 
-/etc/php-fpm.d/www.conf:
-  file.absent
-
-/etc/php-fpm.d/moodle.conf:
-  file.managed:
-    - source: salt://app/php-fpm/moodle.conf
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 0644
+/etc/php/7.0/fpm/pool.d/www.conf:
+  file.absent:
     - require:
       - pkg: php.packages
 
 php-fpm:
   service.running:
+    - name: php7.0-fpm
     - enable: True
-    - reload: True
     - require:
       - pkg: nginx
       - pkg: php.packages
-    - watch:
-      - file: /etc/php*
+
+php-fpm.reload:
+  service.running:
+    - name: php7.0-fpm
+    - reload: True
 
 #
 # Supporting packages
@@ -98,165 +108,113 @@ ghostscript:
   pkg.installed
 
 #
-# Default document root
+# Required directories
 #
 
-/home/moodle/htdocs-root:
+{% for home_directory in pillar['system']['home_directories'] %}
+homes.{{ home_directory }}:
   file.directory:
-    - user: moodle
-    - group: moodle
-    - mode: 0750
-    - require:
-      - file: /home/moodle
-  # acl.present:
-  #   - acl_type: user
-  #   - acl_name: nginx
-  #   - perms: rx
-  #   - require:
-  #     - file: /home/moodle/htdocs-root
-  cmd.run:
-    - name: 'setfacl -m user:nginx:rx /home/moodle/htdocs-root'
-    - require:
-      - file: /home/moodle/htdocs-root
-
-/home/moodle/htdocs-root/index.html:
-  file.managed:
-    - source: salt://app/htdocs-root/index.html
-    - user: moodle
-    - group: moodle
-    - mode: 0644
-    - require:
-      - file: /home/moodle/htdocs-root
-  # acl.present:
-  #   - acl_type: user
-  #   - acl_name: nginx
-  #   - perms: r
-  #   - require:
-  #     - file: /home/moodle/htdocs-root/index.html
-  cmd.run:
-    - name: 'setfacl -m user:nginx:r /home/moodle/htdocs-root/index.html'
-    - require:
-      - file: /home/moodle/htdocs-root/index.html
+    - name: {{ home_directory }}
+    - user: root
+    - group: root
+    - mode: 755
+  acl.present:
+    - name: {{ home_directory }}
+    - acl_type: user
+    - acl_name: nginx
+    - perms: rx
+{% endfor %}
 
 #
-# Firewall
+# Moodle platforms
 #
 
-public:
-  firewalld.present:
-    - services:
-      - http
-      - ssh
-
-#
-# SELinux
-#
-
-httpd_can_network_connect_db:
-  selinux.boolean:
-    - value: True
-    - persist: True
-
-httpd_can_sendmail:
-  selinux.boolean:
-    - value: True
-    - persist: True
-
-httpd_read_user_content:
-  selinux.boolean:
-    - value: True
-    - persist: True
-
-# Set the SELinux security context on Moodle's data directory so that we're able
-# to write to it.
-'semanage fcontext -a -t httpd_cache_t "/home/moodle/data(/.*)?" && restorecon -R /home/moodle/data':
-  cmd.run:
-    - require:
-      - file: /home/moodle/data
-      - pkg: policycoreutils-python
-
-#
-# Moodle
-#
-
-moodle:
+{% for domain, platform in pillar['platforms'].items() %}
+moodle.{{ domain }}.user:
   user.present:
-    - fullname: Moodle user
+    - name: {{ platform['user']['name'] }}
+    - fullname: {{ domain }}
     - shell: /bin/bash
-    - home: /home/moodle
+    - home: {{ platform['user']['home'] }}
     - gid_from_name: true
 
-/etc/nginx/conf.d/default.conf:
-  file.absent
+moodle.{{ domain }}.home:
+  file.directory:
+    - name: {{ platform['user']['home'] }}
+    - user: {{ platform['user']['name'] }}
+    - group: {{ platform['user']['name'] }}
+    - mode: 0750
+    - require:
+      - user: {{ platform['user']['name'] }}
+  acl.present:
+    - name: {{ platform['user']['home'] }}
+    - acl_type: user
+    - acl_name: {{ pillar['nginx']['user'] }}
+    - perms: rx
+    - require:
+      - file: {{ platform['user']['home'] }}
 
-/etc/nginx/conf.d/moodle.conf:
+moodle.{{ domain }}.htdocs:
+  file.directory:
+    - name: {{ platform['user']['home'] }}/htdocs
+    - user: {{ platform['user']['name'] }}
+    - group: {{ platform['user']['name'] }}
+    - mode: 0770
+    - require:
+      - file: moodle.{{ domain }}.home
+  acl.present:
+    - name: {{ platform['user']['home'] }}/htdocs
+    - acl_type: user
+    - acl_name: {{ pillar['nginx']['user'] }}
+    - perms: rx
+    - require:
+      - file: {{ platform['user']['home'] }}
+
+moodle.{{ domain }}.data:
+  file.directory:
+    - name: {{ platform['user']['home'] }}/data
+    - user: {{ platform['user']['name'] }}
+    - group: {{ platform['user']['name'] }}
+    - mode: 0770
+    - require:
+      - file: moodle.{{ domain }}.home
+
+moodle.{{ domain }}.nginx.available:
   file.managed:
-    - source: salt://app/nginx/moodle.conf
+    - name: /etc/nginx/sites-available/{{ platform['basename'] }}.conf
+    - source: salt://app/nginx/platform.conf.jinja
+    - template: jinja
+    - context:
+      domain: {{ domain }}
+      platform: {{ platform }}
     - user: root
     - group: root
     - mode: 0644
     - require:
       - pkg: nginx
 
-/home:
-  cmd.run:
-    - name: 'setfacl -m user:nginx:rx /home'
-  # acl.present:
-  #   - acl_type: user
-  #   - acl_name: nginx
-  #   - perms: rx
+moodle.{{ domain }}.nginx.enabled:
+  file.symlink:
+    - name: /etc/nginx/sites-enabled/{{ platform['basename'] }}
+    - target: /etc/nginx/sites-available/{{ platform['basename'] }}.conf
+    - require:
+      - file: moodle.{{ domain }}.nginx.available
+    - require_in:
+      - service: nginx.reload
 
-/home/moodle:
-  file.directory:
-    - user: moodle
-    - group: moodle
-    - mode: 0700
+moodle.{{ domain }}.php-fpm:
+  file.managed:
+    - name: /etc/php/7.0/fpm/pool.d/{{ platform['basename'] }}.conf
+    - source: salt://app/php-fpm/moodle.conf.jinja
+    - template: jinja
+    - context:
+        domain: {{ domain }}
+        platform: {{ platform }}
+    - user: root
+    - group: root
+    - mode: 0644
     - require:
-      - user: moodle
-  # acl.present:
-  #   - acl_type: user
-  #   - acl_name: nginx
-  #   - perms: rx
-  cmd.run:
-    - name: 'setfacl -m user:nginx:rx /home/moodle'
-    - require:
-      - file: /home/moodle
-
-/home/moodle/htdocs:
-  file.directory:
-    - user: moodle
-    - group: moodle
-    - mode: 0750
-    - require:
-      - file: /home/moodle
-  # acl.present:
-  #   - name: /home/moodle/htdocs
-  #   - acl_type: user
-  #   - acl_name: nginx
-  #   - perms: rx
-  #   - recurse: True
-  cmd.run:
-    - name: 'setfacl -Rm user:nginx:rx /home/moodle/htdocs'
-    - require:
-      - file: /home/moodle/htdocs
-
-/home/moodle/htdocs.default-acl:
-  # See saltstack/salt#22142
-  # acl.present:
-  #   - name: /home/moodle/htdocs
-  #   - acl_type: default:user
-  #   - acl_name: nginx
-  #   - perms: rx
-  #   - recurse: False
-  cmd.run:
-    - name: 'setfacl -m default:user:nginx:rx /home/moodle/htdocs'
-    - require:
-      - file: /home/moodle/htdocs
-
-/home/moodle/data:
-  file.directory:
-    - user: moodle
-    - group: moodle
-    - mode: 0770
-    - require:
-      - file: /home/moodle
+      - pkg: php.packages
+    - require_in:
+      - service: php-fpm.reload
+{% endfor %}
