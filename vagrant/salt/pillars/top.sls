@@ -1,0 +1,6 @@
+base:
+  '*':
+    - base
+
+  'app-*':
+    - app
