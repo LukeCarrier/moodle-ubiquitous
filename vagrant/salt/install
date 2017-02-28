@@ -43,7 +43,7 @@ apt-get update
 
 if [ -n "$install_master" ]; then
     echo 'installing Salt master...'
-    apt-get install -y salt-master >/dev/null
+    apt-get install -y salt-master -o Dpkg::Options::="--force-confold" >/dev/null
 
     echo 'installing configuration...'
     mkdir -p /etc/salt/pki/master/minions
@@ -62,7 +62,7 @@ fi
 
 if [ -n "$install_minion" ]; then
     echo 'installing Salt minion...'
-    apt-get install -y salt-minion >/dev/null
+    apt-get install -y salt-minion -o Dpkg::Options::="--force-confold" >/dev/null
 
     echo 'installing minion configuration and keys...'
     cp "${root}/minions/${install_minion}"        /etc/salt/minion
