@@ -62,9 +62,10 @@ if [ -n "$install_minion" ]; then
     apt-get install -y salt-minion >/dev/null
 
     echo 'installing minion configuration and keys...'
-    cp "${root}/minions/${install_minion}" /etc/salt/minion
-    cp "${root}/minions/${install_minion}.pem" /etc/salt/pki/minion/minion.pem
-    cp "${root}/minions/${install_minion}.pub" /etc/salt/pki/minion/minion.pub
+    cp "${root}/minions/${install_minion}"        /etc/salt/minion
+    cp "${root}/minions/${install_minion}.grains" /etc/salt/grains
+    cp "${root}/minions/${install_minion}.pem"    /etc/salt/pki/minion/minion.pem
+    cp "${root}/minions/${install_minion}.pub"    /etc/salt/pki/minion/minion.pub
 
     echo 'preseeding minion with master key...'
     cp "${root}/master.pub" /etc/salt/pki/minion/minion_master.pub

@@ -2,5 +2,6 @@ base:
   '*':
     - base
 
-  'app-*':
+  'roles:app':
+    - match: grain
     - app

@@ -6,26 +6,38 @@
 #
 
 base:
-  'app-*':
-    - app
-  'db-*':
-    - db
-  'salt':
+  'roles:salt':
+    - match: grain
     - salt
 
-  'app-debug-*':
+  'roles:app':
+    - match: grain
     - app
+
+  'roles:db':
+    - match: grain
+    - db
+
+  'roles:app-debug':
+    - match: grain
     - app-debug
-  'mail-debug':
+
+  'roles:mail-debug':
+    - match: grain
     - mail-debug
 
-  'selenium-*':
+  'roles:selenium':
+    - match: grain
     - selenium-base
-  'selenium-hub':
+  'roles:selenium-hub':
+    - match: grain
     - selenium-hub
-  'selenium-node-*':
+  'roles:selenium-node':
+    - match: grain
     - selenium-node-base
-  'selenium-node-chrome':
+  'roles:selenium-node-chrome':
+    - match: grain
     - selenium-node-chrome
-  'selenium-node-firefox':
+  'roles:selenium-node-firefox':
+    - match: grain
     - selenium-node-firefox
