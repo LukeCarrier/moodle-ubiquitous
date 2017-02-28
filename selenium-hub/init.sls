@@ -5,6 +5,10 @@
 # @copyright 2016 Luke Carrier
 #
 
+include:
+  - base
+  - selenium-base
+
 /etc/systemd/system/selenium-hub.service:
   file.managed:
     - source: salt://selenium-hub/systemd/selenium-hub.service

@@ -5,6 +5,10 @@
 # @copyright 2016 Luke Carrier
 #
 
+include:
+  - base
+  - selenium-base
+
 /etc/yum.repos.d/google-chrome.repo:
   file.managed:
     - source: salt://selenium-node-chrome/repos/google-chrome.repo

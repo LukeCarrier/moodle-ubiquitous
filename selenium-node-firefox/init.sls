@@ -5,6 +5,10 @@
 # @copyright 2016 Luke Carrier
 #
 
+include:
+  - base
+  - selenium-base
+
 firefox:
   pkg.installed
 
