@@ -38,6 +38,9 @@ curl -s "$SALTSTACK_GPG_KEY" | sudo apt-key add -
 echo 'installing saltstack APT repository...'
 echo "$SALTSTACK_SOURCES" >"$SALTSTACK_SOURCES_LIST"
 
+echo 'refreshing repository metadata...'
+apt-get update
+
 if [ -n "$install_master" ]; then
     echo 'installing Salt master...'
     apt-get install -y salt-master >/dev/null
