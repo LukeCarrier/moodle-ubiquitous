@@ -15,7 +15,23 @@ Vagrant.configure(2) do |config|
     salt.vm.synced_folder ".", "/srv/salt", type: "rsync"
     salt.vm.synced_folder "vagrant/salt/pillars", "/srv/pillar", type: "rsync"
     salt.vm.provision "salt-salt", type: "shell", path: "vagrant/salt/install",
-                      args: [ "--master", "app-debug-1,db-1,mail-debug,salt,selenium-hub,selenium-node-chrome,selenium-node-firefox", "--minion", "salt", "--root", "/srv/salt/vagrant/salt" ]
+                      args: [ "--master", "app-debug-1,db-1,gocd,mail-debug,salt,selenium-hub,selenium-node-chrome,selenium-node-firefox", "--minion", "salt", "--root", "/srv/salt/vagrant/salt" ]
+  end
+
+  config.vm.define "gocd" do |gocd|
+    gocd.vm.provider "virtualbox" do |v|
+      v.memory = 2048
+    end
+
+    gocd.vm.network "private_network", ip: "192.168.120.10",
+                    netmask: "255.255.255.0"
+    gocd.vm.hostname = "gocd.moodle"
+
+    gocd.ssh.port = 2230
+    gocd.vm.network "forwarded_port", guest: 22, host: gocd.ssh.port
+
+    gocd.vm.synced_folder "./vagrant", "/vagrant", type: "rsync"
+    gocd.vm.provision "gocd-salt", type: "shell", path: "vagrant/salt/install", args: [ "--minion", "gocd", "--root", "/vagrant/salt" ]
   end
 
   config.vm.define "app-debug-1" do |appdebug1|
