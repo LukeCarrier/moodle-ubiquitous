@@ -143,7 +143,7 @@ moodle.{{ domain }}.home:
     - name: {{ platform['user']['home'] }}
     - user: {{ platform['user']['name'] }}
     - group: {{ platform['user']['name'] }}
-    - mode: 0750
+    - mode: 0770
     - require:
       - user: {{ platform['user']['name'] }}
   acl.present:
@@ -152,7 +152,16 @@ moodle.{{ domain }}.home:
     - acl_name: {{ pillar['nginx']['user'] }}
     - perms: rx
     - require:
-      - file: {{ platform['user']['home'] }}
+      - file: moodle.{{ domain }}.home
+
+moodle.{{ domain }}.home.default:
+  acl.present:
+    - name: {{ platform['user']['home'] }}
+    - acl_type: default:user
+    - acl_name: {{ pillar['nginx']['user'] }}
+    - perms: rx
+    - require:
+      - file: moodle.{{ domain }}.home
 
 moodle.{{ domain }}.htdocs:
   file.directory:
@@ -168,7 +177,16 @@ moodle.{{ domain }}.htdocs:
     - acl_name: {{ pillar['nginx']['user'] }}
     - perms: rx
     - require:
-      - file: {{ platform['user']['home'] }}
+      - file: moodle.{{ domain }}.htdocs
+
+moodle.{{ domain }}.htdocs.default:
+  acl.present:
+    - name: {{ platform['user']['home'] }}/htdocs
+    - acl_type: default:user
+    - acl_name: {{ pillar['nginx']['user'] }}
+    - perms: rx
+    - require:
+      - file: moodle.{{ domain }}.home
 
 moodle.{{ domain }}.data:
   file.directory:
@@ -177,7 +195,7 @@ moodle.{{ domain }}.data:
     - group: {{ platform['user']['name'] }}
     - mode: 0770
     - require:
-      - file: moodle.{{ domain }}.home
+      - file: moodle.{{ domain }}.htdocs
 
 moodle.{{ domain }}.nginx.available:
   file.managed:

@@ -20,6 +20,7 @@ base:
   'roles:app':
     - match: grain
     - app
+    - app-gocd-agent
 
   'roles:db':
     - match: grain

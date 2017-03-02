@@ -1,0 +1,1 @@
+go ALL=(ALL) NOPASSWD: /usr/local/ubiquitous/bin/ubiquitous-permissions *

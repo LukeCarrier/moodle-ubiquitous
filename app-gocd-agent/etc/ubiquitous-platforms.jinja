@@ -1,0 +1,3 @@
+{% for domain, platform in pillar['platforms'].items() %}
+{{ domain }}:{{ platform['user']['name'] }}:{{ platform['user']['home'] }}/htdocs
+{% endfor %}
