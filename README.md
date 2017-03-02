@@ -29,7 +29,7 @@ details.
 | `192.168.120.100` | `selenium-hub.moodle`          | Selenium grid hub               |
 | `192.168.120.105` | `selenium-node-chrome.moodle`  | Selenium node (Chrome)          |
 | `192.168.120.110` | `selenium-node-firefox.moodle` | Selenium node (Firefox)         |
-| `192.168.120.150` | `db-1.moodle`                  | PostgreSQL server               |
+| `192.168.120.150` | `db-pgsql-1.moodle`            | PostgreSQL server               |
 | `192.168.120.200` | `mail-debug.moodle`            | Mail catcher                    |
 
 ### Configuration values
@@ -46,7 +46,7 @@ details.
   manually to resolve these issues:
     * `salt`: `$ sudo firewall-cmd --permanent --zone=public --add-service=salt-master && sudo firewall-cmd --reload`
     * `app-debug-1`: `$ sudo firewall-cmd --permanent --zone=public --add-service=http && sudo firewall-cmd --reload`
-    * `db-1`: `$ sudo firewall-cmd --permanent --zone=public --add-service=postgresql && sudo firewall-cmd --reload`
+    * `db-pgsql-1`: `$ sudo firewall-cmd --permanent --zone=public --add-service=postgresql && sudo firewall-cmd --reload`
 
 ## Future tasks
 

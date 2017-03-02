@@ -15,7 +15,7 @@ Vagrant.configure(2) do |config|
     salt.vm.synced_folder ".", "/srv/salt", type: "rsync"
     salt.vm.synced_folder "vagrant/salt/pillars", "/srv/pillar", type: "rsync"
     salt.vm.provision "salt-salt", type: "shell", path: "vagrant/salt/install",
-                      args: [ "--master", "app-debug-1,db-1,gocd,mail-debug,salt,selenium-hub,selenium-node-chrome,selenium-node-firefox", "--minion", "salt", "--root", "/srv/salt/vagrant/salt" ]
+                      args: [ "--master", "app-debug-1,db-pgsql-1,gocd,mail-debug,salt,selenium-hub,selenium-node-chrome,selenium-node-firefox", "--minion", "salt", "--root", "/srv/salt/vagrant/salt" ]
   end
 
   config.vm.define "gocd" do |gocd|
@@ -52,16 +52,16 @@ Vagrant.configure(2) do |config|
                                rsync__args: ["--archive", "--compress", "--delete"]
   end
 
-  config.vm.define "db-1" do |db1|
+  config.vm.define "db-pgsql-1" do |db1|
     db1.vm.network "private_network", ip: "192.168.120.150",
                    netmask: "255.255.255.0"
-    db1.vm.hostname = "db-1.moodle"
+    db1.vm.hostname = "db-pgsql-1.moodle"
 
     db1.ssh.port = 2225
     db1.vm.network "forwarded_port", guest: 22, host: db1.ssh.port
 
     db1.vm.synced_folder "./vagrant", "/vagrant", type: "rsync"
-    db1.vm.provision "db-1-salt", type: "shell", path: "vagrant/salt/install", args: [ "--minion", "db-1", "--root", "/vagrant/salt" ]
+    db1.vm.provision "db-pgsql-1-salt", type: "shell", path: "vagrant/salt/install", args: [ "--minion", "db-pgsql-1", "--root", "/vagrant/salt" ]
   end
 
   config.vm.define "mail-debug" do |maildebug|
