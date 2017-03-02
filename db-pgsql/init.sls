@@ -59,15 +59,15 @@ postgresql-server.iptables.pgsql:
 moodle.{{ domain }}.postgres:
   postgres_user.present:
     - user: postgres
-    - name: {{ platform['user']['name'] }}
-    - password: {{ platform['user']['password'] }}
+    - name: {{ platform['pgsql']['user']['name'] }}
+    - password: {{ platform['pgsql']['user']['password'] }}
     - require:
       - service: postgresql-server
   postgres_database.present:
     - user: postgres
-    - name: {{ platform['database']['name'] }}
-    - encoding: {{ platform['database']['encoding'] }}
-    - owner: {{ platform['user']['name'] }}
+    - name: {{ platform['pgsql']['database']['name'] }}
+    - encoding: {{ platform['pgsql']['database']['encoding'] }}
+    - owner: {{ platform['pgsql']['user']['name'] }}
     - require:
       - postgres_user: moodle.{{ domain }}.postgres
       - service: postgresql-server
