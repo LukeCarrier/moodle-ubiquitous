@@ -10,6 +10,13 @@ base:
     - match: grain
     - salt
 
+  'roles:gocd-server':
+    - match: grain
+    - gocd-server
+  'roles:gocd-agent':
+    - match: grain
+    - gocd-agent
+
   'roles:app':
     - match: grain
     - app

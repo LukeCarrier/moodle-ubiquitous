@@ -1,0 +1,3 @@
+{% for user, password_hash in pillar['gocd-server']['users'].items() %}
+{{ user }}:{SHA}{{ password_hash }}
+{% endfor %}
