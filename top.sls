@@ -22,9 +22,9 @@ base:
     - app
     - app-gocd-agent
 
-  'roles:db':
+  'roles:db-pgsql':
     - match: grain
-    - db
+    - db-pgsql
 
   'roles:app-debug':
     - match: grain

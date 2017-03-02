@@ -26,7 +26,7 @@ postgresql-server:
 postgresql-server.postgresql.conf:
   file.managed:
     - name: /etc/postgresql/9.5/main/postgresql.conf
-    - source: salt://db/postgres/postgresql.conf
+    - source: salt://db-pgsql/postgres/postgresql.conf
     - user: postgres
     - group: postgres
     - mode: 0644
@@ -36,7 +36,7 @@ postgresql-server.postgresql.conf:
 postgresql-server.pg_hba.conf:
   file.managed:
     - name: /etc/postgresql/9.5/main/pg_hba.conf
-    - source: salt://db/postgres/pg_hba.conf
+    - source: salt://db-pgsql/postgres/pg_hba.conf
     - user: postgres
     - group: postgres
     - mode: 0600
