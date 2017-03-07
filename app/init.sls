@@ -82,10 +82,31 @@ php.packages:
       - php7.0-xmlrpc
       - php7.0-zip
 
-/etc/php/7.0/fpm/pool.d/www.conf:
+/etc/php/7.0/fpm/php-fpm.conf:
+  file.managed:
+    - source: salt://app/php-fpm/php-fpm.conf
+    - user: root
+    - group: root
+    - mode: 0644
+
+/etc/php/7.0/fpm/pools-available:
+  file.directory:
+    - user: root
+    - group: root
+    - mode: 755
+
+/etc/php/7.0/fpm/pools-enabled:
+  file.directory:
+    - user: root
+    - group: root
+    - mode: 755
+
+/etc/php/7.0/fpm/pool.d:
   file.absent:
     - require:
       - pkg: php.packages
+      - file: /etc/php/7.0/fpm/php-fpm.conf
+      - file: /etc/php/7.0/fpm/pools-enabled
 
 php-fpm:
   service.running:
@@ -163,25 +184,26 @@ moodle.{{ domain }}.home.default:
     - require:
       - file: moodle.{{ domain }}.home
 
-moodle.{{ domain }}.htdocs:
+moodle.{{ domain }}.releases:
   file.directory:
-    - name: {{ platform['user']['home'] }}/htdocs
+    - name: {{ platform['user']['home'] }}/releases
+    - makedirs: True
     - user: {{ platform['user']['name'] }}
     - group: {{ platform['user']['name'] }}
     - mode: 0770
     - require:
       - file: moodle.{{ domain }}.home
   acl.present:
-    - name: {{ platform['user']['home'] }}/htdocs
+    - name: {{ platform['user']['home'] }}/releases
     - acl_type: user
     - acl_name: {{ pillar['nginx']['user'] }}
     - perms: rx
     - require:
-      - file: moodle.{{ domain }}.htdocs
+      - file: moodle.{{ domain }}.releases
 
-moodle.{{ domain }}.htdocs.default:
+moodle.{{ domain }}.releases.default:
   acl.present:
-    - name: {{ platform['user']['home'] }}/htdocs
+    - name: {{ platform['user']['home'] }}/releases
     - acl_type: default:user
     - acl_name: {{ pillar['nginx']['user'] }}
     - perms: rx
@@ -195,7 +217,7 @@ moodle.{{ domain }}.data:
     - group: {{ platform['user']['name'] }}
     - mode: 0770
     - require:
-      - file: moodle.{{ domain }}.htdocs
+      - file: moodle.{{ domain }}.home
 
 moodle.{{ domain }}.nginx.available:
   file.managed:
@@ -204,6 +226,7 @@ moodle.{{ domain }}.nginx.available:
     - template: jinja
     - context:
       domain: {{ domain }}
+      instance: blue
       platform: {{ platform }}
     - user: root
     - group: root
@@ -213,21 +236,23 @@ moodle.{{ domain }}.nginx.available:
 
 moodle.{{ domain }}.nginx.enabled:
   file.symlink:
-    - name: /etc/nginx/sites-enabled/{{ platform['basename'] }}
+    - name: /etc/nginx/sites-enabled/{{ platform['basename'] }}.conf
     - target: /etc/nginx/sites-available/{{ platform['basename'] }}.conf
     - require:
       - file: moodle.{{ domain }}.nginx.available
     - require_in:
       - service: nginx.reload
 
-moodle.{{ domain }}.php-fpm:
+{% for instance in ['blue', 'green'] %}
+moodle.{{ domain }}.{{ instance }}.php-fpm:
   file.managed:
-    - name: /etc/php/7.0/fpm/pool.d/{{ platform['basename'] }}.conf
-    - source: salt://app/php-fpm/moodle.conf.jinja
+    - name: /etc/php/7.0/fpm/pools-available/{{ platform['basename'] }}.{{ instance }}.conf
+    - source: salt://app/php-fpm/platform.conf.jinja
     - template: jinja
     - context:
-        domain: {{ domain }}
-        platform: {{ platform }}
+      domain: {{ domain }}
+      instance: blue
+      platform: {{ platform }}
     - user: root
     - group: root
     - mode: 0644
@@ -235,4 +260,16 @@ moodle.{{ domain }}.php-fpm:
       - pkg: php.packages
     - require_in:
       - service: php-fpm.reload
+{% endfor %}
+
+moodle.{{ domain }}.config:
+  file.managed:
+    - name: {{ platform['user']['home'] }}/config.php
+    - source: salt://app/moodle/config.php.jinja
+    - template: jinja
+    - context:
+      cfg: {{ platform['moodle'] }}
+    - user: {{ platform['user']['name'] }}
+    - group: {{ platform['user']['name'] }}
+    - mode: 0660
 {% endfor %}

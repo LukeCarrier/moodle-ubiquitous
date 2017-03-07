@@ -1,0 +1,33 @@
+<?php // Moodle cfguration file
+
+// Boilerplate
+unset($CFG);
+global $CFG;
+$CFG = new stdClass();
+
+// Database
+$CFG->dbtype    = '{{ cfg['dbtype'] }}';
+$CFG->dblibrary = '{{ cfg['dblibrary'] }}';
+$CFG->dbhost    = '{{ cfg['dbhost'] }}';
+$CFG->dbname    = '{{ cfg['dbname'] }}';
+$CFG->dbuser    = '{{ cfg['dbuser'] }}';
+$CFG->dbpass    = '{{ cfg['dbpass'] }}';
+$CFG->prefix    = '{{ cfg['prefix'] }}';
+$CFG->dboptions = array(
+    'dbpersist' => {{ cfg['dboptions']['dbpersist'] }},
+    'dbport'    => {{ cfg['dboptions']['dbport'] }},
+    'dbsocket'  => '{{ cfg['dboptions']['dbsocket'] }}',
+);
+
+$CFG->dataroot             = '{{cfg['dataroot'] }}';
+$CFG->directorypermissions = {{ cfg['directorypermissions'] }};
+
+$CFG->wwwroot  = '{{ cfg['wwwroot'] }}';
+$CFG->sslproxy = {{ cfg['sslproxy'] }};
+$CFG->admin    = '{{ cfg['admin'] }}';
+
+// Bootstrap
+require_once __DIR__ . '/lib/setup.php';
+
+// There is no php closing tag in this file,
+// it is intentional because it prevents trailing whitespace problems!

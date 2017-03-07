@@ -23,7 +23,7 @@
     - require:
       - file: /usr/local/ubiquitous
 
-/usr/local/ubiquitous/libexec:
+/usr/local/ubiquitous/lib:
   file.directory:
     - user: root
     - group: root
@@ -39,27 +39,29 @@
     - require:
       - file: /usr/local/ubiquitous
 
-/usr/local/ubiquitous/bin/ubiquitous-permissions:
+{% for script in ['info', 'install-release', 'set-current-release']: %}
+/usr/local/ubiquitous/bin/ubiquitous-{{ script }}:
   file.managed:
-    - source: salt://app-gocd-agent/bin/ubiquitous-permissions
+    - source: salt://app-gocd-agent/local/bin/ubiquitous-{{ script }}
     - user: root
     - group: root
     - mode: 0755
     - require:
       - file: /usr/local/ubiquitous/bin
+{% endfor %}
 
-/usr/local/ubiquitous/libexec/ubiquitous-lib:
+/usr/local/ubiquitous/lib/ubiquitous-lib:
   file.managed:
-    - source: salt://app-gocd-agent/libexec/ubiquitous-lib
+    - source: salt://app-gocd-agent/local/lib/ubiquitous-lib
     - user: root
     - group: root
     - mode: 0755
     - require:
-      - file: /usr/local/ubiquitous/libexec
+      - file: /usr/local/ubiquitous/lib
 
 /usr/local/ubiquitous/etc/ubiquitous-platforms:
   file.managed:
-    - source: salt://app-gocd-agent/etc/ubiquitous-platforms.jinja
+    - source: salt://app-gocd-agent/local/etc/ubiquitous-platforms.jinja
     - template: jinja
     - user: root
     - group: root
@@ -94,22 +96,6 @@ app-gocd-agent.{{ domain }}.home:
 app-gocd-agent.{{ domain }}.home.default:
   acl.present:
     - name: {{ platform['user']['home'] }}
-    - acl_type: default:user
-    - acl_name: go
-    - perms: rwx
-    - recurse: True
-
-app-gocd-agent.{{ domain }}.htdocs:
-  acl.present:
-    - name: {{ platform['user']['home'] }}/htdocs
-    - acl_type: user
-    - acl_name: go
-    - perms: rwx
-    - recurse: True
-
-app-gocd-agent.{{ domain }}.htdocs.default:
-  acl.present:
-    - name: {{ platform['user']['home'] }}/htdocs
     - acl_type: default:user
     - acl_name: go
     - perms: rwx

@@ -28,3 +28,20 @@ platforms:
       database:
         name: ubuntu
         encoding: utf8
+    moodle:
+      dbtype: pgsql
+      dblibrary: native
+      dbhost: 192.168.120.150
+      dbname: ubuntu
+      dbuser: ubuntu
+      dbpass: gibberish
+      prefix: mdl_
+      dboptions:
+        dbpersist: False
+        dbport: 5432
+        dbsocket:
+      dataroot: /home/ubuntu/data
+      directorypermissions: '0777'
+      wwwroot: http://192.168.120.50
+      sslproxy: false
+      admin: admin

@@ -2,7 +2,7 @@ server {
     listen 80;
     server_name {{ domain }};
 
-    root {{ platform['user']['home'] }}/htdocs;
+    root {{ platform['user']['home'] }}/current;
     index index.php index.html;
 
     client_max_body_size {{ platform['nginx']['client_max_body_size'] }};
@@ -10,7 +10,7 @@ server {
     include "conf.d/site.{{ platform['basename'] }}.*.conf";
 
     location ~ \.php(.*)$ {
-        fastcgi_pass  unix:/var/run/php/php7.0-fpm-{{ platform['basename'] }}.sock;
+        fastcgi_pass unix:/var/run/php/php7.0-fpm-{{ platform['basename'] }}.sock;
         include snippets/fastcgi-php.conf;
     }
 }
