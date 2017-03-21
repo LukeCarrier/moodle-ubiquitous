@@ -17,6 +17,11 @@ ufw.dead:
   service.dead:
     - name: ufw
 
+iptables.persistent:
+  pkg.installed:
+    - pkgs:
+      - iptables-persistent
+
 iptables.default.input.established:
   iptables.append:
     - chain: INPUT
