@@ -20,6 +20,7 @@ postgresql-server:
     - name: postgresql@9.5-main
     - enable: True
     - require:
+      - pkg: postgresql-server
       - file: postgresql-server.postgresql.conf
       - file: postgresql-server.pg_hba.conf
 
