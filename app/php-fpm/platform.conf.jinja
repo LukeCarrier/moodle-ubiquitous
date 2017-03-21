@@ -1,6 +1,6 @@
 [{{ domain }}]
 
-listen = /var/run/php/php7.0-fpm-{{ platform['basename'] }}.{{ instance }}.sock
+listen = /var/run/php/php7.0-fpm-{{ platform['basename'] }}.sock
 listen.backlog = 128
 listen.allowed_clients = 127.0.0.1
 listen.owner = {{ pillar['nginx']['user'] }}

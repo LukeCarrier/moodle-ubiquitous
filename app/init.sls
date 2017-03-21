@@ -59,6 +59,12 @@ nginx.reload:
       - file: /etc/nginx/sites-enabled/default
       - pkg: nginx
 
+/etc/nginx/sites-extra:
+  file.directory:
+    - user: root
+    - group: root
+    - mode: 755
+
 #
 # PHP
 #
@@ -96,6 +102,12 @@ php.packages:
     - mode: 755
 
 /etc/php/7.0/fpm/pools-enabled:
+  file.directory:
+    - user: root
+    - group: root
+    - mode: 755
+
+/etc/php/7.0/fpm/pools-extra:
   file.directory:
     - user: root
     - group: root
