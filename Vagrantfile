@@ -13,7 +13,7 @@ Vagrant.configure(2) do |config|
     salt.vm.network "forwarded_port", guest: 22, host: salt.ssh.port
 
     salt.vm.synced_folder ".", "/srv/salt", type: "rsync"
-    salt.vm.synced_folder "vagrant/salt/pillars", "/srv/pillar", type: "rsync"
+    salt.vm.synced_folder "vagrant/salt/pillar", "/srv/pillar", type: "rsync"
     salt.vm.provision "salt-salt", type: "shell", path: "vagrant/salt/install",
                       args: [ "--master", "app-debug-1,db-pgsql-1,gocd,mail-debug,salt,selenium-hub,selenium-node-chrome,selenium-node-firefox", "--minion", "salt", "--root", "/srv/salt/vagrant/salt" ]
   end
