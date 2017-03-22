@@ -9,6 +9,7 @@
 # Default firewall policy
 #
 
+{% if pillar['systemd']['apply'] %}
 ufw.disable:
   service.disabled:
     - name: ufw
@@ -16,7 +17,9 @@ ufw.disable:
 ufw.dead:
   service.dead:
     - name: ufw
+{% endif %}
 
+{% if pillar['iptables']['apply'] %}
 iptables.persistent:
   pkg.installed:
     - pkgs:
@@ -52,6 +55,7 @@ iptables.default.forward.local:
     - jump: ACCEPT
     - source: 127.0.0.1
     - save: True
+{% endif %}
 
 #
 # Administrative user
@@ -112,13 +116,21 @@ ssh:
     - source: salt://base/sshd/sshd_config
     - require:
       - pkg: openssh-server
+
+{% if pillar['systemd']['apply'] %}
+ssh.service:
   service.running:
+    - name: ssh
     - enable: True
     - reload: True
     - require:
       - pkg: openssh-server
     - watch:
       - file: /etc/ssh/sshd_config
+{% endif %}
+
+{% if pillar['iptables']['apply'] %}
+ssh.iptables:
   iptables.append:
     - chain: INPUT
     - jump: ACCEPT
@@ -127,6 +139,7 @@ ssh:
     - save: True
     - require_in:
       - iptables.default.input.drop
+{% endif %}
 
 #
 # Useful administrative tools
@@ -149,8 +162,12 @@ ntp:
     - pkgs:
       - ntp
       - ntpdate
+
+{% if pillar['systemd']['apply'] %}
+ntp.service:
   service.running:
     - name: ntp
     - enable: True
     - require:
       - pkg: ntp
+{% endif %}

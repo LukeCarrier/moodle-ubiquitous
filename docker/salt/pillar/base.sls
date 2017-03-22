@@ -6,7 +6,7 @@ admin:
   home: /home/ubuntu
 
 iptables:
-  apply: True
+  apply: False
 
 systemd:
-  apply: True
+  apply: False

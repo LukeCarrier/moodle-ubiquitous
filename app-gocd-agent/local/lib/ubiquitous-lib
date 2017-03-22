@@ -13,7 +13,8 @@ IFS=$'\n\t'
 shopt -s extglob
 shopt -s nullglob
 
-UBIQUITOUS_PLATFORMS="/usr/local/ubiquitous/etc/ubiquitous-platforms"
+UBIQUITOUS_PREFIX="/usr/local/ubiquitous"
+UBIQUITOUS_PLATFORMS="${UBIQUITOUS_PREFIX}/etc/ubiquitous-platforms"
 
 UBIQUITOUS_RELEASES_DIR="%s/releases"
 UBIQUITOUS_CURRENT_LINK="%s/current"
@@ -37,11 +38,24 @@ SYMLINK_TARGET_NOT_PRESENT=2
 SYMLINK_TARGET_INVALID_PARENT=2
 
 abort() {
-    local status=$1
-    local message=$2
+    local status="$1"
+    local message="$2"
 
     echo "$message" >&2
-    exit $status
+    exit "$status"
+}
+
+in_array() {
+    local haystack=${1}[@]
+    local needle="$2"
+
+    for i in "${!haystack}"; do
+        if [[ "$i" == "$needle" ]]; then
+            return 0
+        fi
+    done
+
+    return 1
 }
 
 require_root() {
@@ -201,23 +215,29 @@ phpfpm_resolve_socket_link() {
 phpfpm_disable_instance() {
     local basename="$1"
     local instance="$2"
+    local reload="$3"
 
     local source="$(phpfpm_resolve_instance_config "$basename" "$instance")"
     local link="$(phpfpm_resolve_instance_link "$basename" "$instance")"
 
     rm -f "$link"
-    systemctl reload "$UBIQUITOUS_PHPFPM_SERVICE"
+    if [ "$reload" != "0" ]; then
+        systemctl reload "$UBIQUITOUS_PHPFPM_SERVICE"
+    fi
 }
 
 phpfpm_enable_instance() {
     local basename="$1"
     local instance="$2"
+    local reload="$3"
 
     local source="$(phpfpm_resolve_instance_config "$basename" "$instance")"
     local link="$(phpfpm_resolve_instance_link "$basename" "$instance")"
 
     ln -sfn "$source" "$link"
-    systemctl reload "$UBIQUITOUS_PHPFPM_SERVICE"
+    if [ "$reload" != "0" ]; then
+        systemctl reload "$UBIQUITOUS_PHPFPM_SERVICE"
+    fi
 }
 
 phpfpm_set_current_instance() {

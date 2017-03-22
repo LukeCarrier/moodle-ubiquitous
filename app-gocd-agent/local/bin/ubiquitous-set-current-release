@@ -8,13 +8,15 @@
 #
 
 domain=''
+reload=1
 release=''
 
 while true; do
     case "$1" in
-        -d|--domain  ) domain="$2"  ; shift 2 ;;
-        -r|--release ) release="$2" ; shift 2 ;;
-        *            ) break        ;         ;;
+        -d|--domain         ) domain="$2"  ; shift 2 ;;
+        -m|--manually-reload) reload=0     ; shift 1 ;;
+        -r|--release        ) release="$2" ; shift 2 ;;
+        *                   ) break        ;         ;;
     esac
 done
 
@@ -46,13 +48,13 @@ phpfpm_socket_link="$(phpfpm_resolve_socket_link "$platform_basename")"
 phpfpm_inactive_socket="$(phpfpm_resolve_socket "$platform_basename" "$phpfpm_inactive_instance")"
 
 echo "enabling pool '${phpfpm_inactive_instance}'..."
-phpfpm_enable_instance "$platform_basename" "$phpfpm_inactive_instance"
+phpfpm_enable_instance "$platform_basename" "$phpfpm_inactive_instance" "$reload"
 
 echo "pointing '${platform_current_link}' at release directory '${release_dir}'..."
-ln -sfn "$release_dir" "$platform_current_link"
+sudo -u "$platform_user" ln -sfn "$release_dir" "$platform_current_link"
 
 echo "setting active pool socket '${phpfpm_socket_link}' to '${phpfpm_inactive_socket}'..."
 phpfpm_set_current_instance "$platform_basename" "$phpfpm_inactive_instance"
 
 echo "disabling previously active php-fpm pool '${phpfpm_active_instance}'..."
-phpfpm_disable_instance "$platform_basename" "$phpfpm_active_instance"
+phpfpm_disable_instance "$platform_basename" "$phpfpm_active_instance" "$reload"

@@ -14,11 +14,17 @@ go-server:
   - require:
     - file: /etc/apt/sources.list.d/gocd.list
     - cmd: /etc/apt/sources.list.d/gocd.list
+
+{% if pillar['systemd']['apply'] %}
+go-server.service:
   service.running:
+  - name: go-server
   - enable: True
   - require:
     - pkg: go-server
+{% endif %}
 
+{% if pillar['iptables']['apply'] %}
 go-server.iptables.dashboard-http:
   iptables.append:
   - chain: INPUT
@@ -42,6 +48,7 @@ go-server.iptables.dashboard-https:
     - iptables: iptables.default.input.established
   - require_in:
     - iptables: iptables.default.input.drop
+{% endif %}
 
 /var/go/users:
   file.managed:

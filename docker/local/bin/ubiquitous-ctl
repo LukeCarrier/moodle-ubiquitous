@@ -1,0 +1,66 @@
+#!/bin/bash
+
+#
+# Ubiquitous Moodle
+#
+# @author Luke Carrier <luke@carrier.im>
+# @copyright 2016 Luke Carrier
+#
+
+. "$(dirname $(dirname $(readlink -fn $0)))/lib/ubiquitous-lib"
+
+UBIQUITOUS_NGINX_PIDFILE="/run/nginx.pid"
+UBIQUITOUS_PHPFPM_PIDFILE="/run/php/php7.0-fpm.pid"
+
+if [ $# -lt 1 ] || [ $# -gt 2 ]; then
+    abort $ERROR_PARAMS "usage: $(basename "$0") <ACTION (start, stop, restart)> [SERVICE (nginx, php-fpm, postgresql)]"
+fi
+
+action="$1"
+IFS=' ' declare -a UBIQUITOUS_SERVICES=(nginx php-fpm postgresql)
+if in_array UBIQUITOUS_SERVICES "${2:-UNSET}"; then
+    services="$2"
+else
+    services="${UBIQUITOUS_SERVICES[@]}"
+fi
+
+start() {
+    [[ " ${services[@]} " =~ " nginx " ]] && start-stop-daemon --start \
+            --oknodo --pidfile "$UBIQUITOUS_NGINX_PIDFILE" \
+            --startas "$(which nginx)" \
+            -- -g 'daemon on; master_process on;'
+
+    [[ " ${services[@]} " =~ " php-fpm " ]] && start-stop-daemon --start \
+            --oknodo --pidfile "$UBIQUITOUS_PHPFPM_PIDFILE" \
+            --startas "$(which php-fpm7.0)" \
+            -- --daemonize --fpm-config /etc/php/7.0/fpm/php-fpm.conf
+
+    [[ " ${services[@]} " =~ " postgresql " ]] && /usr/bin/pg_ctlcluster \
+            --skip-systemctl-redirect -m fast 9.5-main start -- -w
+}
+
+stop() {
+    [[ " ${services[@]} " =~ " nginx " ]] && start-stop-daemon --stop \
+            --oknodo --retry 5 --pidfile "$UBIQUITOUS_NGINX_PIDFILE"
+
+    [[ " ${services[@]} " =~ " php-fpm " ]] && start-stop-daemon --stop \
+            --oknodo --retry 5 --pidfile "$UBIQUITOUS_PHPFPM_PIDFILE"
+
+    [[ " ${services[@]} " =~ " postgresql " ]] && /usr/bin/pg_ctlcluster \
+            --skip-systemctl-redirect -m fast 9.5-main stop -- -w
+}
+
+case "$action" in
+    start)
+        start
+        ;;
+
+    stop)
+        stop
+        ;;
+
+    restart)
+        stop
+        start
+        ;;
+esac

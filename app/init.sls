@@ -14,11 +14,22 @@ include:
 
 nginx:
   pkg.installed: []
+
+{% if pillar['systemd']['apply'] %}
+nginx.service:
   service.running:
+    - name: nginx
     - enable: True
     - require:
       - pkg: nginx
 
+nginx.reload:
+  service.running:
+    - name: nginx
+    - reload: True
+{% endif %}
+
+{% if pillar['iptables']['apply'] %}
 nginx.iptables.http:
   iptables.append:
     - chain: INPUT
@@ -42,11 +53,15 @@ nginx.iptables.https:
       - iptables: iptables.default.input.established
     - require_in:
       - iptables: iptables.default.input.drop
+{% endif %}
 
-nginx.reload:
-  service.running:
-    - name: nginx
-    - reload: True
+/etc/nginx/nginx.conf:
+  file.managed:
+    - source: salt://app/nginx/nginx.conf.jinja
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 0644
 
 /etc/nginx/sites-enabled/default:
   file.absent:
@@ -120,6 +135,7 @@ php.packages:
       - file: /etc/php/7.0/fpm/php-fpm.conf
       - file: /etc/php/7.0/fpm/pools-enabled
 
+{% if pillar['systemd']['apply'] %}
 php-fpm:
   service.running:
     - name: php7.0-fpm
@@ -132,6 +148,7 @@ php-fpm.reload:
   service.running:
     - name: php7.0-fpm
     - reload: True
+{% endif %}
 
 #
 # Supporting packages
@@ -162,7 +179,7 @@ homes.{{ home_directory }}:
 # Moodle platforms
 #
 
-{% for domain, platform in pillar['platforms'].items() %}
+{% for domain, platform in salt['pillar.get']('platforms', {}).items() %}
 moodle.{{ domain }}.user:
   user.present:
     - name: {{ platform['user']['name'] }}
@@ -252,8 +269,10 @@ moodle.{{ domain }}.nginx.enabled:
     - target: /etc/nginx/sites-available/{{ platform['basename'] }}.conf
     - require:
       - file: moodle.{{ domain }}.nginx.available
+{% if pillar['systemd']['apply'] %}
     - require_in:
       - service: nginx.reload
+{% endif %}
 
 {% for instance in ['blue', 'green'] %}
 moodle.{{ domain }}.{{ instance }}.php-fpm:
@@ -270,8 +289,10 @@ moodle.{{ domain }}.{{ instance }}.php-fpm:
     - mode: 0644
     - require:
       - pkg: php.packages
+{% if pillar['systemd']['apply'] %}
     - require_in:
       - service: php-fpm.reload
+{% endif %}
 {% endfor %}
 
 moodle.{{ domain }}.config:

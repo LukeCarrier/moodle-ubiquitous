@@ -16,13 +16,17 @@ postgresql-server:
   pkg.installed:
     - name: postgresql-9.5
     - allow_updates: True
+
+{% if pillar['systemd']['apply'] %}
+postgresql-server.service:
   service.running:
-    - name: postgresql@9.5-main
+    - name: postgresql
     - enable: True
     - require:
       - pkg: postgresql-server
       - file: postgresql-server.postgresql.conf
       - file: postgresql-server.pg_hba.conf
+{% endif %}
 
 postgresql-server.postgresql.conf:
   file.managed:
@@ -44,6 +48,7 @@ postgresql-server.pg_hba.conf:
     - require:
       - pkg: postgresql-server
 
+{% if pillar['iptables']['apply'] %}
 postgresql-server.iptables.pgsql:
   iptables.append:
     - chain: INPUT
@@ -55,15 +60,18 @@ postgresql-server.iptables.pgsql:
       - iptables: iptables.default.input.established
     - require_in:
       - iptables: iptables.default.input.drop
+{% endif %}
 
-{% for domain, platform in pillar['platforms'].items() %}
+{% for domain, platform in salt['pillar.get']('platforms', {}).items() %}
 moodle.{{ domain }}.postgres:
   postgres_user.present:
     - user: postgres
     - name: {{ platform['pgsql']['user']['name'] }}
     - password: {{ platform['pgsql']['user']['password'] }}
+{% if pillar['systemd']['apply'] %}
     - require:
-      - service: postgresql-server
+      - service: postgresql-server.service
+{% endif %}
   postgres_database.present:
     - user: postgres
     - name: {{ platform['pgsql']['database']['name'] }}
@@ -71,5 +79,7 @@ moodle.{{ domain }}.postgres:
     - owner: {{ platform['pgsql']['user']['name'] }}
     - require:
       - postgres_user: moodle.{{ domain }}.postgres
-      - service: postgresql-server
+{% if pillar['systemd']['apply'] %}
+      - service: postgresql-server.service
+{% endif %}
 {% endfor %}

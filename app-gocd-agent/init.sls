@@ -84,7 +84,7 @@
 # Filesystem permissions
 #
 
-{% for domain, platform in pillar['platforms'].items() %}
+{% for domain, platform in salt['pillar.get']('platforms', {}).items() %}
 app-gocd-agent.{{ domain }}.home:
   acl.present:
     - name: {{ platform['user']['home'] }}

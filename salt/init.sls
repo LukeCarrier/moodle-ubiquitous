@@ -19,6 +19,7 @@ salt-master:
     - require:
       - pkg: salt-master
 
+{% if pillar['iptables']['apply'] %}
 salt-master.iptables.publish:
   iptables.append:
     - chain: INPUT
@@ -42,3 +43,4 @@ salt-master.iptables.ret:
       - iptables: iptables.default.input.established
     - require_in:
       - iptables: iptables.default.input.drop
+{% endif %}

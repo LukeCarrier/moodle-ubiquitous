@@ -14,11 +14,16 @@ go-agent:
     - require:
       - file: /etc/apt/sources.list.d/gocd.list
       - cmd: /etc/apt/sources.list.d/gocd.list
+
+{% if pillar['systemd']['apply'] %}
+go-agent.service:
   service.running:
+    - name: go-agent
     - enable: True
     - require:
       - pkg: go-agent
       - file: go-agent.defaults
+{% endif %}
 
 go-agent.defaults:
   file.managed:
