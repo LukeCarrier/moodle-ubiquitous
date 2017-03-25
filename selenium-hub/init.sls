@@ -13,6 +13,7 @@ include:
   file.managed:
     - source: salt://selenium-hub/systemd/selenium-hub.service
 
+{% if pillar['systemd']['apply'] %}
 selenium-hub:
   service.running:
     - enable: True
@@ -21,28 +22,24 @@ selenium-hub:
       - file: /etc/systemd/system/selenium-hub.service
       - file: /opt/selenium/selenium-server.jar
       - file: /opt/selenium/hub.json
-      - pkg: java-1.8.0-openjdk-headless
+      - pkg: oracle-java.java8
       - user: selenium
+{% endif %}
 
 /opt/selenium/hub.json:
   file.managed:
     - source: salt://selenium-hub/selenium/hub.json
 
-/etc/firewalld/services/selenium-hub.xml:
-  file.managed:
-    - source: salt://selenium-hub/firewalld/selenium-hub.xml
-
-public:
-  firewalld.present:
-    - services:
-      - selenium-hub
-      - ssh
+{% if pillar['iptables']['apply'] %}
+nginx.iptables.http:
+  iptables.append:
+    - chain: INPUT
+    - jump: ACCEPT
+    - proto: tcp
+    - dport: 4444
+    - save: True
     - require:
-      - file: /etc/firewalld/services/selenium-hub.xml
-      - service: firewalld.reload
-
-'selenium-hub: firewall-cmd --runtime-to-permanent':
-  cmd.run:
-    - name: firewall-cmd --runtime-to-permanent
-    - require:
-      - firewalld: public
+      - iptables: iptables.default.input.established
+    - require_in:
+      - iptables: iptables.default.input.drop
+{% endif %}

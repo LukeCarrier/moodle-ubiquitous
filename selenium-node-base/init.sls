@@ -5,43 +5,54 @@
 # @copyright 2016 Luke Carrier
 #
 
-rpmforge-release:
-  pkg.installed:
-    - sources:
-      - rpmforge-release: salt://cache/rpmforge-release-0.5.3-1.el7.rf.x86_64.rpm
-
-xorg-x11-server-Xvfb:
-  pkg.installed
+include:
+  - base
+  - selenium-base
 
 x11vnc:
   pkg.installed:
-    - require:
-      - pkg: rpmforge-release
+    - pkgs:
+      - x11vnc
+      - xvfb
+
+{% if pillar['systemd']['apply'] %}
+x11vnc.service:
   service.running:
     - enable: True
     - reload: True
     - require:
       - file: /etc/systemd/system/x11vnc.service
       - file: /etc/systemd/system/xvfb.service
+{% endif %}
+
+x11vnc.fonts:
+  pkg.installed:
+    - pkgs:
+      - fonts-liberation
+      - ttf-ubuntu-font-family
 
 /etc/systemd/system/selenium-node.service:
   file.managed:
     - source: salt://selenium-node-base/systemd/selenium-node.service
+    - user: root
+    - group: root
+    - mode: 0644
 
 /etc/systemd/system/xvfb.service:
   file.managed:
     - source: salt://selenium-node-base/systemd/xvfb.service
+    - user: root
+    - group: root
+    - mode: 0644
 
 /etc/systemd/system/x11vnc.service:
   file.managed:
     - source: salt://selenium-node-base/systemd/x11vnc.service
+    - user: root
+    - group: root
+    - mode: 0644
 
-liberation-fonts:
-  pkg.installed:
-    - pkgs:
-      - liberation-mono-fonts
-      - liberation-serif-fonts
-
+{% if pillar['systemd']['apply'] %}
 selenium-node:
   service.running:
     - enable: True
@@ -50,25 +61,32 @@ selenium-node:
       - file: /etc/systemd/system/selenium-node.service
       - file: /etc/systemd/system/xvfb.service
       - file: /opt/selenium/selenium-server.jar
-      - pkg: java-1.8.0-openjdk-headless
-      - pkg: xorg-x11-server-Xvfb
+      - pkg: oracle-java.java8
+      - pkg: x11vnc
+{% endif %}
 
-/etc/firewalld/services/selenium-node.xml:
-  file.managed:
-    - source: salt://selenium-node-base/firewalld/selenium-node.xml
-
-/etc/firewalld/services/x11vnc.xml:
-  file.managed:
-    - source: salt://selenium-node-base/firewalld/x11vnc.xml
-
-public:
-  firewalld.present:
-    - services:
-      - selenium-node
-      - ssh
-      - x11vnc
+{% if pillar['iptables']['apply'] %}
+x11vnc.iptables:
+  iptables.append:
+    - chain: INPUT
+    - jump: ACCEPT
+    - proto: tcp
+    - dport: 5999
+    - save: True
     - require:
-      - file: /etc/firewalld/services/selenium-node.xml
-      - file: /etc/firewalld/services/x11vnc.xml
+      - iptables: iptables.default.input.established
+    - require_in:
+      - iptables: iptables.default.input.drop
+
+selenium-node.iptables:
+  iptables.append:
+    - chain: INPUT
+    - jump: ACCEPT
+    - proto: tcp
+    - dport: 5555
+    - save: True
     - require:
-      - service: firewalld.reload
+      - iptables: iptables.default.input.established
+    - require_in:
+      - iptables: iptables.default.input.drop
+{% endif %}

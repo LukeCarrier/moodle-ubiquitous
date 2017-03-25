@@ -5,6 +5,9 @@
 # @copyright 2016 Luke Carrier
 #
 
+include:
+  - java-base
+
 '/etc/apt/sources.list.d/gocd.list':
   file.managed:
     - source: salt://gocd-base/lists/gocd.list
@@ -14,27 +17,6 @@
   cmd.run:
     - name: apt-key adv --keyserver pgp.mit.edu --recv-keys 8816C449
     - unless: apt-key list | grep 8816C449
-
-oracle-java.ppa:
-  pkgrepo.managed:
-    - humanname: Oracle Java (JDK) 7 / 8 / 9 Installer PPA
-    - ppa: webupd8team/java
-
-oracle-java.license.select:
-  debconf.set:
-    - name: 'oracle-java8-installer'
-    - data:
-        'shared/accepted-oracle-license-v1-1': { 'type': 'boolean', 'value': True }
-    - require:
-      - pkgrepo: oracle-java.ppa
-
-oracle-java.java8:
-  pkg.installed:
-    - pkgs:
-      - oracle-java8-installer
-      - oracle-java8-set-default
-    - require:
-      - debconf: oracle-java.license.select
 
 /var/go/.ssh:
   file.directory:

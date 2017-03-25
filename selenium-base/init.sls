@@ -5,6 +5,9 @@
 # @copyright 2016 Luke Carrier
 #
 
+include:
+  - java-base
+
 /opt/selenium:
   file.directory:
     - user: root
@@ -13,12 +16,10 @@
 
 /opt/selenium/selenium-server.jar:
   file.managed:
-    - source: salt://cache/selenium-server-standalone-3.0.1.jar
+    - source: {{ pillar['selenium']['server_jar']['source'] }}
+    - source_hash: {{ pillar['selenium']['server_jar']['source_hash'] }}
     - require:
       - file: /opt/selenium
-
-java-1.8.0-openjdk-headless:
-  pkg.installed
 
 selenium:
   user.present:

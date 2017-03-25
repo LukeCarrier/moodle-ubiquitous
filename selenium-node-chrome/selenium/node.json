@@ -3,7 +3,12 @@
     {
       "browserName": "chrome",
       "maxInstances": 1,
-      "seleniumProtocol": "WebDriver"
+      "seleniumProtocol": "WebDriver",
+      "chromeOptions": {
+        "prefs": {
+          "password_manager_enabled": false
+        }
+      }
     }
   ],
   "proxy": "org.openqa.grid.selenium.proxy.DefaultRemoteProxy",

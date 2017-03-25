@@ -14,3 +14,7 @@ base:
   'roles:(gocd-agent|gocd-server)':
     - match: grain_pcre
     - gocd
+
+  'roles:selenium-.+':
+    - match: grain_pcre
+    - selenium
