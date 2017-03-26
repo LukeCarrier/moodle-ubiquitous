@@ -1,3 +1,13 @@
+location /behat {
+    alias {{ platform['user']['home'] }}/current;
+
+    location ~ ^/behat(.+\.php)(/|$) {
+        include snippets/fastcgi-php.conf;
+        fastcgi_param SCRIPT_FILENAME $document_root$1;
+        fastcgi_pass unix:/var/run/php/php7.0-fpm-ubuntu.sock;
+    }
+}
+
 location /data/behat-faildump {
     alias {{ platform['user']['home'] }}/data/behat-faildump;
     autoindex on;
