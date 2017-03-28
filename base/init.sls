@@ -78,6 +78,9 @@ locales.default:
 #
 
 admin:
+  group.present:
+    - name: admin
+    - system: True
   user.present:
     - name: {{ pillar['admin']['name'] }}
     - password: {{ pillar['admin']['password'] }}
@@ -86,6 +89,8 @@ admin:
     - home: {{ pillar['admin']['home'] }}
     - gid_from_name: True
     - groups: {{ pillar['admin']['groups'] }}
+    - require:
+      - group: admin
 
 admin.ssh:
   file.directory:
