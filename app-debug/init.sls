@@ -16,12 +16,17 @@ php.xdebug:
   - user: {{ platform['user']['name'] }}
   - group: {{ platform['user']['name'] }}
   - mode: 0770
+
+{% if pillar['acl']['apply'] %}
+{{ platform['user']['home'] }}/data/behat-faildump.acl:
   acl.present:
+  - name: {{ platform['user']['home'] }}/data/behat-faildump
   - acl_type: user
   - acl_name: nginx
   - perms: rx
   - require:
     - file: {{ platform['user']['home'] }}/data/behat-faildump
+{% endif %}
 
 /etc/php/7.0/fpm/pools-extra/{{ platform['basename'] }}.debug.conf:
   file.managed:

@@ -84,6 +84,7 @@
 # Filesystem permissions
 #
 
+{% if pillar['acl']['apply'] %}
 {% for domain, platform in salt['pillar.get']('platforms', {}).items() %}
 app-gocd-agent.{{ domain }}.home:
   acl.present:
@@ -101,3 +102,4 @@ app-gocd-agent.{{ domain }}.home.default:
     - perms: rwx
     - recurse: True
 {% endfor %}
+{% endif %}

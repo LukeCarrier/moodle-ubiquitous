@@ -5,6 +5,9 @@ admin:
     - sudo
   home: /home/ubuntu
 
+acl:
+  apply: True
+
 iptables:
   apply: True
 

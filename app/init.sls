@@ -168,11 +168,15 @@ homes.{{ home_directory }}:
     - user: root
     - group: root
     - mode: 755
+
+{% if pillar['acl']['apply'] %}
+homes.{{ home_directory }}.acl:
   acl.present:
     - name: {{ home_directory }}
     - acl_type: user
     - acl_name: nginx
     - perms: rx
+{% endif %}
 {% endfor %}
 
 #
@@ -196,6 +200,9 @@ moodle.{{ domain }}.home:
     - mode: 0770
     - require:
       - user: {{ platform['user']['name'] }}
+
+{% if pillar['acl']['apply'] %}
+moodle.{{ domain }}.home.acl:
   acl.present:
     - name: {{ platform['user']['home'] }}
     - acl_type: user
@@ -204,7 +211,7 @@ moodle.{{ domain }}.home:
     - require:
       - file: moodle.{{ domain }}.home
 
-moodle.{{ domain }}.home.default:
+moodle.{{ domain }}.home.acl.default:
   acl.present:
     - name: {{ platform['user']['home'] }}
     - acl_type: default:user
@@ -212,6 +219,7 @@ moodle.{{ domain }}.home.default:
     - perms: rx
     - require:
       - file: moodle.{{ domain }}.home
+{% endif %}
 
 moodle.{{ domain }}.releases:
   file.directory:
@@ -222,6 +230,9 @@ moodle.{{ domain }}.releases:
     - mode: 0770
     - require:
       - file: moodle.{{ domain }}.home
+
+{% if pillar['acl']['apply'] %}
+moodle.{{ domain }}.releases.acl:
   acl.present:
     - name: {{ platform['user']['home'] }}/releases
     - acl_type: user
@@ -230,7 +241,7 @@ moodle.{{ domain }}.releases:
     - require:
       - file: moodle.{{ domain }}.releases
 
-moodle.{{ domain }}.releases.default:
+moodle.{{ domain }}.releases.acl.default:
   acl.present:
     - name: {{ platform['user']['home'] }}/releases
     - acl_type: default:user
@@ -238,6 +249,7 @@ moodle.{{ domain }}.releases.default:
     - perms: rx
     - require:
       - file: moodle.{{ domain }}.home
+{% endif %}
 
 moodle.{{ domain }}.data:
   file.directory:
