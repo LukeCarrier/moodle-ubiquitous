@@ -224,14 +224,22 @@ $ vagrant ssh salt --command 'sudo salt 'selenium-*' state.apply'
 Then ensure that all of the Behat-related options are present in your Moodle `config.php` (see the recommended configuration for advice) and run the following command to bootstrap your test site:
 
 ```
-$ vagrant ssh app-debug-1 --command 'sudo -u moodle php ~moodle/htdocs/admin/tool/behat/cli/init.php'
+$ vagrant ssh app-debug-1 --command 'php current/admin/tool/behat/cli/init.php'
 ```
 
-The acceptance test site will then be accessible from each of the application
-servers at `{wwwroot}/behat`. Run the tests with:
+The acceptance test site will then be accessible from each of the application servers at `{wwwroot}/behat`.
+
+Some of the tests attempt to upload files within the Moodle source tree to the application. We must therefore synchronise the Moodle source tree to the Selenium nodes and apply [a patch](https://github.com/moodle/moodle/compare/master...LukeCarrier:MDL-NOBUG-selenium-remote-node-file-upload-master) to Moodle to allow it to locate these files:
 
 ```
-$ vagrant ssh app-debug-1 --command 'sudo -u moodle ~moodle/htdocs/vendor/bin/behat --config ~moodle/data/behat/behat/behat.yml --profile chrome'
+$ vagrant rsync selenium-node-chrome
+$ vagrant rsync selenium-node-firefox
+```
+
+Run the tests with:
+
+```
+$ vagrant ssh app-debug-1 --command 'current/vendor/bin/behat --config data/behat/behatrun/behat/behat.yml --profile chrome'
 ```
 
 ### PHPUnit
