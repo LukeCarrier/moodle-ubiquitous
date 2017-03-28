@@ -49,4 +49,5 @@ selenium-node.restart:
 
 /opt/selenium/node.json:
   file.managed:
-    - source: salt://selenium-node-chrome/selenium/node.json
+    - source: salt://selenium-node-chrome/selenium/node.json.jinja
+    - template: jinja

@@ -1,0 +1,2 @@
+postgresql:
+  client_authentication: []

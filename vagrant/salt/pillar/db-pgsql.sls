@@ -1,8 +1,7 @@
-platforms:
-  dev.local:
-    user:
-      name: dev-local
-      password: gibberish
-    database:
-      name: dev-local
-      encoding: utf8
+postgresql:
+  client_authentication:
+    - type: host
+      database: all
+      user: all
+      address: 192.168.120.0/24
+      method: md5

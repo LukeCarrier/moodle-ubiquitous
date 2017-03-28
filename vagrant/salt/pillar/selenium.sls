@@ -5,3 +5,10 @@ selenium:
   chromedriver:
     source: https://chromedriver.storage.googleapis.com/2.28/chromedriver_linux64.zip
     source_hash: 8f5b0ab727c326a2f7887f08e4f577cb4452a9e5783d1938728946a8557a37bc
+
+selenium-hub:
+  port: 4444
+
+selenium-node:
+  hub: http://192.168.120.100:4444
+  port: 5555

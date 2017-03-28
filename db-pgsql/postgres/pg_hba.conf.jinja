@@ -86,7 +86,9 @@ local   all             postgres                                peer
 
 # TYPE  DATABASE        USER            ADDRESS                 METHOD
 
-host    all             all             192.168.120.0/24        md5
+{% for record in pillar['postgresql']['client_authentication'] %}
+{{ record['type'] }} {{ record['database'] }} {{ record['user'] }} {{ record['address'] }} {{ record['method'] }}
+{% endfor %}
 
 # "local" is for Unix domain socket connections only
 local   all             all                                     peer

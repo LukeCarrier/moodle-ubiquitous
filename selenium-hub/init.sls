@@ -28,7 +28,8 @@ selenium-hub:
 
 /opt/selenium/hub.json:
   file.managed:
-    - source: salt://selenium-hub/selenium/hub.json
+    - source: salt://selenium-hub/selenium/hub.json.jinja
+    - template: jinja
 
 {% if pillar['iptables']['apply'] %}
 nginx.iptables.http:
