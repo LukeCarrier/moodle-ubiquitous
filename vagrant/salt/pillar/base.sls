@@ -8,5 +8,12 @@ admin:
 iptables:
   apply: True
 
+locales:
+  present:
+    - en_AU.UTF-8
+    - en_GB.UTF-8
+    - en_US.UTF-8
+  default: en_GB.UTF-8
+
 systemd:
   apply: True

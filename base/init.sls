@@ -58,6 +58,22 @@ iptables.default.forward.local:
 {% endif %}
 
 #
+# Locales
+#
+
+{% for locale in pillar['locales']['present'] %}
+locales.present.{{ locale }}:
+  locale.present:
+    - name: {{ locale }}
+{% endfor %}
+
+locales.default:
+  locale.system:
+    - name: {{ pillar['locales']['default'] }}
+    - require:
+      - locale: locales.present.{{ pillar['locales']['default'] }}
+
+#
 # Administrative user
 #
 

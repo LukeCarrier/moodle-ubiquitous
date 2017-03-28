@@ -21,11 +21,6 @@ RUN apt-get update \
         && apt-get dist-upgrade -y \
         && apt-get install -y curl sudo
 
-# Ensure default locale exists
-RUN cp /usr/share/i18n/SUPPORTED /etc/locale.gen \
-        && locale-gen \
-        && update-locale
-
 # Install Salt and accomanying configuration
 RUN curl -L https://bootstrap.saltstack.com | sh -s -- -X \
         && sed -i "s/#file_client:.*/file_client: local/" /etc/salt/minion
