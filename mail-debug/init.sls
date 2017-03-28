@@ -5,6 +5,9 @@
 # @copyright 2016 Luke Carrier
 #
 
+include:
+  - base
+
 #
 # Dependencies
 #
@@ -12,12 +15,9 @@
 ruby:
   pkg.installed:
     - pkgs:
-      - gcc
-      - gcc-c++
-      - openssl-devel
-      - ruby
-      - ruby-devel
-      - sqlite-devel
+      - build-essential
+      - libsqlite3-dev
+      - ruby-dev
 
 #
 # MailCatcher
@@ -30,9 +30,8 @@ mailcatcher:
     - home: /var/mailcatcher
     - gid_from_name: true
   cmd.run:
-    - name: gem install mailcatcher
-    - user: mailcatcher
-    - group: mailcatcher
+    - name: gem install --user-install mailcatcher
+    - runas: mailcatcher
     - require:
       - user: mailcatcher
   file.managed:
@@ -45,23 +44,34 @@ mailcatcher:
     - enable: True
     - require:
       - file: /etc/systemd/system/mailcatcher.service
-      - cmd: gem install mailcatcher
+      - cmd: mailcatcher
 
 #
 # Firewall
 #
 
-/etc/firewalld/services/mailcatcher.xml:
-  file.managed:
-    - source: salt://mail-debug/firewalld/mailcatcher.xml
-    - user: root
-    - group: root
-
-public:
-  firewalld.present:
-    - services:
-      - mailcatcher
-      - ssh
+{% if pillar['iptables']['apply'] %}
+mailcatcher.iptables.smtp:
+  iptables.append:
+    - chain: INPUT
+    - jump: ACCEPT
+    - proto: tcp
+    - dport: 1025
+    - save: True
     - require:
-      - file: /etc/firewalld/services/mailcatcher.xml
-      - service: firewalld.reload
+      - iptables: iptables.default.input.established
+    - require_in:
+      - iptables: iptables.default.input.drop
+
+mailcatcher.iptables.http:
+  iptables.append:
+    - chain: INPUT
+    - jump: ACCEPT
+    - proto: tcp
+    - dport: 1080
+    - save: True
+    - require:
+      - iptables: iptables.default.input.established
+    - require_in:
+      - iptables: iptables.default.input.drop
+{% endif %}
