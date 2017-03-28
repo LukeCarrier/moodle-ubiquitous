@@ -2,3 +2,5 @@ roles:
   - app
   - app-debug
   - db-pgsql
+  - selenium-hub
+  - selenium-node-chrome

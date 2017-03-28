@@ -7,6 +7,6 @@ base:
     - match: grain
     - app
 
-  'roles:(gocd-agent|gocd-server)':
+  'roles:selenium-.+':
     - match: grain_pcre
-    - gocd
+    - selenium

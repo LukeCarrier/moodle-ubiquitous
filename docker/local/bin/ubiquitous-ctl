@@ -11,9 +11,11 @@
 
 UBIQUITOUS_NGINX_PIDFILE="/run/nginx.pid"
 UBIQUITOUS_PHPFPM_PIDFILE="/run/php/php7.0-fpm.pid"
+UBIQUITOUS_SELENIUM_HUB_PIDFILE="/run/selenium-hub.pid"
+UBIQUITOUS_SELENIUM_NODE_PIDFILE="/run/selenium-node.pid"
 
 if [ $# -lt 1 ] || [ $# -gt 2 ]; then
-    abort $ERROR_PARAMS "usage: $(basename "$0") <ACTION (start, stop, restart)> [SERVICE (nginx, php-fpm, postgresql)]"
+    abort $ERROR_PARAMS "usage: $(basename "$0") <ACTION (start, stop, restart)> [SERVICE (nginx, php-fpm, postgresql, selenium-hub, selenium-node)]"
 fi
 
 action="$1"
@@ -37,6 +39,21 @@ start() {
 
     [[ " ${services[@]} " =~ " postgresql " ]] && /usr/bin/pg_ctlcluster \
             --skip-systemctl-redirect -m fast 9.5-main start -- -w
+
+    [[ " ${services[@]} " =~ " selenium-hub " ]] && start-stop-daemon --start \
+            --oknonodo --pidfile "$UBIQUITOUS_SELENIUM_HUB_PIDFILE" \
+            --user selenium --startas /usr/bin/java \
+            -- -XX:NewSize=128m -XX:MaxNewSize=128m -XX:SurvivorRatio=8 -Xms512m -Xmx512m \
+            -Djava.net.preferIPv4Stack=true \
+            -jar /opt/selenium/selenium-server.jar -role hub
+
+    [[ " ${services[@]} " =~ " selenium-node " ]] && start-stop-daemon --start \
+            --oknonodo --pidfile "$UBIQUITOUS_SELENIUM_NODE_PIDFILE" \
+            --user selenium --startas /usr/bin/java \
+            -- -XX:NewSize=128m -XX:MaxNewSize=128m -XX:SurvivorRatio=8 -Xms512m -Xmx512m \
+            -Djava.net.preferIPv4Stack=true \
+            -Dwebdriver.chrome.driver=/opt/selenium/chromedriver/chromedriver \
+            -jar /opt/selenium/selenium-server.jar -role node
 }
 
 stop() {
@@ -48,6 +65,12 @@ stop() {
 
     [[ " ${services[@]} " =~ " postgresql " ]] && /usr/bin/pg_ctlcluster \
             --skip-systemctl-redirect -m fast 9.5-main stop -- -w
+
+    [[ " ${services[@]} " =~ " selenium-hub " ]] && start-stop-daemon --stop \
+            --oknodo --retry 5 --pidfile "$UBIQUITOUS_SELENIUM_HUB_PIDFILE"
+
+    [[ " ${services[@]} " =~ " selenium-node " ]] && start-stop-daemon --stop \
+            --oknodo --retry 5 --pidfile "$UBIQUITOUS_SELENIUM_NODE_PIDFILE"
 }
 
 case "$action" in
