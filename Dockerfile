@@ -43,6 +43,6 @@ RUN /usr/local/ubiquitous/bin/ubiquitous-ctl start postgresql \
         && /usr/local/ubiquitous/bin/ubiquitous-ctl stop
 
 # Mark a release as active
-RUN sudo -u ubuntu mkdir -p ~ubuntu/releases/test \
+RUN sudo -u ubuntu mkdir -p /home/ubuntu/releases/test \
         && mkdir -p /var/run/php \
         && /usr/local/ubiquitous/bin/ubiquitous-set-current-release --manually-reload --domain dev.local --release test
