@@ -36,10 +36,6 @@ $ vagrant group up dev
 The first time you start the servers, and whenever you make changes to the Salt states, you'll need to converge the state of the machines:
 
 ```
-# Fetch necessary binaries from the Internet; they're all checksummed on their
-# way in :)
-$ ./make-cache
-
 # Provision the Salt master first, opening the ports necessary for
 # master-minion configuration
 $ vagrant ssh --command 'sudo salt salt state.apply'
