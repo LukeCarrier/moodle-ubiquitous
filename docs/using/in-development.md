@@ -4,12 +4,16 @@ In development, Ubiquitous is deployed from [a default Salt pillar](../../vagran
 
 ## Getting started
 
-First, prepare your development by installing the following applications:
+###Prerequisites
+
+Install:
 
 * [VirtualBox](https://www.virtualbox.org/) -- desktop virtualisation
 * [Vagrant](https://www.vagrantup.com/) -- command line tool for managing virtualised development environments
 
-Then install some Vagrant plugins that'll make it easier to manage larger environments:
+Become familiar with Salt - see [Salt Admin](../admin/salt.md)
+
+Install some Vagrant plugins that'll make it easier to manage larger environments:
 
 ```
 # Manage virtual machines in groups
@@ -30,16 +34,13 @@ You'll need to structure your Moodle development environment appropriately. Ubiq
 Start up all of the machines necessary for a testing environment:
 
 ```
+$ cd moodle-ubiquitous
 $ vagrant group up dev
 ```
 
 The first time you start the servers, and whenever you make changes to the Salt states, you'll need to converge the state of the machines:
 
 ```
-# Fetch necessary binaries from the Internet; they're all checksummed on their
-# way in :)
-$ ./make-cache
-
 # Provision the Salt master first, opening the ports necessary for
 # master-minion configuration
 $ vagrant ssh --command 'sudo salt salt state.apply'

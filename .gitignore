@@ -6,3 +6,7 @@
 
 # VM console logs
 /*-console.log
+
+# IDEs
+.project
+.settings/
