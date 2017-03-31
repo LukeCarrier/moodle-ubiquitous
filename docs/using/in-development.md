@@ -4,14 +4,14 @@ In development, Ubiquitous is deployed from [a default Salt pillar](../../vagran
 
 ## Getting started
 
-###Prerequisites
+### Prerequisites
 
-Install:
+Install and be familiar with:
 
 * [VirtualBox](https://www.virtualbox.org/) -- desktop virtualisation
 * [Vagrant](https://www.vagrantup.com/) -- command line tool for managing virtualised development environments
 
-Become familiar with Salt - see [Salt Admin](../admin/salt.md)
+Also be familiar with Salt - see [Salt Admin](../admin/salt.md)
 
 Install some Vagrant plugins that'll make it easier to manage larger environments:
 
@@ -22,15 +22,6 @@ $ vagrant plugin install vagrant-group
 # Automatically manage Guest Additions versions
 $ vagrant plugin install vagrant-vbguest
 ```
-
-You'll need to structure your Moodle development environment appropriately. Ubiquitous sets up a synced folder for `../Moodle` relative to itself to get your source code to the application server:
-
-```
-.
-├── Moodle
-└── Ubiquitous
-```
-
 Start up all of the machines necessary for a testing environment:
 
 ```
@@ -38,169 +29,44 @@ $ cd moodle-ubiquitous
 $ vagrant group up dev
 ```
 
-The first time you start the servers, and whenever you make changes to the Salt states, you'll need to converge the state of the machines:
+The [Vagrantfile](/Vagrantfile) makes assumptions about the host environment, including:
+ * Moodle itself is installed in `../Moodle` relative to Ubiquitous
+ * standard ports are available (for e.g. SSH forwarding)
+
+Use a Vagrantfile.local if needed, or for fix-on-fails; however Vagrant should handle self-configuration on a clean host.
+
+The first time you start the servers, and on changes to a Salt state definition, converge the machine state:
 
 ```
-# Provision the Salt master first, opening the ports necessary for
-# master-minion configuration
+# Converge primary VM (Salt master) first
+# This opens necessary ports for master-minion configuration
 $ vagrant ssh --command 'sudo salt salt state.apply'
 
 # Then converge the rest of the machines
 $ vagrant ssh --command 'sudo salt '*' state.apply'
 ```
 
-The above may take some time to complete. Once the above commands complete, the following services should now be available to you:
+The above may take some time to complete. Then, the following should become available:
 
-* [Moodle](http://192.168.120.50/base/) - your development environment
+* [Moodle](http://192.168.120.50/index.php) - your (unconfigured) Moodle application
 * [MailCatcher](http://192.168.120.200:1080/) - a simple mail server that allows you to browse all of the email it receives
 * PostgreSQL - `192.168.120.150:5432`
 
 ## Recommended Moodle configuration
 
-The following configuration ensures that complex parts of Ubiquitous such as the Behat testing environment function as expected.
+Copy and paste (this config file)[development-config.php] into ``../Moodle/config.php``; then, perform
 
-```php
-<?php // Moodle configuration file
-
-// Boilerplate
-unset($CFG);
-global $CFG;
-$CFG = new stdClass();
-
-// Database server
-    // MySQL
-    //$CFG->dbtype    = 'mysqli';
-    //$CFG->dblibrary = 'native';
-    //$CFG->dbhost    = '192.168.120.155';
-    //$CFG->dbname    = 'moodle';
-    //$CFG->dbuser    = 'moodle';
-    //$CFG->dbpass    = 'Password123';
-    //$CFG->prefix    = 'mdl_';
-    //$CFG->dboptions = array (
-    //    'dbpersist' => 0,
-    //    'dbport'    => 3306,
-    //    'dbsocket'  => '',
-    //);
-
-    // PostgreSQL
-    $CFG->dbtype    = 'pgsql';
-    $CFG->dblibrary = 'native';
-    $CFG->dbhost    = '192.168.120.150';
-    $CFG->dbname    = 'ubuntu';
-    $CFG->dbuser    = 'ubuntu';
-    $CFG->dbpass    = 'gibberish';
-    $CFG->prefix    = 'mdl_';
-    $CFG->dboptions = array (
-        'dbpersist' => 0,
-        'dbport'    => 5432,
-        'dbsocket'  => '',
-    );
-
-    // SQL Server
-    //$CFG->dbtype    = 'sqlsrv';
-    //$CFG->dblibrary = 'native';
-    //$CFG->dbhost    = 'tcp:192.168.120.155';
-    //$CFG->dbname    = 'moodle';
-    //$CFG->dbuser    = 'moodle';
-    //$CFG->dbpass    = 'Password123';
-    //$CFG->prefix    = 'mdl_';
-    //$CFG->dboptions = array(
-    //    'dbpersist' => 0,
-    //    'dbport'    => 1433,
-    //    'dbsocket'  => '',
-    //);
-
-// Base URLs
-$CFG->wwwroot = 'http://192.168.120.50';
-$CFG->admin   = 'admin';
-
-// Data directory
-$CFG->dataroot             = '/home/ubuntu/data/base';
-$CFG->directorypermissions = 0770;
-
-// Send mails via MailCatcher on mail-debug
-$CFG->smtphosts = '192.168.120.200:1025';
-
-// Enable debugging
-$CFG->debug        = E_ALL;
-$CFG->debugdisplay = true;
-
-// Common developer options
-//$CFG->debugstringids = true;
-//$CFG->langstringcache = false;
-//$CFG->cachejs = false;
-//$CFG->themedesignermode = true;
-
-// Behat testing environment
-$CFG->behat_prefix        = 'b_';
-$CFG->behat_dataroot      = dirname($CFG->dataroot) . '/behat';
-$CFG->behat_faildump_path = dirname($CFG->dataroot) . '/behat-faildump';
-$CFG->behat_wwwroot       = 'http://192.168.120.50/behat';
-$CFG->behat_profiles = array(
-    'chrome' => array(
-        'extensions' => array(
-            'Behat\MinkExtension\Extension' => array(
-                'selenium2' => array(
-                    'browser'     => 'chrome',
-                    'browserName' => 'chrome',
-                ),
-            ),
-        ),
-    ),
-    'firefox' => array(
-        'extensions' => array(
-            'Behat\MinkExtension\Extension' => array(
-                'selenium2' => array(
-                    'browser'     => 'firefox',
-                    'browserName' => 'firefox',
-                ),
-            ),
-        ),
-    ),
-    'iexplore' => array(
-        'extensions' => array(
-            'Behat\MinkExtension\Extension' => array(
-                'selenium2' => array(
-                    'browser'     => 'iexplore',
-                    'browserName' => 'iexplore',
-                ),
-            ),
-        ),
-    ),
-);
-$CFG->behat_config = array_merge(array(
-    'default' => array(
-        'extensions' => array(
-            'Behat\MinkExtension' => array(
-                'selenium2' => array(
-                    'wd_host' => "http://192.168.120.100:4444/wd/hub",
-                    'capabilities' => array(
-                        'browserVersion'    => 'ANY',
-                        'deviceType'        => 'ANY',
-                        'name'              => 'ANY',
-                        'deviceOrientation' => 'ANY',
-                        'ignoreZoomSetting' => 'ANY',
-                        'version'           => 'ANY',
-                        'platform'          => 'ANY',
-                    ),
-                ),
-            ),
-        ),
-    ),
-), $CFG->behat_profiles);
-
-// Selenium node path configuration
-// Requires https://github.com/moodle/moodle/compare/master...LukeCarrier:MDL-NOBUG-selenium-remote-node-file-upload-master
-$CFG->behat_node_dirroot = '/var/lib/selenium/moodle';
-$CFG->behat_node_dir_sep = '/';
-
-// PHPUnit testing environment
-$CFG->phpunit_prefix   = 'phpu_';
-$CFG->phpunit_dataroot = dirname($CFG->dataroot) . '/phpunit';
-
-// Bootstrap Moodle
-require_once __DIR__ . '/lib/setup.php';
 ```
+# Sync your local sandbox to the Vagrant server
+$ vagrant rsync app-debug-1
+# Simulate a deployment
+$ vagrant ssh app-debug-1 --command '/usr/local/ubiquitous/bin/ubiquitous-set-current-release -d dev.local -r vagrant'
+# Verify
+$ vagrant ssh app-debug-1 --command 'sudo less /home/ubuntu/current/config.php'
+``` 
+ 
+Visiting [Moodle](http://192.168.120.50/index.php) should then succeed (e.g. start Moodle install depending on application / database state).
+
 
 ## Running Moodle test suites
 

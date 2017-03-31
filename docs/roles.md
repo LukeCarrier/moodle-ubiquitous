@@ -1,6 +1,6 @@
 # Understanding Ubiquitous roles
 
-In Ubiquitous, a role is an individual Salt state with a corresponding Salt grain. The following roles are provided:
+Ubiquitous leverages [roles defined by Salt grains](https://docs.saltstack.com/en/latest/topics/grains/). The following roles are provided:
 
 | Role | Description |
 | --- | --- |

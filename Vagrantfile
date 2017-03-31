@@ -132,6 +132,9 @@ Vagrant.configure(2) do |config|
       "selenium-hub",
       "selenium-node-chrome",
       "selenium-node-firefox",
+    ],
+    "pipeline" => [
+      "gocd",
     ]
   }
 
