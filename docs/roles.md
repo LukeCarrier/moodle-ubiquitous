@@ -25,27 +25,7 @@ Details on applying roles to servers can be found in the [Salt administration do
 | Dependencies | None |
 | Dependants | `app-debug`, `app-gocd-agent` |
 
-Application servers run [nginx](https://nginx.org/) 1.10.x and [PHP-FPM](http://php.net/manual/en/install.fpm.php) 7.0.x, with per-platform configuration sourced from `/etc/nginx/sites-enabled` and `/etc/php/7.0/fpm/pools-enabled` respectively. Both directories contain links to `/etc/nginx/sites-available` and `/etc/php/7.0/fpm/pools-available`, facilitating blue/green deployments by simply adding links and reloading the appropriate service.
-
-User accounts are created for each platform and a directory structure like the following is created for each:
-
-```
-.
-├── current     # Symlink to current release
-└── releases    # Release directory
-```
-
-In order to allow deployment tools and platform users access to files, this role requires that any filesystems containing home directories have support for Linux ACLs. You can verify that support is enabled as follows:
-
-```
-# Checking the active mount -- proceed to the defaults if they're enabled for
-# the mount
-$ mount | grep 'on / type'
-
-# Checking defaults
-# Pull requests for additional filesystems welcome ;-)
-$ tune2fs /dev/xxx | grep 'Default mount options'    # ext* filesystems
-```
+Application servers provide the frontend of the environment, serving the site through nginx and handing off dynamic requests to PHP-FPM pools. Each platform is isolated from neighbouring sites using local system user accounts.
 
 ### With debugging support (`app-debug`)
 
@@ -83,7 +63,7 @@ These commands depend on platform configuration, stored in `/usr/local/ubiqutous
 domain:basename:username:/home/dir
 ```
 
-To facilitate pipeline execution, the `go` agent user is allowed passwordless `sudo` to the release management commands.
+To facilitate running pipelines, the `go` agent user is allowed passwordless `sudo` to the release management commands.
 
 ## PostgreSQL database (`db-pgsql`)
 
