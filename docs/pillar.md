@@ -2,7 +2,7 @@
 
 [The Salt pillar](https://docs.saltstack.com/en/latest/topics/tutorials/pillar.html) provides a home for configuration data that doesn't belong within the Salt state tree, enabling developers to create more reusable states.
 
-This document provides an overview of the available pillar values and where they're used. A complete sample of the pilalr tree, with relevant top file, can be found in the [Vagrant configuration](../vagrant/salt/pillar).
+This document provides an overview of the available pillar values and where they're used. A complete sample of the pillar tree, with relevant top file, can be found in the [Vagrant configuration](../vagrant/salt/pillar).
 
 ## `acl`
 
@@ -86,7 +86,7 @@ iptables:
 
 ## `locales`
 
-Localisation configuration for the `locales` package and supported tools.
+Localisation configuration for the `locales` package and supporting tools.
 
 ```yaml
 locales:
