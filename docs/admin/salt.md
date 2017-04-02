@@ -6,7 +6,7 @@ Salt is used as a configuration management system, converging the state of all r
 
 ### Assigning roles to minions
 
-[Ubiquitous roles](../roles.md) are assigned to servers using [Salt grains](https://docs.saltstack.com/en/latest/topics/grains/). To add a role to a server with the Salt minion already installed, simply edit `/etc/salt/grains` with content along the lines of the following:
+[Ubiquitous roles](../roles.md) are collections of [Salt states](https://docs.saltstack.com/en/latest/topics/tutorials/starting_states.html) designed to be assigned to servers using [Salt grains](https://docs.saltstack.com/en/latest/topics/grains/). To add a role to a server with the Salt minion already installed, simply edit `/etc/salt/grains` with content along the lines of the following:
 
 ```
 roles:
@@ -15,7 +15,7 @@ roles:
 
 *Note:* the `base` state and states suffixed with `-base` are extended by others using `include` and should not be applied directly.
 
-You'll then need to instruct the relevant minions to synchronise their grains with those in the configuration:
+You'll then need to instruct the relevant minions to synchronise their grains with those in their configuration:
 
 ```
 $ sudo salt '*' saltutil.sync_grains
@@ -25,7 +25,7 @@ If a role is listed as having dependencies, ensure that that all dependencies ar
 
 ### Applying states
 
-In order to apply role changes, you'll need to
+Salt doesn't automatically apply modified states to servers. In order to bring minions in line with their expected configurations, you'll need to _apply_ them.
 
 To apply states to a single minion:
 
