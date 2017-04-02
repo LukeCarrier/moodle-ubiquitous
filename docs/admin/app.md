@@ -35,3 +35,11 @@ The nginx configuration follows the Debian convention, with per-platform configu
 The PHP-FPM configuration emlates this configuration. Configuration files are stored in `/etc/php/7.0/fpm/pools-available` and linked to `/etc/php/7.0/fpm/pools-enabled`.
 
 This configuration facilitates blue/green deployments by simply adding links and reloading the appropriate service.
+
+## Deployments
+
+The `app-gocd-agent` role writes a number of scripts facilitating the deployment process to `/usr/local/ubiquitous/bin`:
+
+* `ubiquitous-info` helps administrators understand the running state of a platform by describing the current configuration, examining the three symbolic links (the nginx `server {}` entry, the PHP-FPM pool and the `current` symlink in the user's home directory)
+* `ubiquitous-install-release` copies new source files into a release directory ready for switching over
+* `ubiquitous-set-current-release` changes the active release by enabling the inactive FPM pool before altering each of the symbolic links and reloading the services as necessary
