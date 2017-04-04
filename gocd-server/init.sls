@@ -14,6 +14,8 @@ go-server:
   - require:
     - file: /etc/apt/sources.list.d/gocd.list
     - cmd: /etc/apt/sources.list.d/gocd.list
+  - require_in:
+    - file: /var/go/.ssh
 
 {% if pillar['systemd']['apply'] %}
 go-server.service:
