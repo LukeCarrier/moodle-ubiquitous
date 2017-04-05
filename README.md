@@ -7,6 +7,8 @@ It employs [Vagrant](https://www.vagrantup.com) to provision environments, [Salt
 The environment includes:
 
 * [Ubuntu 16.04.2 LTS](https://www.ubuntu.com/)
+* Configuration management with [Salt](https://docs.saltstack.com/en/getstarted/)
+* Continuous delivery with [GoCD](https://www.gocd.io/)
 * Static file serving with [nginx](http://nginx.org/)
 * [PHP 7.0](http://php.net/), with the FPM SAPI and OPcache
 * [PostgreSQL 9.5](http://www.postgresql.org/)
@@ -14,9 +16,12 @@ The environment includes:
 
 ## Usage
 
-Ubiquitous aims to cover the requirements of both [Moodle developers](docs/using/in-development.md) and [production Moodle deployments](docs/using/in-production.md).
+Ubiquitous aims to cover the requirements of:
+* [Moodle development](docs/using/in-development.md) - using [Vagrant](https://www.vagrantup.com/)
+* [testing / continuous integration]docs/using/in-test.md) - using [Docker](https://www.docker.com/)
+* [production Moodle deployments](docs/using/in-production.md) - using your tool of choice.
 
-In both configurations, Salt applies configuration changes to the servers. The difference is in which servers are enabled and which [server roles](docs/roles.md) are applied to them.
+In all use cases, Salt applies configuration changes to the servers. The difference is in which servers are enabled and which [server roles](docs/roles.md) are applied to them.
 
 ### Getting Started
 See [in-development](docs/using/in-development.md), assuming you're running a development box.
