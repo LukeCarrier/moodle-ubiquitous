@@ -18,7 +18,7 @@ The environment includes:
 
 Ubiquitous aims to cover the requirements of:
 * [Moodle development](docs/using/in-development.md) - using [Vagrant](https://www.vagrantup.com/)
-* [testing / continuous integration]docs/using/in-test.md) - using [Docker](https://www.docker.com/)
+* [Moodle testing / Continuous Integration](docs/using/in-test.md) - using [Docker](https://www.docker.com/)
 * [production Moodle deployments](docs/using/in-production.md) - using your tool of choice.
 
 In all use cases, Salt applies configuration changes to the servers. The difference is in which servers are enabled and which [server roles](docs/roles.md) are applied to them.

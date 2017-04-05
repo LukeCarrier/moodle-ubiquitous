@@ -56,7 +56,7 @@ The above may take some time to complete. Then, the following should become avai
 
 ## Recommended Moodle configuration
 
-Copy and paste (this config file)[development-config.php] into ``../Moodle/config.php``; then, perform
+Copy and paste [this config file](development-config.php) into ``../Moodle/config.php``; then, perform
 
 ```
 # Sync your local sandbox to the Vagrant server
@@ -67,7 +67,7 @@ $ vagrant ssh app-debug-1 --command '/usr/local/ubiquitous/bin/ubiquitous-set-cu
 $ vagrant ssh app-debug-1 --command 'sudo less /home/ubuntu/current/config.php'
 ``` 
  
-Visiting [Moodle](http://192.168.120.50/index.php) should then succeed (e.g. start Moodle install depending on application / database state).
+Visiting [your development environment](http://192.168.120.50) should then succeed.
 
 
 ## Running Moodle test suites
