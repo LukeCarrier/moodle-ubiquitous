@@ -15,7 +15,7 @@ Vagrant.configure(2) do |config|
     salt.vm.synced_folder ".", "/srv/salt", type: "rsync"
     salt.vm.synced_folder "vagrant/salt/pillar", "/srv/pillar", type: "rsync"
     salt.vm.provision "salt-salt", type: "shell", path: "vagrant/salt/install",
-                      args: [ "--master", "app-debug-1,db-pgsql-1,gocd,mail-debug,salt,selenium-hub,selenium-node-chrome,selenium-node-firefox", "--minion", "salt", "--root", "/srv/salt/vagrant/salt" ]
+                      args: [ "--master", "app-debug-1,db-pgsql-1,gocd,named,mail-debug,salt,selenium-hub,selenium-node-chrome,selenium-node-firefox", "--minion", "salt", "--root", "/srv/salt/vagrant/salt" ]
   end
 
   config.vm.define "gocd" do |gocd|
@@ -32,6 +32,18 @@ Vagrant.configure(2) do |config|
 
     gocd.vm.synced_folder "./vagrant", "/vagrant", type: "rsync"
     gocd.vm.provision "gocd-salt", type: "shell", path: "vagrant/salt/install", args: [ "--minion", "gocd", "--root", "/vagrant/salt" ]
+  end
+
+  config.vm.define "named" do |named|
+    named.vm.network "private_network", ip: "192.168.120.15",
+                     netmask: "255.255.255.0"
+    named.vm.hostname = "named.moodle"
+
+    named.ssh.port = 2231
+    named.vm.network "forwarded_port", guest: 22, host: named.ssh.port
+
+    named.vm.synced_folder "./vagrant", "/vagrant", type: "rsync"
+    named.vm.provision "named-salt", type: "shell", path: "vagrant/salt/install", args: [ "--minion", "named", "--root", "/vagrant/salt" ]
   end
 
   config.vm.define "app-debug-1" do |appdebug1|

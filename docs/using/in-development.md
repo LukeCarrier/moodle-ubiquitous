@@ -285,6 +285,7 @@ The default network configuration of the Vagrant configuration is below. Note th
 | --- | --- | --- |
 | `192.168.120.5` | `salt.moodle` | Salt master |
 | `192.168.120.10` | `gocd.moodle` | GoCD server |
+| `192.168.120.15` | `named.moodle` | BIND named server |
 | `192.168.120.50` | `app-debug-1.moodle` | Application server (with debugging) |
 | `192.168.120.100` | `selenium-hub.moodle` | Selenium grid hub |
 | `192.168.120.105` | `selenium-node-chrome.moodle` | Selenium node (Chrome) |
