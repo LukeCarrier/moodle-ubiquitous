@@ -33,7 +33,7 @@ The [Vagrantfile](/Vagrantfile) makes assumptions about the host environment, in
  * Moodle itself is installed in `../Moodle` relative to Ubiquitous
  * standard ports are available (for e.g. SSH forwarding)
 
-Use a Vagrantfile.local if needed, or for fix-on-fails; however Vagrant should handle self-configuration on a clean host.
+Use Vagrantfile.config and / or Vagrantfile.local to override as needed.
 
 The first time you start the servers, and on changes to a Salt state definition, converge the machine state:
 
@@ -72,7 +72,7 @@ Visiting [your development environment](http://192.168.120.50) should then succe
 
 ## Running Moodle test suites
 
-Moodle has three distinct environments for development:
+Moodle has three distinct environments for development (seperate from [Continuous Integration](docs/using/in-test.md)):
 
 * The development environment we interact with directly
 * The Behat environment, which is a replica of the above with a different `wwwroot` and no content
@@ -96,10 +96,12 @@ Once complete, the following services will be available to you:
 * VNC for the Selenium Chrome node - `192.168.120.105:5999`
 * VNC for the Selenium Firefox node - `192.168.120.110:5999`
 
-Then ensure that all of the Behat-related options are present in your Moodle `config.php` (see the recommended configuration for advice) and run the following command to bootstrap your test site:
+### Behat
+
+Review the Behat-related options in your Moodle `config.php` (see the recommended configuration for advice) and run the following command to bootstrap the testing environment:
 
 ```
-$ vagrant ssh app-debug-1 --command 'php current/admin/tool/behat/cli/init.php'
+$ vagrant ssh app-debug-1 --command 'php ~/releases/vagrant/admin/tool/behat/cli/init.php'
 ```
 
 The acceptance test site will then be accessible from each of the application servers at `{wwwroot}/behat`.
@@ -111,7 +113,7 @@ $ vagrant rsync selenium-node-chrome
 $ vagrant rsync selenium-node-firefox
 ```
 
-Run the tests with:
+Run the tests with e.g.:
 
 ```
 $ vagrant ssh app-debug-1 --command 'current/vendor/bin/behat --config data/behat/behatrun/behat/behat.yml --profile chrome'
@@ -119,16 +121,16 @@ $ vagrant ssh app-debug-1 --command 'current/vendor/bin/behat --config data/beha
 
 ### PHPUnit
 
-With the relevant configuration options present in your Moodle `config.php`, run the following to enable PHPUnit:
+Review the PHPUnit-related options in your Moodle `config.php` (see the recommended configuration for advice) and run the following command to bootstrap the testing environment:
 
 ```
-$ vagrant ssh app-debug-1 --command 'sudo -u moodle php ~moodle/htdocs/admin/tool/phpunit/cli/init.php'
+$ vagrant ssh app-debug-1 --command 'php ~/releases/vagrant/admin/tool/phpunit/cli/init.php'
 ```
 
-You may then run tests as follows:
+Run the tests with e.g.:
 
 ```
-$ vagrant ssh app-debug-1 --config 'sudo -u moodle php ~moodle/htdocs/vendor/bin/phpunit'
+$ vagrant ssh app-debug-1 --command 'php ~/releases/vagrant/vendor/bin/phpunit -c ~/releases/vagrant/ --group=core_group'
 ```
 
 ## Advanced topics

@@ -6,9 +6,9 @@
     instance_eval File.read("Vagrantfile.config"), "Vagrantfile.config"
   end
 
-# Evaluate config with default.
+# Configure defaults.
 MOODLE_DIR = ENV['UBIQUITOUS_MOODLE_DIR'] || MOODLE_DIR || "../Moodle"
-puts "* The value of MOODLE_DIR is '%s'" % [MOODLE_DIR]
+# puts "* The value of MOODLE_DIR is '%s'" % [MOODLE_DIR]
 
 Vagrant.configure(2) do |config|
 

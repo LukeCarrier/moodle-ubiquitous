@@ -58,6 +58,10 @@ $CFG->admin   = 'admin';
 $CFG->dataroot             = '/home/ubuntu/data';
 $CFG->directorypermissions = 0770;
 
+// Set an arbitary Moodle 'branch'.
+// @link https://tracker.moodle.org/browse/CONTRIB-6003
+$CFG->branch = 30;
+
 // Send mails via MailCatcher on mail-debug
 $CFG->smtphosts = '192.168.120.200:1025';
 
