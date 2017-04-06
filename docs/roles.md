@@ -11,6 +11,7 @@ In Ubiquitous, a role is an individual Salt state with a corresponding Salt grai
 | [`gocd-agent`](#gocd-agent-gocd-agent) | Vanilla GoCD agent |
 | [`gocd-server`](#gocd-server-gocd-server) | Vanilla GoCD server |
 | [`mail-debug`](#mail-debugging-mail-debug) | MailCatcher |
+| [`named`](#name-server-named) | Bind DNS server |
 | [`salt`](#salt-master-salt) | Salt master for configuration management |
 | [`selenium-hub`](#selenium-hub-selenium-hub) |  Selenium grid hub server |
 | [`selenium-node-chrome`](#selenium-chrome-node-selenium-node-chrome) | Selenium grid node (Chrome) |
@@ -100,6 +101,15 @@ Installs and configures the [GoCD](https://www.gocd.io/) server.
 | Dependants | None |
 
 Installs [MailCatcher](https://mailcatcher.me/), allowing you to review all email sent by Moodle platforms. The SMTP server listens on port 1025, HTTP on 1080.
+
+## Name server (`named`)
+
+| | |
+| --- | --- |
+| Dependencies | None |
+| Dependants | None |
+
+Installs the [Bind]() DNS server, suited for use in internal name resolution.
 
 ## Salt master (`salt`)
 

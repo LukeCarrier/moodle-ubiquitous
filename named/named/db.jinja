@@ -1,0 +1,14 @@
+{% set zone = pillar['named']['zones'][domain] %}
+$TTL {{ zone['ttl'] }}
+
+@ IN SOA {{ zone['soa']['fqdn'] }}. {{ zone['soa']['hostmaster'] }}. (
+  {{ zone['soa']['serial'] }}
+  {{ zone['soa']['refresh'] }}
+  {{ zone['soa']['retry'] }}
+  {{ zone['soa']['expire'] }}
+  {{ zone['soa']['negative_cache_ttl'] }}
+);
+
+{% for record in zone['records'] %}
+{{ record }}
+{% endfor %}

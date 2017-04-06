@@ -15,6 +15,10 @@ base:
     - match: grain_pcre
     - gocd
 
+  'roles:named':
+    - match: grain
+    - named
+
   'roles:selenium-.+':
     - match: grain_pcre
     - selenium

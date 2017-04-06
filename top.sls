@@ -17,6 +17,10 @@ base:
     - match: grain
     - gocd-agent
 
+  'roles:named':
+    - match: grain
+    - named
+
   'roles:app':
     - match: grain
     - app
