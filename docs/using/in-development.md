@@ -130,7 +130,7 @@ $ vagrant ssh app-debug-1 --command 'php ~/releases/vagrant/admin/tool/phpunit/c
 Run the tests with e.g.:
 
 ```
-$ vagrant ssh app-debug-1 --command 'php ~/releases/vagrant/vendor/bin/phpunit -c ~/releases/vagrant/ --group=core_group'
+$ vagrant ssh app-debug-1 --command '~/releases/vagrant/vendor/bin/phpunit -c ~/releases/vagrant/ --group=core_group'
 ```
 
 ## Advanced topics

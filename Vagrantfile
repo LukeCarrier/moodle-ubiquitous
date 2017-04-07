@@ -60,7 +60,7 @@ Vagrant.configure(2) do |config|
 
     appdebug1.vm.synced_folder MOODLE_DIR, "/home/ubuntu/releases/vagrant", type: "rsync",
                                owner: "ubuntu", group: "ubuntu",
-                               rsync__exclude: [".git", "phpunit.xml"],
+                               rsync__exclude: [".git", "vendor/", "phpunit.xml"],
                                rsync__rsync_path: "sudo rsync",
                                rsync__args: ["--archive", "--compress", "--delete"]
   end
