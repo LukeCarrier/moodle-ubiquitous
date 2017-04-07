@@ -6,6 +6,18 @@
 #
 
 #
+# Hosts file
+#
+
+/etc/hosts:
+  file.managed:
+    - source: salt://base/network/hosts.jinja
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 644
+
+#
 # Default firewall policy
 #
 
