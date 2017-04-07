@@ -2,6 +2,8 @@ named:
   resolvers:
     - 8.8.8.8 # Google public DNS
     - 4.2.2.4 # Level 3 customer DNS
+  allow_query:
+    - 192.168.120.0/24
   zones:
     moodle:
       ttl: 604800
