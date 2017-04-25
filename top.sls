@@ -12,6 +12,7 @@ base:
 
   'roles:gocd-server':
     - match: grain
+    - certbot
     - gocd-server
   'roles:gocd-agent':
     - match: grain
@@ -25,6 +26,7 @@ base:
     - match: grain
     - app
     - app-gocd-agent
+    - certbot
 
   'roles:db-pgsql':
     - match: grain
