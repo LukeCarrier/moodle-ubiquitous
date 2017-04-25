@@ -7,27 +7,11 @@
 
 include:
   - base
+  - nginx-base
 
 #
 # nginx
 #
-
-nginx:
-  pkg.installed: []
-
-{% if pillar['systemd']['apply'] %}
-nginx.service:
-  service.running:
-    - name: nginx
-    - enable: True
-    - require:
-      - pkg: nginx
-
-nginx.reload:
-  service.running:
-    - name: nginx
-    - reload: True
-{% endif %}
 
 {% if pillar['iptables']['apply'] %}
 nginx.iptables.http:
@@ -54,25 +38,6 @@ nginx.iptables.https:
     - require_in:
       - iptables: iptables.default.input.drop
 {% endif %}
-
-/etc/nginx/nginx.conf:
-  file.managed:
-    - source: salt://app/nginx/nginx.conf.jinja
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 0644
-
-/etc/nginx/sites-enabled/default:
-  file.absent:
-    - require:
-      - pkg: nginx
-
-/etc/nginx/sites-available/default:
-  file.absent:
-    - require:
-      - file: /etc/nginx/sites-enabled/default
-      - pkg: nginx
 
 /etc/nginx/sites-extra:
   file.directory:

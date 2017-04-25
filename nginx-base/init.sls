@@ -8,6 +8,12 @@
 nginx:
   pkg.installed: []
 
+/etc/nginx/sites-available/default:
+  file.absent:
+    - require:
+      - file: /etc/nginx/sites-enabled/default
+      - pkg: nginx
+
 /etc/nginx/sites-enabled/default:
   file.absent:
     - require:

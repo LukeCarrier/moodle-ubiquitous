@@ -11,9 +11,14 @@ base:
     - match: grain
     - db-pgsql
 
-  'roles:(gocd-agent|gocd-server)':
-    - match: grain_pcre
+  'roles:gocd-agent':
+    - match: grain
     - gocd
+
+  'roles:gocd-server':
+    - match: grain
+    - gocd
+    - nginx
 
   'roles:named':
     - match: grain
