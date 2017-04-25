@@ -8,6 +8,7 @@
 include:
   - base
   - gocd-base
+  - nginx-base
 
 go-server:
   pkg.installed:
@@ -27,24 +28,24 @@ go-server.service:
 {% endif %}
 
 {% if pillar['iptables']['apply'] %}
-go-server.iptables.dashboard-http:
+go-server.iptables.http:
   iptables.append:
   - chain: INPUT
   - jump: ACCEPT
   - proto: tcp
-  - dport: 8153
+  - dport: 80
   - save: True
   - require:
     - iptables: iptables.default.input.established
   - require_in:
     - iptables: iptables.default.input.drop
 
-go-server.iptables.dashboard-https:
+go-server.iptables.https:
   iptables.append:
   - chain: INPUT
   - jump: ACCEPT
   - proto: tcp
-  - dport: 8154
+  - dport: 443
   - save: True
   - require:
     - iptables: iptables.default.input.established
@@ -61,3 +62,35 @@ go-server.iptables.dashboard-https:
     - mode: 0600
     - require:
       - pkg: go-server
+
+/etc/nginx/sites-available/gocd-server.conf:
+  file.managed:
+    - source: salt://gocd-server/nginx/gocd-server.conf
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 0644
+{% if pillar['systemd']['apply'] %}
+    - require_in:
+      - service: nginx.reload
+{% endif %}
+
+/etc/nginx/sites-enabled/gocd-server.conf:
+  file.symlink:
+    - target: /etc/nginx/sites-available/gocd-server.conf
+{% if pillar['systemd']['apply'] %}
+    - require_in:
+      - service: nginx.reload
+{% endif %}
+
+{% if salt['pillar.get']('gocd-server:nginx:server_name') %}
+gocd-server.cert:
+  acme.cert:
+    - name: {{ pillar['gocd-server']['nginx']['server_name'] }}
+    - email: {{ pillar['gocd-server']['acme']['email'] }}
+    - webroot: /var/www/acme
+    - renew: 45
+    - require:
+      - pkg: certbot.pkg
+      - file: certbot.root
+{% endif %}
