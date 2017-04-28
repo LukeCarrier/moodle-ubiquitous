@@ -14,22 +14,22 @@ acl:
   apply: True    # Should ACLs be applied?
 ```
 
-## `admin`
+## `users`
 
-Details about the administrative user, who'll be able to log in to the server via SSH.
+Details about the administrative users, who'll be able to log in to the server via SSH.
 
 ```yaml
-admin:
+users:
   # Required
-  name: ubuntu           # Username
-  password: gibberish    # Cleartext for now
-  groups:                # Primary group is always named after user name
-    - sudo               # Recommended to enable elevation
-  home: /home/ubuntu     # Home directory
+  ubuntu:                  # Username
+    password: gibberish    # Cleartext for now
+    groups:                # Primary group is always named after user name
+      - sudo               # Recommended to enable elevation
+    home: /home/ubuntu     # Home directory
 
-  # Optional
-  authorized_keys:       # SSH keys for authentication
-    - ssh-rsa <public key>
+    # Optional
+    authorized_keys:       # SSH keys for authentication
+      - ssh-rsa <public key>
 ```
 
 ## `gocd-agent`

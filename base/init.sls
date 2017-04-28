@@ -93,38 +93,41 @@ admin:
   group.present:
     - name: admin
     - system: True
+
+{% for username, user in pillar['users'].items() %}
+user.{{ username }}:
   user.present:
-    - name: {{ pillar['admin']['name'] }}
-    - password: {{ pillar['admin']['password'] }}
-    - fullname: Administrative user
+    - name: {{ username }}
+    - password: {{ user['password'] }}
+    - fullname: {{ user['fullname'] }}
     - shell: /bin/bash
-    - home: {{ pillar['admin']['home'] }}
+    - home: {{ user['home'] }}
     - gid_from_name: True
-    - groups: {{ pillar['admin']['groups'] }}
+    - groups: {{ user['groups'] }}
     - require:
       - group: admin
 
-admin.ssh:
+user.{{ username }}.ssh:
   file.directory:
-    - name: {{ pillar['admin']['home'] }}/.ssh
-    - user: {{ pillar['admin']['name'] }}
-    - group: admin
+    - name: {{ user['home'] }}/.ssh
+    - user: {{ username }}
+    - group: {{ username }}
     - mode: 0700
     - require:
-      - user: {{ pillar['admin']['name'] }}
+      - user: {{ username }}
 
-{% if 'authorized_keys' in pillar['admin'] %}
-admin.ssh.authorized_keys:
+{% if 'authorized_keys' in user %}
+user.{{ username }}.ssh.authorized_keys:
   file.managed:
-    - name: {{ pillar['admin']['home'] }}/.ssh/authorized_keys
-    - template: jinja
-    - source: salt://base/admin/authorized_keys.jinja
-    - user: {{ pillar['admin']['name'] }}
-    - group: {{ pillar['admin']['name'] }}
+    - name: {{ user['home'] }}/.ssh/authorized_keys
+    - contents_pillar: users:{{ username }}:authorized_keys
+    - user: {{ username }}
+    - group: {{ username }}
     - mode: 0600
     - require:
-      - file: admin.ssh
+      - file: user.{{ username }}.ssh
 {% endif %}
+{% endfor %}
 
 #
 # SaltStack APT repository
