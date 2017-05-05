@@ -53,8 +53,5 @@ phpfpm_enable_instance "$platform_basename" "$phpfpm_inactive_instance" "$reload
 echo "pointing '${platform_current_link}' at release directory '${release_dir}'..."
 sudo -u "$platform_user" ln -sfn "$release_dir" "$platform_current_link"
 
-echo "setting active pool socket '${phpfpm_socket_link}' to '${phpfpm_inactive_socket}'..."
-phpfpm_set_current_instance "$platform_basename" "$phpfpm_inactive_instance"
-
 echo "disabling previously active php-fpm pool '${phpfpm_active_instance}'..."
 phpfpm_disable_instance "$platform_basename" "$phpfpm_active_instance" "$reload"
