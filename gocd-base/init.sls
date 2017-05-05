@@ -24,6 +24,15 @@ include:
     - group: go
     - mode: 0700
 
+/var/go/.ssh/config:
+  file.managed:
+    - source: salt://gocd-base/ssh/config
+    - user: go
+    - group: go
+    - mode: 0600
+    - require:
+      - file: /var/go/.ssh
+
 {% if salt['pillar.get']('gocd-deploy:known-hosts') %}
 /var/go/.ssh/known_hosts:
   file.managed:
