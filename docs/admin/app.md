@@ -36,6 +36,12 @@ The PHP-FPM configuration emlates this configuration. Configuration files are st
 
 This configuration facilitates blue/green deployments by simply adding links and reloading the appropriate service.
 
+You can determine which platforms will be deployed to a given application server by querying the Salt pillar:
+
+```
+$ salt <minion ID> pillar.keys platforms
+```
+
 ## Deployments
 
 The `app-gocd-agent` role writes a number of scripts facilitating the deployment process to `/usr/local/ubiquitous/bin`:
