@@ -39,7 +39,6 @@ platforms:
       dboptions:
         dbpersist: False
         dbport: 5432
-        dbsocket:
       dataroot: /home/ubuntu/data
       directorypermissions: '0777'
       wwwroot: http://192.168.120.50

@@ -6,25 +6,31 @@ global $CFG;
 $CFG = new stdClass();
 
 // Database
-$CFG->dbtype    = '{{ cfg['dbtype'] }}';
-$CFG->dblibrary = '{{ cfg['dblibrary'] }}';
-$CFG->dbhost    = '{{ cfg['dbhost'] }}';
-$CFG->dbname    = '{{ cfg['dbname'] }}';
-$CFG->dbuser    = '{{ cfg['dbuser'] }}';
-$CFG->dbpass    = '{{ cfg['dbpass'] }}';
-$CFG->prefix    = '{{ cfg['prefix'] }}';
+$CFG->dbtype    = {{ cfg['dbtype'] | json }};
+$CFG->dblibrary = {{ cfg['dblibrary'] | json }};
+$CFG->dbhost    = {{ cfg['dbhost'] | json }};
+$CFG->dbname    = {{ cfg['dbname'] | json }};
+$CFG->dbuser    = {{ cfg['dbuser'] | json }};
+$CFG->dbpass    = {{ cfg['dbpass'] | json }};
+$CFG->prefix    = {{ cfg['prefix'] | json }};
 $CFG->dboptions = array(
-    'dbpersist' => {{ cfg['dboptions']['dbpersist'] }},
-    'dbport'    => {{ cfg['dboptions']['dbport'] }},
-    'dbsocket'  => '{{ cfg['dboptions']['dbsocket'] }}',
+{% for key, value in cfg['dboptions'].items() %}
+    {{ key | json }} => {{ value | json }},
+{% endfor %}
 );
 
-$CFG->dataroot             = '{{cfg['dataroot'] }}';
-$CFG->directorypermissions = {{ cfg['directorypermissions'] }};
+// Web configuration
+$CFG->wwwroot  = {{ cfg['wwwroot'] | json }};
+$CFG->sslproxy = {{ cfg['sslproxy'] | default(False) | json }};
+$CFG->admin    = {{ cfg['admin'] | json }};
 
-$CFG->wwwroot  = '{{ cfg['wwwroot'] }}';
-$CFG->sslproxy = {{ cfg['sslproxy'] }};
-$CFG->admin    = '{{ cfg['admin'] }}';
+// Data directory
+$CFG->dataroot             = {{ cfg['dataroot'] | json }};
+$CFG->directorypermissions = {{ cfg['directorypermissions'] | json }};
+
+{% if 'additional_options' in cfg %}
+{{ cfg['additional_options'] }}
+{% endif %}
 
 // Bootstrap
 require_once __DIR__ . '/lib/setup.php';
