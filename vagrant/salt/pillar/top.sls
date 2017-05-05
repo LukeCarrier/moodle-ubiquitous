@@ -6,6 +6,7 @@ base:
   'roles:app':
     - match: grain
     - app
+    - nginx
 
   'roles:db-pgsql':
     - match: grain
