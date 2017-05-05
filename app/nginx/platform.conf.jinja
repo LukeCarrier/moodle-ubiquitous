@@ -12,6 +12,6 @@ server {
     location ~ ^(.+\.php)(/|$) {
         include snippets/fastcgi-php.conf;
         fastcgi_param SCRIPT_FILENAME $document_root$1;
-        fastcgi_pass unix:/var/run/php/php7.0-fpm-ubuntu.sock;
+        fastcgi_pass unix:/var/run/php/php7.0-fpm-{{ platform['basename'] }}.sock;
     }
 }
