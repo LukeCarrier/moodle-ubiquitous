@@ -32,6 +32,10 @@ base:
     - match: grain
     - db-pgsql
 
+  'roles:mount-cifs':
+    - match: grain
+    - mount-cifs
+
   'roles:app-debug':
     - match: grain
     - app-debug
