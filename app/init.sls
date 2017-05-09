@@ -52,6 +52,7 @@ nginx.iptables.https:
 php.packages:
   pkg.installed:
     - pkgs:
+      - php7.0-dev
       - php7.0-cli
       - php7.0-curl
       - php7.0-fpm
@@ -114,6 +115,60 @@ php-fpm.reload:
     - name: php7.0-fpm
     - reload: True
 {% endif %}
+
+#
+# SQL Server drivers for PHP
+#
+
+php.sqlsrv.repo:
+  pkgrepo.managed:
+    - file: /etc/apt/sources.list.d/mssql-release.list
+    - humanname:
+    - name: deb [arch=amd64] https://packages.microsoft.com/ubuntu/16.04/prod xenial main
+    - key_url: https://packages.microsoft.com/keys/microsoft.asc
+
+php.sqlsrv.msodbcsql.license:
+  debconf.set:
+    - name: 'msodbcsql'
+    - data:
+        'msodbcsql/accept_eula': { 'type': 'boolean', 'value': True }
+
+php.sqlsrv.pkgs:
+  pkg.latest:
+    - pkgs:
+      - build-essential
+      - gcc
+      - g++
+      - msodbcsql
+      - unixodbc-dev
+    - require:
+      - pkgrepo: php.sqlsrv.repo
+
+{% for extension, priority in {'sqlsrv': 20, 'pdo_sqlsrv': 20}.items() %}
+php.sqlsrv.{{ extension }}.pecl:
+  pecl.installed:
+    - name: {{ extension }}
+
+php.sqlsrv.{{ extension }}.ini.available:
+  file.managed:
+    - name: /etc/php/7.0/mods-available/{{ extension }}.ini
+    - source: salt://app/php/extension.ini.jinja
+    - template: jinja
+    - context:
+      extension: {{ extension }}
+      priority: {{ priority }}
+
+{% for sapi in ['cli', 'fpm'] %}
+php.sqlsrv.{{ extension }}.ini.enabled.{{ sapi }}:
+  file.symlink:
+    - name: /etc/php/7.0/{{ sapi }}/conf.d/{{ priority }}-{{ extension }}.ini
+    - target: /etc/php/7.0/mods-available/{{ extension }}.ini
+{% if pillar['systemd']['apply'] %}
+    - require_in:
+      - service: php-fpm.reload
+{% endif %}
+{% endfor %}
+{% endfor %}
 
 #
 # Supporting packages
