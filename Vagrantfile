@@ -62,7 +62,7 @@ Vagrant.configure(2) do |config|
                                owner: "ubuntu", group: "ubuntu",
                                rsync__exclude: [".git", "vendor/", "phpunit.xml"],
                                rsync__rsync_path: "sudo rsync",
-                               rsync__args: ["--archive", "--compress", "--delete"]
+                               rsync__args: ["--archive", "--compress", "--delete", "--verbose"]
   end
 
   config.vm.define "db-pgsql-1" do |db1|

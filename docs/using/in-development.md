@@ -45,8 +45,11 @@ $ vagrant ssh --command 'sudo salt salt state.apply'
 # Then converge the rest of the machines
 $ vagrant ssh --command 'sudo salt '*' state.apply'
 ```
+The above may take some time to complete; and can time out "Minion did not return. [No response]" while the minion is still configuring.
+Re-try, or alternatively, perform manually for a specific minion:
+$ vagrant ssh app-debug-1 --command 'sudo salt-call state.apply'
 
-The above may take some time to complete. Then, the following should become available:
+Afterwards, the following should become available:
 
 * [Moodle](http://192.168.120.50/) - your development environment
 * [Behat instance](http://192.168.120.50/behat/) - your development environment's Behat `wwwroot`
@@ -62,7 +65,7 @@ Copy and paste [this config file](development-config.php) into ``../Moodle/confi
 # Sync your local sandbox to the Vagrant server
 $ vagrant rsync app-debug-1
 # Simulate a deployment
-$ vagrant ssh app-debug-1 --command '/usr/local/ubiquitous/bin/ubiquitous-set-current-release -d dev.local -r vagrant'
+$ vagrant ssh app-debug-1 --command 'sudo /usr/local/ubiquitous/bin/ubiquitous-set-current-release -d dev.local -r vagrant'
 # Verify
 $ vagrant ssh app-debug-1 --command 'sudo less /home/ubuntu/current/config.php'
 ``` 

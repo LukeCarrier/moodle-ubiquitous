@@ -8,7 +8,7 @@ $CFG = new stdClass();
 
 // Database server
 
-    // PostgreSQL
+    //* PostgreSQL
     $CFG->dbtype    = 'pgsql';
     $CFG->dblibrary = 'native';
     $CFG->dbhost    = '192.168.120.150';
@@ -21,34 +21,39 @@ $CFG = new stdClass();
         'dbport'    => 5432,
         'dbsocket'  => '',
     );
+    //*/
 
-    // MySQL
-    //$CFG->dbtype    = 'mysqli';
-    //$CFG->dblibrary = 'native';
-    //$CFG->dbhost    = '192.168.120.155';
-    //$CFG->dbname    = 'moodle';
-    //$CFG->dbuser    = 'moodle';
-    //$CFG->dbpass    = 'Password123';
-    //$CFG->prefix    = 'mdl_';
-    //$CFG->dboptions = array (
-    //    'dbpersist' => 0,
-    //    'dbport'    => 3306,
-    //    'dbsocket'  => '',
-    //);
+    /* MySQL
+    $CFG->dbtype    = 'mysqli';
+    $CFG->dblibrary = 'native';
+    $CFG->dbhost    = '192.168.120.155';
+    $CFG->dbname    = 'moodle';
+    $CFG->dbuser    = 'moodle';
+    $CFG->dbpass    = 'Password123';
+    $CFG->prefix    = 'mdl_';
+    $CFG->dboptions = array (
+        'dbpersist' => 0,
+        'dbport'    => 3306,
+        'dbsocket'  => '',
+    );
+    //*/
 
-    // SQL Server
-    //$CFG->dbtype    = 'sqlsrv';
-    //$CFG->dblibrary = 'native';
-    //$CFG->dbhost    = 'tcp:192.168.120.155';
-    //$CFG->dbname    = 'moodle';
-    //$CFG->dbuser    = 'moodle';
-    //$CFG->dbpass    = 'Password123';
-    //$CFG->prefix    = 'mdl_';
-    //$CFG->dboptions = array(
-    //    'dbpersist' => 0,
-    //    'dbport'    => 1433,
-    //    'dbsocket'  => '',
-    //);
+    /* SQL Server
+    $CFG->dbtype    = 'sqlsrv';
+    $CFG->dblibrary = 'native';
+    $CFG->dbhost    = 'tcp:192.168.120.155';
+    $CFG->dbname    = 'moodle';
+    $CFG->dbuser    = 'moodle';
+    $CFG->dbpass    = 'Password123';
+    $CFG->prefix    = 'mdl_';
+    $CFG->dboptions = array(
+        'dbpersist' => 0,
+        'dbport'    => 1433,
+        'dbsocket'  => '',
+    );
+    // Handle Saleslogix hook being broken with freetds
+    $CFG->auth   = 'manual';
+    //*/
 
 // Base URLs
 $CFG->wwwroot = 'http://192.168.120.50';
@@ -75,7 +80,7 @@ $CFG->debugdisplay = true;
 $CFG->behat_prefix        = 'b_';
 $CFG->behat_dataroot      = dirname($CFG->dataroot) . '/behat';
 $CFG->behat_faildump_path = dirname($CFG->dataroot) . '/behat-faildump';
-$CFG->behat_wwwroot       = 'http://192.168.120.50/behat';
+$CFG->behat_wwwroot       = 'http://localhost/behat';
 $CFG->behat_profiles = array(
     'chrome' => array(
         'extensions' => array(
