@@ -13,6 +13,13 @@ include:
 # nginx
 #
 
+/etc/logrotate.d/nginx:
+  file.managed:
+    - source: salt://app/logrotate/nginx
+    - user: root
+    - group: root
+    - mode: 0644
+
 {% if pillar['iptables']['apply'] %}
 nginx.iptables.http:
   iptables.append:
@@ -279,6 +286,13 @@ moodle.{{ domain }}.data:
     - mode: 0770
     - require:
       - file: moodle.{{ domain }}.home
+
+moodle.{{ domain }}.nginx.log:
+  file.directory:
+    - name: /var/log/nginx/{{ platform['basename'] }}
+    - user: www-data
+    - group: adm
+    - mode: 0640
 
 moodle.{{ domain }}.nginx.available:
   file.managed:

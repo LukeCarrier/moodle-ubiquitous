@@ -5,6 +5,9 @@ server {
     root {{ platform['user']['home'] }}/current;
     index index.php index.html;
 
+    access_log /var/log/nginx/{{ platform['basename'] }}/access.log;
+    error_log /var/log/nginx/{{ platform['basename'] }}/error.log error;
+
     client_max_body_size {{ platform['nginx']['client_max_body_size'] }};
 
     include "sites-extra/{{ platform['basename'] }}.*.conf";
