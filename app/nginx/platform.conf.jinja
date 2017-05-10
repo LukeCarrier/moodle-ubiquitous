@@ -7,6 +7,8 @@ server {
     access_log /var/log/nginx/{{ platform['basename'] }}/access.log;
     error_log /var/log/nginx/{{ platform['basename'] }}/error.log error;
 
+    add_header X-Backend-Server $hostname;
+
     client_max_body_size {{ platform['nginx']['client_max_body_size'] }};
 
     include "sites-extra/{{ platform['basename'] }}.*.conf";
