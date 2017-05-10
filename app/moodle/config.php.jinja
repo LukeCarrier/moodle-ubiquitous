@@ -26,7 +26,7 @@ $CFG->admin    = {{ cfg['admin'] | json }};
 
 // Data directory
 $CFG->dataroot             = {{ cfg['dataroot'] | json }};
-$CFG->directorypermissions = {{ cfg['directorypermissions'] | json }};
+$CFG->directorypermissions = {{ cfg['directorypermissions'] }};
 
 {% if 'additional_options' in cfg %}
 {{ cfg['additional_options'] }}
