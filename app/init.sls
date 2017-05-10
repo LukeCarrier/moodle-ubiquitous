@@ -108,6 +108,19 @@ php.packages:
       - file: /etc/php/7.0/fpm/php-fpm.conf
       - file: /etc/php/7.0/fpm/pools-enabled
 
+/var/log/php7.0-fpm:
+  file.directory:
+    - user: root
+    - group: root
+    - mode: 0755
+
+/etc/logrotate.d/php7.0-fpm:
+  file.managed:
+    - source: salt://app/logrotate/php7.0-fpm
+    - user: root
+    - group: root
+    - mode: 0644
+
 {% if pillar['systemd']['apply'] %}
 php-fpm:
   service.running:
@@ -319,6 +332,13 @@ moodle.{{ domain }}.nginx.enabled:
     - require_in:
       - service: nginx.reload
 {% endif %}
+
+moodle.{{ domain }}.php-fpm.log:
+  file.directory:
+    - name: /var/log/php7.0-fpm/{{ platform['basename'] }}
+    - user: {{ platform['user']['name'] }}
+    - group: {{ platform['user']['name'] }}
+    - mode: 0750
 
 {% for instance in ['blue', 'green'] %}
 moodle.{{ domain }}.{{ instance }}.php-fpm:

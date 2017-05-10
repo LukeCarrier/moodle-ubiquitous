@@ -21,13 +21,24 @@ pm.status_path = /status
 ping.path = /ping
 ping.response = pong
 
-catch_workers_output = yes
+catch_workers_output = no
+php_flag[display_errors] = Off
+php_flag[log_errors] = On
+php_value[error_log] = /var/log/php7.0-fpm/{{ platform['basename'] }}/pool.log
 
 security.limit_extensions = .php
 
 env[HOSTNAME]       = "{{ grains.nodename }}"
 env[PATH]           = $PATH
 
+{% if 'flags' in platform['php'] %}
+{% for option, value in platform['php']['flags'].items() %}
+php_flag[{{ option }}] = {{ value }}
+{% endfor %}
+{% endif %}
+
+{% if 'values' in platform['php'] %}
 {% for option, value in platform['php']['values'].items() %}
 php_value[{{ option }}] = {{ value }}
 {% endfor %}
+{% endif %}
