@@ -6,7 +6,20 @@
 #
 
 nginx:
-  pkg.installed: []
+  pkg.installed:
+    - pkgs:
+      - nginx
+      - nginx-extras
+
+/etc/nginx/nginx.conf:
+  file.managed:
+    - source: salt://nginx-base/nginx/nginx.conf.jinja
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 0644
+    - require:
+      - pkg: nginx
 
 /etc/nginx/sites-available/default:
   file.absent:
