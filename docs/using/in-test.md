@@ -20,11 +20,11 @@ The Docker configuration differs from other configurations in a number of ways d
 
 Docker images contain the following role loadout:
 
-* app
-* app-debug
-* db-pgsql
-* selenium-hub
-* selenium-node-chrome
+* `app`
+* `app-debug`
+* `db-pgsql`
+* `selenium-hub`
+* `selenium-node-chrome`
 
 As more CI services adopt [Docker Compose](https://docs.docker.com/compose/) or similar to support multiple containers, we will revisit this decision.
 
