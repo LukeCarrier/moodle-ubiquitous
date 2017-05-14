@@ -2,7 +2,11 @@
 
 The testing configuration is designed for use in continuous integration platforms built around containers. In this setup, all services are installed to a single container. At test time, the hosting service will either mount a volume or copy the files into the container, then run a series of shell commands which will start the services and run the tests.
 
-## Building the container
+## Pre-built containers
+
+[Pre-built containers](https://hub.docker.com/r/lukecarrier/moodle-ubiquitous/) are made available on Docker Hub. Since these containers may change on a whim, potentially interfering with your test results, you're advised to follow the instructions below to build your own container images.
+
+## Building containers
 
 The recommended approach for building the container image is to allow the Docker Hub to run the build against your Git repository using webhooks, ensuring that your container image is always up to date. See [the Docker Hub automated builds](https://docs.docker.com/docker-hub/builds/), Docker Hub will perform automated builds of the container image from the repository.
 
