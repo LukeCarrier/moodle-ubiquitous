@@ -32,7 +32,7 @@ COPY docker/salt/pillar /srv/pillar/
 # -> one with no platforms declared to perform the installation of the services
 # -> a second with the services started and platforms declared to create
 #    databases and configure the services
-# This workaround allows us Ubiquitous to funciton despite the lack of an init
+# This workaround allows Ubiquitous to function despite the lack of an init
 # system.
 RUN salt-call --local state.apply
 COPY docker/salt/pillar_post/* /srv/pillar/
