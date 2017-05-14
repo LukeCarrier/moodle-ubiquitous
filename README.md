@@ -24,4 +24,4 @@ Ubiquitous aims to cover numerous use cases with the same Salt state tree. In ea
 
 ## License
 
-Ubiquitous Moodle is released under the terms of the GPL v3. This is the same license as the core Moodle distribution.
+Ubiquitous Moodle is released under the terms of the [GPL v3](LICENSE.md). This is the same license as the core Moodle distribution.
