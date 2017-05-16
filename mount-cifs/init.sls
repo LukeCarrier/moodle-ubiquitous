@@ -32,6 +32,7 @@ mount-cifs.{{ basename }}.mount:
     - opts:
       - vers={{ mount['vers'] | yaml_encode }}
       - cache=strict
+      - sec={{ mount['sec'] }}
       - credentials=/etc/fstab.cifs/{{ basename }}
       - uid={{ mount['uid'] }}
     - extra_mount_invisible_keys:
