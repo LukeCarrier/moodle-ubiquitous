@@ -44,6 +44,10 @@ base:
     - match: grain
     - mail-debug
 
+  'roles:mail-relay':
+    - match: grain
+    - mail-relay
+
   'roles:selenium':
     - match: grain
     - selenium-base
