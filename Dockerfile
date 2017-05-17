@@ -13,6 +13,9 @@ ARG salt_log_level=warning
 ENV DEBIAN_FRONTEND noninteractive
 ENV USER root
 
+# Workaround for broken msodbcsql
+ENV ACCEPT_EULA Y
+
 COPY docker/local /usr/local/ubiquitous/
 RUN chmod 0755 /usr/local/ubiquitous/bin/*
 
