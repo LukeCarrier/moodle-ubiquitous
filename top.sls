@@ -32,6 +32,10 @@ base:
     - match: grain
     - db-pgsql
 
+  'roles:av-sophos':
+    - match: grain
+    - av-sophos
+
   'roles:mount-cifs':
     - match: grain
     - mount-cifs
