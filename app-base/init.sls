@@ -223,49 +223,8 @@ homes.{{ home_directory }}.acl:
     - acl_type: user
     - acl_name: {{ pillar['nginx']['user'] }}
     - perms: rx
-{% endif %}
-{% endfor %}
-
-#
-# Moodle platforms
-#
-
-{% for domain, platform in salt['pillar.get']('platforms', {}).items() %}
-app.{{ domain }}.user:
-  user.present:
-    - name: {{ platform['user']['name'] }}
-    - fullname: {{ domain }}
-    - shell: /bin/bash
-    - home: {{ platform['user']['home'] }}
-    - gid_from_name: true
-
-app.{{ domain }}.home:
-  file.directory:
-    - name: {{ platform['user']['home'] }}
-    - user: {{ platform['user']['name'] }}
-    - group: {{ platform['user']['name'] }}
-    - mode: 0770
     - require:
-      - user: {{ platform['user']['name'] }}
-
-{% if pillar['acl']['apply'] %}
-app.{{ domain }}.home.acl:
-  acl.present:
-    - name: {{ platform['user']['home'] }}
-    - acl_type: user
-    - acl_name: {{ pillar['nginx']['user'] }}
-    - perms: rx
-    - require:
-      - file: app.{{ domain }}.home
-
-app.{{ domain }}.home.acl.default:
-  acl.present:
-    - name: {{ platform['user']['home'] }}
-    - acl_type: default:user
-    - acl_name: {{ pillar['nginx']['user'] }}
-    - perms: rx
-    - require:
-      - file: app.{{ domain }}.home
+      - file: moodle.{{ domain }}.home
 {% endif %}
 
 app.{{ domain }}.releases:
@@ -391,18 +350,6 @@ app.{{ domain }}.{{ instance }}.php-fpm:
     - onchanges_in:
       - app.php-fpm.reload
 {% endif %}
-{% endfor %}
-
-app.{{ domain }}.config:
-  file.managed:
-    - name: {{ platform['user']['home'] }}/config.php
-    - source: salt://app/moodle/config.php.jinja
-    - template: jinja
-    - context:
-      cfg: {{ platform['moodle'] }}
-    - user: {{ platform['user']['name'] }}
-    - group: {{ platform['user']['name'] }}
-    - mode: 0660
 {% endfor %}
 
 {% if pillar['systemd']['apply'] %}
