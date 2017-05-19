@@ -73,20 +73,16 @@ iptables.default.forward.local:
 # Locales
 #
 
-locales.root:
-  file.directory:
-    - name: /usr/share/i18n/locales
-    - makedirs: True
-    - user: root
-    - group: root
-    - mode: 0755
+locales.pkg:
+  pkg.latest:
+    - name: locales
 
 {% for locale in pillar['locales']['present'] %}
 locales.present.{{ locale }}:
   locale.present:
     - name: {{ locale }}
     - require:
-      - file: locales.root
+      - pkg: locales.pkg
 {% endfor %}
 
 locales.default:
@@ -94,7 +90,6 @@ locales.default:
     - name: {{ pillar['locales']['default'] }}
     - require:
       - locale: locales.present.{{ pillar['locales']['default'] }}
-      - file: locales.root
 
 #
 # Administrative user
