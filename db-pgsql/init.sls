@@ -23,10 +23,15 @@ postgresql-server.service:
     - name: postgresql
     - enable: True
     - require:
-      - pkg: postgresql-server
+      - cmd: postgresql-server.cluster
       - file: postgresql-server.postgresql.conf
       - file: postgresql-server.pg_hba.conf
 {% endif %}
+
+postgresql-server.cluster:
+  cmd.run:
+    - name: pg_createcluster 9.5 main
+    - unless: test -d /var/lib/postgresql/9.5/main
 
 postgresql-server.postgresql.conf:
   file.managed:
@@ -36,7 +41,7 @@ postgresql-server.postgresql.conf:
     - group: postgres
     - mode: 0644
     - require:
-      - pkg: postgresql-server
+      - cmd: postgresql-server.cluster
 
 postgresql-server.pg_hba.conf:
   file.managed:
@@ -47,7 +52,7 @@ postgresql-server.pg_hba.conf:
     - group: postgres
     - mode: 0600
     - require:
-      - pkg: postgresql-server
+      - cmd: postgresql-server.cluster
 
 {% if pillar['iptables']['apply'] %}
 postgresql-server.iptables.pgsql:
