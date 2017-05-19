@@ -4,9 +4,9 @@ base:
     - platforms
     - platforms-logos
 
-  'roles:app':
+  'roles:app-base':
     - match: grain
-    - app
+    - app-base
     - nginx
     - php-fpm
 

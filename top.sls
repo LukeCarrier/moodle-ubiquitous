@@ -22,7 +22,7 @@ base:
     - match: grain
     - named
 
-  'roles:app':
+  'roles:app-base':
     - match: grain
     - app
     - certbot
