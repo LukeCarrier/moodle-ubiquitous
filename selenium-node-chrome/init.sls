@@ -34,6 +34,7 @@ chromedriver:
   file.managed:
     - name: /opt/selenium/chromedriver/chromedriver
     - mode: 0755
+    - replace: false
     - watch:
       - archive: chromedriver
 
