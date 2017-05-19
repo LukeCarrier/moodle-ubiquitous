@@ -9,6 +9,7 @@ FROM ubuntu:16.04
 LABEL maintainer "Luke Carrier <luke@carrier.im>"
 
 ARG salt_log_level=warning
+ARG shell_args=
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV USER root
@@ -41,11 +42,11 @@ COPY docker/salt/pillar /srv/pillar/
 # system.
 RUN salt-call --log-level=$salt_log_level --local state.apply
 COPY docker/salt/pillar_post/* /srv/pillar/
-RUN /usr/local/ubiquitous/bin/ubiquitous-ctl start postgresql \
+RUN bash $shell_args /usr/local/ubiquitous/bin/ubiquitous-ctl start postgresql \
         && cp /usr/local/ubiquitous/share/postgresql-template-charset.sql /tmp/postgresql-template-charset.sql \
         && sudo -u postgres psql --file /tmp/postgresql-template-charset.sql \
         && salt-call --log-level=$salt_log_level --local state.apply \
-        && /usr/local/ubiquitous/bin/ubiquitous-ctl stop
+        && bash $shell_args /usr/local/ubiquitous/bin/ubiquitous-ctl stop
 
 # Mark a release as active
 RUN sudo -u ubuntu mkdir -p /home/ubuntu/releases/test \
