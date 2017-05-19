@@ -78,3 +78,11 @@ base:
   'roles:selenium-node-firefox':
     - match: grain
     - selenium-node-firefox
+
+  'app:app-moodle':
+    - match: grain
+    - app-moodle
+
+  'app:app-saml':
+    - match: grain
+    - app-saml

@@ -87,3 +87,15 @@ asso.saml.package.rename:
   file.rename:
     - name: /home/asso/simplesamlphp
     - source: /home/asso/simplesamlphp-1.14.14
+    - require:
+      - pkg: asso.saml.package
+
+asso.saml.config.replace:
+  file.managed:
+    - name: /home/asso/simplesamlphp/config
+    - source: salt://app-saml/saml/config.php.jinja
+    - template: jinja
+    - user: root
+    - group: root
+    - require:
+      - pkg: asso.saml.package.rename
