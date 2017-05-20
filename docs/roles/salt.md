@@ -1,12 +1,12 @@
 # Administering Salt
 
-Salt is used as a configuration management system, converging the state of all registered minions with the desired states defined in each [role](../roles.md). If you're not already familiar with Salt, take a look at the [getting started guide](https://docs.saltstack.com/en/getstarted/).
+Salt is used as a configuration management system, converging the state of all registered minions with the desired states defined in each [role](../roles/). If you're not already familiar with Salt, take a look at the [getting started guide](https://docs.saltstack.com/en/getstarted/).
 
 ## Day to day operations
 
 ### Assigning roles to minions
 
-[Ubiquitous roles](../roles.md) are collections of [Salt states](https://docs.saltstack.com/en/latest/topics/tutorials/starting_states.html) designed to be assigned to servers using [Salt grains](https://docs.saltstack.com/en/latest/topics/grains/). To add a role to a server with the Salt minion already installed, simply edit `/etc/salt/grains` with content along the lines of the following:
+[Ubiquitous roles](../roles/) are collections of [Salt states](https://docs.saltstack.com/en/latest/topics/tutorials/starting_states.html) designed to be assigned to servers using [Salt grains](https://docs.saltstack.com/en/latest/topics/grains/). To add a role to a server with the Salt minion already installed, simply edit `/etc/salt/grains` with content along the lines of the following:
 
 ```
 roles:
