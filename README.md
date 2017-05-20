@@ -10,17 +10,11 @@ A sample Moodle configuration for both development and production deployment com
 * [PostgreSQL 9.5](http://www.postgresql.org/)
 * [Selenium](http://www.seleniumhq.org/) Hub and nodes
 
-[More about server roles...](docs/roles.md)
-
 * * *
 
-## Usage
+## Documentation
 
-Ubiquitous aims to cover numerous use cases with the same Salt state tree. In each use case, the tooling used to manage machines and the distribution of roles across these machines differs:
-
-* [Vagrant](https://www.vagrantup.com/) is used in [local Moodle development environments](docs/using/in-development.md)
-* [Docker](https://www.docker.com/) containers are built for use in [continuous integration platforms](docs/using/in-test.md)
-* Your tool of choice in [production Moodle deployments](docs/using/in-production.md).
+For detailed instructions on how to get started with Ubiquitous, please see [the manual](https://lukecarrier.gitbooks.io/ubiquitous-moodle/).
 
 ## License
 
