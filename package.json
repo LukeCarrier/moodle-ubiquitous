@@ -28,6 +28,7 @@
   ],
   "devDependencies": {
     "gitbook-cli": "^2.3.0",
-    "gitbook-plugin-edit-link": "^2.0.2"
+    "gitbook-plugin-edit-link": "^2.0.2",
+    "gitbook-plugin-mermaid-2": "git+https://github.com/genzj/gitbook-plugin-mermaid-2.git#gitbook-3"
   }
 }

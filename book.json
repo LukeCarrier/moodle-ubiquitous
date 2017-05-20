@@ -3,7 +3,8 @@
   "title": "Ubiquitous Moodle",
 
   "plugins": [
-    "edit-link"
+    "edit-link",
+    "mermaid-2@git+https://github.com/genzj/gitbook-plugin-mermaid-2.git#gitbook-3"
   ],
   "pluginsConfig": {
     "edit-link": {
