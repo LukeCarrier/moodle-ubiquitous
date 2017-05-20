@@ -6,3 +6,7 @@
 
 # VM console logs
 /*-console.log
+
+# npm
+/node_modules/
+/npm-*.log
