@@ -9,6 +9,7 @@
     "doc": "docs"
   },
   "scripts": {
+    "gitbook": "gitbook",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -24,5 +25,8 @@
       "name": "Luke Carrier",
       "email": "luke@carrier.im"
     }
-  ]
+  ],
+  "devDependencies": {
+    "gitbook-cli": "^2.3.0"
+  }
 }
