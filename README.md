@@ -10,7 +10,7 @@ A sample Moodle configuration for both development and production deployment com
 * [PostgreSQL 9.5](http://www.postgresql.org/)
 * [Selenium](http://www.seleniumhq.org/) Hub and nodes
 
-* * *
+---
 
 ## Documentation
 

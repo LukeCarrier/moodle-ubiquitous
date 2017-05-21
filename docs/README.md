@@ -14,7 +14,7 @@ It fulfils three requirements:
 
 The environment is designed to simplify the Moodle development experience and provide a consistency across development, testing/integration and production.
 
-* * *
+---
 
 ## Specifications
 
