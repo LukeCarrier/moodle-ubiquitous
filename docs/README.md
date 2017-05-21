@@ -40,7 +40,7 @@ The documentation is managed with the excellent [GitBook toolchain](https://tool
 # Install the dependencies
 $ npm install
 
-# Launch the server -- use this when making changes
+# Launch the server --- use this when making changes
 $ npm run gitbook -- serve
 
 # Or perform a one-time build to _book/

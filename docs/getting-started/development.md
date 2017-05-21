@@ -6,8 +6,8 @@ In development environments, Ubiquitous servers are created and managed in Virtu
 
 First, prepare your development by installing the following applications:
 
-* [VirtualBox](https://www.virtualbox.org/) -- desktop virtualisation
-* [Vagrant](https://www.vagrantup.com/) -- command line tool for managing virtualised development environments
+* [VirtualBox](https://www.virtualbox.org/) --- desktop virtualisation
+* [Vagrant](https://www.vagrantup.com/) --- command line tool for managing virtualised development environments
 
 Then install some Vagrant plugins that'll make it easier to manage larger environments:
 
@@ -46,11 +46,11 @@ $ vagrant ssh --command 'sudo salt '*' state.apply'
 
 The above may take some time to complete. Once the above commands complete, the following services should now be available to you:
 
-* [Moodle](http://192.168.120.50/) - your development environment
-* [Behat instance](http://192.168.120.50/behat/) - your development environment's Behat `wwwroot`
-* [Behat fail dump](http://192.168.120.50/data/behat-faildump/) - screenshots and page snapshots for failing Behat tests
-* [MailCatcher](http://192.168.120.200:1080/) - a simple mail server that allows you to browse all of the email it receives
-* PostgreSQL - `192.168.120.150:5432`
+* [Moodle](http://192.168.120.50/) --- your development environment
+* [Behat instance](http://192.168.120.50/behat/) --- your development environment's Behat `wwwroot`
+* [Behat fail dump](http://192.168.120.50/data/behat-faildump/) --- screenshots and page snapshots for failing Behat tests
+* [MailCatcher](http://192.168.120.200:1080/) --- a simple mail server that allows you to browse all of the email it receives
+* PostgreSQL --- `192.168.120.150:5432`
 
 ## Recommended Moodle configuration
 
@@ -221,9 +221,9 @@ $ vagrant ssh salt --command 'sudo salt 'selenium-*' state.apply'
 
 Once complete, the following services will be available to you:
 
-* [Selenium Grid console](http://192.168.120.100:4444/grid/console) - see an overview of available nodes, helpful for diagnosing registration issues
-* VNC for the Selenium Chrome node - `192.168.120.105:5999`
-* VNC for the Selenium Firefox node - `192.168.120.110:5999`
+* [Selenium Grid console](http://192.168.120.100:4444/grid/console) --- see an overview of available nodes, helpful for diagnosing registration issues
+* VNC for the Selenium Chrome node --- `192.168.120.105:5999`
+* VNC for the Selenium Firefox node --- `192.168.120.110:5999`
 
 Then ensure that all of the Behat-related options are present in your Moodle `config.php` (see the recommended configuration for advice) and run the following command to bootstrap your test site:
 

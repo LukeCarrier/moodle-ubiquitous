@@ -11,7 +11,7 @@ Before proceeding, make sure you a basic understanding of the different [Ubiquit
 
 ## Preparing new servers
 
-All servers in the cluster will be configured as Salt minions. Salt will handle configuring the servers based on roles which we'll assign later -- see the subheadings. This section assumes a stock, minimal installation of Ubuntu 16.04.2 LTS with networking correctly configured.
+All servers in the cluster will be configured as Salt minions. Salt will handle configuring the servers based on roles which we'll assign later --- see the subheadings. This section assumes a stock, minimal installation of Ubuntu 16.04.2 LTS with networking correctly configured.
 
 1. [Install the Salt minion](../roles/salt.md#installing-minions)
 2. [Assign the appropriate role](../roles/salt.md#assigning-roles-to-minions)

@@ -9,7 +9,7 @@ All source and data files for each platform are owned by separate user accounts,
 This role requires that all filesystems containing platform home directories (pillar `system:home_directories`) have support for Linux ACLs. You can verify that support is enabled as follows:
 
 ```
-# Checking the active mount -- proceed to the defaults if they're enabled for
+# Checking the active mount --- proceed to the defaults if they're enabled for
 # the mount
 $ mount | grep 'on / type'
 
