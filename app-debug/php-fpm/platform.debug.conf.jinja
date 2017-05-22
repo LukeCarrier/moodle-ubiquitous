@@ -5,3 +5,5 @@ env[PHP_IDE_CONFIG] = "serverName={{ grains.nodename }}"
 php_flag[xdebug.remote_enable] = On
 php_flag[xdebug.remote_connect_back] = On
 php_value[xdebug.remote_port] = 9000
+# Development timeout.
+php_value[max_execution_time] = 180

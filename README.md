@@ -1,6 +1,10 @@
 # Ubiquitous Moodle
 
-A sample Moodle configuration for both development and production deployment comprised of:
+A sample [Moodle](https://moodle.org) configuration, targeted at developers.
+
+It employs [Vagrant](https://www.vagrantup.com) to provision environments, [Salt](https://docs.saltstack.com/en/getstarted/) for configuration management, and [GoCD](https://www.gocd.io/) for continuous delivery.
+
+The environment includes:
 
 * [Ubuntu 16.04.2 LTS](https://www.ubuntu.com/)
 * Configuration management with [Salt](https://docs.saltstack.com/en/getstarted/)
@@ -10,18 +14,25 @@ A sample Moodle configuration for both development and production deployment com
 * [PostgreSQL 9.5](http://www.postgresql.org/)
 * [Selenium](http://www.seleniumhq.org/) Hub and nodes
 
-[More about server roles...](docs/roles.md)
-
-* * *
-
 ## Usage
 
-Ubiquitous aims to cover numerous use cases with the same Salt state tree. In each use case, the tooling used to manage machines and the distribution of roles across these machines differs:
+Ubiquitous aims to cover the requirements of:
+* [Moodle development](docs/using/in-development.md) - using [Vagrant](https://www.vagrantup.com/)
+* [Moodle testing / Continuous Integration](docs/using/in-test.md) - using [Docker](https://www.docker.com/)
+* [production Moodle deployments](docs/using/in-production.md) - using your tool of choice.
 
-* [Vagrant](https://www.vagrantup.com/) is used in [local Moodle development environments](docs/using/in-development.md)
-* [Docker](https://www.docker.com/) containers are built for use in [continuous integration platforms](docs/using/in-test.md)
-* Your tool of choice in [production Moodle deployments](docs/using/in-production.md).
+In all use cases, Salt applies configuration changes to the servers. The difference is in which servers are enabled and which [server roles](docs/roles.md) are applied to them.
+
+### Getting Started
+See [in-development](docs/using/in-development.md), assuming you're running a development box.
+
+## Ubiquitous Development
+
+Documentation for Ubiquitous developers is in the works.
+
+* * *
 
 ## License
 
 Ubiquitous Moodle is released under the terms of the [GPL v3](LICENSE.md). This is the same license as the core Moodle distribution.
+
