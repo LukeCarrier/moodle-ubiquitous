@@ -81,6 +81,7 @@ moodle.{{ domain }}.postgres:
   postgres_database.present:
     - user: postgres
     - name: {{ platform['pgsql']['database']['name'] }}
+    - template: template0
     - encoding: {{ platform['pgsql']['database']['encoding'] }}
     - owner: {{ platform['pgsql']['user']['name'] }}
     - require:
