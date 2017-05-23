@@ -70,7 +70,7 @@ asso.nginx.log:
 asso.nginx.available:
   file.managed:
     - name: /etc/nginx/sites-available/asso.conf
-    - source: salt://app-saml/nginx/asso.conf.jinja
+    - source: salt://app-saml/nginx/saml.nginx.conf.jinja
     - template: jinja
     - user: root
     - group: root
@@ -88,15 +88,12 @@ asso.saml.package.rename:
   file.rename:
     - name: /home/{{ pillar['saml']['linux_user_username'] }}/simplesamlphp
     - source: /home/{{ pillar['saml']['linux_user_username'] }}/simplesamlphp-1.14.14
-    - require:
-      - pkg: asso.saml.package
+    - force: true
 
 asso.saml.config.replace:
   file.managed:
-    - name: /home/{{ pillar['saml']['linux_user_username'] }}/simplesamlphp/config
+    - name: /home/{{ pillar['saml']['linux_user_username'] }}/simplesamlphp/config.php
     - source: salt://app-saml/saml/config.php.jinja
     - template: jinja
-    - user: root
-    - group: root
-    - require:
-      - pkg: asso.saml.package.rename
+    - user: {{ pillar['saml']['linux_user_username'] }}
+    - group: {{ pillar['nginx']['user'] }}
