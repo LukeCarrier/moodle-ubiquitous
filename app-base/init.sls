@@ -15,7 +15,7 @@ include:
 
 /etc/logrotate.d/nginx:
   file.managed:
-    - source: salt://app/logrotate/nginx
+    - source: salt://app-base/logrotate/nginx
     - user: root
     - group: root
     - mode: 0644
@@ -78,7 +78,7 @@ php.packages:
 
 /etc/php/7.0/fpm/php-fpm.conf:
   file.managed:
-    - source: salt://app/php-fpm/php-fpm.conf
+    - source: salt://app-base/php-fpm/php-fpm.conf
     - user: root
     - group: root
     - mode: 0644
@@ -122,7 +122,7 @@ php.packages:
 
 /etc/logrotate.d/php7.0-fpm:
   file.managed:
-    - source: salt://app/logrotate/php7.0-fpm
+    - source: salt://app-base/logrotate/php7.0-fpm
     - user: root
     - group: root
     - mode: 0644
@@ -176,7 +176,7 @@ php.sqlsrv.{{ extension }}.pecl:
 php.sqlsrv.{{ extension }}.ini.available:
   file.managed:
     - name: /etc/php/7.0/mods-available/{{ extension }}.ini
-    - source: salt://app/php/extension.ini.jinja
+    - source: salt://app-base/php/extension.ini.jinja
     - template: jinja
     - context:
       extension: {{ extension }}
