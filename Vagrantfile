@@ -16,6 +16,13 @@ Vagrant.configure(2) do |config|
 
   config.vm.network "forwarded_port", guest: 22, host: 2222, id: "ssh", disabled: true
   config.vm.synced_folder ".", "/vagrant", disabled: true
+  # Set low resurce defaults.
+  config.vm.provider "virtualbox" do |v|
+      v.customize ["modifyvm", :id, "--memory", "512"]
+      v.customize ["modifyvm", :id, "--cpus", "1"]
+      v.customize ["modifyvm", :id, "--cpuexecutioncap", "75"]
+      v.customize ["modifyvm", :id, "--vram", "12"]
+  end
 
   config.vm.define "salt", primary: true do |salt|
     salt.vm.network "private_network", ip: "192.168.120.5",
@@ -33,7 +40,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.define "gocd" do |gocd|
     gocd.vm.provider "virtualbox" do |v|
-      v.memory = 2048
+      v.customize ["modifyvm", :id, "--memory", "2048"]
     end
 
     gocd.vm.network "private_network", ip: "192.168.120.10",
@@ -60,6 +67,10 @@ Vagrant.configure(2) do |config|
   end
 
   config.vm.define "app-debug-1" do |appdebug1|
+    appdebug1.vm.provider "virtualbox" do |v|
+      v.customize ["modifyvm", :id, "--memory", "2048"]
+      v.customize ["modifyvm", :id, "--cpus", "2"]
+    end
     appdebug1.vm.network "private_network", ip: "192.168.120.50",
                          netmask: "255.255.255.0"
     appdebug1.vm.hostname = "app-debug-1.moodle"
