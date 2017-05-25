@@ -22,14 +22,14 @@ For detailed instructions on how to get started with Ubiquitous, please see [the
 ## Usage
 
 Ubiquitous aims to cover the requirements of:
-* [Moodle development](docs/using/in-development.md) - using [Vagrant](https://www.vagrantup.com/)
-* [Moodle testing / Continuous Integration](docs/using/in-test.md) - using [Docker](https://www.docker.com/)
-* [production Moodle deployments](docs/using/in-production.md) - using your tool of choice.
+* [Moodle development](docs/getting-started/development) - using [Vagrant](https://www.vagrantup.com/)
+* [Moodle testing / Continuous Integration](docs/getting-started/test) - using [Docker](https://www.docker.com/)
+* [production Moodle deployments](docs/getting-started/production) - using your tool of choice.
 
-In all use cases, Salt applies configuration changes to the servers. The difference is in which servers are enabled and which [server roles](docs/roles.md) are applied to them.
+In all use cases, Salt applies configuration changes to the servers. The difference is in which servers are enabled and which [server roles](docs/roles) are applied to them.
 
 ### Getting Started
-See [in-development](docs/using/in-development.md), assuming you're running a development box.
+See [in-development](ddocs/getting-started/development), assuming you're running a development box.
 
 ## Ubiquitous Development
 

@@ -11,7 +11,7 @@ Install and be familiar with:
 * [VirtualBox](https://www.virtualbox.org/) --- desktop virtualisation
 * [Vagrant](https://www.vagrantup.com/) --- command line tool for managing virtualised development environments
 
-Also be familiar with Salt - see [Salt Admin](../admin/salt.md)
+Also be familiar with Salt - see [Salt Admin](../roles/salt)
 
 Install some Vagrant plugins that'll make it easier to manage larger environments:
 
@@ -86,7 +86,7 @@ Visiting [your development environment](http://192.168.120.50) should then succe
 
 ## Running Moodle test suites
 
-Moodle has three distinct environments for development (seperate from [Continuous Integration](docs/using/in-test.md)):
+Moodle has three distinct environments for development (seperate from [Continuous Integration](docs/getting-started/test)):
 
 * The development environment we interact with directly
 * The Behat environment, which is a replica of the above with a different `wwwroot` and no content
