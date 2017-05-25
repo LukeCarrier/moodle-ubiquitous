@@ -1,8 +1,10 @@
 # Vagrant
 /.vagrant/
 
-# Local Vagrantfie
+# Vagrant customisation
+/Vagrantfile.config
 /Vagrantfile.local
+
 
 # VM console logs
 /*-console.log
@@ -13,3 +15,7 @@
 
 # GitBook
 /_book/
+
+# IDEs
+.project
+.settings/
