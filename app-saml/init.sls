@@ -13,7 +13,7 @@ include:
 # OS software requirements
 #
 
-os.packages:
+main:
   pkg.installed:
   - pkgs:
     - libxml2
