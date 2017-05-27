@@ -13,7 +13,7 @@ include:
 # OS software requirements
 #
 
-main:
+os.packages:
   pkg.installed:
   - pkgs:
     - libxml2
@@ -24,36 +24,37 @@ main:
 
 asso.user:
   user.present:
-    - name: asso
-    - fullname: asso
+    - name: {{ pillar['saml']['linux_user_username'] }}
+    - fullname: {{ pillar['saml']['linux_user_username'] }}
     - shell: /bin/bash
-    - home: /home/asso
+    - home: /home/{{ pillar['saml']['linux_user_username'] }}
+    - password: {{ pillar['saml']['linux_user_password_hash'] }}
     - gid_from_name: true
 
 asso.home:
   file.directory: 
-    - name: /home/asso
-    - user: asso
-    - group: asso
+    - name: /home/{{ pillar['saml']['linux_user_username'] }}
+    - user: {{ pillar['saml']['linux_user_username'] }}
+    - group: {{ pillar['saml']['linux_user_username'] }}
     - mode: 0770
     - require:
-      - user: asso
+      - user: {{ pillar['saml']['linux_user_username'] }}
 
 {% if pillar['acl']['apply'] %}
 asso.home.acl:
   acl.present:
-    - name: /home/asso
+    - name: /home/{{ pillar['saml']['linux_user_username'] }}
     - acl_type: user
-    - acl_name: asso
+    - acl_name: {{ pillar['saml']['linux_user_username'] }}
     - perms: rx
     - require:
       - file: asso.home
 
 asso.home.acl.default:
   acl.present:
-    - name: /home/asso
+    - name: /home/{{ pillar['saml']['linux_user_username'] }}
     - acl_type: default:user
-    - acl_name: asso
+    - acl_name: {{ pillar['saml']['linux_user_username'] }}
     - perms: rx
     - require:
       - file: asso.home
@@ -79,20 +80,20 @@ asso.nginx.available:
 
 asso.saml.package:
   archive.extracted:
-    - name: /home/asso/
+    - name: /home/{{ pillar['saml']['linux_user_username'] }}/
     - source: https://github.com/simplesamlphp/simplesamlphp/releases/download/v1.14.14/simplesamlphp-1.14.14.tar.gz
     - source_hash: 2ff76d8b379141cdd3340dbd8e8bab1605e7a862d4a31657cc37265817463f48
 
 asso.saml.package.rename:
   file.rename:
-    - name: /home/asso/simplesamlphp
-    - source: /home/asso/simplesamlphp-1.14.14
+    - name: /home/{{ pillar['saml']['linux_user_username'] }}/simplesamlphp
+    - source: /home/{{ pillar['saml']['linux_user_username'] }}/simplesamlphp-1.14.14
     - require:
       - pkg: asso.saml.package
 
 asso.saml.config.replace:
   file.managed:
-    - name: /home/asso/simplesamlphp/config
+    - name: /home/{{ pillar['saml']['linux_user_username'] }}/simplesamlphp/config
     - source: salt://app-saml/saml/config.php.jinja
     - template: jinja
     - user: root
