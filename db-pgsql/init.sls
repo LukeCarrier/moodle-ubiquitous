@@ -22,7 +22,11 @@ postgresql-server.service:
   service.running:
     - name: postgresql
     - enable: True
-    - require:
+
+postgresql-server.reload:
+  service.running:
+    - name: postgresql
+    - watch:
       - cmd: postgresql-server.cluster
       - file: postgresql-server.postgresql.conf
       - file: postgresql-server.pg_hba.conf
