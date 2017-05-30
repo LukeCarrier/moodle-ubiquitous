@@ -153,16 +153,29 @@ php.sqlsrv.msodbcsql.license:
     - data:
         'msodbcsql/accept_eula': { 'type': 'boolean', 'value': True }
 
-php.sqlsrv.pkgs:
+php.sqlsrv.deps:
   pkg.latest:
     - pkgs:
       - build-essential
       - gcc
       - g++
-      - msodbcsql
       - unixodbc-dev
     - require:
       - pkgrepo: php.sqlsrv.repo
+
+# Temporarily work around ODBC client packaging failing to check the debconf
+# database and requiring ACCEPT_EULA environment variable to be set at install
+# time.
+#
+# See https://connect.microsoft.com/SQLServer/Feedback/Details/3105172
+php.sqlsrv.pkgs:
+  cmd.run:
+    - name: apt-get install --assume-yes msodbcsql
+    - env:
+      - ACCEPT_EULA: Y
+    - unless: dpkg -l | grep msodbcsql
+    - require:
+      - pkg: php.sqlsrv.deps
 
 {% for extension, priority in {'sqlsrv': 20, 'pdo_sqlsrv': 20}.items() %}
 php.sqlsrv.{{ extension }}.pecl:
