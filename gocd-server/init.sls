@@ -71,7 +71,7 @@ go-server.iptables.https:
     - group: root
     - mode: 0644
 {% if pillar['systemd']['apply'] %}
-    - require_in:
+    - watch_in:
       - service: nginx.reload
 {% endif %}
 
