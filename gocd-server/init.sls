@@ -65,7 +65,7 @@ go-server.iptables.https:
 
 /etc/nginx/sites-available/gocd-server.conf:
   file.managed:
-    - source: salt://gocd-server/nginx/gocd-server.conf
+    - source: salt://gocd-server/nginx/gocd-server.conf.jinja
     - template: jinja
     - user: root
     - group: root
