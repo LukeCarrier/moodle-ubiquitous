@@ -1,6 +1,6 @@
 environment: integration
 roles:
-  - app-base
+  - app
   - app-debug
   - app-default-release
   - db-pgsql

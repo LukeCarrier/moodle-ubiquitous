@@ -3,9 +3,9 @@ base:
     - base
     - platforms
 
-  'roles:app-base':
+  'roles:app':
     - match: grain
-    - app-base
+    - app
 
   'roles:db-pgsql':
     - match: grain
