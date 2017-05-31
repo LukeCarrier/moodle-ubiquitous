@@ -15,7 +15,7 @@ include:
     - group: root
     - mode: 0644
   cmd.run:
-    - name: apt-key adv --keyserver pgp.mit.edu --recv-keys 8816C449
+    - name: apt-key adv --keyserver hkp://pgp.mit.edu:80 --recv-keys 8816C449
     - unless: apt-key list | grep 8816C449
 
 /var/go/.ssh:
