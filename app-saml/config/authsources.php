@@ -28,8 +28,8 @@ $config = array(
         // Can be NULL/unset, in which case a builtin discovery service will be used.
         'discoURL' => null,
 
-        'privatekey'  => '{{ pillar['saml']['auth_source_pem'] }}',
-        'certificate' => '{{ pillar['saml']['auth_source_cert'] }}',
+        'privatekey'  => {{ pillar['platforms']['saml_platforms']['saml_idp_proxy']['auth_source_pem'] | yaml }},
+        'certificate' => {{ pillar['platforms']['saml_platforms']['saml_idp_proxy']['auth_source_cert'] | yaml }},
 
         /*
          * WARNING: SHA-1 is disallowed starting January the 1st, 2014.

@@ -72,7 +72,7 @@ postgresql-server.iptables.pgsql:
       - iptables: iptables.default.input.drop
 {% endif %}
 
-{% for domain, platform in salt['pillar.get']('platforms', {}).items() %}
+{% for domain, platform in salt['pillar.get']('platforms:moodle_platforms', {}).items() %}
 moodle.{{ domain }}.postgres:
   postgres_user.present:
     - user: postgres

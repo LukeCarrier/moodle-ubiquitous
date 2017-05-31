@@ -6,10 +6,10 @@
 
 $config = array(
     'baseurlpath' => 'simplesaml/',
-    'auth.adminpassword' => "{{ pillar['saml']['adminpassword'] | yaml }}",
-    'secretsalt' => "{{ pillar['saml']['secret_salt'] | yaml }}",
-    'technicalcontact_name' => "{{ pillar['saml']['tech_contact_name'] | yaml }}",
-    'technicalcontact_email' => "{{ pillar['saml']['tech_contact_email'] | yaml }}",
+    'auth.adminpassword' => "{{ pillar['platforms']['saml_platforms']['saml_idp_proxy']['adminpassword'] | yaml }}",
+    'secretsalt' => "{{ pillar['platforms']['saml_platforms']['saml_idp_proxy']['secret_salt'] | yaml }}",
+    'technicalcontact_name' => "{{ pillar['platforms']['saml_platforms']['saml_idp_proxy']['tech_contact_name'] | yaml }}",
+    'technicalcontact_email' => "{{ pillar['platforms']['saml_platforms']['saml_idp_proxy']['tech_contact_email'] | yaml }}",
     'enable.saml20-idp' => false,
-    'session.cookie.name' => "{{ pillar['saml']['config_session_cookie_name'] | yaml }}",
+    'session.cookie.name' => "{{ pillar['platforms']['saml_platforms']['saml_idp_proxy']['config_session_cookie_name'] | yaml }}",
 );

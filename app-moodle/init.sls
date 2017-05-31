@@ -13,7 +13,7 @@ include:
 # Moodle platforms
 #
 
-{% for domain, platform in salt['pillar.get']('platforms', {}).items() %}
+{% for domain, platform in salt['pillar.get']('platforms:moodle_platforms', {}).items() %}
 moodle.{{ domain }}.user:
   user.present:
     - name: {{ platform['user']['name'] }}

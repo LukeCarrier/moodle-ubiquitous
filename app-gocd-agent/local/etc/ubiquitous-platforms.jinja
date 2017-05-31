@@ -1,3 +1,3 @@
-{% for domain, platform in salt['pillar.get']('platforms', {}).items() %}
+{% for domain, platform in salt['pillar.get']('platforms:moodle_platforms', {}).items() %}
 {{ domain }}:{{ platform['basename'] }}:{{ platform['user']['name'] }}:{{ platform['user']['home'] }}
 {% endfor %}
