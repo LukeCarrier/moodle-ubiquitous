@@ -318,7 +318,7 @@ moodle.{{ domain }}.nginx.log:
     - name: /var/log/nginx/{{ platform['basename'] }}
     - user: www-data
     - group: adm
-    - mode: 0640
+    - mode: 0750
 
 moodle.{{ domain }}.nginx.available:
   file.managed:
