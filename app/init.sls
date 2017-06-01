@@ -313,6 +313,15 @@ moodle.{{ domain }}.data:
     - require:
       - file: moodle.{{ domain }}.home
 
+moodle.{{ domain }}.localcache:
+  file.directory:
+    - name: {{ platform['user']['home'] }}/data/localcache
+    - user: {{ platform['user']['name'] }}
+    - group: {{ platform['user']['name'] }}
+    - mode: 0770
+    - require:
+      - file: moodle.{{ domain }}.data
+
 moodle.{{ domain }}.nginx.log:
   file.directory:
     - name: /var/log/nginx/{{ platform['basename'] }}
