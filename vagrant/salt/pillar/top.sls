@@ -7,6 +7,7 @@ base:
     - match: grain
     - app
     - nginx
+    - php-fpm
 
   'roles:db-pgsql':
     - match: grain
