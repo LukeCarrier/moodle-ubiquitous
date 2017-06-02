@@ -343,6 +343,10 @@ moodle.{{ domain }}.nginx.available:
     - mode: 0644
     - require:
       - pkg: nginx
+{% if pillar['systemd']['apply'] %}
+    - require_in:
+      - service: nginx.reload
+{% endif %}
 
 moodle.{{ domain }}.nginx.enabled:
   file.symlink:
