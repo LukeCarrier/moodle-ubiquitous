@@ -65,7 +65,7 @@ The first time you start the servers, and whenever you make changes to the Salt 
 $ vagrant ssh --command 'sudo salt salt state.apply'
 
 # Then converge the rest of the machines
-$ vagrant ssh --command 'sudo salt '*' state.apply'
+$ vagrant ssh --command "sudo salt -G 'group:dev' state.apply"
 ```
 
 For the time being, the following commands are necessary to install the configuration for the Vagrant release and virtual host:
@@ -249,7 +249,7 @@ Ubiquitous packages a Selenium Grid comprised of Chrome and Firefox nodes. To us
 $ vagrant group up selenium
 
 # If it's your first time, let Salt configure them
-$ vagrant ssh salt --command 'sudo salt 'selenium-*' state.apply'
+$ vagrant ssh salt --command "sudo salt -G 'group:selenium' state.apply"
 ```
 
 Once complete, the following services will be available to you:

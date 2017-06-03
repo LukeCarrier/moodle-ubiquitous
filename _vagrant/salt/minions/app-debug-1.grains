@@ -1,3 +1,4 @@
+group: dev
 roles:
   - app
   - app-debug
