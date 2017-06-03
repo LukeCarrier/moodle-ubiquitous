@@ -1,6 +1,6 @@
 # Using Ubiquitous in development
 
-In development environments, Ubiquitous servers are created and managed in VirtualBox by Vagrant based on definitions in [the Vagrantfile](../../Vagrantfile). Once created, Vagrant's shell provisioner runs a script which installs the Salt master and minion daemons as appropriate for the role and seeds machines appropriate configuration and keys by [a script](../../vagrant/salt/install) as per configuration in. server configuration is managed by Salt, applying the states against [a default Salt pillar](../../vagrant/salt/pillar).
+In development environments, Ubiquitous servers are created and managed in VirtualBox by Vagrant based on definitions in the `Vagrantfile`. Once created, Vagrant's shell provisioner runs a script which installs the Salt master and minion daemons, seeds configuration and keys. Server configuration is managed by Salt.
 
 ## Getting started
 
