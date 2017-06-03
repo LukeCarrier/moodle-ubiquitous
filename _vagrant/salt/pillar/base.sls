@@ -9,9 +9,6 @@ users:
 acl:
   apply: True
 
-iptables:
-  apply: True
-
 locales:
   present:
     - en_AU.UTF-8 UTF-8

@@ -163,10 +163,6 @@ As more CI services adopt [Docker Compose](https://docs.docker.com/compose/) or 
 
 Ubiquitous ordinarily requires that application server `/home` filesystems support extended attributes and, in turn, ACLs. Since none of Docker's many filesystems support ACLs, we instead run all services under the user account that owns the platform files.
 
-### iptables
-
-Since containers do not maintain their own kernels, there is no notion of an iptables-based firewall within them. iptables rules are not applied to Docker containers; we instead use [`EXPOSE` directives in the Dockerfile](https://docs.docker.com/engine/reference/builder/#expose).
-
 ### systemd
 
 Docker is designed to contain individual processes within each container. In lieu of an init system running in each container, you're encouraged to manage multiple containers using [Docker Compose](https://docs.docker.com/compose/). Unfortunately this is not how CI platforms such as [GitLab CI](https://about.gitlab.com/gitlab-ci/) and [Bitbucket Pipelines](https://bitbucket.org/product/features/pipelines) are using containers.
