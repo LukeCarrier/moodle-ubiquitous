@@ -13,9 +13,9 @@ Vagrant.configure(2) do |config|
     salt.vm.network "forwarded_port", guest: 22, host: salt.ssh.port
 
     salt.vm.synced_folder ".", "/srv/salt", type: "rsync"
-    salt.vm.synced_folder "vagrant/salt/pillar", "/srv/pillar", type: "rsync"
-    salt.vm.provision "salt-salt", type: "shell", path: "vagrant/salt/install",
-                      args: [ "--master", "app-debug-1,db-pgsql-1,gocd,named,mail-debug,salt,selenium-hub,selenium-node-chrome,selenium-node-firefox", "--minion", "salt", "--root", "/srv/salt/vagrant/salt" ]
+    salt.vm.synced_folder "./_vagrant/salt/pillar", "/srv/pillar", type: "rsync"
+    salt.vm.provision "salt-salt", type: "shell", path: "./_vagrant/salt/install",
+                      args: [ "--master", "app-debug-1,db-pgsql-1,gocd,named,mail-debug,salt,selenium-hub,selenium-node-chrome,selenium-node-firefox", "--minion", "salt", "--root", "/srv/salt/_vagrant/salt" ]
   end
 
   config.vm.define "gocd" do |gocd|
@@ -30,8 +30,8 @@ Vagrant.configure(2) do |config|
     gocd.ssh.port = 2230
     gocd.vm.network "forwarded_port", guest: 22, host: gocd.ssh.port
 
-    gocd.vm.synced_folder "./vagrant", "/vagrant", type: "rsync"
-    gocd.vm.provision "gocd-salt", type: "shell", path: "vagrant/salt/install", args: [ "--minion", "gocd", "--root", "/vagrant/salt" ]
+    gocd.vm.synced_folder "./_vagrant", "/vagrant", type: "rsync"
+    gocd.vm.provision "gocd-salt", type: "shell", path: "./_vagrant/salt/install", args: [ "--minion", "gocd", "--root", "/vagrant/salt" ]
   end
 
   config.vm.define "named" do |named|
@@ -42,8 +42,8 @@ Vagrant.configure(2) do |config|
     named.ssh.port = 2231
     named.vm.network "forwarded_port", guest: 22, host: named.ssh.port
 
-    named.vm.synced_folder "./vagrant", "/vagrant", type: "rsync"
-    named.vm.provision "named-salt", type: "shell", path: "vagrant/salt/install", args: [ "--minion", "named", "--root", "/vagrant/salt" ]
+    named.vm.synced_folder "./_vagrant", "/vagrant", type: "rsync"
+    named.vm.provision "named-salt", type: "shell", path: "./_vagrant/salt/install", args: [ "--minion", "named", "--root", "/vagrant/salt" ]
   end
 
   config.vm.define "app-debug-1" do |appdebug1|
@@ -54,8 +54,8 @@ Vagrant.configure(2) do |config|
     appdebug1.ssh.port = 2224
     appdebug1.vm.network "forwarded_port", guest: 22, host: appdebug1.ssh.port
 
-    appdebug1.vm.synced_folder "./vagrant", "/vagrant", type: "rsync"
-    appdebug1.vm.provision "app-debug-1-salt", type: "shell", path: "vagrant/salt/install", args: [ "--minion", "app-debug-1", "--root", "/vagrant/salt" ]
+    appdebug1.vm.synced_folder "./_vagrant", "/vagrant", type: "rsync"
+    appdebug1.vm.provision "app-debug-1-salt", type: "shell", path: "./_vagrant/salt/install", args: [ "--minion", "app-debug-1", "--root", "/vagrant/salt" ]
 
     appdebug1.vm.synced_folder "../Moodle", "/home/ubuntu/releases/vagrant", type: "rsync",
                                owner: "ubuntu", group: "ubuntu",
@@ -72,8 +72,8 @@ Vagrant.configure(2) do |config|
     db1.ssh.port = 2225
     db1.vm.network "forwarded_port", guest: 22, host: db1.ssh.port
 
-    db1.vm.synced_folder "./vagrant", "/vagrant", type: "rsync"
-    db1.vm.provision "db-pgsql-1-salt", type: "shell", path: "vagrant/salt/install", args: [ "--minion", "db-pgsql-1", "--root", "/vagrant/salt" ]
+    db1.vm.synced_folder "./_vagrant", "/vagrant", type: "rsync"
+    db1.vm.provision "db-pgsql-1-salt", type: "shell", path: "./_vagrant/salt/install", args: [ "--minion", "db-pgsql-1", "--root", "/vagrant/salt" ]
   end
 
   config.vm.define "mail-debug" do |maildebug|
@@ -83,8 +83,8 @@ Vagrant.configure(2) do |config|
     maildebug.ssh.port = 2226
     maildebug.vm.network "forwarded_port", guest: 22, host: maildebug.ssh.port
 
-    maildebug.vm.synced_folder "./vagrant", "/vagrant", type: "rsync"
-    maildebug.vm.provision "mail-debug-salt", type: "shell", path: "vagrant/salt/install", args: [ "--minion", "mail-debug", "--root", "/vagrant/salt" ]
+    maildebug.vm.synced_folder "./_vagrant", "/vagrant", type: "rsync"
+    maildebug.vm.provision "mail-debug-salt", type: "shell", path: "./_vagrant/salt/install", args: [ "--minion", "mail-debug", "--root", "/vagrant/salt" ]
   end
 
   config.vm.define "selenium-hub" do |seleniumhub|
@@ -95,8 +95,8 @@ Vagrant.configure(2) do |config|
     seleniumhub.ssh.port = 2227
     seleniumhub.vm.network "forwarded_port", guest: 22, host: seleniumhub.ssh.port
 
-    seleniumhub.vm.synced_folder "./vagrant", "/vagrant", type: "rsync"
-    seleniumhub.vm.provision "selenium-hub-salt", type: "shell", path: "vagrant/salt/install", args: ["--minion", "selenium-hub", "--root", "/vagrant/salt" ]
+    seleniumhub.vm.synced_folder "./_vagrant", "/vagrant", type: "rsync"
+    seleniumhub.vm.provision "selenium-hub-salt", type: "shell", path: "./_vagrant/salt/install", args: ["--minion", "selenium-hub", "--root", "/vagrant/salt" ]
   end
 
   config.vm.define "selenium-node-chrome" do |seleniumnodechrome|
@@ -107,8 +107,8 @@ Vagrant.configure(2) do |config|
     seleniumnodechrome.ssh.port = 2228
     seleniumnodechrome.vm.network "forwarded_port", guest: 22, host: seleniumnodechrome.ssh.port
 
-    seleniumnodechrome.vm.synced_folder "./vagrant", "/vagrant", type: "rsync"
-    seleniumnodechrome.vm.provision "selenium-node-chrome-salt", type: "shell", path: "vagrant/salt/install", args: ["--minion", "selenium-node-chrome", "--root", "/vagrant/salt" ]
+    seleniumnodechrome.vm.synced_folder "./_vagrant", "/vagrant", type: "rsync"
+    seleniumnodechrome.vm.provision "selenium-node-chrome-salt", type: "shell", path: "./_vagrant/salt/install", args: ["--minion", "selenium-node-chrome", "--root", "/vagrant/salt" ]
 
     seleniumnodechrome.vm.synced_folder "../Moodle", "/home/ubuntu/moodle", type: "rsync",
                                         owner: "ubuntu", group: "ubuntu",
@@ -124,8 +124,8 @@ Vagrant.configure(2) do |config|
     seleniumnodefirefox.ssh.port = 2229
     seleniumnodefirefox.vm.network "forwarded_port", guest: 22, host: seleniumnodefirefox.ssh.port
 
-    seleniumnodefirefox.vm.synced_folder "./vagrant", "/vagrant", type: "rsync"
-    seleniumnodefirefox.vm.provision "selenium-node-firefox-salt", type: "shell", path: "vagrant/salt/install", args: ["--minion", "selenium-node-firefox", "--root", "/vagrant/salt" ]
+    seleniumnodefirefox.vm.synced_folder "./_vagrant", "/vagrant", type: "rsync"
+    seleniumnodefirefox.vm.provision "selenium-node-firefox-salt", type: "shell", path: "./_vagrant/salt/install", args: ["--minion", "selenium-node-firefox", "--root", "/vagrant/salt" ]
 
     seleniumnodefirefox.vm.synced_folder "../Moodle", "/home/ubuntu/moodle", type: "rsync",
                                         owner: "ubuntu", group: "ubuntu",
