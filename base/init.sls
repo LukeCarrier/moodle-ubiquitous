@@ -18,20 +18,6 @@
     - mode: 644
 
 #
-# Default firewall policy
-#
-
-{% if pillar['systemd']['apply'] %}
-ufw.disable:
-  service.disabled:
-    - name: ufw
-
-ufw.dead:
-  service.dead:
-    - name: ufw
-{% endif %}
-
-#
 # Locales
 #
 

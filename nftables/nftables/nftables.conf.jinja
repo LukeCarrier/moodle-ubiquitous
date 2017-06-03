@@ -1,0 +1,31 @@
+#!/usr/sbin/nft -f
+
+flush ruleset
+
+{% for table in salt['pillar.get']('nftables:ruleset') %}
+table {{ table['family'] }} {{ table['name'] }} {
+	{%- for set in table.get('sets', []) %}
+	set {{ set['name'] }} {
+		type {{ set['type']}}
+		{% if 'flags' in set %}flags {{ set['flags']}}{% endif %}
+		{%- if 'elements' in set %}
+		elements = {
+			{%- for element in set['elements'] %}
+			{{ element }}
+			{%- endfor %}
+		}
+		{% endif %}
+	}
+	{% endfor %}
+
+	{% for chain in table.get('chains', []) %}
+	chain {{ chain['name'] }} {
+		type {{ chain['type'] }} hook {{ chain['hook'] }} priority {{ chain['priority'] }}; policy {{ chain['policy'] }};
+
+		{% for rule in chain.get('rules', []) %}
+		{{ rule }}
+		{%- endfor %}
+	}
+	{% endfor %}
+}
+{% endfor %}

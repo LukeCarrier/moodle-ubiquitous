@@ -32,7 +32,7 @@
 * [Redis](roles/redis.md)
 * [MailCatcher](roles/mail-debug.md)
 * [Mail relay](roles/mail-relay.md)
-* [iptables](roles/iptables.md)
+* [nftables](roles/nftables.md)
 * [Sophos AV](roles/av-sophos.md)
 * [CIFS mounts](roles/mount-cifs.md)
 * [BIND](roles/named.md)
