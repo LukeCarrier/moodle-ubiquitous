@@ -20,32 +20,6 @@ include:
     - group: root
     - mode: 0644
 
-{% if pillar['iptables']['apply'] %}
-nginx.iptables.http:
-  iptables.append:
-    - chain: INPUT
-    - jump: ACCEPT
-    - proto: tcp
-    - dport: 80
-    - save: True
-    - require:
-      - iptables: iptables.default.input.established
-    - require_in:
-      - iptables: iptables.default.input.drop
-
-nginx.iptables.https:
-  iptables.append:
-    - chain: INPUT
-    - jump: ACCEPT
-    - proto: tcp
-    - dport: 443
-    - save: True
-    - require:
-      - iptables: iptables.default.input.established
-    - require_in:
-      - iptables: iptables.default.input.drop
-{% endif %}
-
 /etc/nginx/sites-extra:
   file.directory:
     - user: root

@@ -58,20 +58,6 @@ postgresql-server.pg_hba.conf:
     - require:
       - cmd: postgresql-server.cluster
 
-{% if pillar['iptables']['apply'] %}
-postgresql-server.iptables.pgsql:
-  iptables.append:
-    - chain: INPUT
-    - jump: ACCEPT
-    - proto: tcp
-    - dport: 5432
-    - save: True
-    - require:
-      - iptables: iptables.default.input.established
-    - require_in:
-      - iptables: iptables.default.input.drop
-{% endif %}
-
 {% for domain, platform in salt['pillar.get']('platforms', {}).items() %}
 moodle.{{ domain }}.postgres:
   postgres_user.present:

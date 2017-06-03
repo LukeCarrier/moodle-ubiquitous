@@ -14,22 +14,6 @@ named:
       - bind9
       - dnsutils
 
-{% if pillar['iptables']['apply'] %}
-{% for protocol in ['tcp', 'udp']%}
-named.iptables.dns-{{ protocol }}:
-  iptables.append:
-    - chain: INPUT
-    - jump: ACCEPT
-    - proto: {{ protocol }}
-    - dport: 53
-    - save: True
-    - require:
-      - iptables: iptables.default.input.established
-    - require_in:
-      - iptables: iptables.default.input.drop
-{% endfor %}
-{% endif %}
-
 /etc/bind/named.conf.options:
   file.managed:
     - source: salt://named/named/named.conf.options.jinja

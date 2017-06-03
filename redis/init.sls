@@ -14,18 +14,6 @@ redis.pkgs:
       - redis-server
       - redis-tools
 
-redis.iptables.redis:
-  iptables.append:
-    - chain: INPUT
-    - jump: ACCEPT
-    - proto: tcp
-    - dport: 6379
-    - save: True
-    - require:
-      - iptables: iptables.default.input.established
-    - require_in:
-      - iptables: iptables.default.input.drop
-
 redis.sysctl.overcommit-memory:
   sysctl.present:
     - name: vm.overcommit_memory

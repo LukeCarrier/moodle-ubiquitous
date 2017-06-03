@@ -31,44 +31,6 @@ ufw.dead:
     - name: ufw
 {% endif %}
 
-{% if pillar['iptables']['apply'] %}
-iptables.persistent:
-  pkg.installed:
-    - pkgs:
-      - iptables-persistent
-
-iptables.default.input.established:
-  iptables.append:
-    - chain: INPUT
-    - jump: ACCEPT
-    - match: conntrack
-    - ctstate: RELATED,ESTABLISHED
-    - save: True
-
-iptables.default.input.drop:
-  iptables.set_policy:
-    - chain: INPUT
-    - policy: DROP
-    - save: True
-    - require:
-      - iptables: iptables.default.input.local
-      - iptables: iptables.default.input.established
-
-iptables.default.input.local:
-  iptables.append:
-    - chain: INPUT
-    - jump: ACCEPT
-    - source: 127.0.0.1
-    - save: True
-
-iptables.default.forward.local:
-  iptables.append:
-    - chain: FORWARD
-    - jump: ACCEPT
-    - source: 127.0.0.1
-    - save: True
-{% endif %}
-
 #
 # Locales
 #
@@ -191,18 +153,6 @@ ssh.service:
       - pkg: openssh-server
     - watch:
       - file: /etc/ssh/sshd_config
-{% endif %}
-
-{% if pillar['iptables']['apply'] %}
-ssh.iptables:
-  iptables.append:
-    - chain: INPUT
-    - jump: ACCEPT
-    - proto: tcp
-    - dport: 22
-    - save: True
-    - require_in:
-      - iptables.default.input.drop
 {% endif %}
 
 #

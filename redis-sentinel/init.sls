@@ -9,18 +9,6 @@ redis-sentinel.pkgs:
   pkg.latest:
     - name: redis-sentinel
 
-redis-sentinel.iptables.redis-sentinel:
-  iptables.append:
-    - chain: INPUT
-    - jump: ACCEPT
-    - proto: tcp
-    - dport: 26379
-    - save: True
-    - require:
-      - iptables: iptables.default.input.established
-    - require_in:
-      - iptables: iptables.default.input.drop
-
 redis-sentinel.conf:
   file.managed:
     - name: /etc/redis/sentinel.conf

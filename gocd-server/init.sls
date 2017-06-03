@@ -27,32 +27,6 @@ go-server.service:
     - pkg: go-server
 {% endif %}
 
-{% if pillar['iptables']['apply'] %}
-go-server.iptables.http:
-  iptables.append:
-  - chain: INPUT
-  - jump: ACCEPT
-  - proto: tcp
-  - dport: 80
-  - save: True
-  - require:
-    - iptables: iptables.default.input.established
-  - require_in:
-    - iptables: iptables.default.input.drop
-
-go-server.iptables.https:
-  iptables.append:
-  - chain: INPUT
-  - jump: ACCEPT
-  - proto: tcp
-  - dport: 443
-  - save: True
-  - require:
-    - iptables: iptables.default.input.established
-  - require_in:
-    - iptables: iptables.default.input.drop
-{% endif %}
-
 /var/go/users:
   file.managed:
     - source: salt://gocd-server/gocd/users.jinja
