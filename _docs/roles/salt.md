@@ -195,6 +195,73 @@ You're now ready to start installing minions.
 
 ## Troubleshooting
 
+### The master or master won't start
+
+When attempting to start the Salt master, you encounter the following error:
+
+```
+$ sudo systemctl start salt-master
+Job for salt-master.service failed because the control process exited with error code. See "systemctl status salt-master.service" and "journalctl -xe" for details.
+```
+
+#### Invalid default locale
+
+In the journal, you notice a message similar to the following:
+
+```
+Jun 03 18:10:31 salt systemd[1]: Starting The Salt Master Server...
+Jun 03 18:10:31 salt salt-master[7603]: Error in sys.excepthook:
+Jun 03 18:10:31 salt salt-master[7603]: Traceback (most recent call last):
+Jun 03 18:10:31 salt salt-master[7603]:   File "/usr/lib/python2.7/dist-packages/salt/log/setup.py", line 1063, i
+Jun 03 18:10:31 salt salt-master[7603]:     exc_type, exc_value, exc_traceback
+Jun 03 18:10:31 salt salt-master[7603]:   File "/usr/lib/python2.7/logging/__init__.py", line 1193, in error
+Jun 03 18:10:31 salt salt-master[7603]:     self._log(ERROR, msg, args, **kwargs)
+Jun 03 18:10:31 salt salt-master[7603]:   File "/usr/lib/python2.7/dist-packages/salt/log/setup.py", line 310, in
+Jun 03 18:10:31 salt salt-master[7603]:     self, level, msg, args, exc_info=exc_info, extra=extra
+Jun 03 18:10:31 salt salt-master[7603]:   File "/usr/lib/python2.7/logging/__init__.py", line 1285, in _log
+Jun 03 18:10:31 salt salt-master[7603]:     record = self.makeRecord(self.name, level, fn, lno, msg, args, exc_in
+Jun 03 18:10:31 salt salt-master[7603]:   File "/usr/lib/python2.7/dist-packages/salt/log/setup.py", line 333, in
+Jun 03 18:10:31 salt salt-master[7603]:     _msg = msg.decode(salt_system_encoding, 'replace')
+Jun 03 18:10:31 salt salt-master[7603]: LookupError: unknown encoding: utf_8_utf_8
+Jun 03 18:10:31 salt salt-master[7603]: Original exception was:
+Jun 03 18:10:31 salt salt-master[7603]: Traceback (most recent call last):
+Jun 03 18:10:31 salt salt-master[7603]:   File "/usr/bin/salt-master", line 22, in <module>
+Jun 03 18:10:31 salt salt-master[7603]:     salt_master()
+Jun 03 18:10:31 salt salt-master[7603]:   File "/usr/lib/python2.7/dist-packages/salt/scripts.py", line 89, in sa
+Jun 03 18:10:31 salt salt-master[7603]:     master = salt.cli.daemons.Master()
+Jun 03 18:10:31 salt salt-master[7603]:   File "/usr/lib/python2.7/dist-packages/salt/utils/parsers.py", line 154
+Jun 03 18:10:31 salt salt-master[7603]:     optparse.OptionParser.__init__(self, *args, **kwargs)
+Jun 03 18:10:31 salt salt-master[7603]:   File "/usr/lib/python2.7/optparse.py", line 1220, in __init__
+Jun 03 18:10:31 salt salt-master[7603]:     add_help=add_help_option)
+Jun 03 18:10:31 salt salt-master[7603]:   File "/usr/lib/python2.7/dist-packages/salt/utils/parsers.py", line 236
+Jun 03 18:10:31 salt salt-master[7603]:     mixin_setup_func(self)
+Jun 03 18:10:31 salt salt-master[7603]:   File "/usr/lib/python2.7/dist-packages/salt/utils/parsers.py", line 497
+Jun 03 18:10:31 salt salt-master[7603]:     logging.getLogger(__name__).debug('SYSPATHS setup as: {0}'.format(sys
+Jun 03 18:10:31 salt salt-master[7603]:   File "/usr/lib/python2.7/logging/__init__.py", line 1155, in debug
+Jun 03 18:10:31 salt salt-master[7603]:     self._log(DEBUG, msg, args, **kwargs)
+Jun 03 18:10:31 salt salt-master[7603]:   File "/usr/lib/python2.7/dist-packages/salt/log/setup.py", line 310, in
+Jun 03 18:10:31 salt salt-master[7603]:     self, level, msg, args, exc_info=exc_info, extra=extra
+Jun 03 18:10:31 salt salt-master[7603]:   File "/usr/lib/python2.7/logging/__init__.py", line 1285, in _log
+Jun 03 18:10:31 salt salt-master[7603]:     record = self.makeRecord(self.name, level, fn, lno, msg, args, exc_in
+Jun 03 18:10:31 salt salt-master[7603]:   File "/usr/lib/python2.7/dist-packages/salt/log/setup.py", line 333, in
+Jun 03 18:10:31 salt salt-master[7603]:     _msg = msg.decode(salt_system_encoding, 'replace')
+Jun 03 18:10:31 salt salt-master[7603]: LookupError: unknown encoding: utf_8_utf_8
+Jun 03 18:10:31 salt systemd[1]: salt-master.service: Main process exited, code=exited, status=1/FAILURE
+Jun 03 18:10:31 salt systemd[1]: Failed to start The Salt Master Server.
+Jun 03 18:10:31 salt systemd[1]: salt-master.service: Unit entered failed state.
+Jun 03 18:10:31 salt systemd[1]: salt-master.service: Failed with result 'exit-code'.
+```
+
+The key is in the line `LookupError: unknown encoding: utf_8_utf_8`, indicating that Salt encountered an error determining the locale. To fix this, we need to both manually fix the locale issue and ensure that the next Salt state application doesn't break it again.
+
+Issue the following command to reconfigure the `locales` package:
+
+```
+$ sudo dpkg-reconfigure locales
+```
+
+Check the Salt pillar for an invalid `locale:default` value (ensure it matches the pattern `en_GB.UTF-8` and does not duplicate the character set, e.g. `en_GB.UTF-8 UTF-8`).
+
 ### My minions keep ignoring me
 
 This is a common problem with Salt deployments on IaaS platforms such as Azure.
