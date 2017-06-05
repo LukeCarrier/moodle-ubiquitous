@@ -71,8 +71,8 @@ $ vagrant ssh --command "sudo salt -G 'group:dev' state.apply"
 For the time being, the following commands are necessary to install the configuration for the Vagrant release and virtual host:
 
 ```
-$ vagrant ssh --command 'sudo /usr/local/ubiquitous/bin/ubiquitous-set-current-release -d dev.local -r vagrant' app-debug-1
 $ vagrant ssh --command 'mkdir data/base data/behat' app-debug-1
+$ vagrant ssh --command 'sudo /usr/local/ubiquitous/bin/ubiquitous-set-current-release -d dev.local -r vagrant' app-debug-1
 $ vagrant ssh --command 'sudo systemctl restart nginx' app-debug-1
 $ vagrant ssh --command 'sudo systemctl restart php7.0-fpm' app-debug-1
 ```
