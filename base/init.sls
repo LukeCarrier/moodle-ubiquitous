@@ -88,8 +88,6 @@ locales.present.{{ locale }}:
 locales.default:
   locale.system:
     - name: {{ pillar['locales']['default'] }}
-    - require:
-      - locale: locales.present.{{ pillar['locales']['default'] }}
 
 #
 # Administrative user
