@@ -9,35 +9,8 @@
 # Deployment tools and configuration
 #
 
-/usr/local/ubiquitous:
-  file.directory:
-    - user: root
-    - group: root
-    - mode: 0750
-
-/usr/local/ubiquitous/bin:
-  file.directory:
-    - user: root
-    - group: root
-    - mode: 0750
-    - require:
-      - file: /usr/local/ubiquitous
-
-/usr/local/ubiquitous/lib:
-  file.directory:
-    - user: root
-    - group: root
-    - mode: 0750
-    - require:
-      - file: /usr/local/ubiquitous
-
-/usr/local/ubiquitous/etc:
-  file.directory:
-    - user: root
-    - group: root
-    - mode: 0750
-    - require:
-      - file: /usr/local/ubiquitous
+include:
+  - app-ubiquitous-dirs
 
 {% for script in ['info', 'install-release', 'set-current-release']: %}
 /usr/local/ubiquitous/bin/ubiquitous-{{ script }}:
@@ -47,7 +20,7 @@
     - group: root
     - mode: 0755
     - require:
-      - file: /usr/local/ubiquitous/bin
+      - file: app-ubiquitous-dirs.bin
 {% endfor %}
 
 /usr/local/ubiquitous/lib/ubiquitous-lib:
@@ -57,7 +30,7 @@
     - group: root
     - mode: 0755
     - require:
-      - file: /usr/local/ubiquitous/lib
+      - file: app-ubiquitous-dirs.lib
 
 /usr/local/ubiquitous/etc/ubiquitous-platforms:
   file.managed:
@@ -67,7 +40,7 @@
     - group: root
     - mode: 0600
     - require:
-      - file: /usr/local/ubiquitous/etc
+      - file: app-ubiquitous-dirs.etc
 
 #
 # Sudo
