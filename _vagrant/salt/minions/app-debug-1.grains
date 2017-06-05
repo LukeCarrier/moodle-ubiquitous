@@ -2,3 +2,4 @@ group: dev
 roles:
   - app
   - app-debug
+  - app-error-pages

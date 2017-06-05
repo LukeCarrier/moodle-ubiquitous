@@ -2,6 +2,7 @@ base:
   '*':
     - base
     - platforms
+    - platforms-logos
 
   'roles:app':
     - match: grain

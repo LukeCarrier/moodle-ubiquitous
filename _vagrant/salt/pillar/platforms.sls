@@ -1,6 +1,9 @@
 platforms:
   dev.local:
     basename: ubuntu
+    name: Local test site
+    email: root@localhost
+    lang: en
     user:
       name: ubuntu
       home: /home/ubuntu
