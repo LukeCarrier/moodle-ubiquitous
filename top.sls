@@ -25,8 +25,11 @@ base:
   'roles:app':
     - match: grain
     - app
-    - app-gocd-agent
     - certbot
+
+  'roles:app-gocd-agent':
+    - match: grain
+    - app-gocd-agent
 
   'roles:db-pgsql':
     - match: grain
