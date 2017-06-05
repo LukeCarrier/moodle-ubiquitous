@@ -52,7 +52,7 @@ phpfpm_enable_instance "$platform_basename" "$phpfpm_inactive_instance" "$reload
 
 if [ -f "${release_dir}/admin/cli/alternative_component_cache.php" ]; then
     echo "rebuilding component cache..."
-    sudo -u "$platform_user" php "${release_dir}/admin/cli/alternative_component_cache.php" --rebuild
+    sudo -u "$platform_user" php "${release_dir}/admin/cli/alternative_component_cache.php" --rebuild || true
 else
     echo "skipping component cache rebuild (CLI script does not exist)"
 fi
