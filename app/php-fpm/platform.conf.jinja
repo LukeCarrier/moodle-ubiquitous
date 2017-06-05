@@ -12,12 +12,15 @@ group = {{ platform['user']['name'] }}
 
 pm = {{ platform['php']['fpm']['pm'] }}
 pm.max_children = {{ platform['php']['fpm']['pm.max_children'] }}
+
+{% if platform['php']['fpm']['pm'] == 'dynamic' %}
 pm.start_servers = {{ platform['php']['fpm']['pm.start_servers'] }}
 pm.min_spare_servers = {{ platform['php']['fpm']['pm.min_spare_servers'] }}
 pm.max_spare_servers = {{ platform['php']['fpm']['pm.max_spare_servers'] }}
 pm.max_requests = {{ platform['php']['fpm']['pm.max_requests'] }}
-pm.status_path = /status
+{% endif %}
 
+pm.status_path = /status
 ping.path = /ping
 ping.response = pong
 
