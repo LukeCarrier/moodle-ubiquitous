@@ -75,7 +75,7 @@ app-error-pages:
             <div class="outer">
               <div class="inner">
                 <div class="center">
-                  <img src="logo.png" alt="<!--# echo var="platform_name" --> logo">
+                  <img src="/logo.png" alt="<!--# echo var="platform_name" --> logo">
                 </div>
 
                 {% raw %}{{ body }}{% endraw %}
