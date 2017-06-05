@@ -1,0 +1,15 @@
+set $ubiquitous_error_document_root '/usr/local/ubiquitous/share/ubiquitous-error-pages';
+
+{% for status in error_pages %}
+error_page {{ status }} /ubiquitous-error/{{ status }}.html;
+{% endfor %}
+
+location ~ ^/ubiquitous-error/(\d+\.html) {
+    internal;
+    ssi on;
+    alias "${ubiquitous_error_document_root}/${platform_lang}/$1";
+}
+
+location = /logo.png {
+    alias "${ubiquitous_error_document_root}/logos/${platform_basename}.png";
+}

@@ -31,6 +31,10 @@ base:
     - match: grain
     - app-debug
 
+  'roles:app-error-pages':
+    - match: grain
+    - app-error-pages
+
   'roles:app-gocd-agent':
     - match: grain
     - app-gocd-agent
