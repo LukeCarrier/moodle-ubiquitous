@@ -3,3 +3,4 @@ roles:
   - app
   - app-debug
   - app-error-pages
+  - app-gocd-agent
