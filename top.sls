@@ -27,6 +27,10 @@ base:
     - app
     - certbot
 
+  'roles:app-debug':
+    - match: grain
+    - app-debug
+
   'roles:app-gocd-agent':
     - match: grain
     - app-gocd-agent
@@ -42,10 +46,6 @@ base:
   'roles:mount-cifs':
     - match: grain
     - mount-cifs
-
-  'roles:app-debug':
-    - match: grain
-    - app-debug
 
   'roles:mail-debug':
     - match: grain
