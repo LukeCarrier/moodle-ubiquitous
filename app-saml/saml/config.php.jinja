@@ -6,8 +6,8 @@
 
 $config = array(
     'baseurlpath' => 'simplesaml/',
-    'auth.adminpassword' => "{{ pillar['platforms']['saml_platforms']['saml_idp_proxy']['adminpassword'] | yaml }}",
-    'secretsalt' => "{{ pillar['platforms']['saml_platforms']['saml_idp_proxy']['secret_salt'] | yaml }}",
+    'auth.adminpassword' => "{{ pillar['platforms']['saml_platforms']['saml_idp_proxy']['config_adminpassword'] | yaml }}",
+    'secretsalt' => "{{ pillar['platforms']['saml_platforms']['saml_idp_proxy']['config_secretsalt'] | yaml }}",
     'technicalcontact_name' => "{{ pillar['platforms']['saml_platforms']['saml_idp_proxy']['tech_contact_name'] | yaml }}",
     'technicalcontact_email' => "{{ pillar['platforms']['saml_platforms']['saml_idp_proxy']['tech_contact_email'] | yaml }}",
     'enable.saml20-idp' => false,

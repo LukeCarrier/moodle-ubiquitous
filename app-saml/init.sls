@@ -97,3 +97,17 @@ asso.saml.config.replace:
     - template: jinja
     - user: {{ pillar['platforms']['saml_platforms']['saml_idp_proxy']['linux_user_username'] }}
     - group: {{ pillar['nginx']['user'] }}
+
+asso.phpfpm.config.place:
+  file.managed:
+    - name: /etc/php/7.0/fpm/pools-available/sso.conf
+    - source: salt://app-saml/php-fpm/sso.conf.jinja
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 0644
+
+asso.phpfpm.reload:
+  service.running:
+    - name: php7.0-fpm
+    - reload: True
