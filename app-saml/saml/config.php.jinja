@@ -5,7 +5,7 @@
  */
 
 $config = array(
-    'baseurlpath' => 'simplesaml/',
+    'baseurlpath' => {{ pillar['platforms']['saml_platforms']['saml_idp_proxy']['config_baseurlpath'] | yaml }},
     'auth.adminpassword' => "{{ pillar['platforms']['saml_platforms']['saml_idp_proxy']['config_adminpassword'] | yaml }}",
     'secretsalt' => "{{ pillar['platforms']['saml_platforms']['saml_idp_proxy']['config_secretsalt'] | yaml }}",
     'technicalcontact_name' => "{{ pillar['platforms']['saml_platforms']['saml_idp_proxy']['tech_contact_name'] | yaml }}",

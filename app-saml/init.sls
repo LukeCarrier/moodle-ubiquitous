@@ -60,6 +60,13 @@ asso.home.acl.default:
       - file: asso.home
 {% endif %}
 
+asso.home.wwwuser:
+  acl.present:
+    - name: /home/{{ pillar['platforms']['saml_platforms']['saml_idp_proxy']['linux_user_username'] }}
+    - acl_type: group
+    - acl_name: {{ pillar['nginx']['user'] }}
+    - perms: rwx
+
 asso.nginx.log:
   file.directory:
     - name: /var/log/nginx/asso
@@ -92,7 +99,7 @@ asso.saml.package.rename:
 
 asso.saml.config.replace:
   file.managed:
-    - name: /home/{{ pillar['platforms']['saml_platforms']['saml_idp_proxy']['linux_user_username'] }}/simplesamlphp/config.php
+    - name: /home/{{ pillar['platforms']['saml_platforms']['saml_idp_proxy']['linux_user_username'] }}/simplesamlphp/config/config.php
     - source: salt://app-saml/saml/config.php.jinja
     - template: jinja
     - user: {{ pillar['platforms']['saml_platforms']['saml_idp_proxy']['linux_user_username'] }}
@@ -107,7 +114,20 @@ asso.phpfpm.config.place:
     - group: root
     - mode: 0644
 
+asso.nginx.symlink:
+  file.symlink:
+    - name: /etc/php/7.0/fpm/pools-enabled/sso.conf
+    - target: /etc/php/7.0/fpm/pools-available/sso.conf
+
+asso.phpfpm.symlink:
+  file.symlink:
+    - name: /etc/nginx/sites-enabled/asso.conf
+    - target: /etc/nginx/sites-available/asso.conf
+
 asso.phpfpm.reload:
   service.running:
     - name: php7.0-fpm
-    - reload: True
+
+asso.nginx.reload:
+  service.running:
+    - name: nginx
