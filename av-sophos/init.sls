@@ -29,7 +29,3 @@ av-sophos.savconfig.{{ option }}:
     - name: /opt/sophos-av/bin/savconfig set {{ option | yaml }} {{ value | yaml }}
     - unless: /opt/sophos-av/bin/savconfig get {{ option | yaml }} | grep {{ value | yaml }}
 {% endfor %}
-
-av-sophos.savupdate:
-  cmd.run:
-    - name: /opt/sophos-av/bin/savupdate --verbose=5
