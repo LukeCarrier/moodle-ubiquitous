@@ -145,6 +145,26 @@ user.{{ username }}.ssh.authorized_keys:
     - mode: 0644
 
 #
+# systemd
+#
+
+{% if pillar['systemd']['apply'] %}
+systemd.journald:
+  file.managed:
+    - name: /etc/systemd/journald.conf
+    - source: salt://base/systemd/journald.conf.jinja
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 0644
+  service.running:
+    - name: systemd-journald
+    - reload: True
+    - watch:
+      - file: systemd.journald
+{% endif %}
+
+#
 # SSH daemon
 #
 
