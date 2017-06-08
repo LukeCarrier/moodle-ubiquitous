@@ -63,7 +63,7 @@ app-error-pages.page.{{ lang }}.{{ status }}:
 {% endfor %}
 {% endfor %}
 
-{% for domain, platform in salt['pillar.get']('platforms', {}).items() %}
+{% for domain, platform in salt['pillar.get']('platforms:moodle_platforms', {}).items() %}
 app-error-pages.{{ platform['basename'] }}.logo.base64:
   file.managed:
     - name: /usr/local/ubiquitous/share/ubiquitous-error-pages/logos/{{ platform['basename'] }}.png.base64
