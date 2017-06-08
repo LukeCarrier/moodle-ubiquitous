@@ -1,3 +1,11 @@
+{% if salt['pillar.get']('av-sophos:on_access', False) %}
+  {% set savdstatus_expect = 'On-access scanning is running' %}
+  {% set savdctl_action = 'enable' %}
+{% else %}
+  {% set savdstatus_expect = 'On-access scanning is not running' %}
+  {% set savdctl_action = 'disable' %}
+{% endif %}
+
 av-sophos.deps:
   pkg.latest:
     - name: build-essential
@@ -29,3 +37,8 @@ av-sophos.savconfig.{{ option }}:
     - name: /opt/sophos-av/bin/savconfig set {{ option | yaml }} {{ value | yaml }}
     - unless: /opt/sophos-av/bin/savconfig get {{ option | yaml }} | grep {{ value | yaml }}
 {% endfor %}
+
+av-sophos.savdctl:
+  cmd.run:
+    - name: /opt/sophos-av/bin/savdctl {{ savdctl_action | yaml_squote }}
+    - unless: /opt/sophos-av/bin/savdstatus --verbose | grep {{ savdstatus_expect | yaml_squote }}
