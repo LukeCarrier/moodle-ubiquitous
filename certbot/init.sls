@@ -34,3 +34,11 @@ certbot.root:
     - user: {{ pillar['nginx']['user'] }}
     - group: {{ pillar['nginx']['user'] }}
     - mode: 0750
+
+certbot.acme-challenge-snippet:
+  file.managed:
+    - name: /etc/nginx/snippets/acme-challenge.conf
+    - source: salt://certbot/nginx/acme-challenge.conf
+    - user: root
+    - group: root
+    - mode: 0644
