@@ -23,7 +23,7 @@ os.packages:
     - openssl
 
 {% for platform, configuration in salt['pillar.get']('platforms:saml_platforms', {}).items() %}
-asso.user:
+asso.{{ platform }}.user:
   user.present:
     - name: {{ configuration['linux_user_username'] }}
     - fullname: {{ configuration['linux_user_username'] }}
@@ -32,7 +32,7 @@ asso.user:
     - password: {{ configuration['linux_user_password_hash'] }}
     - gid_from_name: true
 
-asso.home:
+asso.{{ platform }}.home:
   file.directory: 
     - name: /home/{{ configuration['linux_user_username'] }}
     - user: {{ configuration['linux_user_username'] }}
@@ -41,41 +41,41 @@ asso.home:
     - require:
       - user: {{ configuration['linux_user_username'] }}
 
-{% if configuration['acl']['apply'] %}
-asso.home.acl:
+{% if pillar['acl']['apply'] %}
+asso.{{ platform }}.home.acl:
   acl.present:
     - name: /home/{{ configuration['linux_user_username'] }}
     - acl_type: user
     - acl_name: {{ configuration['linux_user_username'] }}
     - perms: rx
     - require:
-      - file: asso.home
+      - file: asso.{{ platform }}.home
 
-asso.home.acl.default:
+asso.{{ platform }}.home.acl.default:
   acl.present:
     - name: /home/{{ configuration['linux_user_username'] }}
     - acl_type: default:user
     - acl_name: {{ configuration['linux_user_username'] }}
     - perms: rx
     - require:
-      - file: asso.home
+      - file: asso.{{ platform }}.home
 {% endif %}
 
-asso.home.wwwuser:
+asso.{{ platform }}.home.wwwuser:
   acl.present:
     - name: /home/{{ configuration['linux_user_username'] }}
     - acl_type: group
-    - acl_name: {{ configuration['nginx']['user'] }}
+    - acl_name: {{ pillar['nginx']['user'] }}
     - perms: rwx
 
-asso.nginx.log:
+asso.{{ platform }}.nginx.log:
   file.directory:
     - name: /var/log/nginx/asso
-    - user: {{ configuration['nginx']['user'] }}
+    - user: {{ pillar['nginx']['user'] }}
     - group: adm
     - mode: 0640
 
-asso.nginx.available:
+asso.{{ platform }}.nginx.available:
   file.managed:
     - name: /etc/nginx/sites-available/asso.conf
     - source: salt://app-saml/nginx/saml.nginx.conf.jinja
@@ -86,19 +86,19 @@ asso.nginx.available:
     - require:
       - pkg: nginx
 
-asso.saml.package:
+asso.{{ platform }}.saml.package:
   archive.extracted:
     - name: /home/{{ configuration['linux_user_username'] }}/
     - source: https://github.com/simplesamlphp/simplesamlphp/releases/download/v1.14.14/simplesamlphp-1.14.14.tar.gz
     - source_hash: 2ff76d8b379141cdd3340dbd8e8bab1605e7a862d4a31657cc37265817463f48
 
-asso.saml.package.rename:
+asso.{{ platform }}.saml.package.rename:
   file.rename:
     - name: /home/{{ configuration['linux_user_username'] }}/simplesamlphp
     - source: /home/{{ configuration['linux_user_username'] }}/simplesamlphp-1.14.14
     - force: true
 
-asso.saml.config.replace:
+asso.{{ platform }}.saml.config.replace:
   file.managed:
     - name: /home/{{ configuration['linux_user_username'] }}/simplesamlphp/config/config.php
     - source: salt://app-saml/saml/config.php.jinja
@@ -106,7 +106,7 @@ asso.saml.config.replace:
     - user: {{ configuration['linux_user_username'] }}
     - group: {{ pillar['nginx']['user'] }}
 
-asso.phpfpm.config.place:
+asso.{{ platform }}.phpfpm.config.place:
   file.managed:
     - name: /etc/php/7.0/fpm/pools-available/sso.conf
     - source: salt://app-saml/php-fpm/sso.conf.jinja
@@ -115,18 +115,18 @@ asso.phpfpm.config.place:
     - group: root
     - mode: 0644
 
-asso.nginx.symlink:
+asso.{{ platform }}.nginx.symlink:
   file.symlink:
     - name: /etc/php/7.0/fpm/pools-enabled/sso.conf
     - target: /etc/php/7.0/fpm/pools-available/sso.conf
 
-asso.phpfpm.symlink:
+asso.{{ platform }}.phpfpm.symlink:
   file.symlink:
     - name: /etc/nginx/sites-enabled/asso.conf
     - target: /etc/nginx/sites-available/asso.conf
 
 {% if platform == 'saml_idp_proxy' %}
-asso.phpfpm.config.place:
+asso.{{ platform }}.saml.idpp.authsources.place:
   file.managed:
     - name: /home/asso/simplesamlphp/config/authsources.php
     - source: salt://app-saml/saml/idpproxy-authsources.php.jinja
@@ -134,10 +134,46 @@ asso.phpfpm.config.place:
     - user: asso
     - group: www-data
     - mode: 0644
+
+asso.{{ platform }}.saml.sp.cert.place:
+  file.managed:
+    - name: /home/asso/simplesamlphp/cert/sp.cert
+    - source: salt://app-saml/certs/idpp-saml-sp.cert.jinja
+    - template: jinja
+    - user: asso
+    - group: www-data
+    - mode: 0660
+
+asso.{{ platform }}.saml.sp.pem.place:
+  file.managed:
+    - name: /home/asso/simplesamlphp/cert/sp.pem
+    - source: salt://app-saml/certs/idpp-saml-sp.pem.jinja
+    - template: jinja
+    - user: asso
+    - group: www-data
+    - mode: 0660
+
+asso.{{ platform }}.saml.idp.cert.place:
+  file.managed:
+    - name: /home/asso/simplesamlphp/cert/idp.cert
+    - source: salt://app-saml/certs/idpp-saml-idp.cert.jinja
+    - template: jinja
+    - user: asso
+    - group: www-data
+    - mode: 0660
+
+asso.{{ platform }}.saml.idp.pem.place:
+  file.managed:
+    - name: /home/asso/simplesamlphp/cert/idp.pem
+    - source: salt://app-saml/certs/idpp-saml-idp.pem.jinja
+    - template: jinja
+    - user: asso
+    - group: www-data
+    - mode: 0660
 {% endif %}
 
 {% if platform == 'saml_identity_provider' %}
-asso.phpfpm.config.place:
+asso.{{ platform }}.saml.authsources.place:
   file.managed:
     - name: /home/asso/simplesamlphp/config/authsources.php
     - source: salt://app-saml/saml/idp-authsources.php.jinja
@@ -145,13 +181,31 @@ asso.phpfpm.config.place:
     - user: asso
     - group: www-data
     - mode: 0644
+
+asso.{{ platform }}.saml.cert.place:
+  file.managed:
+    - name: /home/asso/simplesamlphp/cert/saml.cert
+    - source: salt://app-saml/certs/idp-saml.cert.jinja
+    - template: jinja
+    - user: asso
+    - group: www-data
+    - mode: 0660
+
+asso.{{ platform }}.saml.pem.place:
+  file.managed:
+    - name: /home/asso/simplesamlphp/cert/saml.pem
+    - source: salt://app-saml/certs/idp-saml.pem.jinja
+    - template: jinja
+    - user: asso
+    - group: www-data
+    - mode: 0660
 {% endif %}
 
-asso.phpfpm.reload:
+asso.{{ platform }}.phpfpm.reload:
   service.running:
     - name: php7.0-fpm
 
-asso.nginx.reload:
+asso.{{ platform }}.nginx.reload:
   service.running:
     - name: nginx
 {% endfor %}
