@@ -43,6 +43,10 @@ base:
     - match: grain
     - app-gocd-agent
 
+  'roles:app-lets-encrypt':
+    - match: grain
+    - app-lets-encrypt
+
   'roles:db-pgsql':
     - match: grain
     - db-pgsql
