@@ -1,4 +1,5 @@
 {% set platform = pillar['platforms'][domain] %}
+{% set ssl = 'ssl' in platform['nginx'] and platform['nginx']['ssl'] %}
 
 {%- macro lane_location(lane) %}
     location ~ {{ lane['location'] | replace('\\\\', '\\') }} {
@@ -21,6 +22,7 @@
 
 {% for source, destination in platform.get('rewrites', {}).items() %}
 server {
+    listen 80;
     server_name {{ source }};
 
     root {{ platform['user']['home'] }}/current;
@@ -34,10 +36,63 @@ server {
     root {{ platform['user']['home'] }}/current;
     index index.php index.html;
 
+    add_header X-Backend-Server $hostname;
+
+    access_log /var/log/nginx/{{ platform['basename'] }}/access.log{% if 'access_log_format' in platform['nginx'] %} {{ platform['nginx']['access_log_format'] }}{% endif %};
+    error_log /var/log/nginx/{{ platform['basename'] }}/error.log error;
+
+    client_max_body_size {{ platform['nginx']['client_max_body_size'] }};
+
+    set $platform_maintenance 0;
+
+    include "sites-extra/{{ platform['basename'] }}.*.conf";
+
+    location ~ ^/(status|ping)$ {
+{% for client in salt['pillar.get']('php-fpm:status_clients', []) %}
+        allow {{ client }};
+{% endfor %}
+        deny all;
+
+        include fastcgi.conf;
+        fastcgi_pass unix:/var/run/php/php7.0-fpm-{{ platform['basename'] }}.sock;
+    }
+
+    {{ salt['pillar.get']('maintenance:override-conditions', '') | indent(4) }}
+
+{% if 'lanes' in platform['nginx'] -%}
+{%- for lane in platform['nginx']['lanes'].values() -%}
+{{ lane_location(lane) }}
+{%- endfor %}
+
+    location / {
+{% if ssl and salt['file.file_exists']('/etc/letsencrypt/live/' + domain + '/fullchain.pem') %}
+        return 301 https://$host$request_uri;
+{% else %}
+        location ~ ^(.+\.php)(/|$) {
+            include snippets/fastcgi-php.conf;
+            fastcgi_param SCRIPT_FILENAME $document_root$1;
+            fastcgi_pass unix:/var/run/php/php7.0-fpm-{{ platform['basename'] }}.sock;
+        }
+{% endif %}
+    }
+}
+
+{% if ssl and salt['file.file_exists']('/etc/letsencrypt/live/' + domain + '/fullchain.pem') %}
+server {
+    listen 443 ssl;
+    server_name {{ domain }}{% if 'aliases' in platform %} {{ platform['aliases'] | join(' ') }}{% endif %};
+
+    root {{ platform['user']['home'] }}/current;
+    index index.php index.html;
+
     access_log /var/log/nginx/{{ platform['basename'] }}/access.log{% if 'access_log_format' in platform['nginx'] %} {{ platform['nginx']['access_log_format'] }}{% endif %};
     error_log /var/log/nginx/{{ platform['basename'] }}/error.log error;
 
     add_header X-Backend-Server $hostname;
+
+    ssl on;
+    ssl_certificate {{ platform['nginx']['ssl_certificate'] }};
+    ssl_certificate_key {{ platform['nginx']['ssl_certificate_key'] }};
 
     client_max_body_size {{ platform['nginx']['client_max_body_size'] }};
 
@@ -73,3 +128,4 @@ server {
     }
 {%- endif %}
 }
+{% endif %}
