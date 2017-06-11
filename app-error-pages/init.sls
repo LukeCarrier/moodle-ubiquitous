@@ -82,6 +82,7 @@ app-error-pages.{{ platform['basename'] }}.logo:
       - file: app-error-pages.{{ platform['basename'] }}.logo.base64
   file.managed:
     - name: /usr/local/ubiquitous/share/ubiquitous-error-pages/logos/{{ platform['basename'] }}.png
+    - replace: False
     - user: root
     - group: root
     - mode: 0644
