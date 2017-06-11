@@ -22,7 +22,7 @@ php.xdebug:
   acl.present:
   - name: {{ platform['user']['home'] }}/data/behat-faildump
   - acl_type: user
-  - acl_name: nginx
+  - acl_name: {{ pillar['nginx']['user'] }}
   - perms: rx
   - require:
     - file: {{ platform['user']['home'] }}/data/behat-faildump

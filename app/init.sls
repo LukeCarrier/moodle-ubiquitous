@@ -227,7 +227,7 @@ homes.{{ home_directory }}.acl:
   acl.present:
     - name: {{ home_directory }}
     - acl_type: user
-    - acl_name: nginx
+    - acl_name: {{ pillar['nginx']['user'] }}
     - perms: rx
 {% endif %}
 {% endfor %}
