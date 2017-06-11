@@ -33,6 +33,6 @@
     "gitbook-plugin-copy-code-button": "0.0.2",
     "gitbook-plugin-dashing": "^0.3.0",
     "gitbook-plugin-edit-link": "^2.0.2",
-    "gitbook-plugin-mermaid-2": "git+https://github.com/genzj/gitbook-plugin-mermaid-2.git#gitbook-3"
+    "gitbook-plugin-mermaid-2": "git+https://github.com/LukeCarrier/gitbook-plugin-mermaid-2.git#master"
   }
 }

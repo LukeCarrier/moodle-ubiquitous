@@ -6,13 +6,16 @@
     "copy-code-button",
     "dashing",
     "edit-link",
-    "mermaid-2@git+https://github.com/genzj/gitbook-plugin-mermaid-2.git#gitbook-3"
+    "mermaid-2@git+https://github.com/LukeCarrier/gitbook-plugin-mermaid-2.git#master"
   ],
   "pluginsConfig": {
     "edit-link": {
       "base": "https://github.com/LukeCarrier/moodle-ubiquitous/blob/master/docs",
       "label": "Edit on GitHub",
       "multilingual": false
+    },
+    "mermaid-2": {
+      "theme": "dark"
     }
   }
 }
