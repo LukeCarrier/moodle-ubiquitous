@@ -159,7 +159,7 @@ systemd.journald:
     - mode: 0644
   service.running:
     - name: systemd-journald
-    - reload: True
+    - full_restart: True
     - watch:
       - file: systemd.journald
 {% endif %}
