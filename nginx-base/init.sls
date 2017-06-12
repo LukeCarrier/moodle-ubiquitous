@@ -11,8 +11,9 @@ nginx:
       - nginx
       - nginx-extras
 
-/etc/nginx/nginx.conf:
+nginx.conf:
   file.managed:
+    - name: /etc/nginx/nginx.conf
     - source: salt://nginx-base/nginx/nginx.conf.jinja
     - template: jinja
     - user: root
@@ -21,21 +22,26 @@ nginx:
     - require:
       - pkg: nginx
 
-/etc/nginx/sites-available/default:
+nginx.default-enabled:
   file.absent:
-    - require:
-      - file: /etc/nginx/sites-enabled/default
-      - pkg: nginx
-
-/etc/nginx/sites-enabled/default:
-  file.absent:
+    - name: /etc/nginx/sites-enabled/default
     - require:
       - pkg: nginx
 
-nginx.ssl_params:
+nginx.default-available:
+  file.absent:
+    - name: /etc/nginx/sites-available/default
+    - require:
+      - file: nginx.default-enabled
+      - pkg: nginx
+
+nginx.ssl-params:
   file.managed:
     - name: /etc/nginx/ssl_params
     - source: salt://nginx-base/nginx/ssl_params
+    - user: root
+    - group: root
+    - mode: 0644
     - require:
       - pkg: nginx
 
@@ -51,4 +57,9 @@ nginx.reload:
   service.running:
     - name: nginx
     - reload: True
+    - watch:
+      - file: nginx.conf
+      - file: nginx.default-available
+      - file: nginx.default-enabled
+      - file: nginx.ssl-params
 {% endif %}
