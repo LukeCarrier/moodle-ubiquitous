@@ -1,0 +1,3 @@
+{% for name, format in salt['pillar.get']('nginx:log_formats', {}).items() %}
+log_format {{ name | yaml_squote }} {{ format | yaml_squote }};
+{% endfor %}

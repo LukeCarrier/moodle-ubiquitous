@@ -35,6 +35,17 @@ nginx.default-available:
       - file: nginx.default-enabled
       - pkg: nginx
 
+nginx.log-formats:
+  file.managed:
+    - name: /etc/nginx/conf.d/log-formats.conf
+    - source: salt://nginx-base/nginx/log-formats.conf.jinja
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 0644
+    - require:
+      - pkg: nginx
+
 nginx.ssl-params:
   file.managed:
     - name: /etc/nginx/ssl_params
@@ -61,5 +72,6 @@ nginx.reload:
       - file: nginx.conf
       - file: nginx.default-available
       - file: nginx.default-enabled
+      - file: nginx.log-formats
       - file: nginx.ssl-params
 {% endif %}
