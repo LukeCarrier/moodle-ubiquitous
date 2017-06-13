@@ -83,10 +83,10 @@ base:
     - match: grain
     - selenium-node-firefox
 
-  'app:app-moodle':
+  'roles:app-moodle':
     - match: grain
     - app-moodle
 
-  'app:app-saml':
+  'roles:app-saml':
     - match: grain
     - app-saml
