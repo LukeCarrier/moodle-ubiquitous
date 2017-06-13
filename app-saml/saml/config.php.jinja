@@ -1,15 +1,15 @@
 <?php
-/* 
+/*
  * The configuration of SimpleSAMLphp
- * 
+ *
  */
 
 $config = array(
-    'baseurlpath' => {{ pillar['platforms']['saml_platforms']['saml_idp_proxy']['config_baseurlpath'] | yaml_squote }},
-    'auth.adminpassword' => {{ pillar['platforms']['saml_platforms']['saml_idp_proxy']['config_adminpassword'] | yaml_squote }},
-    'secretsalt' => {{ pillar['platforms']['saml_platforms']['saml_idp_proxy']['config_secretsalt'] | yaml_squote }},
-    'technicalcontact_name' => {{ pillar['platforms']['saml_platforms']['saml_idp_proxy']['tech_contact_name'] | yaml_squote }},
-    'technicalcontact_email' => {{ pillar['platforms']['saml_platforms']['saml_idp_proxy']['tech_contact_email'] | yaml_squote }},
+    'baseurlpath' => {{ platform['saml']['config_baseurlpath'] | yaml_squote }},
+    'auth.adminpassword' => {{ platform['saml']['config_adminpassword'] | yaml_squote }},
+    'secretsalt' => {{ platform['saml']['config_secretsalt'] | yaml_squote }},
+    'technicalcontact_name' => {{ platform['saml']['tech_contact_name'] | yaml_squote }},
+    'technicalcontact_email' => {{ platform['saml']['tech_contact_email'] | yaml_squote }},
     'enable.saml20-idp' => true,
-    'session.cookie.name' => {{ pillar['platforms']['saml_platforms']['saml_idp_proxy']['config_session_cookie_name'] | yaml_squote }},
+    'session.cookie.name' => {{ platform['saml']['config_session_cookie_name'] | yaml_squote }},
 );

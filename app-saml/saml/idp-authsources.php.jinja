@@ -37,17 +37,17 @@ $config = array(
         //'remember.username.enabled' => FALSE,
         //'remember.username.checked' => FALSE,
 
-        {{ pillar['platforms']['saml_platforms']['saml_identity_provider']['saml_test_user_creds_01'] | yaml_squote }} => array(
-            'Login' => array({{ pillar['platforms']['saml_platforms']['saml_identity_provider']['saml_test_user_login_01'] | yaml_squote }}),
-            'FirstName' => array({{ pillar['platforms']['saml_platforms']['saml_identity_provider']['saml_test_user_firstname_01'] | yaml_squote }}),
-            'LastName' => array({{ pillar['platforms']['saml_platforms']['saml_identity_provider']['saml_test_user_lastname_01'] | yaml_squote }}),
-            'Email' => array({{ pillar['platforms']['saml_platforms']['saml_identity_provider']['saml_test_user_email_01'] | yaml_squote }}),
+        {{ platform['saml']['test_user_creds_01'] | yaml_squote }} => array(
+            'Login' => array({{ platform['saml']['test_user_login_01'] | yaml_squote }}),
+            'FirstName' => array({{ platform['saml']['test_user_firstname_01'] | yaml_squote }}),
+            'LastName' => array({{ platform['saml']['test_user_lastname_01'] | yaml_squote }}),
+            'Email' => array({{ platform['saml']['test_user_email_01'] | yaml_squote }}),
         ),
-        {{ pillar['platforms']['saml_platforms']['saml_identity_provider']['saml_test_user_creds_02'] | yaml_squote }} => array(
-            'Login' => array({{ pillar['platforms']['saml_platforms']['saml_identity_provider']['saml_test_user_login_02'] | yaml_squote }}),
-            'FirstName' => array({{ pillar['platforms']['saml_platforms']['saml_identity_provider']['saml_test_user_firstname_02'] | yaml_squote }}),
-            'LastName' => array({{ pillar['platforms']['saml_platforms']['saml_identity_provider']['saml_test_user_lastname_02'] | yaml_squote }}),
-            'Email' => array({{ pillar['platforms']['saml_platforms']['saml_identity_provider']['saml_test_user_email_02'] | yaml_squote }}),
+        {{ platform['saml']['test_user_creds_02'] | yaml_squote }} => array(
+            'Login' => array({{ platform['saml']['test_user_login_02'] | yaml_squote }}),
+            'FirstName' => array({{ platform['saml']['test_user_firstname_02'] | yaml_squote }}),
+            'LastName' => array({{ platform['saml']['test_user_lastname_02'] | yaml_squote }}),
+            'Email' => array({{ platform['saml']['test_user_email_02'] | yaml_squote }}),
         ),
     ),
 );

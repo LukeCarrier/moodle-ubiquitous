@@ -69,7 +69,7 @@ include:
 #
 
 {% if pillar['acl']['apply'] %}
-{% for domain, platform in salt['pillar.get']('platforms:moodle_platforms', {}).items() %}
+{% for domain, platform in salt['pillar.get']('platforms', {}).items() %}
 app-gocd-agent.{{ domain }}.home:
   acl.present:
     - name: {{ platform['user']['home'] }}

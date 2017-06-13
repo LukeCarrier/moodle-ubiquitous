@@ -28,7 +28,7 @@ $config = array(
         // Can be NULL/unset, in which case a builtin discovery service will be used.
         'discoURL' => null,
 
-        'privatekey'  => {{ pillar['platforms']['saml_platforms']['saml_idp_proxy']['auth_source_pem'] }},
-        'certificate' => {{ pillar['platforms']['saml_platforms']['saml_idp_proxy']['auth_source_cert'] }},
+        'privatekey'  => {{ platform['saml']['auth_source_pem'] | yaml_squote }},
+        'certificate' => {{ platform['saml']['auth_source_cert'] | yaml_squote }},
     ),
 );

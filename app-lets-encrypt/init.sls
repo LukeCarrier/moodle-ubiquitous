@@ -6,7 +6,7 @@
 #
 
 include:
-  - app
+  - app-base
   - certbot
 
 {% for domain, platform in salt['pillar.get']('platforms', {}).items() %}
@@ -29,6 +29,9 @@ app-lets-encrypt.{{ domain }}.cert:
     - email: {{ platform['lets_encrypt']['email'] }}
     - webroot: /var/www/acme
     - renew: {{ platform['lets_encrypt']['lifetime'] }}
+    {% if platform['lets_encrypt']['test_cert'] %}
+    - test_cert: true
+    {% endif %}
     - require:
       - pkg: certbot.pkg
       - file: certbot.root

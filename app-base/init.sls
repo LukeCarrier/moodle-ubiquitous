@@ -203,3 +203,143 @@ moodle.dependencies:
     - pkgs:
       - ghostscript
       - unoconv
+
+{% for home_directory in pillar['system']['home_directories'] %}
+app-base.homes.{{ home_directory }}:
+  file.directory:
+    - name: {{ home_directory }}
+    - user: root
+    - group: root
+    - mode: 755
+
+{% if pillar['acl']['apply'] %}
+app-base.homes.{{ home_directory }}.acl:
+  acl.present:
+    - name: {{ home_directory }}
+    - acl_type: user
+    - acl_name: {{ pillar['nginx']['user'] }}
+    - perms: rx
+    - require:
+      - file: app-base.homes.{{ home_directory }}
+{% endif %}
+{% endfor %}
+
+#
+# Platforms
+#
+
+{% for domain, platform in salt['pillar.get']('platforms', {}).items() %}
+{% if platform['php']['values']['session.save_path'] %}
+app-base.{{ domain }}.session.dir.create:
+  file.directory:
+    - name: {{ platform['php']['values']['session.save_path'] }}
+    - user: {{ platform['user']['name'] }}
+    - group: {{ platform['user']['name'] }}
+    - mode: 0770
+    - makedirs: True
+    - require:
+      - user: {{ platform['user']['name'] }}
+{% endif %}
+
+app-base.{{ domain }}.user:
+  user.present:
+    - name: {{ platform['user']['name'] }}
+    - fullname: {{ domain }}
+    - shell: /bin/bash
+    - home: {{ platform['user']['home'] }}
+    - gid_from_name: true
+
+app-base.{{ domain }}.home:
+  file.directory:
+    - name: {{ platform['user']['home'] }}
+    - user: {{ platform['user']['name'] }}
+    - group: {{ platform['user']['name'] }}
+    - mode: 0770
+    - require:
+      - user: {{ platform['user']['name'] }}
+
+{% if pillar['acl']['apply'] %}
+app-base.{{ domain }}.home.acl:
+  acl.present:
+    - name: {{ platform['user']['home'] }}
+    - acl_type: user
+    - acl_name: {{ pillar['nginx']['user'] }}
+    - perms: rx
+    - require:
+      - file: app-base.{{ domain }}.home
+
+app-base.{{ domain }}.home.acl.default:
+  acl.present:
+    - name: {{ platform['user']['home'] }}
+    - acl_type: default:user
+    - acl_name: {{ pillar['nginx']['user'] }}
+    - perms: rx
+    - require:
+      - file: app-base.{{ domain }}.home
+{% endif %}
+
+app-base.{{ domain }}.releases:
+  file.directory:
+    - name: {{ platform['user']['home'] }}/releases
+    - makedirs: True
+    - user: {{ platform['user']['name'] }}
+    - group: {{ platform['user']['name'] }}
+    - mode: 0770
+    - require:
+      - file: app-base.{{ domain }}.home
+
+{% if pillar['acl']['apply'] %}
+app-base.{{ domain }}.releases.acl:
+  acl.present:
+    - name: {{ platform['user']['home'] }}/releases
+    - acl_type: user
+    - acl_name: {{ pillar['nginx']['user'] }}
+    - perms: rx
+    - require:
+      - file: app-base.{{ domain }}.releases
+
+app-base.{{ domain }}.releases.acl.default:
+  acl.present:
+    - name: {{ platform['user']['home'] }}/releases
+    - acl_type: default:user
+    - acl_name: {{ pillar['nginx']['user'] }}
+    - perms: rx
+    - require:
+      - file: app-base.{{ domain }}.home
+{% endif %}
+
+app-base.{{ domain }}.nginx.log:
+  file.directory:
+    - name: /var/log/nginx/{{ platform['basename'] }}
+    - user: www-data
+    - group: adm
+    - mode: 0640
+
+app-base.{{ domain }}.php-fpm.log:
+  file.directory:
+    - name: /var/log/php7.0-fpm/{{ platform['basename'] }}
+    - user: {{ platform['user']['name'] }}
+    - group: {{ platform['user']['name'] }}
+    - mode: 0750
+
+{% for instance in ['blue', 'green'] %}
+app-base.{{ domain }}.{{ instance }}.php-fpm:
+  file.managed:
+    - name: /etc/php/7.0/fpm/pools-available/{{ platform['basename'] }}.{{ instance }}.conf
+    - source: salt://app-base/php-fpm/platform.conf.jinja
+    - template: jinja
+    - context:
+      domain: {{ domain }}
+      instance: blue
+      platform: {{ platform }}
+    - user: root
+    - group: root
+    - mode: 0644
+    - require:
+      - pkg: php.packages
+{% if pillar['systemd']['apply'] %}
+    - require_in:
+      - service: php-fpm.reload
+{% endif %}
+{% endfor %}
+{% endfor %}

@@ -13,7 +13,7 @@ app-debug.php.xdebug:
     - pkgs:
       - php-xdebug
 
-{% for domain, platform in salt['pillar.get']('platforms:moodle_platforms', {}).items() %}
+{% for domain, platform in salt['pillar.get']('platforms', {}).items() %}
 {% set behat_faildump = platform['user']['home'] + '/data/behat-faildump' %}
 app-debug.{{ domain }}.behat-faildump:
   file.directory:
