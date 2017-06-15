@@ -2,6 +2,12 @@
 
 env[PHP_IDE_CONFIG] = "serverName={{ grains.nodename }}"
 
+; Remote debugging
 php_flag[xdebug.remote_enable] = On
 php_flag[xdebug.remote_connect_back] = On
 php_value[xdebug.remote_port] = 9000
+
+; Profiling
+php_flag[xdebug.profiler_enable_trigger] = On
+php_value[xdebug.profiler_output_dir] = {{ platform['user']['home'] }}/var/php/profiling
+php_value[xdebug.profiler_output_name] = cachegrind.out.%S.%s.%p.%u
