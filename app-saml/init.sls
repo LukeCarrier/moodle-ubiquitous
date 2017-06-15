@@ -84,7 +84,7 @@ asso.{{ domain }}.saml.idpp.authsources.place:
     - group: www-data
     - mode: 0644
 
-asso.{{ domain }}.saml.sp.cert.place:
+asso.{{ domain }}.saml.idpp.sp.cert.place:
   file.managed:
     - name: {{ platform['user']['home'] }}/releases/simplesamlphp/cert/sp.crt
     - contents_pillar: platforms:{{ domain }}:saml:sp_cert
@@ -92,7 +92,7 @@ asso.{{ domain }}.saml.sp.cert.place:
     - group: www-data
     - mode: 0660
 
-asso.{{ domain }}.saml.sp.pem.place:
+asso.{{ domain }}.saml.idpp.sp.pem.place:
   file.managed:
     - name: {{ platform['user']['home'] }}/releases/simplesamlphp/cert/sp.pem
     - contents_pillar: platforms:{{ domain }}:saml:sp_pem
@@ -100,7 +100,7 @@ asso.{{ domain }}.saml.sp.pem.place:
     - group: www-data
     - mode: 0660
 
-asso.{{ domain }}.saml.idp.cert.place:
+asso.{{ domain }}.saml.idpp.idp.cert.place:
   file.managed:
     - name: {{ platform['user']['home'] }}/releases/simplesamlphp/cert/server.crt
     - contents_pillar: platforms:{{ domain }}:saml:idp_cert
@@ -108,15 +108,48 @@ asso.{{ domain }}.saml.idp.cert.place:
     - group: www-data
     - mode: 0660
 
-asso.{{ domain }}.saml.idp.pem.place:
+asso.{{ domain }}.saml.idpp.idp.pem.place:
   file.managed:
     - name: {{ platform['user']['home'] }}/releases/simplesamlphp/cert/server.pem
     - contents_pillar: platforms:{{ domain }}:saml:idp_pem
     - user: asso
     - group: www-data
     - mode: 0660
+
+asso.{{ domain }}.saml.idp.metadata.idp-hosted.place:
+  file.managed:
+    - name: {{ platform['user']['home'] }}/releases/simplesamlphp/metadata/saml20-idp-hosted.php
+    - contents_pillar: platforms:{{ domain }}:saml:meta_saml20_idp_hosted
+    - user: asso
+    - group: www-data
+    - mode: 0660
+
+asso.{{ domain }}.saml.idpp.metadata.idp-remote.place:
+  file.managed:
+    - name: {{ platform['user']['home'] }}/releases/simplesamlphp/metadata/saml20-idp-remote.php
+    - contents_pillar: platforms:{{ domain }}:saml:meta_saml20_idp_remote
+    - user: asso
+    - group: www-data
+    - mode: 0660
+
+asso.{{ domain }}.saml.idpp.metadata.sp-remote.place:
+  file.managed:
+    - name: {{ platform['user']['home'] }}/releases/simplesamlphp/metadata/saml20-sp-remote.php
+    - contents_pillar: platforms:{{ domain }}:saml:meta_saml20_sp_remote
+    - user: asso
+    - group: www-data
+    - mode: 0660
+
+asso.{{ domain }}.saml.idpp.exampleauth.enable:
+  file.managed:
+    - name: {{ platform['user']['home'] }}/releases/simplesamlphp/modules/exampleauth/enable
+    - source: None
+    - user: asso
+    - group: www-data
+    - mode: 0644
+
 {% elif platform['saml']['role'] == 'idp' %}
-asso.{{ domain }}.saml.authsources.place:
+asso.{{ domain }}.saml.idp.authsources.place:
   file.managed:
     - name: {{ platform['user']['home'] }}/releases/simplesamlphp/config/authsources.php
     - source: salt://app-saml/saml/idp-authsources.php.jinja
@@ -127,7 +160,7 @@ asso.{{ domain }}.saml.authsources.place:
     - group: www-data
     - mode: 0644
 
-asso.{{ domain }}.saml.cert.place:
+asso.{{ domain }}.saml.idp.cert.place:
   file.managed:
     - name: {{ platform['user']['home'] }}/releases/simplesamlphp/cert/saml.crt
     - contents_pillar: platforms:{{ domain }}:saml:idp_cert
@@ -135,13 +168,29 @@ asso.{{ domain }}.saml.cert.place:
     - group: www-data
     - mode: 0660
 
-asso.{{ domain }}.saml.pem.place:
+asso.{{ domain }}.saml.idp.pem.place:
   file.managed:
     - name: {{ platform['user']['home'] }}/releases/simplesamlphp/cert/saml.pem
     - contents_pillar: platforms:{{ domain }}:saml:idp_pem
     - user: asso
     - group: www-data
     - mode: 0660
+
+asso.{{ domain }}.saml.idp.metadata.sp-remote.place:
+  file.managed:
+    - name: {{ platform['user']['home'] }}/releases/simplesamlphp/metadata/saml20-sp-remote.php
+    - contents_pillar: platforms:{{ domain }}:saml:meta_saml20_sp_remote
+    - user: asso
+    - group: www-data
+    - mode: 0660
+
+asso.{{ domain }}.saml.idp.exampleauth.enable:
+  file.managed:
+    - name: {{ platform['user']['home'] }}/releases/simplesamlphp/modules/exampleauth/enable
+    - source: None
+    - user: asso
+    - group: www-data
+    - mode: 0644
 {% endif %}
 {% endfor %}
 
