@@ -173,7 +173,11 @@ ssh:
     - name: openssh-server
   file.managed:
     - name: /etc/ssh/sshd_config
-    - source: salt://base/sshd/sshd_config
+    - source: salt://base/sshd/sshd_config.jinja
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 0644
     - require:
       - pkg: openssh-server
 

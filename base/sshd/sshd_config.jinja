@@ -1,0 +1,72 @@
+{% macro openssh_boolean(value) -%}
+  {%- if value -%}
+    yes
+  {%- else -%}
+    no
+  {%- endif -%}
+{%- endmacro %}
+
+# Supported protocols
+{% for protocol in pillar['sshd']['Protocol'] %}
+Protocol 2
+{% endfor %}
+
+# Run as little code as possible with root privileges
+UsePrivilegeSeparation {{ pillar['sshd']['UsePrivilegeSeparation'] }}
+
+# Host keys for protocol version 2
+{% for host_key in pillar['sshd']['HostKey'] %}
+HostKey {{ host_key }}
+{% endfor %}
+
+{% if 'KexAlgorithms' in pillar['sshd'] %}
+# Key exchange algorithms for per-connection keys
+KexAlgorithms {{ pillar['sshd']['KexAlgorithms'] | join(',') }}
+{% endif %}
+
+{% if 'Ciphers' in pillar['sshd'] %}
+# Cryptographic ciphers for connection encryption
+Ciphers {{ pillar['sshd']['Ciphers'] | join(',') }}
+{% endif %}
+
+{% if 'MACs' in pillar['sshd'] %}
+# Message authentication codes to detect modification in transit
+MACs {{ pillar['sshd']['MACs'] | join(',') }}
+{% endif %}
+
+{% if 'LogLevel' in pillar['sshd'] %}
+# Log level
+LogLevel {{ pillar['sshd']['LogLevel'] }}
+{% endif %}
+
+# Authentication methods
+AuthenticationMethods {{ pillar['sshd']['AuthenticationMethods'] }}
+
+{% if 'AuthorizedKeysCommand' in pillar['sshd'] %}
+# Obtain authorized public keys from an external command
+AuthorizedKeysCommand {{ pillar['sshd']['AuthorizedKeysCommand'] }}
+{% if 'AuthorizedKeysCommandUser' in pillar['sshd'] %}
+AuthorizedKeysCommandUser {{ pillar['sshd']['AuthorizedKeysCommandUser'] }}
+{% endif %}
+{% endif %}
+
+# Allow authenticating as root?
+PermitRootLogin {{ openssh_boolean(pillar['sshd']['PermitRootLogin']) }}
+
+# Print relevant information on login
+PrintMotd {{ openssh_boolean(pillar['sshd']['PrintMotd']) }}
+PrintLastLog {{ openssh_boolean(pillar['sshd']['PrintLastLog']) }}
+
+# Send TCP keepalive messages
+TCPKeepAlive {{ openssh_boolean(pillar['sshd']['TCPKeepAlive']) }}
+
+# Forward environment variables
+AcceptEnv{% for variable in pillar['sshd']['AcceptEnv'] %} {{ variable }}{% endfor %}
+
+# Subsystems
+{% for name, command in pillar['sshd']['Subsystem'].items() %}
+Subsystem {{ name }} {{ command }}
+{% endfor %}
+
+# PAM authentication, account processing and session processing
+UsePAM {{ openssh_boolean(pillar['sshd']['UsePAM']) }}
