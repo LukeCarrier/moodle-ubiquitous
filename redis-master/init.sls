@@ -13,17 +13,23 @@ include:
 # Redis default configuration
 #
 
-redis.config.keys.set:
-  redis.string:
-    - value: string data
-    - host: {{ pillar['redis']['master']['host'] | yaml_squote }}
-    - port: {{ pillar['redis']['master']['port'] }}
-    - db: {{ pillar['redis']['master']['db'] }}
-    - password: {{ pillar['redis']['master']['password'] }}
+# redis.config.keys.set:
+#   redis.string:
+#     - value: string data
+#     - host: {{ pillar['redis']['master']['host'] | yaml_squote }}
+#     - port: {{ pillar['redis']['master']['port'] }}
+#     - db: {{ pillar['redis']['master']['db'] }}
+#     - password: {{ pillar['redis']['master']['password'] }}
 
-# redis.service:
-#   service.running:
-#     - name: redis
-#     - enable: True
-#     - require:
-#       - pkg: redis-server
+redis.config.values.set:
+  file.managed:
+    - name: /etc/redis/redis.conf
+    - source: salt://redis-master/redis.conf.jinja
+    - template: jinja
+    - watch_in:
+      - service: redis.service.reload
+
+redis.service.reload:
+  service.running:
+    - name: redis
+    - enable: True

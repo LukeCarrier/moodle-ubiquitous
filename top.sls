@@ -93,4 +93,4 @@ base:
 
   'roles:redis-master':
     - match: grain
-    - redis-base
+    - redis-master
