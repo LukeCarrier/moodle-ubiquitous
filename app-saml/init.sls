@@ -21,6 +21,9 @@ os.packages:
     - zlib1g
     - zlib1g-dev
     - openssl
+    - php7.0-sqlite3
+    - php7.0-gmp
+    - libgmp-dev
 
 {% for domain, platform in salt['pillar.get']('platforms', {}).items() %}
 asso.{{ domain }}.nginx.available:
@@ -140,9 +143,25 @@ asso.{{ domain }}.saml.idpp.metadata.sp-remote.place:
     - group: www-data
     - mode: 0660
 
+asso.{{ domain}}.saml.idpp.redis.config.place:
+  file.managed:
+    - name: {{ platform['user']['home'] }}/releases/simplesamlphp/config/module_redis.php
+    - contents_pillar: platforms:{{ domain }}:saml:config_redis
+    - user: asso
+    - group: www-data
+    - mode: 0660
+
 asso.{{ domain }}.saml.idpp.exampleauth.enable:
   file.managed:
     - name: {{ platform['user']['home'] }}/releases/simplesamlphp/modules/exampleauth/enable
+    - source: None
+    - user: asso
+    - group: www-data
+    - mode: 0644
+
+asso.{{ domain }}.saml.idpp.redis.enable:
+  file.managed:
+    - name: {{ platform['user']['home'] }}/releases/simplesamlphp/modules/redis/enable
     - source: None
     - user: asso
     - group: www-data

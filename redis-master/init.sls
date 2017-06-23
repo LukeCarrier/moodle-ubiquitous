@@ -21,6 +21,11 @@ include:
 #     - db: {{ pillar['redis']['master']['db'] }}
 #     - password: {{ pillar['redis']['master']['password'] }}
 
+redis.system.overcommit-memory:
+  sysctl.present:
+    - name: vm.overcommit_memory
+    - value: 1
+
 redis.config.values.set:
   file.managed:
     - name: /etc/redis/redis.conf
