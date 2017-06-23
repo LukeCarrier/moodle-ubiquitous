@@ -91,6 +91,6 @@ base:
     - match: grain
     - app-saml
 
-  'roles:redis-master':
+  'roles:redis':
     - match: grain
-    - redis-master
+    - redis-base
