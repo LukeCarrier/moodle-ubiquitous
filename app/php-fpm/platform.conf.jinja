@@ -31,8 +31,13 @@ php_value[error_log] = /var/log/php7.0-fpm/{{ platform['basename'] }}/pool.log
 
 security.limit_extensions = .php
 
-env[HOSTNAME]       = "{{ grains.nodename }}"
-env[PATH]           = $PATH
+env[HOSTNAME] = {{ grains.nodename | yaml_squote }}
+env[PATH] = $PATH
+{% if 'env' in platform['php'] %}
+{% for variable, value in platform['php']['env'].items() %}
+env[{{ variable }}] = {{ value | yaml }}
+{% endfor %}
+{% endif %}
 
 {% if 'flags' in platform['php'] %}
 {% for option, value in platform['php']['flags'].items() %}
