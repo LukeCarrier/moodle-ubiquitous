@@ -17,7 +17,10 @@ platforms:
         pm.min_spare_servers: 5
         pm.max_spare_servers: 10
         pm.max_requests: 1000
+      env:
+        TZ: ':/etc/localtime'
       values:
+        date.timezone: Europe/London
         memory_limit: 1024m
         post_max_size: 1024m
         upload_max_filesize: 1024m
