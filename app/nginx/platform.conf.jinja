@@ -1,3 +1,12 @@
+{% for source, destination in platform.get('rewrites', {}).items() %}
+server {
+    server_name {{ source }};
+
+    root {{ platform['user']['home'] }}/current;
+    rewrite ^ https://{{ destination }}$request_uri? permanent;
+}
+{% endfor %}
+
 server {
     server_name {{ domain }}{% if 'aliases' in platform %} {{ platform['aliases'] | join(' ') }}{% endif %};
 
