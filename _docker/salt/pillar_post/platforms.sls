@@ -6,9 +6,6 @@ platforms:
       home: /home/ubuntu
     nginx:
       client_max_body_size: 1024m
-    database:
-      name: dev-local
-      encoding: utf8
     php:
       fpm:
         pm: dynamic
