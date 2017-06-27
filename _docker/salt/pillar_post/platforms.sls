@@ -6,6 +6,21 @@ platforms:
       home: /home/ubuntu
     nginx:
       client_max_body_size: 1024m
+      lanes:
+        slow:
+          location: ^((/backup|/course/report|/report)/.+\.php|/course/delete\.php)(/|$)
+          fastcgi_read_timeout: 3600
+          fastcgi_params:
+            PHP_VALUE: |
+              max_execution_time=3600
+              memory_limit=1024m
+        fast:
+          location: ^(.+\.php)(/|$)
+          fastcgi_read_timeout: 60
+          fastcgi_params:
+            PHP_VALUE: |
+              max_execution_time=60
+              memory_limit=128m
     php:
       fpm:
         pm: dynamic
