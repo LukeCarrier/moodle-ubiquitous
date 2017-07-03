@@ -1,5 +1,9 @@
 {%- macro lane_location(lane) %}
     location ~ {{ lane['location'] | replace('\\\\', '\\') }} {
+        if ($platform_maintenance != 0) {
+            return 503;
+        }
+
 {%- if 'fastcgi_read_timeout' in lane %}
         fastcgi_read_timeout {{ lane['fastcgi_read_timeout'] }};
 {%- endif %}
@@ -35,6 +39,8 @@ server {
 
     client_max_body_size {{ platform['nginx']['client_max_body_size'] }};
 
+    set $platform_maintenance 0;
+
     include "sites-extra/{{ platform['basename'] }}.*.conf";
 
     location ~ ^/(status|ping)$ {
@@ -47,12 +53,18 @@ server {
         fastcgi_pass unix:/var/run/php/php7.0-fpm-{{ platform['basename'] }}.sock;
     }
 
+    {{ salt['pillar.get']('maintenance:override-conditions', '') | indent(4) }}
+
 {% if 'lanes' in platform['nginx'] -%}
 {%- for lane in platform['nginx']['lanes'].values() -%}
 {{ lane_location(lane) }}
 {%- endfor %}
 {% else %}
     location ~ ^(.+\.php)(/|$) {
+        if ($platform_maintenance != 0) {
+            return 503;
+        }
+
         include snippets/fastcgi-php.conf;
         fastcgi_param SCRIPT_FILENAME $document_root$1;
         fastcgi_pass unix:/var/run/php/php7.0-fpm-{{ platform['basename'] }}.sock;
