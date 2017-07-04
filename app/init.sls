@@ -359,6 +359,20 @@ moodle.{{ domain }}.nginx.enabled:
       - service: nginx.reload
 {% endif %}
 
+{% for name, contents in platform['nginx'].get('extra', {}).items() %}
+moodle.{{ domain }}.nginx.extra.{{ name }}:
+  file.managed:
+    - name: /etc/nginx/sites-extra/{{ platform['basename'] }}.{{ name }}.conf
+    - contents: {{ contents | yaml_encode }}
+    - user: root
+    - group: root
+    - mode: 0644
+{% if pillar['systemd']['apply'] %}
+    - require_in:
+      - service: nginx.reload
+{% endif %}
+{% endfor %}
+
 moodle.{{ domain }}.php-fpm.log:
   file.directory:
     - name: /var/log/php7.0-fpm/{{ platform['basename'] }}
