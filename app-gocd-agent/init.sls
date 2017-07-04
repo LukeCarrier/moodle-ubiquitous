@@ -23,6 +23,17 @@ include:
       - file: app-ubiquitous-dirs.bin
 {% endfor %}
 
+{% for name, contents in salt['pillar.get']('gocd-agent:scripts', {}).items() %}
+/usr/local/ubiquitous/bin/{{ name }}:
+  file.managed:
+    - contents: {{ contents | yaml_encode }}
+    - user: root
+    - group: root
+    - mode: 0755
+    - require:
+      - file: app-ubiquitous-dirs.bin
+{% endfor %}
+
 /usr/local/ubiquitous/lib/ubiquitous-lib:
   file.managed:
     - source: salt://app-gocd-agent/local/lib/ubiquitous-lib
