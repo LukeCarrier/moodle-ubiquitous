@@ -9,6 +9,7 @@ oracle-java.ppa:
   pkgrepo.managed:
     - humanname: Oracle Java (JDK) 7 / 8 / 9 Installer PPA
     - ppa: webupd8team/java
+    - keyserver: http://keyserver.ubuntu.com
 
 oracle-java.license.select:
   debconf.set:
