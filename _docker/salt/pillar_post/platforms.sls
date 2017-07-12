@@ -1,6 +1,7 @@
 platforms:
   dev.local:
     basename: ubuntu
+    default_release: test
     user:
       name: ubuntu
       home: /home/ubuntu

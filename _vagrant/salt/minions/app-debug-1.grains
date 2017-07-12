@@ -3,4 +3,5 @@ group: dev
 roles:
   - app
   - app-debug
+  - app-default-release
   - app-error-pages

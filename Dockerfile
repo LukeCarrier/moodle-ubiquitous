@@ -47,8 +47,3 @@ RUN bash $shell_args /usr/local/ubiquitous/bin/ubiquitous-ctl start postgresql \
         && sudo -u postgres psql --file /tmp/postgresql-template-charset.sql \
         && salt-call --log-level=$salt_log_level --local state.apply \
         && bash $shell_args /usr/local/ubiquitous/bin/ubiquitous-ctl stop
-
-# Mark a release as active
-RUN sudo -u ubuntu mkdir -p /home/ubuntu/releases/test \
-        && mkdir -p /var/run/php \
-        && /usr/local/ubiquitous/bin/ubiquitous-set-current-release --manually-reload --domain dev.local --release test

@@ -2,6 +2,7 @@ environment: integration
 roles:
   - app
   - app-debug
+  - app-default-release
   - db-pgsql
   - selenium-hub
   - selenium-node-chrome
