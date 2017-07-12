@@ -31,6 +31,10 @@ base:
     - match: grain
     - app-debug
 
+  'roles:app-default-release':
+    - match: grain
+    - app-default-release
+
   'roles:app-error-pages':
     - match: grain
     - app-error-pages
