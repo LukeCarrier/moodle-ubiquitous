@@ -1,3 +1,4 @@
+environment: dev
 group: selenium
 roles:
   - selenium-node-firefox

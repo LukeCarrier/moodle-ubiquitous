@@ -1,3 +1,4 @@
+environment: dev
 group: dev
 roles:
   - app
