@@ -45,19 +45,6 @@ abort() {
     exit "$status"
 }
 
-in_array() {
-    local haystack=${1}[@]
-    local needle="$2"
-
-    for i in "${!haystack}"; do
-        if [[ "$i" == "$needle" ]]; then
-            return 0
-        fi
-    done
-
-    return 1
-}
-
 require_root() {
     if [ "$USER" != "root" ]; then
         abort $ERROR_PARAMS "you must be root"

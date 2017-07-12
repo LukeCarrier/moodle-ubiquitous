@@ -7,7 +7,24 @@
 # @copyright 2016 Luke Carrier
 #
 
-. "$(dirname $(dirname $(readlink -fn $0)))/lib/ubiquitous-lib"
+set -euo pipefail
+IFS=$'\n\t'
+
+shopt -s extglob
+shopt -s nullglob
+
+in_array() {
+    local haystack=${1}[@]
+    local needle="$2"
+
+    for i in "${!haystack}"; do
+        if [[ "$i" == "$needle" ]]; then
+            return 0
+        fi
+    done
+
+    return 1
+}
 
 UBIQUITOUS_NGINX_PIDFILE="/run/nginx.pid"
 UBIQUITOUS_PHPFPM_PIDFILE="/run/php/php7.0-fpm.pid"
