@@ -15,7 +15,7 @@ app-error-pages.ubiquitous-error-pages:
     - group: root
     - mode: 0755
     - require:
-      - file: app-ubiquitous-dirs.share
+      - app-ubiquitous-dirs.share
 
 app-error-pages.share.ubiquitous-error-pages.logos:
   file.directory:
@@ -24,7 +24,7 @@ app-error-pages.share.ubiquitous-error-pages.logos:
     - group: root
     - mode: 0755
     - require:
-      - file: app-error-pages.ubiquitous-error-pages
+      - app-error-pages.ubiquitous-error-pages
 
 app-error-pages.snippet:
   file.managed:
@@ -36,6 +36,8 @@ app-error-pages.snippet:
     - user: root
     - group: root
     - mode: 0644
+    - require:
+      - nginx
 
 {% for lang, pages in salt['pillar.get']('app-error-pages:translated').items() %}
 app-error-pages.page.lang.{{ lang }}:
@@ -45,7 +47,7 @@ app-error-pages.page.lang.{{ lang }}:
     - group: root
     - mode: 0755
     - require:
-      - file: app-error-pages.ubiquitous-error-pages
+      - app-error-pages.ubiquitous-error-pages
 
 {% for status, body in pages['pages'].items() %}
 # Note that the context value's syntax here. PyYAML will incorrectly parse the
@@ -57,7 +59,7 @@ app-error-pages.page.{{ lang }}.{{ status }}:
     - template: jinja
     - context: { body: {{ body | yaml_encode }} }
     - require:
-      - file: app-error-pages.page.lang.{{ lang }}
+      - app-error-pages.page.lang.{{ lang }}
 {% endfor %}
 {% endfor %}
 
@@ -70,7 +72,7 @@ app-error-pages.{{ platform['basename'] }}.logo.base64:
     - group: root
     - mode: 0600
     - require:
-      - file: app-error-pages.share.ubiquitous-error-pages.logos
+      - app-error-pages.share.ubiquitous-error-pages.logos
 
 app-error-pages.{{ platform['basename'] }}.logo:
   cmd.wait:
@@ -79,7 +81,7 @@ app-error-pages.{{ platform['basename'] }}.logo:
                 >/usr/local/ubiquitous/share/ubiquitous-error-pages/logos/{{ platform['basename'] }}.png
         rm -f /usr/local/ubiquitous/share/ubiquitous-error-pages/logos/{{ platform['basename'] }}.png.base64
     - watch:
-      - file: app-error-pages.{{ platform['basename'] }}.logo.base64
+      - app-error-pages.{{ platform['basename'] }}.logo.base64
   file.managed:
     - name: /usr/local/ubiquitous/share/ubiquitous-error-pages/logos/{{ platform['basename'] }}.png
     - replace: False
@@ -98,4 +100,14 @@ app-error-pages.{{ platform['basename'] }}.nginx:
     - user: root
     - group: root
     - mode: 0644
+    - onchanges_in:
+      - app-error-pages.nginx.reload
 {% endfor %}
+
+{% if pillar['systemd']['apply'] %}
+app-error-pages.nginx.reload:
+  cmd.run:
+    - name: systemctl reload nginx || systemctl restart nginx
+    - onchanges:
+      - app-error-pages.snippet
+{% endif %}

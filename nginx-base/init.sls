@@ -65,13 +65,17 @@ nginx.service:
       - pkg: nginx
 
 nginx.reload:
-  service.running:
-    - name: nginx
-    - reload: True
-    - watch:
-      - file: nginx.conf
+  cmd.run:
+    - name: systemctl reload nginx || systemctl restart nginx
+    - onchanges:
       - file: nginx.default-available
       - file: nginx.default-enabled
       - file: nginx.log-formats
       - file: nginx.ssl-params
+
+nginx.restart:
+  cmd.run:
+    - name: systemctl restart nginx
+    - onchanges:
+      - file: nginx.conf
 {% endif %}

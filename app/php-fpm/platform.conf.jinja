@@ -50,3 +50,5 @@ php_flag[{{ option }}] = {{ value }}
 php_value[{{ option }}] = {{ value }}
 {% endfor %}
 {% endif %}
+
+include=/etc/php/7.0/fpm/pools-extra/{{ platform['basename'] }}.*.conf

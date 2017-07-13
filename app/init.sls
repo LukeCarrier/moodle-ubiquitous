@@ -121,21 +121,6 @@ php.packages:
     - group: root
     - mode: 0644
 
-{% if pillar['systemd']['apply'] %}
-php-fpm:
-  service.running:
-    - name: php7.0-fpm
-    - enable: True
-    - require:
-      - pkg: nginx
-      - pkg: php.packages
-
-php-fpm.reload:
-  service.running:
-    - name: php7.0-fpm
-    - reload: True
-{% endif %}
-
 #
 # SQL Server drivers for PHP
 #
@@ -197,8 +182,8 @@ php.sqlsrv.{{ extension }}.ini.enabled.{{ sapi }}:
     - name: /etc/php/7.0/{{ sapi }}/conf.d/{{ priority }}-{{ extension }}.ini
     - target: /etc/php/7.0/mods-available/{{ extension }}.ini
 {% if pillar['systemd']['apply'] %}
-    - require_in:
-      - service: php-fpm.reload
+    - onchanges_in:
+      - service: app.php-fpm.restart
 {% endif %}
 {% endfor %}
 {% endfor %}
@@ -237,7 +222,7 @@ homes.{{ home_directory }}.acl:
 #
 
 {% for domain, platform in salt['pillar.get']('platforms', {}).items() %}
-moodle.{{ domain }}.user:
+app.{{ domain }}.user:
   user.present:
     - name: {{ platform['user']['name'] }}
     - fullname: {{ domain }}
@@ -245,7 +230,7 @@ moodle.{{ domain }}.user:
     - home: {{ platform['user']['home'] }}
     - gid_from_name: true
 
-moodle.{{ domain }}.home:
+app.{{ domain }}.home:
   file.directory:
     - name: {{ platform['user']['home'] }}
     - user: {{ platform['user']['name'] }}
@@ -255,26 +240,26 @@ moodle.{{ domain }}.home:
       - user: {{ platform['user']['name'] }}
 
 {% if pillar['acl']['apply'] %}
-moodle.{{ domain }}.home.acl:
+app.{{ domain }}.home.acl:
   acl.present:
     - name: {{ platform['user']['home'] }}
     - acl_type: user
     - acl_name: {{ pillar['nginx']['user'] }}
     - perms: rx
     - require:
-      - file: moodle.{{ domain }}.home
+      - file: app.{{ domain }}.home
 
-moodle.{{ domain }}.home.acl.default:
+app.{{ domain }}.home.acl.default:
   acl.present:
     - name: {{ platform['user']['home'] }}
     - acl_type: default:user
     - acl_name: {{ pillar['nginx']['user'] }}
     - perms: rx
     - require:
-      - file: moodle.{{ domain }}.home
+      - file: app.{{ domain }}.home
 {% endif %}
 
-moodle.{{ domain }}.releases:
+app.{{ domain }}.releases:
   file.directory:
     - name: {{ platform['user']['home'] }}/releases
     - makedirs: True
@@ -282,54 +267,54 @@ moodle.{{ domain }}.releases:
     - group: {{ platform['user']['name'] }}
     - mode: 0770
     - require:
-      - file: moodle.{{ domain }}.home
+      - file: app.{{ domain }}.home
 
 {% if pillar['acl']['apply'] %}
-moodle.{{ domain }}.releases.acl:
+app.{{ domain }}.releases.acl:
   acl.present:
     - name: {{ platform['user']['home'] }}/releases
     - acl_type: user
     - acl_name: {{ pillar['nginx']['user'] }}
     - perms: rx
     - require:
-      - file: moodle.{{ domain }}.releases
+      - file: app.{{ domain }}.releases
 
-moodle.{{ domain }}.releases.acl.default:
+app.{{ domain }}.releases.acl.default:
   acl.present:
     - name: {{ platform['user']['home'] }}/releases
     - acl_type: default:user
     - acl_name: {{ pillar['nginx']['user'] }}
     - perms: rx
     - require:
-      - file: moodle.{{ domain }}.home
+      - file: app.{{ domain }}.home
 {% endif %}
 
-moodle.{{ domain }}.data:
+app.{{ domain }}.data:
   file.directory:
     - name: {{ platform['user']['home'] }}/data
     - user: {{ platform['user']['name'] }}
     - group: {{ platform['user']['name'] }}
     - mode: 0770
     - require:
-      - file: moodle.{{ domain }}.home
+      - file: app.{{ domain }}.home
 
-moodle.{{ domain }}.localcache:
+app.{{ domain }}.localcache:
   file.directory:
     - name: {{ platform['user']['home'] }}/data/localcache
     - user: {{ platform['user']['name'] }}
     - group: {{ platform['user']['name'] }}
     - mode: 0770
     - require:
-      - file: moodle.{{ domain }}.data
+      - file: app.{{ domain }}.data
 
-moodle.{{ domain }}.nginx.log:
+app.{{ domain }}.nginx.log:
   file.directory:
     - name: /var/log/nginx/{{ platform['basename'] }}
     - user: www-data
     - group: adm
     - mode: 0750
 
-moodle.{{ domain }}.nginx.available:
+app.{{ domain }}.nginx.available:
   file.managed:
     - name: /etc/nginx/sites-available/{{ platform['basename'] }}.conf
     - source: salt://app/nginx/platform.conf.jinja
@@ -344,23 +329,23 @@ moodle.{{ domain }}.nginx.available:
     - require:
       - pkg: nginx
 {% if pillar['systemd']['apply'] %}
-    - require_in:
-      - service: nginx.reload
+    - onchanges_in:
+      - app.nginx.restart
 {% endif %}
 
-moodle.{{ domain }}.nginx.enabled:
+app.{{ domain }}.nginx.enabled:
   file.symlink:
     - name: /etc/nginx/sites-enabled/{{ platform['basename'] }}.conf
     - target: /etc/nginx/sites-available/{{ platform['basename'] }}.conf
     - require:
-      - file: moodle.{{ domain }}.nginx.available
+      - file: app.{{ domain }}.nginx.available
 {% if pillar['systemd']['apply'] %}
-    - require_in:
-      - service: nginx.reload
+    - onchanges_in:
+      - app.nginx.restart
 {% endif %}
 
 {% for name, contents in platform['nginx'].get('extra', {}).items() %}
-moodle.{{ domain }}.nginx.extra.{{ name }}:
+app.{{ domain }}.nginx.extra.{{ name }}:
   file.managed:
     - name: /etc/nginx/sites-extra/{{ platform['basename'] }}.{{ name }}.conf
     - contents: {{ contents | yaml_encode }}
@@ -368,12 +353,12 @@ moodle.{{ domain }}.nginx.extra.{{ name }}:
     - group: root
     - mode: 0644
 {% if pillar['systemd']['apply'] %}
-    - require_in:
-      - service: nginx.reload
+    - onchanges_in:
+      - app.nginx.reload
 {% endif %}
 {% endfor %}
 
-moodle.{{ domain }}.php-fpm.log:
+app.{{ domain }}.php-fpm.log:
   file.directory:
     - name: /var/log/php7.0-fpm/{{ platform['basename'] }}
     - user: {{ platform['user']['name'] }}
@@ -381,7 +366,7 @@ moodle.{{ domain }}.php-fpm.log:
     - mode: 0750
 
 {% for instance in ['blue', 'green'] %}
-moodle.{{ domain }}.{{ instance }}.php-fpm:
+app.{{ domain }}.{{ instance }}.php-fpm:
   file.managed:
     - name: /etc/php/7.0/fpm/pools-available/{{ platform['basename'] }}.{{ instance }}.conf
     - source: salt://app/php-fpm/platform.conf.jinja
@@ -396,12 +381,12 @@ moodle.{{ domain }}.{{ instance }}.php-fpm:
     - require:
       - pkg: php.packages
 {% if pillar['systemd']['apply'] %}
-    - require_in:
-      - service: php-fpm.reload
+    - onchanges_in:
+      - app.php-fpm.reload
 {% endif %}
 {% endfor %}
 
-moodle.{{ domain }}.config:
+app.{{ domain }}.config:
   file.managed:
     - name: {{ platform['user']['home'] }}/config.php
     - source: salt://app/moodle/config.php.jinja
@@ -412,3 +397,32 @@ moodle.{{ domain }}.config:
     - group: {{ platform['user']['name'] }}
     - mode: 0660
 {% endfor %}
+
+{% if pillar['systemd']['apply'] %}
+app.nginx.reload:
+  cmd.run:
+    - name: systemctl reload nginx || systemctl restart nginx
+
+app.nginx.restart:
+  cmd.run:
+    - name: systemctl restart nginx
+
+app.php-fpm.enable:
+  service.running:
+    - name: php7.0-fpm
+    - enable: True
+    - require:
+      - php.packages
+
+app.php-fpm.reload:
+  cmd.run:
+    - name: systemctl reload php7.0-fpm || systemctl restart php7.0-fpm
+    - require:
+      - php.packages
+
+app.php-fpm.restart:
+  cmd.run:
+    - name: systemctl restart php7.0-fpm
+    - require:
+      - php.packages
+{% endif %}
