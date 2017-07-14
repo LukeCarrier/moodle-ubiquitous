@@ -28,10 +28,6 @@ The technical specifications of the environment are as follows:
 * [PostgreSQL 9.5](http://www.postgresql.org/)
 * [Selenium](http://www.seleniumhq.org/) Hub and nodes
 
-## Developing Ubiquitous
-
-A rudimentary understanding of Salt concepts is essential: Ubiquitous is just an ordinary Salt state tree. The [Get Started tutorials](https://docs.saltstack.com/en/getstarted/) and ["Salt in ten minutes" walkthrough](https://docs.saltstack.com/en/latest/topics/tutorials/walkthrough.html) are great starting points.
-
 ### Building the documentation
 
 The documentation is managed with the excellent [GitBook toolchain](https://toolchain.gitbook.com/) and hosted by [GitBook](https://www.gitbook.com/). To work with it locally:
