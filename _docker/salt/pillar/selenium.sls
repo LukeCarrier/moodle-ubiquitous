@@ -7,8 +7,10 @@ selenium:
     source_hash: 342f4f8db4f9c5f14fdd8a255d2188bf735e6785d678fce93eab0b316307e474
 
 selenium-hub:
+  host: 127.0.0.1
   port: 4444
 
 selenium-node:
-  hub: http://127.0.0.1:4444
+  host: 127.0.0.1
   port: 5555
+  hub: http://localhost:4444
