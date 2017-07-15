@@ -8,7 +8,7 @@ platforms:
       client_max_body_size: 1024m
       lanes:
         slow:
-          location: ^((/backup|/course/report|/report)/.+\.php|/course/delete\.php)(/|$)
+          location: ^((/admin|/backup|/course/report|/report)/.+\.php|/course/delete\.php)(/|$)
           fastcgi_read_timeout: 3600
           fastcgi_params:
             PHP_VALUE: |
