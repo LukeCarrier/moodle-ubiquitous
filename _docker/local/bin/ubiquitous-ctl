@@ -69,7 +69,8 @@ start() {
                 --user selenium --startas /usr/bin/java \
                 -- -XX:NewSize=128m -XX:MaxNewSize=128m -XX:SurvivorRatio=8 -Xms512m -Xmx512m \
                 -Djava.net.preferIPv4Stack=true \
-                -jar /opt/selenium/selenium-server.jar -role hub
+                -jar /opt/selenium/selenium-server.jar -role hub \
+                -hubConfig /opt/selenium/hub.json
     fi
 
     if [[ " ${services[@]} " =~ " selenium-node " ]]; then
@@ -79,7 +80,8 @@ start() {
                 -- -XX:NewSize=128m -XX:MaxNewSize=128m -XX:SurvivorRatio=8 -Xms512m -Xmx512m \
                 -Djava.net.preferIPv4Stack=true \
                 -Dwebdriver.chrome.driver=/opt/selenium/chromedriver/chromedriver \
-                -jar /opt/selenium/selenium-server.jar -role node
+                -jar /opt/selenium/selenium-server.jar -role node \
+                -nodeConfig /opt/selenium/node.json
     fi
 }
 

@@ -4,7 +4,7 @@ After=network.target syslog.target
 
 [Service]
 User=selenium
-ExecStart=/usr/bin/java -XX:NewSize=128m -XX:MaxNewSize=128m -XX:SurvivorRatio=8 -Xms512m -Xmx512m -Djava.net.preferIPv4Stack=true -jar /opt/selenium/selenium-server.jar -role hub
+ExecStart=/usr/bin/java -XX:NewSize=128m -XX:MaxNewSize=128m -XX:SurvivorRatio=8 -Xms512m -Xmx512m -Djava.net.preferIPv4Stack=true -jar /opt/selenium/selenium-server.jar -role hub -hubConfig /opt/selenium/hub.json
 
 [Install]
 WantedBy=multi-user.target
