@@ -8,6 +8,9 @@
   ],
   "proxy": "org.openqa.grid.selenium.proxy.DefaultRemoteProxy",
   "maxSession": 1,
+{%- if 'host' in pillar['selenium-node'] %}
+  "host": {{ pillar['selenium-node']['host'] }},
+{% endif %}
   "port": {{ pillar['selenium-node']['port'] }},
   "register": true,
   "registerCycle": 5000,

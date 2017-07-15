@@ -1,4 +1,7 @@
 {
+{%- if 'host' in pillar['selenium-hub'] %}
+  "host": {{ pillar['selenium-hub']['host'] }},
+{% endif %}
   "port": {{ pillar['selenium-hub']['port'] }},
   "newSessionWaitTimeout": -1,
   "servlets" : [],
