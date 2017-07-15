@@ -108,6 +108,12 @@ php.packages:
       - file: /etc/php/7.0/fpm/php-fpm.conf
       - file: /etc/php/7.0/fpm/pools-enabled
 
+/var/run/php:
+  file.directory:
+    - user: {{ pillar['nginx']['user'] }}
+    - group: {{ pillar['nginx']['user'] }}
+    - mode: 0750
+
 /var/log/php7.0-fpm:
   file.directory:
     - user: root
