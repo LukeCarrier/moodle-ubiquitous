@@ -293,6 +293,26 @@ You may then run tests as follows:
 $ vagrant ssh app-debug-1 --config 'sudo -u moodle php ~moodle/htdocs/vendor/bin/phpunit'
 ```
 
+## Troubleshooting
+
+### I can't access my VMs!
+
+For reasons we've been unable to identify, VirtualBox sometimes fails to configure the host-only network adapter (usually named `vboxnet0`) used as the private network between the virtual machines. When this happens, the adapter will be shown as `state DOWN`:
+
+```
+$ ip addr show
+[snip]
+5: vboxnet0: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN group default qlen 1000
+    link/ether 0a:00:27:00:00:00 brd ff:ff:ff:ff:ff:ff
+```
+
+To rectify this, add a network configuration for the adapter and bring up the link:
+
+```
+$ sudo ip addr add 192.168.120.1/24 dev vboxnet0
+$ sudo ip link set vboxnet0 up
+```
+
 ## Advanced topics
 
 ### Adding your own virtual machines
