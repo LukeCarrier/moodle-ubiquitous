@@ -1,6 +1,10 @@
 Vagrant.configure(2) do |config|
   config.vm.box = "ubuntu/xenial64"
 
+  config.vm.provider "virtualbox" do |v|
+    v.customize [ "modifyvm", :id, "--uartmode1", "disconnected" ]
+  end
+
   config.vm.network "forwarded_port", guest: 22, host: 2222, id: "ssh", disabled: true
   config.vm.synced_folder ".", "/vagrant", disabled: true
 
