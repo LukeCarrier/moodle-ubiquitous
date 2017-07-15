@@ -1,3 +1,5 @@
+{% set platform = pillar['platforms'][domain] %}
+
 {%- macro lane_location(lane) %}
     location ~ {{ lane['location'] | replace('\\\\', '\\') }} {
         if ($platform_maintenance != 0) {

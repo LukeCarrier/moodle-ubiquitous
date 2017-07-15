@@ -1,3 +1,5 @@
+{% set platform = pillar['platforms'][domain] %}
+
 [{{ domain }}]
 
 env[PHP_IDE_CONFIG] = "serverName={{ grains.nodename }}"

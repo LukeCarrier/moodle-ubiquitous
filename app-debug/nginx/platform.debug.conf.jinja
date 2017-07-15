@@ -1,3 +1,5 @@
+{% set platform = pillar['platforms'][domain] %}
+
 location /behat {
     alias {{ platform['user']['home'] }}/current;
 

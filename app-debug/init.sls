@@ -40,7 +40,6 @@ app-debug.{{ domain }}.php-fpm:
     - template: jinja
     - context:
       domain: {{ domain }}
-      platform: {{ platform }}
     - user: root
     - group: root
     - mode: 0644
@@ -56,7 +55,6 @@ app-debug.{{ domain }}.nginx:
     - template: jinja
     - context:
       domain: {{ domain }}
-      platform: {{ platform }}
     - user: root
     - group: root
     - mode: 0644

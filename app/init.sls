@@ -322,7 +322,6 @@ app.{{ domain }}.nginx.available:
     - context:
       domain: {{ domain }}
       instance: blue
-      platform: {{ platform }}
     - user: root
     - group: root
     - mode: 0644
@@ -374,7 +373,6 @@ app.{{ domain }}.{{ instance }}.php-fpm:
     - context:
       domain: {{ domain }}
       instance: blue
-      platform: {{ platform }}
     - user: root
     - group: root
     - mode: 0644

@@ -50,7 +50,7 @@ app-error-pages.page.lang.{{ lang }}:
       - app-error-pages.ubiquitous-error-pages
 
 {% for status, body in pages['pages'].items() %}
-# Note that the context value's syntax here. PyYAML will incorrectly parse the
+# Note the context value's syntax here. PyYAML will incorrectly parse the
 # structure if contents is a multi-line string. :(
 app-error-pages.page.{{ lang }}.{{ status }}:
   file.managed:
@@ -96,7 +96,6 @@ app-error-pages.{{ platform['basename'] }}.nginx:
     - template: jinja
     - context:
       domain: {{ domain }}
-      platform: {{ platform }}
     - user: root
     - group: root
     - mode: 0644

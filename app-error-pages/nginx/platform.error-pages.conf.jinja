@@ -1,3 +1,5 @@
+{% set platform = pillar['platforms'][domain] %}
+
 set $platform_basename {{ platform['basename'] | yaml_dquote }};
 set $platform_name {{ platform['name'] | yaml_dquote }};
 set $platform_email {{ platform['email'] | yaml_dquote }};
