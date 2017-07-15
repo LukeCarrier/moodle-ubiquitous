@@ -133,19 +133,21 @@ Vagrant.configure(2) do |config|
                                         rsync__args: ["--rsync-path='sudo rsync'", "--archive", "--compress", "--delete"]
   end
 
-  config.group.groups = {
-    "dev" => [
-      "salt",
-      "app-debug-1",
-      "db-pgsql-1",
-      "mail-debug",
-    ],
-    "selenium" => [
-      "selenium-hub",
-      "selenium-node-chrome",
-      "selenium-node-firefox",
-    ],
-  }
+  if Vagrant.has_plugin? "vagrant-group"
+    config.group.groups = {
+      "dev" => [
+        "salt",
+        "app-debug-1",
+        "db-pgsql-1",
+        "mail-debug",
+      ],
+      "selenium" => [
+        "selenium-hub",
+        "selenium-node-chrome",
+        "selenium-node-firefox",
+      ],
+    }
+  end
 
   # If such a file exists, load the user's local configuration.
   #
