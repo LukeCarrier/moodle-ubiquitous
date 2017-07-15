@@ -50,7 +50,7 @@ platforms:
     moodle:
       dbtype: pgsql
       dblibrary: native
-      dbhost: 192.168.120.150
+      dbhost: localhost
       dbname: ubuntu
       dbuser: ubuntu
       dbpass: gibberish
@@ -58,9 +58,68 @@ platforms:
       dboptions:
         dbpersist: False
         dbport: 5432
-        dbsocket:
       dataroot: /home/ubuntu/data
       directorypermissions: '0777'
-      wwwroot: http://192.168.120.50
+      wwwroot: http://localhost
       sslproxy: false
       admin: admin
+      pre_bootstrap: |
+        $CFG->behat_prefix        = 'b_';
+        $CFG->behat_dataroot      = '/home/ubuntu/data/behat';
+        $CFG->behat_faildump_path = '/home/ubuntu/data/behat-faildump';
+        $CFG->behat_wwwroot       = 'http://localhost/behat';
+        $CFG->behat_profiles = array(
+            'chrome' => array(
+                'extensions' => array(
+                    'Behat\MinkExtension\Extension' => array(
+                        'selenium2' => array(
+                            'browser'     => 'chrome',
+                            'browserName' => 'chrome',
+                        ),
+                    ),
+                ),
+            ),
+            'firefox' => array(
+                'extensions' => array(
+                    'Behat\MinkExtension\Extension' => array(
+                        'selenium2' => array(
+                            'browser'     => 'firefox',
+                            'browserName' => 'firefox',
+                        ),
+                    ),
+                ),
+            ),
+            'iexplore' => array(
+                'extensions' => array(
+                    'Behat\MinkExtension\Extension' => array(
+                        'selenium2' => array(
+                            'browser'     => 'iexplore',
+                            'browserName' => 'iexplore',
+                        ),
+                    ),
+                ),
+            ),
+        );
+        $CFG->behat_config = array_merge(array(
+            'default' => array(
+                'extensions' => array(
+                    'Behat\MinkExtension' => array(
+                        'selenium2' => array(
+                            'wd_host' => 'http://localhost:4444/wd/hub',
+                            'capabilities' => array(
+                                'browserVersion'    => 'ANY',
+                                'deviceType'        => 'ANY',
+                                'name'              => 'ANY',
+                                'deviceOrientation' => 'ANY',
+                                'ignoreZoomSetting' => 'ANY',
+                                'version'           => 'ANY',
+                                'platform'          => 'ANY',
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        ), $CFG->behat_profiles);
+
+        $CFG->phpunit_prefix   = 'phpu_';
+        $CFG->phpunit_dataroot = '/home/ubuntu/data/phpunit';
