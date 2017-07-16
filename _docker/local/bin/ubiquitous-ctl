@@ -26,6 +26,10 @@ in_array() {
     return 1
 }
 
+UBIQUITOUS_JAVA="/usr/bin/java -XX:NewSize=128m -XX:MaxNewSize=128m -XX:SurvivorRatio=8 -Xms512m -Xmx512m -Djava.net.preferIPv4Stack=true"
+UBIQUITOUS_JAVA_CHROME="-Dwebdriver.chrome.driver=/opt/selenium/chromedriver/chromedriver -Dwebdriver.chrome.verboseLogging=true"
+UBIQUITOUS_JAVA_SELENIUM="-jar /opt/selenium/selenium-server.jar"
+
 UBIQUITOUS_NGINX_PIDFILE="/run/nginx.pid"
 UBIQUITOUS_PHPFPM_PIDFILE="/run/php/php7.0-fpm.pid"
 UBIQUITOUS_SELENIUM_HUB_PIDFILE="/run/selenium-hub.pid"
@@ -65,23 +69,16 @@ start() {
 
     if [[ " ${services[@]} " =~ " selenium-hub " ]]; then
         start-stop-daemon --start \
-                --oknodo --background --pidfile "$UBIQUITOUS_SELENIUM_HUB_PIDFILE" \
-                --user selenium --startas /usr/bin/java \
-                -- -XX:NewSize=128m -XX:MaxNewSize=128m -XX:SurvivorRatio=8 -Xms512m -Xmx512m \
-                -Djava.net.preferIPv4Stack=true \
-                -jar /opt/selenium/selenium-server.jar -role hub \
-                -hubConfig /opt/selenium/hub.json
+                --oknodo --background --make-pidfile --pidfile "$UBIQUITOUS_SELENIUM_HUB_PIDFILE" \
+                --user selenium --startas /bin/bash \
+                -- -c "exec $UBIQUITOUS_JAVA $UBIQUITOUS_JAVA_SELENIUM -role hub -hubConfig /opt/selenium/hub.json >/var/log/selenium-hub.log 2>&1"
     fi
 
     if [[ " ${services[@]} " =~ " selenium-node " ]]; then
         start-stop-daemon --start \
-                --oknodo --background --pidfile "$UBIQUITOUS_SELENIUM_NODE_PIDFILE" \
-                --user selenium --startas /usr/bin/java \
-                -- -XX:NewSize=128m -XX:MaxNewSize=128m -XX:SurvivorRatio=8 -Xms512m -Xmx512m \
-                -Djava.net.preferIPv4Stack=true \
-                -Dwebdriver.chrome.driver=/opt/selenium/chromedriver/chromedriver \
-                -jar /opt/selenium/selenium-server.jar -role node \
-                -nodeConfig /opt/selenium/node.json
+                --oknodo --background --make-pidfile --pidfile "$UBIQUITOUS_SELENIUM_NODE_PIDFILE" \
+                --user selenium --startas /bin/bash \
+                -- -c "exec $UBIQUITOUS_JAVA $UBIQUITOUS_JAVA_CHROME $UBIQUITOUS_JAVA_SELENIUM -role node -nodeConfig /opt/selenium/node.json >/var/log/selenium-node.log 2>&1"
     fi
 }
 
