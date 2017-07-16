@@ -29,6 +29,8 @@ in_array() {
 UBIQUITOUS_JAVA="/usr/bin/java -XX:NewSize=128m -XX:MaxNewSize=128m -XX:SurvivorRatio=8 -Xms512m -Xmx512m -Djava.net.preferIPv4Stack=true"
 UBIQUITOUS_JAVA_CHROME="-Dwebdriver.chrome.driver=/opt/selenium/chromedriver/chromedriver -Dwebdriver.chrome.verboseLogging=true"
 UBIQUITOUS_JAVA_SELENIUM="-jar /opt/selenium/selenium-server.jar"
+UBIQUITOUS_XVFB_PIDFILE="/run/xvfb.pid"
+UBIQUITOUS_XVFB_DISPLAY=":99"
 
 UBIQUITOUS_NGINX_PIDFILE="/run/nginx.pid"
 UBIQUITOUS_PHPFPM_PIDFILE="/run/php/php7.0-fpm.pid"
@@ -76,9 +78,13 @@ start() {
 
     if [[ " ${services[@]} " =~ " selenium-node " ]]; then
         start-stop-daemon --start \
+                --oknodo --background --make-pidfile --pidfile "$UBIQUITOUS_XVFB_PIDFILE" \
+                --user selenium --startas /usr/bin/Xvfb \
+                -- "$UBIQUITOUS_XVFB_DISPLAY" -screen 0 1280x1024x24
+        start-stop-daemon --start \
                 --oknodo --background --make-pidfile --pidfile "$UBIQUITOUS_SELENIUM_NODE_PIDFILE" \
                 --user selenium --startas /bin/bash \
-                -- -c "exec $UBIQUITOUS_JAVA $UBIQUITOUS_JAVA_CHROME $UBIQUITOUS_JAVA_SELENIUM -role node -nodeConfig /opt/selenium/node.json >/var/log/selenium-node.log 2>&1"
+                -- -c "DISPLAY="$UBIQUITOUS_XVFB_DISPLAY" exec $UBIQUITOUS_JAVA $UBIQUITOUS_JAVA_CHROME $UBIQUITOUS_JAVA_SELENIUM -role node -nodeConfig /opt/selenium/node.json >/var/log/selenium-node.log 2>&1"
     fi
 }
 
@@ -106,6 +112,8 @@ stop() {
     if [[ " ${services[@]} " =~ " selenium-node " ]]; then
         start-stop-daemon --stop \
                 --oknodo --retry 5 --pidfile "$UBIQUITOUS_SELENIUM_NODE_PIDFILE"
+        start-stop-daemon --stop \
+                --oknodo --retry 5 --pidfile "$UBIQUITOUS_XVFB_PIDFILE"
     fi
 }
 
