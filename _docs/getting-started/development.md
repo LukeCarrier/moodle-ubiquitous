@@ -154,60 +154,69 @@ $CFG->debugdisplay = true;
 
 // Behat testing environment
 $CFG->behat_prefix        = 'b_';
-$CFG->behat_dataroot      = dirname($CFG->dataroot) . '/behat';
-$CFG->behat_faildump_path = dirname($CFG->dataroot) . '/behat-faildump';
-$CFG->behat_wwwroot       = 'http://192.168.120.50/behat';
+$CFG->behat_dataroot      = '/home/ubuntu/data/behat';
+$CFG->behat_faildump_path = '/home/ubuntu/data/behat-faildump';
+$CFG->behat_wwwroot       = 'http://localhost/behat';
 $CFG->behat_profiles = array(
-    'chrome' => array(
-        'extensions' => array(
-            'Behat\MinkExtension\Extension' => array(
-                'selenium2' => array(
-                    'browser'     => 'chrome',
+'chrome' => array(
+    'extensions' => array(
+        'Behat\MinkExtension' => array(
+            'selenium2' => array(
+                'browser' => 'chrome',
+                'capabilities' => array(
+                    'browser' => 'chrome',
                     'browserName' => 'chrome',
                 ),
             ),
         ),
     ),
-    'firefox' => array(
-        'extensions' => array(
-            'Behat\MinkExtension\Extension' => array(
-                'selenium2' => array(
-                    'browser'     => 'firefox',
+),
+'firefox' => array(
+    'extensions' => array(
+        'Behat\MinkExtension' => array(
+            'selenium2' => array(
+                'browser' => 'firefox',
+                'capabilities' => array(
+                    'browser' => 'firefox',
                     'browserName' => 'firefox',
                 ),
             ),
         ),
     ),
-    'iexplore' => array(
-        'extensions' => array(
-            'Behat\MinkExtension\Extension' => array(
-                'selenium2' => array(
-                    'browser'     => 'iexplore',
+),
+'iexplore' => array(
+    'extensions' => array(
+        'Behat\MinkExtension' => array(
+            'selenium2' => array(
+                'browser' => 'iexplore',
+                'capabilities' => array(
+                    'browser' => 'iexplore',
                     'browserName' => 'iexplore',
                 ),
             ),
         ),
     ),
+),
 );
 $CFG->behat_config = array_merge(array(
-    'default' => array(
-        'extensions' => array(
-            'Behat\MinkExtension' => array(
-                'selenium2' => array(
-                    'wd_host' => "http://192.168.120.100:4444/wd/hub",
-                    'capabilities' => array(
-                        'browserVersion'    => 'ANY',
-                        'deviceType'        => 'ANY',
-                        'name'              => 'ANY',
-                        'deviceOrientation' => 'ANY',
-                        'ignoreZoomSetting' => 'ANY',
-                        'version'           => 'ANY',
-                        'platform'          => 'ANY',
-                    ),
+'default' => array(
+    'extensions' => array(
+        'Behat\MinkExtension' => array(
+            'selenium2' => array(
+                'wd_host' => 'http://localhost:4444/wd/hub',
+                'capabilities' => array(
+                    'browserVersion'    => 'ANY',
+                    'deviceType'        => 'ANY',
+                    'name'              => 'ANY',
+                    'deviceOrientation' => 'ANY',
+                    'ignoreZoomSetting' => 'ANY',
+                    'version'           => 'ANY',
+                    'platform'          => 'ANY',
                 ),
             ),
         ),
     ),
+),
 ), $CFG->behat_profiles);
 
 // Selenium node path configuration
