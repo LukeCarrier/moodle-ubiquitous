@@ -27,7 +27,7 @@ in_array() {
 }
 
 UBIQUITOUS_JAVA="/usr/bin/java -XX:NewSize=128m -XX:MaxNewSize=128m -XX:SurvivorRatio=8 -Xms512m -Xmx512m -Djava.net.preferIPv4Stack=true"
-UBIQUITOUS_JAVA_CHROME="-Dwebdriver.chrome.driver=/opt/selenium/chromedriver/chromedriver -Dwebdriver.chrome.verboseLogging=true"
+UBIQUITOUS_JAVA_CHROME="-Dwebdriver.chrome.driver=/opt/selenium/chromedriver/chromedriver"
 UBIQUITOUS_JAVA_SELENIUM="-jar /opt/selenium/selenium-server.jar"
 UBIQUITOUS_XVFB_PIDFILE="/run/xvfb.pid"
 UBIQUITOUS_XVFB_DISPLAY=":99"
@@ -73,7 +73,7 @@ start() {
         start-stop-daemon --start \
                 --oknodo --background --make-pidfile --pidfile "$UBIQUITOUS_SELENIUM_HUB_PIDFILE" \
                 --user selenium --startas /bin/bash \
-                -- -c "exec $UBIQUITOUS_JAVA $UBIQUITOUS_JAVA_SELENIUM -role hub -hubConfig /opt/selenium/hub.json >/var/log/selenium-hub.log 2>&1"
+                -- -c "exec $UBIQUITOUS_JAVA $UBIQUITOUS_JAVA_SELENIUM -role hub -hubConfig /opt/selenium/hub.json -log /var/log/selenium-hub.log"
     fi
 
     if [[ " ${services[@]} " =~ " selenium-node " ]]; then
@@ -84,7 +84,7 @@ start() {
         start-stop-daemon --start \
                 --oknodo --background --make-pidfile --pidfile "$UBIQUITOUS_SELENIUM_NODE_PIDFILE" \
                 --user selenium --startas /bin/bash \
-                -- -c "DISPLAY="$UBIQUITOUS_XVFB_DISPLAY" exec $UBIQUITOUS_JAVA $UBIQUITOUS_JAVA_CHROME $UBIQUITOUS_JAVA_SELENIUM -role node -nodeConfig /opt/selenium/node.json >/var/log/selenium-node.log 2>&1"
+                -- -c "DISPLAY="$UBIQUITOUS_XVFB_DISPLAY" exec $UBIQUITOUS_JAVA $UBIQUITOUS_JAVA_CHROME $UBIQUITOUS_JAVA_SELENIUM -role node -nodeConfig /opt/selenium/node.json -log /var/log/selenium-node.log"
     fi
 }
 
