@@ -71,30 +71,46 @@ platforms:
         $CFG->behat_profiles = array(
             'chrome' => array(
                 'extensions' => array(
-                    'Behat\MinkExtension\Extension' => array(
+                    'Behat\MinkExtension' => array(
                         'selenium2' => array(
-                            'browser'     => 'chrome',
-                            'browserName' => 'chrome',
+                            'browser' => 'chrome',
+                            'capabilities' => array(
+                                'browser' => 'chrome',
+                                'browserName' => 'chrome',
+                                'extra_capabilities' => array(
+                                    'chromeOptions' => array(
+                                        'args' => array(
+                                            '--no-sandbox',
+                                        ),
+                                    ),
+                                ),
+                            ),
                         ),
                     ),
                 ),
             ),
             'firefox' => array(
                 'extensions' => array(
-                    'Behat\MinkExtension\Extension' => array(
+                    'Behat\MinkExtension' => array(
                         'selenium2' => array(
-                            'browser'     => 'firefox',
-                            'browserName' => 'firefox',
+                            'browser' => 'firefox',
+                            'capabilities' => array(
+                                'browser' => 'firefox',
+                                'browserName' => 'firefox',
+                            ),
                         ),
                     ),
                 ),
             ),
             'iexplore' => array(
                 'extensions' => array(
-                    'Behat\MinkExtension\Extension' => array(
+                    'Behat\MinkExtension' => array(
                         'selenium2' => array(
-                            'browser'     => 'iexplore',
-                            'browserName' => 'iexplore',
+                            'browser' => 'iexplore',
+                            'capabilities' => array(
+                                'browser' => 'iexplore',
+                                'browserName' => 'iexplore',
+                            ),
                         ),
                     ),
                 ),
