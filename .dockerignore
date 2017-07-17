@@ -1,0 +1,16 @@
+# Vagrant
+/_vagrant/
+/.vagrant/
+/Vagrantfile.local
+/Vagrantfile
+
+# npm
+/node_modules/
+/npm-*.log
+/package.json
+/package-lock.json
+
+# Documentation
+/book.json
+/_book/
+/_docs/
