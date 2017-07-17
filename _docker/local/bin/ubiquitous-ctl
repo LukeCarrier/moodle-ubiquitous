@@ -38,11 +38,11 @@ UBIQUITOUS_SELENIUM_HUB_PIDFILE="/run/selenium-hub.pid"
 UBIQUITOUS_SELENIUM_NODE_PIDFILE="/run/selenium-node.pid"
 
 if [ $# -lt 1 ] || [ $# -gt 2 ]; then
-    abort $ERROR_PARAMS "usage: $(basename "$0") <ACTION (start, stop, restart)> [SERVICE (nginx, php-fpm, postgresql, selenium-hub, selenium-node)]"
+    abort $ERROR_PARAMS "usage: $(basename "$0") <ACTION (start, stop, restart)> [SERVICE (nginx, php-fpm, postgresql, selenium-hub, selenium-node, xvfb)]"
 fi
 
 action="$1"
-IFS=' ' declare -a UBIQUITOUS_SERVICES=(nginx php-fpm postgresql selenium-hub selenium-node)
+IFS=' ' declare -a UBIQUITOUS_SERVICES=(nginx php-fpm postgresql selenium-hub selenium-node xvfb)
 if in_array UBIQUITOUS_SERVICES "${2:-UNSET}"; then
     services="$2"
 else
@@ -76,11 +76,14 @@ start() {
                 -- -c "exec $UBIQUITOUS_JAVA $UBIQUITOUS_JAVA_SELENIUM -role hub -hubConfig /opt/selenium/hub.json -log /var/log/selenium-hub.log"
     fi
 
-    if [[ " ${services[@]} " =~ " selenium-node " ]]; then
+    if [[ " ${services[@]} " =~ " xvfb " ]]; then
         start-stop-daemon --start \
                 --oknodo --background --make-pidfile --pidfile "$UBIQUITOUS_XVFB_PIDFILE" \
                 --user selenium --startas /usr/bin/Xvfb \
                 -- "$UBIQUITOUS_XVFB_DISPLAY" -screen 0 1280x1024x24
+    fi
+
+    if [[ " ${services[@]} " =~ " selenium-node " ]]; then
         start-stop-daemon --start \
                 --oknodo --background --make-pidfile --pidfile "$UBIQUITOUS_SELENIUM_NODE_PIDFILE" \
                 --user selenium --startas /bin/bash \
@@ -112,6 +115,9 @@ stop() {
     if [[ " ${services[@]} " =~ " selenium-node " ]]; then
         start-stop-daemon --stop \
                 --oknodo --retry 5 --pidfile "$UBIQUITOUS_SELENIUM_NODE_PIDFILE"
+    fi
+
+    if [[ " ${services[@]} " =~ " xvfb " ]]; then
         start-stop-daemon --stop \
                 --oknodo --retry 5 --pidfile "$UBIQUITOUS_XVFB_PIDFILE"
     fi
