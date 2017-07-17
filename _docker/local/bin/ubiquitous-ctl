@@ -31,6 +31,7 @@ UBIQUITOUS_JAVA_CHROME="-Dwebdriver.chrome.driver=/opt/selenium/chromedriver/chr
 UBIQUITOUS_JAVA_SELENIUM="-jar /opt/selenium/selenium-server.jar"
 UBIQUITOUS_XVFB_PIDFILE="/run/xvfb.pid"
 UBIQUITOUS_XVFB_DISPLAY=":99"
+UBIQUITOUS_X11VNC_PIDFILE="/run/x11vnc.pid"
 
 UBIQUITOUS_NGINX_PIDFILE="/run/nginx.pid"
 UBIQUITOUS_PHPFPM_PIDFILE="/run/php/php7.0-fpm.pid"
@@ -38,7 +39,7 @@ UBIQUITOUS_SELENIUM_HUB_PIDFILE="/run/selenium-hub.pid"
 UBIQUITOUS_SELENIUM_NODE_PIDFILE="/run/selenium-node.pid"
 
 if [ $# -lt 1 ] || [ $# -gt 2 ]; then
-    abort $ERROR_PARAMS "usage: $(basename "$0") <ACTION (start, stop, restart)> [SERVICE (nginx, php-fpm, postgresql, selenium-hub, selenium-node, xvfb)]"
+    abort $ERROR_PARAMS "usage: $(basename "$0") <ACTION (start, stop, restart)> [SERVICE (nginx, php-fpm, postgresql, selenium-hub, selenium-node, x11vnc, xvfb)]"
 fi
 
 action="$1"
@@ -83,6 +84,13 @@ start() {
                 -- "$UBIQUITOUS_XVFB_DISPLAY" -screen 0 1280x1024x24
     fi
 
+    if [[ " ${services[@]} " =~ "x11vnc" ]]; then
+        start-stop-daemon --start \
+                --oknodo --background --make-pidfile --pidfile "$UBIQUITOUS_X11VNC_PIDFILE" \
+                --user selenium --startas /usr/bin/x11vnc \
+                -- -rfbport 5999 -display :99 -forever
+    fi
+
     if [[ " ${services[@]} " =~ " selenium-node " ]]; then
         start-stop-daemon --start \
                 --oknodo --background --make-pidfile --pidfile "$UBIQUITOUS_SELENIUM_NODE_PIDFILE" \
@@ -115,6 +123,11 @@ stop() {
     if [[ " ${services[@]} " =~ " selenium-node " ]]; then
         start-stop-daemon --stop \
                 --oknodo --retry 5 --pidfile "$UBIQUITOUS_SELENIUM_NODE_PIDFILE"
+    fi
+
+    if [[ " ${services[@]} " =~ " x11vnc " ]]; then
+        start-stop-daemon --stop \
+                --oknodo --retry 5 --pidfile "$UBIQUITOUS_X11VNC_PIDFILE"
     fi
 
     if [[ " ${services[@]} " =~ " xvfb " ]]; then
