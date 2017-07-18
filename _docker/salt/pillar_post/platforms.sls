@@ -64,10 +64,11 @@ platforms:
       sslproxy: false
       admin: admin
       pre_bootstrap: |
-        $CFG->behat_prefix        = 'b_';
-        $CFG->behat_dataroot      = '/home/ubuntu/data/behat';
-        $CFG->behat_faildump_path = '/home/ubuntu/data/behat-faildump';
-        $CFG->behat_wwwroot       = 'http://localhost/behat';
+        $CFG->behat_prefix                = 'b_';
+        $CFG->behat_dataroot              = '/home/ubuntu/data/behat';
+        $CFG->behat_faildump_path         = '/home/ubuntu/data/behat-faildump';
+        $CFG->behat_wwwroot               = 'http://localhost/behat';
+        $CFG->behat_restart_browser_after = 900;
         $CFG->behat_profiles = array(
             'chrome' => array(
                 'extensions' => array(
