@@ -130,3 +130,24 @@ pipelines:
           - sudo -u ubuntu php admin/tool/behat/cli/init.php
           - sudo -u ubuntu vendor/bin/behat --config ~ubuntu/data/behat/behatrun/behat/behat.yml --profile chrome --verbose
 ```
+
+## Troubleshooting
+
+Note that more in-depth documentation around the Selenium configuration can be found on [the Selenium role page](../roles/selenium.md). The documentationm below is specific to the Docker container.
+
+### Watching tests over VNC
+
+A VNC server is shipped with the container but is not started by default. To launch it:
+
+```
+$ /usr/local/ubiquitous/bin/ubiquitous-ctl start x11vnc
+```
+
+### Remoting in with SSH
+
+As the base role is implicitly applied to the container, an OpenSSH server is installed and available for use. If you're unable to effectively troubleshoot over a single session, it can be started as follows:
+
+```
+$ mkdir /var/run/sshd
+$ sshd
+```

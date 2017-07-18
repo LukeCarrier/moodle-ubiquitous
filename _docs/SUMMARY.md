@@ -13,5 +13,6 @@
         * [GoCD agent](roles/app/gocd-agent.md)
     * [GoCD](roles/gocd.md)
     * [Salt](roles/salt.md)
+    * [Selenium](roles/selenium.md)
 * [The pillar](pillar/README.md)
 * [Developing Ubiquitous](development/README.md)
