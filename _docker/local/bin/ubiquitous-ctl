@@ -26,7 +26,8 @@ in_array() {
     return 1
 }
 
-UBIQUITOUS_JAVA="/usr/bin/java -XX:NewSize=128m -XX:MaxNewSize=128m -XX:SurvivorRatio=8 -Xms512m -Xmx512m -Djava.net.preferIPv4Stack=true"
+UBIQUITOUS_JAVA_HUB="/usr/bin/java -Xms512m -Xmx512m -Djava.net.preferIPv4Stack=true"
+UBIQUITOUS_JAVA_NODE="/usr/bin/java -Xms512m -Xmx512m -XX:HeapDumpPath:/run/selenium-node.hprof -XX:-HeapDumpOnOutOfMemoryError -XX:+PrintGC -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps -XX:+PrintTenuringDistribution -XX:+PrintGCApplicationStoppedTime -Xloggc:/var/log/selenium-node.gc.log -Djava.net.preferIPv4Stack=true"
 UBIQUITOUS_JAVA_CHROME="-Dwebdriver.chrome.driver=/opt/selenium/chromedriver/chromedriver"
 UBIQUITOUS_JAVA_SELENIUM="-jar /opt/selenium/selenium-server.jar"
 UBIQUITOUS_XVFB_PIDFILE="/run/xvfb.pid"
@@ -74,7 +75,7 @@ start() {
         start-stop-daemon --start \
                 --oknodo --background --make-pidfile --pidfile "$UBIQUITOUS_SELENIUM_HUB_PIDFILE" \
                 --user selenium --startas /bin/bash \
-                -- -c "exec $UBIQUITOUS_JAVA $UBIQUITOUS_JAVA_SELENIUM -role hub -hubConfig /opt/selenium/hub.json -log /var/log/selenium-hub.log"
+                -- -c "exec $UBIQUITOUS_JAVA_HUB $UBIQUITOUS_JAVA_SELENIUM -role hub -hubConfig /opt/selenium/hub.json -log /var/log/selenium-hub.log"
     fi
 
     if [[ " ${services[@]} " =~ " xvfb " ]]; then
@@ -95,7 +96,7 @@ start() {
         start-stop-daemon --start \
                 --oknodo --background --make-pidfile --pidfile "$UBIQUITOUS_SELENIUM_NODE_PIDFILE" \
                 --user selenium --startas /bin/bash \
-                -- -c "DISPLAY="$UBIQUITOUS_XVFB_DISPLAY" exec $UBIQUITOUS_JAVA $UBIQUITOUS_JAVA_CHROME $UBIQUITOUS_JAVA_SELENIUM -role node -nodeConfig /opt/selenium/node.json -log /var/log/selenium-node.log"
+                -- -c "DISPLAY="$UBIQUITOUS_XVFB_DISPLAY" exec $UBIQUITOUS_JAVA_NODE $UBIQUITOUS_JAVA_CHROME $UBIQUITOUS_JAVA_SELENIUM -role node -nodeConfig /opt/selenium/node.json -log /var/log/selenium-node.log"
     fi
 }
 
