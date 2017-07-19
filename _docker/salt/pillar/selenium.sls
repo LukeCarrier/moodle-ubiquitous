@@ -11,6 +11,21 @@ selenium-hub:
   port: 4444
 
 selenium-node:
-  host: 127.0.0.1
-  port: 5555
   hub: http://localhost:4444
+  instances:
+    1:
+      display: ':55'
+      node_port: 5555
+      vnc_port: 5995
+    2:
+      display: ':56'
+      node_port: 5556
+      vnc_port: 5996
+    3:
+      display: ':57'
+      node_port: 5557
+      vnc_port: 5997
+    4:
+      display: ':58'
+      node_port: 5558
+      vnc_port: 5998

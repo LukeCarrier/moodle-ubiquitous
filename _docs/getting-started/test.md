@@ -32,7 +32,9 @@ $ cd Ubiquitous/
 $ docker run -it \
         --volume "$(dirname $PWD)/MoodleDocker":/home/ubuntu/releases/test \
         --workdir /home/ubuntu/releases/test --memory 4g --memory-swap 4g \
-        --publish 8080:80 --publish 8044:4444 --publish 8055:5555 \
+        --publish 8080:80 --publish 8044:4444 \
+        --publish 8055:5555 --publish 8056:5556 --publish 8057:5557 --publish 8058:5558 \
+        --publish 8065:5995 --publish 8066:5996 --publish 8067:5997 --publish 8068:5998 \
         --entrypoint /bin/bash d912563cdbc5
 ```
 
@@ -40,7 +42,12 @@ Note the `--publish` arguments here, which make the following services accessibl
 
 * [The Moodle site](http://localhost:8080/)
 * [Selenium Hub](http://localhost:8044/)
-* [Selenium Node](http://localhost:8055/)
+* Selenium Nodes [1](http://localhost:8055/), [2](http://localhost:8056/), [3](http://localhost:8057/) and [4](http://localhost:8058/)
+* VNC on Selenium nodes:
+    * 1 --- `localhost:8065`
+    * 2 --- `localhost:8066`
+    * 3 --- `localhost:8067`
+    * 4 --- `localhost:8068`
 
 Since systemd is unavailable within the container, services can be started with a control script:
 
@@ -123,12 +130,11 @@ pipelines:
           - cp -r * ~ubuntu/releases/test
           - cp ~ubuntu/config.php ~ubuntu/releases/test/config.php
           - chown -R ubuntu:ubuntu ~ubuntu/releases/test
-          - cd ~ubuntu/current/
-          - sudo -u ubuntu php admin/cli/install_database.php --agree-license --adminpass='P4$$word'
-          - sudo -u ubuntu php admin/tool/phpunit/cli/init.php
-          - sudo -u ubuntu vendor/bin/phpunit --verbose
-          - sudo -u ubuntu php admin/tool/behat/cli/init.php
-          - sudo -u ubuntu vendor/bin/behat --config ~ubuntu/data/behat/behatrun/behat/behat.yml --profile chrome --verbose
+          - sudo -iu ubuntu php ~ubuntu/current/admin/cli/install_database.php --agree-license --adminpass='P4$$word'
+          - sudo -iu ubuntu php ~ubuntu/current/admin/tool/phpunit/cli/init.php
+          - sudo -iu ubuntu ~ubuntu/current/vendor/bin/phpunit --verbose
+          - sudo -iu ubuntu php ~ubuntu/current/admin/tool/behat/cli/init.php --parallel=4
+          - sudo -iu ubuntu php ~ubuntu/current/admin/tool/behat/cli/run.php --verbose --profile=chrome
 ```
 
 ## Troubleshooting

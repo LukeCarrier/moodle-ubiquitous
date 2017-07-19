@@ -26,13 +26,26 @@ in_array() {
     return 1
 }
 
+systemd_get_service_instances() {
+    local service="$1"
+    for instance in /etc/systemd/system/$service.*.service; do
+        instance="${instance#/etc/systemd/system/$service.}"
+        instance="${instance%.service}"
+        echo $instance
+    done
+}
+
 UBIQUITOUS_JAVA_HUB="/usr/bin/java -Xms512m -Xmx512m -Djava.net.preferIPv4Stack=true"
-UBIQUITOUS_JAVA_NODE="/usr/bin/java -Xms512m -Xmx512m -XX:HeapDumpPath:/run/selenium-node.hprof -XX:-HeapDumpOnOutOfMemoryError -XX:+PrintGC -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps -XX:+PrintTenuringDistribution -XX:+PrintGCApplicationStoppedTime -Xloggc:/var/log/selenium-node.gc.log -Djava.net.preferIPv4Stack=true"
+UBIQUITOUS_JAVA_NODE="/usr/bin/java -Xms512m -Xmx512m -Djava.net.preferIPv4Stack=true"
 UBIQUITOUS_JAVA_CHROME="-Dwebdriver.chrome.driver=/opt/selenium/chromedriver/chromedriver"
 UBIQUITOUS_JAVA_SELENIUM="-jar /opt/selenium/selenium-server.jar"
+UBIQUITOUS_SELENIUM_HUB_CONFIG="/opt/selenium/hub.json"
+UBIQUITOUS_SELENIUM_HUB_LOG="/var/log/selenium-hub.log"
+UBIQUITOUS_SELENIUM_NODE_LOG="/var/log/selenium-node.log"
 UBIQUITOUS_XVFB_PIDFILE="/run/xvfb.pid"
-UBIQUITOUS_XVFB_DISPLAY=":99"
+UBIQUITOUS_XVFB_DISPLAY_BASE="55"
 UBIQUITOUS_X11VNC_PIDFILE="/run/x11vnc.pid"
+UBIQUITOUS_X11VNC_PORT_BASE="5995"
 
 UBIQUITOUS_NGINX_PIDFILE="/run/nginx.pid"
 UBIQUITOUS_PHPFPM_PIDFILE="/run/php/php7.0-fpm.pid"
@@ -44,7 +57,7 @@ if [ $# -lt 1 ] || [ $# -gt 2 ]; then
 fi
 
 action="$1"
-IFS=' ' declare -a UBIQUITOUS_SERVICES=(nginx php-fpm postgresql selenium-hub selenium-node xvfb)
+IFS=' ' declare -a UBIQUITOUS_SERVICES=(nginx php-fpm postgresql selenium-hub selenium-node x11vnc xvfb)
 if in_array UBIQUITOUS_SERVICES "${2:-UNSET}"; then
     services="$2"
 else
@@ -75,28 +88,37 @@ start() {
         start-stop-daemon --start \
                 --oknodo --background --make-pidfile --pidfile "$UBIQUITOUS_SELENIUM_HUB_PIDFILE" \
                 --user selenium --startas /bin/bash \
-                -- -c "exec $UBIQUITOUS_JAVA_HUB $UBIQUITOUS_JAVA_SELENIUM -role hub -hubConfig /opt/selenium/hub.json -log /var/log/selenium-hub.log"
+                -- -c "exec ${UBIQUITOUS_JAVA_HUB} ${UBIQUITOUS_JAVA_SELENIUM} -role hub -hubConfig ${UBIQUITOUS_SELENIUM_HUB_CONFIG} -log ${UBIQUITOUS_SELENIUM_HUB_LOG}"
     fi
 
     if [[ " ${services[@]} " =~ " xvfb " ]]; then
-        start-stop-daemon --start \
-                --oknodo --background --make-pidfile --pidfile "$UBIQUITOUS_XVFB_PIDFILE" \
-                --user selenium --startas /usr/bin/Xvfb \
-                -- "$UBIQUITOUS_XVFB_DISPLAY" -screen 0 1280x1024x24
+        instances=( $(systemd_get_service_instances xvfb) )
+        for instance in ${instances[@]}; do
+            start-stop-daemon --start \
+                    --oknodo --background --make-pidfile --pidfile "${UBIQUITOUS_XVFB_PIDFILE}.${instance}" \
+                    --user selenium --startas /usr/bin/Xvfb \
+                    -- ":$(expr $UBIQUITOUS_XVFB_DISPLAY_BASE + $instance - 1)" -screen 0 1280x1024x24
+        done
     fi
 
-    if [[ " ${services[@]} " =~ "x11vnc" ]]; then
-        start-stop-daemon --start \
-                --oknodo --background --make-pidfile --pidfile "$UBIQUITOUS_X11VNC_PIDFILE" \
-                --user selenium --startas /usr/bin/x11vnc \
-                -- -rfbport 5999 -display :99 -forever
+    if [[ " ${services[@]} " =~ " x11vnc " ]]; then
+        instances=( $(systemd_get_service_instances x11vnc) )
+        for instance in ${instances[@]}; do
+            start-stop-daemon --start \
+                    --oknodo --background --make-pidfile --pidfile "${UBIQUITOUS_X11VNC_PIDFILE}.${instance}" \
+                    --user selenium --startas /usr/bin/x11vnc \
+                    -- -rfbport "$(expr $UBIQUITOUS_X11VNC_PORT_BASE + $instance - 1)" -display ":$(expr $UBIQUITOUS_XVFB_DISPLAY_BASE + $instance - 1)" -forever
+        done
     fi
 
     if [[ " ${services[@]} " =~ " selenium-node " ]]; then
-        start-stop-daemon --start \
-                --oknodo --background --make-pidfile --pidfile "$UBIQUITOUS_SELENIUM_NODE_PIDFILE" \
-                --user selenium --startas /bin/bash \
-                -- -c "DISPLAY="$UBIQUITOUS_XVFB_DISPLAY" exec $UBIQUITOUS_JAVA_NODE $UBIQUITOUS_JAVA_CHROME $UBIQUITOUS_JAVA_SELENIUM -role node -nodeConfig /opt/selenium/node.json -log /var/log/selenium-node.log"
+        instances=( $(systemd_get_service_instances selenium-node) )
+        for instance in ${instances[@]}; do
+            start-stop-daemon --start \
+                    --oknodo --background --make-pidfile --pidfile "${UBIQUITOUS_SELENIUM_NODE_PIDFILE}.${instance}" \
+                    --user selenium --startas /bin/bash \
+                    -- -c "DISPLAY=":$(expr $UBIQUITOUS_XVFB_DISPLAY_BASE + $instance - 1)" exec ${UBIQUITOUS_JAVA_NODE} ${UBIQUITOUS_JAVA_CHROME} ${UBIQUITOUS_JAVA_SELENIUM} -role node -nodeConfig /opt/selenium/node.${instance}.json -log $UBIQUITOUS_SELENIUM_NODE_LOG.$instance"
+        done
     fi
 }
 
@@ -122,18 +144,27 @@ stop() {
     fi
 
     if [[ " ${services[@]} " =~ " selenium-node " ]]; then
-        start-stop-daemon --stop \
-                --oknodo --retry 5 --pidfile "$UBIQUITOUS_SELENIUM_NODE_PIDFILE"
+        instances=( $(systemd_get_service_instances selenium-node) )
+        for instance in ${instances[@]}; do
+            start-stop-daemon --stop \
+                    --oknodo --retry 5 --pidfile "${UBIQUITOUS_SELENIUM_NODE_PIDFILE}.${instance}"
+        done
     fi
 
     if [[ " ${services[@]} " =~ " x11vnc " ]]; then
-        start-stop-daemon --stop \
-                --oknodo --retry 5 --pidfile "$UBIQUITOUS_X11VNC_PIDFILE"
+        instances=( $(systemd_get_service_instances x11vnc) )
+        for instance in ${instances[@]}; do
+            start-stop-daemon --stop \
+                    --oknodo --retry 5 --pidfile "${UBIQUITOUS_X11VNC_PIDFILE}.${instance}"
+        done
     fi
 
     if [[ " ${services[@]} " =~ " xvfb " ]]; then
-        start-stop-daemon --stop \
-                --oknodo --retry 5 --pidfile "$UBIQUITOUS_XVFB_PIDFILE"
+        instances=( $(systemd_get_service_instances xvfb) )
+        for instance in ${instances[@]}; do
+            start-stop-daemon --stop \
+                    --oknodo --retry 5 --pidfile "${UBIQUITOUS_XVFB_PIDFILE}.${instance}"
+        done
     fi
 }
 
