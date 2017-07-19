@@ -8,21 +8,24 @@
 include:
   - java-base
 
-/opt/selenium:
+selenium.root:
   file.directory:
+    - name: /opt/selenium
     - user: root
     - group: root
     - mode: 0755
 
-/opt/selenium/selenium-server.jar:
+selenium.binary:
   file.managed:
+    - name: /opt/selenium/selenium-server.jar
     - source: {{ pillar['selenium']['server_jar']['source'] }}
     - source_hash: {{ pillar['selenium']['server_jar']['source_hash'] }}
     - require:
-      - file: /opt/selenium
+      - selenium.root
 
-selenium:
+selenium.user:
   user.present:
+    - name: selenium
     - fullname: Selenium user
     - shell: /bin/bash
     - home: /var/lib/selenium

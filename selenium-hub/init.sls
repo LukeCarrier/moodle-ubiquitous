@@ -9,30 +9,32 @@ include:
   - base
   - selenium-base
 
-/etc/systemd/system/selenium-hub.service:
+selenium-hub.systemd:
   file.managed:
+    - name: /etc/systemd/system/selenium-hub.service
     - source: salt://selenium-hub/systemd/selenium-hub.service
 
-{% if pillar['systemd']['apply'] %}
-selenium-hub:
-  service.running:
-    - enable: True
-    - reload: True
-    - require:
-      - file: /etc/systemd/system/selenium-hub.service
-      - file: /opt/selenium/selenium-server.jar
-      - file: /opt/selenium/hub.json
-      - pkg: oracle-java.java8
-      - user: selenium
-{% endif %}
-
-/opt/selenium/hub.json:
+selenium-hub.config:
   file.managed:
+    - name: /opt/selenium/hub.json
     - source: salt://selenium-hub/selenium/hub.json.jinja
     - template: jinja
 
+{% if pillar['systemd']['apply'] %}
+selenium-hub.service:
+  service.running:
+    - name: selenium-hub
+    - enable: True
+    - reload: True
+    - require:
+      - selenium-hub.systemd
+      - selenium.binary
+      - selenium-hub.config
+      - oracle-java.java8
+{% endif %}
+
 {% if pillar['iptables']['apply'] %}
-nginx.iptables.http:
+selenium-hub.iptables.http:
   iptables.append:
     - chain: INPUT
     - jump: ACCEPT
@@ -40,7 +42,7 @@ nginx.iptables.http:
     - dport: 4444
     - save: True
     - require:
-      - iptables: iptables.default.input.established
+      - iptables.default.input.established
     - require_in:
-      - iptables: iptables.default.input.drop
+      - iptables.default.input.drop
 {% endif %}

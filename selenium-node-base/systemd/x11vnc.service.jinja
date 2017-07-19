@@ -1,0 +1,11 @@
+[Unit]
+Description=X11VNC ({{ instance }})
+Requires=xvfb.{{ instance }}.service
+After=network.target xvfb.{{ instance }}.service
+
+[Service]
+User=selenium
+ExecStart=/usr/bin/x11vnc -rfbport {{ vnc_port }} -display {{ display }} -forever
+
+[Install]
+WantedBy=multi-user.target

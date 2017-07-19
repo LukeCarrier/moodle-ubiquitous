@@ -1,0 +1,12 @@
+[Unit]
+Description=Selenium node ({{ instance }})
+Requires=xvfb.{{ instance }}.service
+After=network.target syslog.target xvfb.service
+
+[Service]
+Environment=DISPLAY={{ display }}
+User=selenium
+ExecStart=/usr/bin/java {{ node_java_options }} -jar /opt/selenium/selenium-server.jar -role node -nodeConfig /opt/selenium/node.{{ instance }}.json
+
+[Install]
+WantedBy=multi-user.target

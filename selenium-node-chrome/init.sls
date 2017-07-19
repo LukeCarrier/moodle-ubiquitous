@@ -5,26 +5,28 @@
 # @copyright 2016 Luke Carrier
 #
 
+{% from 'selenium-node-base/macros.sls' import selenium_node_instance %}
+
 include:
   - base
   - selenium-base
   - selenium-node-base
 
-google-chrome.repo:
+selenium-node-chrome.google-chrome.repo:
   pkgrepo.managed:
     - file: /etc/apt/sources.list.d/google-chrome.list
     - humanname: Google Chrome
     - name: deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main
     - key_url: https://dl.google.com/linux/linux_signing_key.pub
 
-google-chrome.pkg:
+selenium-node-chrome.google-chrome.pkg:
   pkg.installed:
     - pkgs:
       - google-chrome-stable
     - require:
-      - pkgrepo: google-chrome.repo
+      - selenium-node-chrome.google-chrome.repo
 
-chromedriver:
+selenium-node-chrome.chromedriver:
   archive.extracted:
     - name: /opt/selenium/chromedriver
     - source: {{ pillar['selenium']['chromedriver']['source'] }}
@@ -34,21 +36,13 @@ chromedriver:
   file.managed:
     - name: /opt/selenium/chromedriver/chromedriver
     - mode: 0755
-    - replace: false
+    - replace: False
     - watch:
-      - archive: chromedriver
+      - archive: selenium-node-chrome.chromedriver
 
-{% if pillar['systemd']['apply'] %}
-selenium-node.restart:
-  service.running:
-    - name: selenium-node
-    - reload: True
-    - watch:
-      - archive: chromedriver
-      - file: /opt/selenium/node.json
-{% endif %}
-
-/opt/selenium/node.json:
-  file.managed:
-    - source: salt://selenium-node-chrome/selenium/node.json.jinja
-    - template: jinja
+{% for instance, config in pillar['selenium-node']['instances'].items() %}
+{% set node_java_options = '-Dwebdriver.chrome.driver=/opt/selenium/chromedriver/chromedriver ' + config.get('node_java_options', '') %}
+{{ selenium_node_instance(
+        instance, config['display'], node_java_options, 'chrome',
+        config['node_port'], config['vnc_port']) }}
+{% endfor %}

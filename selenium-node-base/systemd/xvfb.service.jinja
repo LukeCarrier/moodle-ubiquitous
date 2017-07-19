@@ -1,0 +1,10 @@
+[Unit]
+Description=X Virtual Frame Buffer ({{ instance }})
+After=network.target
+
+[Service]
+User=selenium
+ExecStart=/usr/bin/Xvfb {{ display }} -screen 0 1280x1024x24
+
+[Install]
+WantedBy=multi-user.target
