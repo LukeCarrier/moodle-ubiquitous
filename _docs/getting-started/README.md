@@ -32,18 +32,18 @@ In development environments machines are managed by Vagrant. The default environ
 * An application server running nginx and PHP-FPM, preconfigured for remote debugging with Xdebug
 * A database server running PostgreSQL
 * A mail server running MailCatcher, allowing you to see outbound email in real-time
-* A complete Selenium environment, consisting of a hub server, a Firefox node and a Chrome node
+* A complete Selenium environment, consisting of a hub server, a Firefox node and a Chrome node.
 
 The following machines are provided for testing production configurations:
 
 * A GoCD instance for testing deployment pipelines
-* A nameserver running BIND for testing your DNS configuration
+* A nameserver running BIND for testing your DNS configuration.
 
-Machines started and stopped independently of one another and we configure handy groups to simplify this process. You're also able to add your own machines as required.
+Machines can be started and stopped independently or by using Vagrant groups. You're also able to add your own machines as required.
 
 ## [Continuous integration and test environments](test.md)
 
-In this configuration, all of the [roles](../roles/README.md) required for a bare bones testing environment are installed to a single container. Whilst not in the spirit of containers this was a necessary compromise to be compatible with current CI implementations. As soon as we're aware of Docker Compose or similar support in one of the CI platforms we'll rework this.
+In this configuration, all of the [roles](../roles/README.md) required for a bare bones testing environment are installed in a single container. Whilst not in the spirit of containers this was a necessary compromise to be compatible with current CI implementations. As soon as we're aware of Docker Compose or similar support in one of the CI platforms we'll rework this.
 
 ## [Production deployments](production.md)
 

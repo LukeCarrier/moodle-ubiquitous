@@ -17,27 +17,26 @@ In Ubiquitous, a role is an individual Salt state with a corresponding Salt grai
 | [`selenium-node-chrome`](#selenium-chrome-node-selenium-node-chrome) | Selenium grid node (Chrome) |
 | [`selenium-node-firefox`](#selenium-firefox-node-selenium-node-firefox) | Selenium grid node (Firefox) |
 
-Details on applying roles to servers can be found in the [Salt administration documentation](admin/salt.md).
+Details on applying roles to servers can be found in the [Salt administration documentation](salt.md).
 
 ## Application server (`app`)
 
-| | |
+| Dependencies | Dependants |
 | --- | --- |
-| Dependencies | None |
-| Dependants | `app-debug`, `app-gocd-agent` |
+| None | `app-debug`, `app-gocd-agent` |
+
 
 Application servers provide the frontend of the environment, serving the site through nginx and handing off dynamic requests to PHP-FPM pools. Each platform is isolated from neighbouring sites using local system user accounts.
 
 ### With debugging support (`app-debug`)
 
-| | |
+| Dependencies | Dependants |
 | --- | --- |
-| Dependencies | `app` |
-| Dependants | None |
+| `app` | None |
 
 This role augments the `app` role with easy access to Behat's faildump and enables debugging and profiling using Xdebug.
 
-The Behat faildump for each platform can be accessed from a browser at `/data/behat-faildump`.
+The Behat faildump for each platform can be accessed from a browser at `{document root}/data/behat-faildump`.
 
 Xdebug profiler output is written to `{home}/data/profiling/` for each platform when enabled. Xdebug can be managed using the following browser extensions:
 
@@ -45,18 +44,17 @@ Xdebug profiler output is written to `{home}/data/profiling/` for each platform 
 
 ### With blue/green deployments (`app-gocd-agent`)
 
-| | |
+| Dependencies | Dependants |
 | --- | --- |
-| Dependencies | `app`, `gocd-agent` |
-| Dependants | None |
+| `app`, `gocd-agent` | None |
 
 Extends the `app` role with a series of scripts and configuration for [GoCD](https://www.gocd.io/) that enables upgrades without downtime.
 
-A suite of scripts are installed to `/usr/local/ubiquitous/bin`:
+A suite of scripts are installed in `/usr/local/ubiquitous/bin`:
 
 * `ubiquitous-info` - dumps the current configuration for a single site
 * `ubiquitous-install-release` - installs a new release
-* `ubiquitous-set-current-release` - changes the current release, priming the new release in a secondary FPM pool before switching over to it
+* `ubiquitous-set-current-release` - changes the current release, priming the new release in a secondary FPM pool before switching over to it.
 
 These commands depend on platform configuration, stored in `/usr/local/ubiqutous/etc/ubiquitous-platforms` in the following format:
 
@@ -68,83 +66,74 @@ To facilitate running pipelines, the `go` agent user is allowed passwordless `su
 
 ## PostgreSQL database (`db-pgsql`)
 
-| | |
+| Dependencies | Dependants |
 | --- | --- |
-| Dependencies | None |
-| Dependants | None |
+| None | None |
 
 Provides a [PostgreSQL](http://www.postgresql.org/) 9.5 database server with users and databases for each configured platform.
 
 ## GoCD agent (`gocd-agent`)
 
-| | |
+Dependencies | Dependants |
 | --- | --- |
-| Dependencies | None |
-| Dependants | `app-gocd-agent` |
+| None | `app-gocd-agent` |
 
 Installs and configures the [GoCD](https://www.gocd.io/) agent.
 
 ## GoCD server (`gocd-server`)
 
-| | |
+| Dependencies | Dependants |
 | --- | --- |
-| Dependencies | None |
-| Dependants | None |
+| None | None |
 
 Installs and configures the [GoCD](https://www.gocd.io/) server.
 
 ## Mail debugging (`mail-debug`)
 
-| | |
+| Dependencies | Dependants |
 | --- | --- |
-| Dependencies | None |
-| Dependants | None |
+| None | None |
 
 Installs [MailCatcher](https://mailcatcher.me/), allowing you to review all email sent by Moodle platforms. The SMTP server listens on port 1025, HTTP on 1080.
 
 ## Name server (`named`)
 
-| | |
+| Dependencies | Dependants |
 | --- | --- |
-| Dependencies | None |
-| Dependants | None |
+| None | None |
 
 Installs the [Bind]() DNS server, suited for use in internal name resolution.
 
 ## Salt master (`salt`)
 
-| | |
+| Dependencies | Dependants |
 | --- | --- |
-| Dependencies | None |
-| Dependants | None |
+| None | None |
 
 Installs the [Salt](https://saltstack.com/) master and appropriate firewall rules.
 
-For installation instructions, see the [administering Salt](admin/salt.md) page.
+For installation instructions, see the [administering Salt](salt.md) page.
 
 ## Selenium hub (`selenium-hub`)
 
-| | |
+| Dependencies | Dependants |
 | --- | --- |
-| Dependencies | None |
-| Dependants | None |
+| None | None |
 
-Installs the Selenium Grid Hub, which manages sessions across individual browser nodes.
+Installs the Selenium Grid hub, which manages sessions across individual browser nodes.
 
 ## Selenium Chrome node (`selenium-node-chrome`)
 
-| | |
+| Dependencies | Dependants |
 | --- | --- |
-| Dependencies | None |
-| Dependants | None |
+| None | None |
 
 Installs a Selenium Grid node with ChromeDriver enabled and the latest Chrome release.
 
 ## Selenium Firefox node (`selenium-node-firefox`)
 
-| | |
+| Dependencies | Dependants |
 | --- | --- |
-| Dependencies | None |
-| Dependants | None |
+| None | None |
 
 Installs a Selenium Grid node with the latest release of Firefox.

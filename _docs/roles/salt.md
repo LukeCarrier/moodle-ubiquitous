@@ -6,7 +6,7 @@ Salt is used as a configuration management system, converging the state of all r
 
 ### Assigning roles to minions
 
-[Ubiquitous roles](../roles/) are collections of [Salt states](https://docs.saltstack.com/en/latest/topics/tutorials/starting_states.html) designed to be assigned to servers using [Salt grains](https://docs.saltstack.com/en/latest/topics/grains/). To add a role to a server with the Salt minion already installed, simply edit `/etc/salt/grains` with content along the lines of the following:
+[Ubiquitous roles](../roles/) are collections of [Salt states](https://docs.saltstack.com/en/latest/topics/tutorials/starting_states.html) designed to be assigned to servers using [Salt grains](https://docs.saltstack.com/en/latest/topics/grains/). To add a role to a server with the Salt minion already installed, simply edit `/etc/salt/grains` with content along these lines:
 
 ```
 roles:
@@ -131,7 +131,7 @@ this when adding Salt minions to facilitate secure key exchange.
 $ sudo salt-key -F master | grep master.pub | cut -d' ' -f3-
 ```
 
-In order to allow easily pushing configuration to the master, create two bare Git repositories under a user's home directory:
+To allow easily pushing configuration to the master, create two bare Git repositories under a user's home directory:
 
 ```
 $ pwd
@@ -147,7 +147,7 @@ Initialized empty Git repository in /home/support/salt.git/
 Initialized empty Git repository in /home/support/pillar.git/
 ```
 
-We now need to create the Salt state trees:
+Then create the Salt state trees:
 
 ```
 $ sudo mkdir /srv/salt /srv/pillar
@@ -155,7 +155,7 @@ $ sudo chown "$USER:$USER" /srv/salt /srv/pillar
 $ sudo chmod 0700 /srv/salt /srv/pillar
 ```
 
-And wire up Git `post-receive` hooks to manage the checkouts for us:
+And wire up Git `post-receive` hooks to manage the checkouts:
 
 ```
 $ cat >salt.git/hooks/post-receive <<EOF
@@ -195,7 +195,7 @@ You're now ready to start installing minions.
 
 ## Troubleshooting
 
-### The master or master won't start
+### The master won't start
 
 When attempting to start the Salt master, you encounter the following error:
 
@@ -262,6 +262,55 @@ $ sudo dpkg-reconfigure locales
 
 Check the Salt pillar for an invalid `locale:default` value (ensure it matches the pattern `en_GB.UTF-8` and does not duplicate the character set, e.g. `en_GB.UTF-8 UTF-8`).
 
+### TypeError: 'bool' object is not iterable
+
+If, when applying states, you receive an error along these lines:
+
+```
+$ sudo salt app-debug-1 state.apply
+    app-debug-1:
+        Data failed to compile:
+    ----------
+        Traceback (most recent call last):
+      File "/usr/lib/python2.7/dist-packages/salt/state.py", line 3629, in call_highstate
+        top = self.get_top()
+      File "/usr/lib/python2.7/dist-packages/salt/state.py", line 3089, in get_top
+        tops = self.get_tops()
+      File "/usr/lib/python2.7/dist-packages/salt/state.py", line 2787, in get_tops
+        saltenv
+      File "/usr/lib/python2.7/dist-packages/salt/fileclient.py", line 189, in cache_file
+        return self.get_url(path, '', True, saltenv, cachedir=cachedir)
+      File "/usr/lib/python2.7/dist-packages/salt/fileclient.py", line 495, in get_url
+        result = self.get_file(url, dest, makedirs, saltenv, cachedir=cachedir)
+      File "/usr/lib/python2.7/dist-packages/salt/fileclient.py", line 1044, in get_file
+        hash_server, stat_server = self.hash_and_stat_file(path, saltenv)
+    TypeError: 'bool' object is not iterable
+    
+    ERROR: Minions returned with non-zero exit code
+```
+
+and you check the Salt versions on your master ('salt') and minion ('app-debug-1) and the latter is newer:
+
+```
+$ salt-call --versions-report
+    Salt Version:
+               Salt: 2016.11.6
+    [snip]
+```
+
+```
+$ salt-call --versions-report
+    Salt Version:
+               Salt: 2017.7.0
+    [snip]
+```
+
+then this is probably because you have destroyed and rebuilt the minion. To remedy, reprovision your salt master by running this from your local machine's Ubiquitous root folder:
+
+```
+$ vagrant provision salt
+```
+
 ### My minions keep ignoring me
 
 This is a common problem with Salt deployments on IaaS platforms such as Azure.
@@ -276,13 +325,15 @@ silly-minion:
     Minion did not return. [No response]
 ```
 
-And in `silly-minion`'s `/var/log/salt/minion` you can see following message around the time of the error:
+and in `silly-minion`'s `/var/log/salt/minion` you can see following message around the time of the error:
 
 ```
 2017-03-15 16:48:57,729 [salt.minion      ][ERROR   ][28379] Error while bringing up minion for multi-master. Is master at salt.example.com responding?
 ```
 
-Then it's likely that your minion is either unable to communicate with the master due to a firewall configuration issue or that a switch between the two servers isn't keeping Salt's connections alive.
+then it's likely that:
+* either your minion is unable to communicate with the master due to a firewall configuration issue
+* or a switch between the two servers isn't keeping Salt's connections alive.
 
 #### Verify firewall configuration
 

@@ -28,13 +28,13 @@ Docker images contain the following role loadout:
 * `app-debug`
 * `db-pgsql`
 * `selenium-hub`
-* `selenium-node-chrome`
+* `selenium-node-chrome`.
 
 As more CI services adopt [Docker Compose](https://docs.docker.com/compose/) or similar to support multiple containers, we will revisit this decision.
 
 ### Filesystem ACLs
 
-Ubiquitous ordinarily requires that application server `/home` filesystems support extended attributes and, in turn, ACLs. Since none of Docker's many filesystems support ACLs, we instead run all services under the user account which owns the platform files.
+Ubiquitous ordinarily requires that application server `/home` filesystems support extended attributes and, in turn, ACLs. Since none of Docker's many filesystems support ACLs, we instead run all services under the user account that owns the platform files.
 
 ### iptables
 

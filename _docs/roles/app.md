@@ -32,7 +32,7 @@ Per-platform user accounts contain a directory structure like the following:
 
 The nginx configuration follows the Debian convention, with per-platform configuration stored in `/etc/nginx/sites-available`. These configuration files are symlinked to `/etc/nginx/sites-enabled`, where nginx sources _enabled_ site configuration. Each configuration will also source additional configuration from `/etc/nginx/sites-extra/<platform basename>.*.conf`.
 
-The PHP-FPM configuration emlates this configuration. Configuration files are stored in `/etc/php/7.0/fpm/pools-available` and linked to `/etc/php/7.0/fpm/pools-enabled`.
+The PHP-FPM configuration emulates this configuration. Configuration files are stored in `/etc/php/7.0/fpm/pools-available` and linked to `/etc/php/7.0/fpm/pools-enabled`.
 
 This configuration facilitates blue/green deployments by simply adding links and reloading the appropriate service.
 
@@ -46,6 +46,9 @@ $ salt <minion ID> pillar.keys platforms
 
 The `app-gocd-agent` role writes a number of scripts facilitating the deployment process to `/usr/local/ubiquitous/bin`:
 
-* `ubiquitous-info` helps administrators understand the running state of a platform by describing the current configuration, examining the three symbolic links (the nginx `server {}` entry, the PHP-FPM pool and the `current` symlink in the user's home directory)
-* `ubiquitous-install-release` copies new source files into a release directory ready for switching over
-* `ubiquitous-set-current-release` changes the active release by enabling the inactive FPM pool before altering each of the symbolic links and reloading the services as necessary
+* `ubiquitous-info` helps administrators understand the running state of a platform by describing the current configuration. It does that by examining three symbolic links:
+    * the active nginx `server {}` entry in `/etc/nginx/sites-enabled.d`
+    * the active PHP-FPM pool entry in `/etc/php-fpm/pools-enabled.d`
+    * the `current` symlink in the user's home directory.
+* `ubiquitous-install-release` copies new source files into a release directory ready for switching over.
+* `ubiquitous-set-current-release` changes the active release by enabling the inactive FPM pool before altering each of the symbolic links and reloading the services as necessary.
