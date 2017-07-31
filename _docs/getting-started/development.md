@@ -304,6 +304,16 @@ $ sudo ip addr add 192.168.120.1/24 dev vboxnet0
 $ sudo ip link set vboxnet0 up
 ```
 
+## TypeError: 'bool' object is not iterable
+
+Issues can occur when applying Salt states to minions when the versions between the master and minions differ (e.g. when machines are provisioned at different times or destroyed and rebuilt). To remedy, allow Vagrant to reprovision your Salt master and minions:
+
+```
+$ vagrant provision
+```
+
+See the [Salt troubleshooting documentation](../roles/salt.md#typeerror-bool-object-is-not-iterable) or further information.
+
 ## Advanced topics
 
 ### Adding your own virtual machines

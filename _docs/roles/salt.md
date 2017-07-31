@@ -267,8 +267,8 @@ Check the Salt pillar for an invalid `locale:default` value (ensure it matches t
 If, when applying states, you receive an error along these lines:
 
 ```
-$ sudo salt app-debug-1 state.apply
-    app-debug-1:
+$ sudo salt minion state.apply
+    minion:
         Data failed to compile:
     ----------
         Traceback (most recent call last):
@@ -285,11 +285,11 @@ $ sudo salt app-debug-1 state.apply
       File "/usr/lib/python2.7/dist-packages/salt/fileclient.py", line 1044, in get_file
         hash_server, stat_server = self.hash_and_stat_file(path, saltenv)
     TypeError: 'bool' object is not iterable
-    
+
     ERROR: Minions returned with non-zero exit code
 ```
 
-and you check the Salt versions on your master ('salt') and minion ('app-debug-1) and the latter is newer:
+and you check the Salt versions on your master and minion and the latter is newer:
 
 ```
 $ salt-call --versions-report
@@ -305,11 +305,7 @@ $ salt-call --versions-report
     [snip]
 ```
 
-then this is probably because you have destroyed and rebuilt the minion. To remedy, reprovision your salt master by running this from your local machine's Ubiquitous root folder:
-
-```
-$ vagrant provision salt
-```
+then it's likely that the issue is caused by a version incompatibility between the master and minion. Ensure that the Salt versions between the machines are compatible.
 
 ### My minions keep ignoring me
 
