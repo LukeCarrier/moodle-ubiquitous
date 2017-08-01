@@ -14,3 +14,7 @@ location /data/behat-faildump {
     alias {{ platform['user']['home'] }}/data/behat-faildump;
     autoindex on;
 }
+
+location /data/profiling {
+    alias {{ platform['user'['home']] }}/data/profiling;
+}
