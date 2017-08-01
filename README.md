@@ -14,7 +14,7 @@ A sample Moodle configuration for both development and production deployment com
 
 ## Status
 
-[![Docker Build Statu](https://img.shields.io/docker/build/lukecarrier/moodle-ubiquitous.svg?style=flat-square)](https://hub.docker.com/r/lukecarrier/moodle-ubiquitous/)
+[![Docker Build Status](https://img.shields.io/docker/build/lukecarrier/moodle-ubiquitous.svg?style=flat-square)](https://hub.docker.com/r/lukecarrier/moodle-ubiquitous/)
 
 ## Documentation
 
