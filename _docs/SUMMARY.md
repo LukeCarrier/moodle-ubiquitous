@@ -1,5 +1,6 @@
 # Summary
 
+* [Introduction](README.md)
 * [Getting started](getting-started/README.md)
     * [In development](getting-started/development.md)
     * [In production](getting-started/production.md)
