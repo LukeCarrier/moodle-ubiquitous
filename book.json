@@ -10,7 +10,7 @@
   ],
   "pluginsConfig": {
     "edit-link": {
-      "base": "https://github.com/LukeCarrier/moodle-ubiquitous/blob/master/docs",
+      "base": "https://github.com/LukeCarrier/moodle-ubiquitous/blob/master/_docs",
       "label": "Edit on GitHub",
       "multilingual": false
     },
