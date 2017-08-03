@@ -281,7 +281,7 @@ $ vagrant ssh app-debug-1 --command 'php current/admin/tool/phpunit/cli/init.php
 You may then run tests as follows:
 
 ```
-$ vagrant ssh app-debug-1 --config 'php current/vendor/bin/phpunit'
+$ vagrant ssh app-debug-1 --command 'php current/vendor/bin/phpunit'
 ```
 
 ## Troubleshooting
