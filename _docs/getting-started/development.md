@@ -267,8 +267,10 @@ $ vagrant rsync selenium-node-firefox
 Run the tests with:
 
 ```
-$ vagrant ssh app-debug-1 --command 'current/vendor/bin/behat --config data/behat/behatrun/behat/behat.yml --profile chrome'
+$ vagrant ssh app-debug-1 --command 'cd current && php admin/tool/behat/cli/run.php --profile=chrome'
 ```
+
+Further detail on using Behat is available in our [`app-debug` role documentation](../roles/app/debug.md#behat).
 
 ### PHPUnit
 
