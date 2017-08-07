@@ -28,21 +28,6 @@ The technical specifications of the environment are as follows:
 * [PostgreSQL 9.5](http://www.postgresql.org/)
 * [Selenium](http://www.seleniumhq.org/) hub and nodes.
 
-### Building the documentation
-
-The documentation is managed with the excellent [GitBook toolchain](https://toolchain.gitbook.com/) and hosted by [GitBook](https://www.gitbook.com/). To work with it locally:
-
-```
-# Install the dependencies
-$ npm install
-
-# Launch the server --- use this when making changes
-$ npm run gitbook -- serve
-
-# Or perform a one-time build to _book/
-$ npm run gitbook -- build
-```
-
 ## License
 
 Ubiquitous Moodle is released under the terms of the GPL v3. This is the same license as the core Moodle distribution.
