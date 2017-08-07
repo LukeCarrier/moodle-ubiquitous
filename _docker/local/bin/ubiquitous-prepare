@@ -1,0 +1,31 @@
+#!/bin/bash
+
+#
+# Ubiquitous Moodle
+#
+# @author Luke Carrier <luke@carrier.im>
+# @copyright 2016 Luke Carrier
+#
+
+set -euo pipefail
+IFS=$'\n\t'
+
+shopt -s extglob
+shopt -s nullglob
+
+echo "preparing site from working directory..."
+cp -r * ~ubuntu/releases/test
+cp ~ubuntu/config.php ~ubuntu/releases/test/config.php
+chown -R ubuntu:ubuntu ~ubuntu/releases/test
+
+echo "installing base site..."
+sudo -iu ubuntu php ~ubuntu/current/admin/cli/install_database.php \
+        --agree-license --adminpass='P4$$word'
+
+echo "installing phpunit site..."
+sudo -iu ubuntu php ~ubuntu/current/admin/tool/phpunit/cli/init.php
+sudo -iu ubuntu php ~ubuntu/current/admin/tool/phpunit/cli/util.php --buildconfig
+sudo -iu ubuntu php ~ubuntu/current/admin/tool/phpunit/cli/util.php --buildcomponentconfigs
+
+echo "installing behat site..."
+sudo -iu ubuntu php ~ubuntu/current/admin/tool/behat/cli/init.php --parallel=4
