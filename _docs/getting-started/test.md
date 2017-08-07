@@ -49,6 +49,16 @@ Note the `--publish` arguments here, which make the following services accessibl
     * 3 --- `localhost:8067`
     * 4 --- `localhost:8068`
 
+To keep an eye on the test runs, a VNC viewer capable of displaying thumbnails of multiple servers (such as [VNC Thumbnail Viewer](https://thetechnologyteacher.wordpress.com/vncthumbnailviewer/) may be useful:
+
+```
+$ java -classpath VncThumbnailViewer.jar VncThumbnailViewer \
+        HOST localhost PORT 8065 \
+        HOST localhost PORT 8066 \
+        HOST localhost PORT 8067 \
+        HOST localhost PORT 8068
+```
+
 Since systemd is unavailable within the container, services can be started with a control script:
 
 ```
