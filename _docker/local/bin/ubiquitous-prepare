@@ -13,11 +13,6 @@ IFS=$'\n\t'
 shopt -s extglob
 shopt -s nullglob
 
-echo "preparing site from working directory..."
-cp -r * ~ubuntu/releases/test
-cp ~ubuntu/config.php ~ubuntu/releases/test/config.php
-chown -R ubuntu:ubuntu ~ubuntu/releases/test
-
 echo "installing base site..."
 sudo -iu ubuntu php ~ubuntu/current/admin/cli/install_database.php \
         --agree-license --adminpass='P4$$word'

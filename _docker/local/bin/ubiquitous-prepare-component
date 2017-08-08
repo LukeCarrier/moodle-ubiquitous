@@ -1,0 +1,57 @@
+#!/bin/bash
+
+#
+# Ubiquitous Moodle
+#
+# @author Luke Carrier <luke@carrier.im>
+# @copyright 2016 Luke Carrier
+#
+
+source_dir=''
+project_file='tests/integration/componentmgr.json'
+
+eval set -- "$(getopt -o "dp:" --long "source-directory:,project-file:" -- "$@")"
+while true; do
+    case "$1" in
+        -d|--source-directory ) source_dir="$2"   ; shift 2 ;;
+        -p|--project-file     ) project_file="$2" ; shift 2 ;;
+        *                     ) break             ;         ;;
+    esac
+done
+
+set -euo pipefail
+IFS=$'\n\t'
+
+shopt -s extglob
+shopt -s nullglob
+
+if [ -z "$source_dir" ]; then
+    echo "you must provide a --source-directory" >&2
+fi
+
+echo "installing component manager..."
+if ! echo $PATH | grep -q "${HOME}/.local/bin"; then
+    export PATH="${PATH}:${HOME}/.local/bin"
+fi
+mkdir -p ~/.local/bin
+if [ ! -x ~/.local/bin/composer ]; then
+    wget -O ~/.local/bin/composer https://getcomposer.org/composer.phar
+    chmod +x ~/.local/bin/composer
+fi
+if [ ! -x ~/.composer/vendor/bin/cgr ]; then
+    ~/.local/bin/composer global require consolidation/cgr
+fi
+if [ ! -x ~/.composer/vendor/bin/componentmgr ]; then
+    ~/.composer/vendor/bin/cgr lukecarrier/moodle-componentmgr </dev/null
+fi
+
+echo "preparing site from component in ${source_dir} using project ${project_file}..."
+sed -i -e "s%SOURCE_DIRECTORY%${source_dir}%" "${source_dir}/${project_file}"
+~/.composer/vendor/bin/componentmgr refresh --verbose \
+        --project-file "${source_dir}/${project_file}"
+~/.composer/vendor/bin/componentmgr package --verbose \
+        --project-file "${source_dir}/${project_file}" \
+        --package-format Directory \
+        --package-destination ~ubuntu/releases/test
+cp ~ubuntu/config.php ~ubuntu/releases/test/config.php
+chown -R ubuntu:ubuntu ~ubuntu/releases/test

@@ -1,0 +1,33 @@
+#!/bin/bash
+
+#
+# Ubiquitous Moodle
+#
+# @author Luke Carrier <luke@carrier.im>
+# @copyright 2016 Luke Carrier
+#
+
+source_dir=''
+
+eval set -- "$(getopt -o "d:" --long "source-directory:" -- "$@")"
+while true; do
+    case "$1" in
+        -d|--source-directory ) source_dir="$2" ; shift 2 ;;
+        *                     ) break           ;         ;;
+    esac
+done
+
+set -euo pipefail
+IFS=$'\n\t'
+
+shopt -s extglob
+shopt -s nullglob
+
+if [ -z "$source_dir" ]; then
+    echo "you must provide a --source-directory" >&2
+fi
+
+echo "preparing site from working directory..."
+cp -r "$source_dir"/* ~ubuntu/releases/test
+cp ~ubuntu/config.php ~ubuntu/releases/test/config.php
+chown -R ubuntu:ubuntu ~ubuntu/releases/test
