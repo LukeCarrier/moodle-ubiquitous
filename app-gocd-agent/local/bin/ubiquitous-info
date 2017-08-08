@@ -9,6 +9,7 @@
 
 domain=''
 
+eval set -- "$(getopt -o "d:" --long "domain:" -- "$@")"
 while true; do
     case "$1" in
         -d|--domain ) domain="$2" ; shift 2 ;;
