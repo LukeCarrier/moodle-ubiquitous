@@ -19,6 +19,11 @@ $CFG->dboptions = array(
 {% endfor %}
 );
 
+// Source directory
+{% if 'dirroot' in cfg %}
+$CFG->dirroot  = {{ cfg['dirroot'] | json }};
+{% endif %}
+
 // Web configuration
 $CFG->wwwroot  = {{ cfg['wwwroot'] | json }};
 $CFG->sslproxy = {{ cfg['sslproxy'] | default(False) | json }};
