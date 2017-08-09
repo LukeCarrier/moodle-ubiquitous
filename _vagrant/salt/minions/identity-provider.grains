@@ -1,7 +1,9 @@
 environment: dev
 group: dev
 roles:
-  - app-moodle
+  - app-saml
   - app-debug
   - app-default-release
   - app-error-pages
+saml-platforms:
+  - identity-provider

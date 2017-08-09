@@ -1,0 +1,6 @@
+environment: dev
+group: dev
+roles:
+  - redis
+saml-platforms:
+  - identity-proxy

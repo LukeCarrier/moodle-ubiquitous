@@ -1,12 +1,14 @@
 base:
   '*':
     - base
-    - platforms
-    - platforms-logos
+    - platforms-moodle
+    - platforms-moodle-logos
+    - platforms-saml-identity-provider
+    - platforms-saml-identity-proxy
 
-  'roles:app-base':
-    - match: grain
-    - app-base
+  'roles:app-.+':
+    - match: grain_pcre
+    - app
     - nginx
     - php-fpm
 
@@ -30,3 +32,15 @@ base:
   'roles:selenium-.+':
     - match: grain_pcre
     - selenium
+
+  'saml-platforms:identity-provider':
+    - match: grain
+    - platforms-saml-identity-provider
+
+  'saml-platforms:identity-proxy':
+    - match: grain
+    - platforms-saml-identity-proxy
+
+  'G@roles:redis and G@saml-platforms:identity-proxy':
+    - match: compound
+    - redis-identity-proxy
