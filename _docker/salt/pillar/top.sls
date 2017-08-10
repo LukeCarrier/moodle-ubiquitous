@@ -5,7 +5,7 @@ base:
 
   'roles:app':
     - match: grain
-    - app
+    - app-moodle
 
   'roles:db-pgsql':
     - match: grain
