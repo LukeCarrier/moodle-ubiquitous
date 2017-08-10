@@ -3,5 +3,5 @@ group: dev
 roles:
   - app-moodle
   - app-debug
-  - app-default-release
+  - app-moodle-default-release
   - app-error-pages

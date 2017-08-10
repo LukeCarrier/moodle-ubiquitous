@@ -22,16 +22,6 @@ app-default-release.{{ domain }}.release:
       - user: app.{{ domain }}.user
       - file: app.{{ domain }}.home
 
-app-default-release.{{ domain }}.data:
-  file.directory:
-    - name: {{ platform['moodle']['dataroot'] }}
-    - user: {{ platform ['user']['name'] }}
-    - group: {{ platform ['user']['name'] }}
-    - mode: 0770
-    - require:
-      - user: app.{{ domain }}.user
-      - file: app.{{ domain }}.home
-
 app-default-release.{{ domain }}.current:
   file.symlink:
     - name: {{ platform['user']['home'] }}/current
