@@ -39,7 +39,7 @@ app-error-pages.snippet:
     - require:
       - nginx
 
-{% for lang, pages in salt['pillar.get']('app-error-pages:translated').items() %}
+{% for lang, pages in salt['pillar.get']('app-error-pages:translated', {}).items() %}
 app-error-pages.page.lang.{{ lang }}:
   file.directory:
     - name: /usr/local/ubiquitous/share/ubiquitous-error-pages/{{ lang }}
