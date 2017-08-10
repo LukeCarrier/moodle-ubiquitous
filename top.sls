@@ -22,11 +22,6 @@ base:
     - match: grain
     - named
 
-  'roles:app-base':
-    - match: grain
-    - app
-    - certbot
-
   'roles:app-debug':
     - match: grain
     - app-debug
