@@ -338,8 +338,14 @@ app-base.{{ domain }}.{{ instance }}.php-fpm:
     - require:
       - pkg: php.packages
 {% if pillar['systemd']['apply'] %}
-    - require_in:
-      - service: php-fpm.reload
+    - onchanges_in:
+      - service: app.php-fpm.restart
 {% endif %}
 {% endfor %}
 {% endfor %}
+
+app.php-fpm.restart:
+  cmd.run:
+    - name: systemctl reload php7.0-fpm || systemctl restart php7.0-fpm
+    - require:
+      - php.packages
