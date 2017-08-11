@@ -313,7 +313,7 @@ app-base.{{ domain }}.nginx.log:
     - name: /var/log/nginx/{{ platform['basename'] }}
     - user: www-data
     - group: adm
-    - mode: 0640
+    - mode: 0750
 
 app-base.{{ domain }}.php-fpm.log:
   file.directory:
@@ -331,7 +331,6 @@ app-base.{{ domain }}.{{ instance }}.php-fpm:
     - context:
       domain: {{ domain }}
       instance: blue
-      platform: {{ platform }}
     - user: root
     - group: root
     - mode: 0644
