@@ -198,8 +198,11 @@ php.sqlsrv.{{ extension }}.ini.enabled.{{ sapi }}:
 # Supporting packages
 #
 
-ghostscript:
-  pkg.installed
+moodle.dependencies:
+  pkg.installed:
+    - pkgs:
+      - ghostscript
+      - unoconv
 
 #
 # Required directories
