@@ -29,22 +29,6 @@ if [ -z "$source_dir" ]; then
     echo "you must provide a --source-directory" >&2
 fi
 
-echo "installing component manager..."
-if ! echo $PATH | grep -q "${HOME}/.local/bin"; then
-    export PATH="${PATH}:${HOME}/.local/bin"
-fi
-mkdir -p ~/.local/bin
-if [ ! -x ~/.local/bin/composer ]; then
-    wget -O ~/.local/bin/composer https://getcomposer.org/composer.phar
-    chmod +x ~/.local/bin/composer
-fi
-if [ ! -x ~/.composer/vendor/bin/cgr ]; then
-    ~/.local/bin/composer global require consolidation/cgr
-fi
-if [ ! -x ~/.composer/vendor/bin/componentmgr ]; then
-    ~/.composer/vendor/bin/cgr lukecarrier/moodle-componentmgr </dev/null
-fi
-
 echo "preparing site from component in ${source_dir} using project ${project_file}..."
 sed -i -e "s%SOURCE_DIRECTORY%${source_dir}%" "${source_dir}/${project_file}"
 ~/.composer/vendor/bin/componentmgr refresh --verbose \

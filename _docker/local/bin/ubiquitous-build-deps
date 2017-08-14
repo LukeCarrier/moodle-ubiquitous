@@ -1,0 +1,34 @@
+#!/bin/bash
+
+#
+# Ubiquitous Moodle
+#
+# @author Luke Carrier <luke@carrier.im>
+# @copyright 2016 Luke Carrier
+#
+
+set -euo pipefail
+IFS=$'\n\t'
+
+shopt -s extglob
+shopt -s nullglob
+
+echo "installing component manager..."
+bin_dir="${HOME}/.local/bin"
+composer="${bin_dir}/composer"
+composer_bin_dir="${HOME}/.composer/vendor/bin"
+cgr="${composer_bin_dir}/cgr"
+if ! echo $PATH | grep -q "${bin_dir}"; then
+    export PATH="${PATH}:${bin_dir}"
+fi
+mkdir -p "$bin_dir"
+if [ ! -x "$composer" ]; then
+    wget -O "$composer" https://getcomposer.org/composer.phar
+    chmod +x "$composer"
+fi
+if [ ! -x "$cgr" ]; then
+    "$composer" global require consolidation/cgr
+fi
+if [ ! -x ~/.composer/vendor/bin/componentmgr ]; then
+    "$cgr" lukecarrier/moodle-componentmgr </dev/null
+fi
