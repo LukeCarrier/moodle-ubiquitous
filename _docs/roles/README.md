@@ -20,7 +20,7 @@ In Ubiquitous, a role is an individual Salt state with a corresponding Salt grai
 | [`mail-relay`](#mail-relay-mail-relay) | Relay mail to an SMTP server for external delivery |
 | [`mount-cifs`](#cifs-shares-mount-cifs) | Mount remote CIFS shares |
 | [`named`](#name-server-named) | Bind DNS server |
-| [`redis`](#redis-redis)
+| [`redis`](#redis-redis) | Redis master and slave instances |
 | [`salt`](#salt-master-salt) | Salt master for configuration management |
 | [`selenium-hub`](#selenium-hub-selenium-hub) | Selenium grid hub server |
 | [`selenium-node-chrome`](#selenium-chrome-node-selenium-node-chrome) | Selenium grid node (Chrome) |
@@ -162,7 +162,7 @@ Installs the [Bind](https://www.isc.org/downloads/bind/) DNS server, suited for 
 | --- | --- | --- |
 | None | None | None |
 
-Installs and configures a redis server and two redis slave instances.
+Installs and configures a [redis](https://redis.io/) server and two redis slave instances.
 
 ## Salt master (`salt`)
 
