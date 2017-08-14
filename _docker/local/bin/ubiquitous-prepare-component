@@ -30,6 +30,8 @@ if [ -z "$source_dir" ]; then
 fi
 
 echo "preparing site from component in ${source_dir} using project ${project_file}..."
+. ~/.profile.d/nvm.sh
+nvm use 7.5
 sed -i -e "s%SOURCE_DIRECTORY%${source_dir}%" "${source_dir}/${project_file}"
 ~/.composer/vendor/bin/componentmgr refresh --verbose \
         --project-file "${source_dir}/${project_file}"

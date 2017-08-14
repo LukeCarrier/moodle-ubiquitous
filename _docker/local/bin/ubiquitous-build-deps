@@ -32,3 +32,23 @@ fi
 if [ ! -x ~/.composer/vendor/bin/componentmgr ]; then
     "$cgr" lukecarrier/moodle-componentmgr </dev/null
 fi
+
+echo "installing node..."
+nvm_dir="${HOME}/.nvm"
+profile="${HOME}/.profile"
+profile_d="${profile}.d"
+profile_d_nvm="${profile}.d/nvm.sh"
+if [ ! -d "$nvm_dir" ]; then
+    git clone https://github.com/creationix/nvm.git "$nvm_dir"
+fi
+mkdir -p "$profile_d"
+cat <<EOT >"$profile_d_nvm"
+export NVM_DIR="\${HOME}/.nvm"
+[ -s "\${NVM_DIR}/nvm.sh" ] && \. "\${NVM_DIR}/nvm.sh"  # This loads nvm
+[ -s "\${NVM_DIR}/bash_completion" ] && \. "\${NVM_DIR}/bash_completion"
+EOT
+if ! grep -q nvm.sh "$profile"; then
+    echo ". ${profile_d_nvm}" >>"$profile"
+fi
+. "$profile_d_nvm"
+nvm install 7.5
