@@ -33,9 +33,11 @@ moodle.{{ domain }}.nginx.available:
     - user: root
     - group: root
     - mode: 0644
-{% if pillar['systemd']['apply'] %}
     - require:
       - pkg: nginx
+{% if pillar['systemd']['apply'] %}
+    - onchanges_in:
+      - service: app.nginx.restart
 {% endif %}
 
 moodle.{{ domain }}.nginx.enabled:
@@ -45,8 +47,8 @@ moodle.{{ domain }}.nginx.enabled:
     - require:
       - file: moodle.{{ domain }}.nginx.available
 {% if pillar['systemd']['apply'] %}
-    - require_in:
-      - service: nginx.reload
+    - onchanges_in:
+      - service: app.nginx.restart
 {% endif %}
 
 moodle.{{ domain }}.data:
@@ -58,6 +60,15 @@ moodle.{{ domain }}.data:
     - require:
       - file: moodle.{{ domain }}.home
 
+moodle..{{ domain }}.localcache:
+  file.directory:
+    - name: {{ platform['user']['home'] }}/data/localcache
+    - user: {{ platform['user']['name'] }}
+    - group: {{ platform['user']['name'] }}
+    - mode: 0770
+    - require:
+      - file: moodle.{{ domain }}.data
+
 moodle.{{ domain }}.config:
   file.managed:
     - name: {{ platform['user']['home'] }}/config.php
@@ -68,4 +79,7 @@ moodle.{{ domain }}.config:
     - user: {{ platform['user']['name'] }}
     - group: {{ platform['user']['name'] }}
     - mode: 0660
+    - onchanges_in:
+      - service: app.nginx.restart
+      - service: app.php-fpm.restart
 {% endfor %}
