@@ -315,6 +315,20 @@ app-base.{{ domain }}.nginx.log:
     - group: adm
     - mode: 0750
 
+{% for name, contents in platform['nginx'].get('extra', {}).items() %}
+app-base.{{ domain }}.nginx.extra.{{ name }}:
+  file.managed:
+    - name: /etc/nginx/sites-extra/{{ platform['basename'] }}.{{ name }}.conf
+    - contents: {{ contents | yaml_encode }}
+    - user: root
+    - group: root
+    - mode: 0644
+{% if pillar['systemd']['apply'] %}
+    - onchanges_in:
+      - app.nginx.reload
+{% endif %}
+{% endfor %}
+
 app-base.{{ domain }}.php-fpm.log:
   file.directory:
     - name: /var/log/php7.0-fpm/{{ platform['basename'] }}
@@ -343,8 +357,23 @@ app-base.{{ domain }}.{{ instance }}.php-fpm:
 {% endfor %}
 {% endfor %}
 
+app.php-fpm.enable:
+  service.running:
+    - name: php7.0-fpm
+    - enable: True
+    - require:
+      - php.packages
+
 app.php-fpm.restart:
   cmd.run:
     - name: systemctl reload php7.0-fpm || systemctl restart php7.0-fpm
     - require:
       - php.packages
+
+app.nginx.reload:
+  cmd.run:
+    - name: systemctl reload nginx || systemctl restart nginx
+
+app.nginx.restart:
+  cmd.run:
+    - name: systemctl restart nginx
