@@ -39,8 +39,10 @@ asso.{{ domain }}.nginx.available:
     - mode: 0644
     - require:
       - pkg: nginx
-    - watch_in:
-      - service: asso.nginx.reload
+{% if pillar['systemd']['apply'] %}
+    - onchanges_in:
+      - service: app.nginx.restart
+{% endif %}
 
 asso.{{ domain }}.nginx.enabled:
   file.symlink:
@@ -49,21 +51,9 @@ asso.{{ domain }}.nginx.enabled:
     - require:
       - file: asso.{{ domain }}.nginx.available
 {% if pillar['systemd']['apply'] %}
-    - require_in:
-      - service: nginx.reload
+    - onchanges_in:
+      - service: app.nginx.restart
 {% endif %}
-
-# asso.{{ domain }}.saml.package:
-  # archive.extracted:
-  #   - name: {{ platform['user']['home'] }}/
-  #   - source: https://github.com/simplesamlphp/simplesamlphp/releases/download/v1.14.14/simplesamlphp-1.14.14.tar.gz
-  #   - source_hash: 2ff76d8b379141cdd3340dbd8e8bab1605e7a862d4a31657cc37265817463f48
-
-# asso.{{ domain }}.saml.package.rename:
-#   file.rename:
-#     - name: {{ platform['user']['home'] }}/simplesamlphp
-#     - source: {{ platform['user']['home'] }}/simplesamlphp-1.14.14
-#     - force: true
 
 asso.{{ domain }}.saml.config.replace:
   file.managed:
