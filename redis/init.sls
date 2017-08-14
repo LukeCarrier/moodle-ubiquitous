@@ -38,7 +38,7 @@ redis.system.overcommit-memory:
 redis.config.values.set:
   file.managed:
     - name: /etc/redis/redis.conf
-    - source: salt://redis-base/redis.conf.jinja
+    - source: salt://redis/redis.conf.jinja
     - template: jinja
     - watch_in:
       - service: redis.service.reload

@@ -88,4 +88,4 @@ base:
 
   'roles:redis':
     - match: grain
-    - redis-base
+    - redis

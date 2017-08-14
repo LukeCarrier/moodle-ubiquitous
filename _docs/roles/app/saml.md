@@ -29,7 +29,7 @@ All file paths are relative to the SimpleSAMLphp installation directory.
 
 ### Requirements
 
-To fully function and be able to store the browser sessions, the IDP proxy requires a data store to save the data. The `redis-base` role provides a master / slave setup to save the sessions. 
+To fully function and be able to store the browser sessions, the IDP proxy requires a data store to save the data. The `redis` role provides a master / slave setup to save the sessions. 
 
 ## Identity Provider
 

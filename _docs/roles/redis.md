@@ -15,7 +15,7 @@ We are going with a three sentinel instance installation. Currently, the sentine
 
 ## Redis Installation
 
-Both, the redis master and slave instances can be installed with the `redis-base` role. 
+Both, the redis master and slave instances can be installed with the `redis` role. 
 
 ### What the role does
 
