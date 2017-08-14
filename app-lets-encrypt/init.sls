@@ -43,11 +43,9 @@ app-lets-encrypt.{{ domain }}.cert:
 {% endfor %}
 
 app-lets-encrypt.nginx-pre-certbot:
-  service.running:
-    - name: nginx
-    - reload: true
+  cmd.run:
+    - name: systemctl reload nginx || systemctl restart nginx
 
 app-lets-encrypt.nginx-post-certbot:
-  service.running:
-    - name: nginx
-    - reload: true
+  cmd.run:
+    - name: systemctl restart nginx
