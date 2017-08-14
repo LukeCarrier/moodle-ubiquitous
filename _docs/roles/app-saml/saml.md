@@ -2,7 +2,7 @@
 
 [SimpleSAMLphp](https://simplesamlphp.org/docs/stable/) is used to enable a single sign on experience on the learning platforms. Configured as an Identity Provider Proxy, the IDP sits between the learning platforms and the identity providers of our integrated customers to enable a hassle free authentication experience. 
 
-The `app-saml` role contains all necessary configuration steps to create an identity provider proxy (IDP Proxy or `IDPP`) as well as an identity provider (IDP) to test the authentication against. Both, the IDPP and the IPD are using SimpleSAMLphp.
+The `app-saml` role contains all necessary configuration steps to create an identity provider proxy (IDP Proxy or `IDPP`) as well as an identity provider (IDP) to test the authentication against. Both, the IDPP and the IPD are using [SimpleSAMLphp](https://simplesamlphp.org/docs/stable/).
 
 ## IDP Proxy
 
@@ -29,11 +29,12 @@ All file paths are relative to the SimpleSAMLphp installation directory.
 
 ### Requirements
 
-To fully function and be able to store the browser sessions, the IDP proxy requires a data store to save the data. The `redis` role provides a master / slave setup to save the sessions. 
+To fully function and be able to store the browser sessions, the IDP proxy requires a data store to save the data.
+One option to use as data store is Redis, for which we have a [role here](../redis.md).
 
 ## Identity Provider
 
-The identity provider is a SimpleSAMLphp server providing a set of test accounts to verify the authentication process. 
+The identity provider is a SimpleSAMLphp server providing a set of test accounts to verify the authentication process.
 
 ### Configuration files
 

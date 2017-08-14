@@ -2,7 +2,7 @@
 
 Ubiquitous is a multi-purpose Moodle hosting environment.
 
-It fulfils four requirements:
+It fulfils three requirements:
 
 1. _Provisioning_ of machines with either a container or virtualisation platform
     * In local development environments we manage [VirtualBox](https://www.virtualbox.org/) virtual machines with [Vagrant](https://www.vagrantup.com/) (version [1.9.6](https://releases.hashicorp.com/vagrant/1.9.6/) for now, because of [this bug](https://github.com/mitchellh/vagrant/issues/8770)).
@@ -28,7 +28,7 @@ The technical specifications of the environment are as follows:
 * [PostgreSQL 9.5](http://www.postgresql.org/)
 * [Selenium](http://www.seleniumhq.org/) hub and nodes.
 * Single sign on with [SimpleSAMLphp](https://simplesamlphp.org/)
-* Saml data store with [Redis](https://redis.io/)
+* Data caching with [Redis 3](https://redis.io/)
 
 ## License
 
