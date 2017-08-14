@@ -1,3 +1,11 @@
+{% macro redis_boolean(value) %}
+  {% if value %}
+    yes
+  {% else %}
+    no
+  {% endif %}
+{%- endmacro %}
+
 # Redis configuration file example.
 #
 # Note that in order to read the configuration file, Redis must be
@@ -39,7 +47,7 @@
 
 # By default Redis does not run as a daemon. Use 'yes' if you need it.
 # Note that Redis will write a pid file in /var/run/redis.pid when daemonized.
-daemonize {{ pillar['redis']['config']['daemonize'] }}
+daemonize {{ redis_boolean(pillar['redis']['config']['daemonize']) }}
 
 # When running daemonized, Redis writes a pid file in /var/run/redis.pid by
 # default. You can specify a custom pid file location here.
@@ -67,13 +75,6 @@ tcp-backlog {{ pillar['redis']['config']['tcp-backlog'] }}
 #
 # bind 192.168.1.100 10.0.0.1
 bind {{ pillar['redis']['config']['bind'] }}
-
-# Specify the path for the Unix socket that will be used to listen for
-# incoming connections. There is no default, so Redis will not listen
-# on a unix socket when not specified.
-#
-# unixsocket /var/run/redis/redis.sock
-# unixsocketperm 700
 
 # Close the connection after a client is idle for N seconds (0 to disable)
 timeout {{ pillar['redis']['config']['timeout'] }}
@@ -106,16 +107,6 @@ loglevel {{ pillar['redis']['config']['loglevel'] }}
 # Redis to log on the standard output. Note that if you use standard
 # output for logging but daemonize, logs will be sent to /dev/null
 logfile {{ pillar['redis']['config']['logfile'] }}
-
-# To enable logging to the system logger, just set 'syslog-enabled' to yes,
-# and optionally update the other syslog parameters to suit your needs.
-# syslog-enabled no
-
-# Specify the syslog identity.
-# syslog-ident redis
-
-# Specify the syslog facility. Must be USER or between LOCAL0-LOCAL7.
-# syslog-facility local0
 
 # Set the number of databases. The default database is DB 0, you can select
 # a different one on a per-connection basis using SELECT <dbid> where
@@ -161,13 +152,13 @@ save {{ pillar['redis']['config']['save_60'] }}
 # and persistence, you may want to disable this feature so that Redis will
 # continue to work as usual even if there are problems with disk,
 # permissions, and so forth.
-stop-writes-on-bgsave-error {{ pillar['redis']['config']['stop-writes-on-bgsave-error'] }}
+stop-writes-on-bgsave-error {{ redis_boolean(pillar['redis']['config']['stop-writes-on-bgsave-error']) }}
 
 # Compress string objects using LZF when dump .rdb databases?
 # For default that's set to 'yes' as it's almost always a win.
 # If you want to save some CPU in the saving child set it to 'no' but
 # the dataset will likely be bigger if you have compressible values or keys.
-rdbcompression {{ pillar['redis']['config']['rdbcompression'] }}
+rdbcompression {{ redis_boolean(pillar['redis']['config']['rdbcompression']) }}
 
 # Since version 5 of RDB a CRC64 checksum is placed at the end of the file.
 # This makes the format more resistant to corruption but there is a performance
@@ -176,7 +167,7 @@ rdbcompression {{ pillar['redis']['config']['rdbcompression'] }}
 #
 # RDB files created with checksum disabled have a checksum of zero that will
 # tell the loading code to skip the check.
-rdbchecksum {{ pillar['redis']['config']['rdbchecksum'] }}
+rdbchecksum {{ redis_boolean(pillar['redis']['config']['rdbchecksum']) }}
 
 # The filename where to dump the DB
 dbfilename {{ pillar['redis']['config']['dbfilename'] }}
@@ -230,7 +221,7 @@ masterauth {{ pillar['redis']['config']['masterpassword'] }}
 #    an error "SYNC with master in progress" to all the kind of commands
 #    but to INFO and SLAVEOF.
 #
-slave-serve-stale-data {{ pillar['redis']['config']['slave-serve-stale-data'] }}
+slave-serve-stale-data {{ redis_boolean(pillar['redis']['config']['slave-serve-stale-data']) }}
 
 # You can configure a slave instance to accept writes or not. Writing against
 # a slave instance may be useful to store some ephemeral data (because data
@@ -246,7 +237,7 @@ slave-serve-stale-data {{ pillar['redis']['config']['slave-serve-stale-data'] }}
 # such as CONFIG, DEBUG, and so forth. To a limited extent you can improve
 # security of read only slaves using 'rename-command' to shadow all the
 # administrative / dangerous commands.
-slave-read-only {{ pillar['redis']['config']['slave-read-only'] }}
+slave-read-only {{ redis_boolean(pillar['redis']['config']['slave-read-only']) }}
 
 # Replication SYNC strategy: disk or socket.
 #
@@ -277,7 +268,7 @@ slave-read-only {{ pillar['redis']['config']['slave-read-only'] }}
 #
 # With slow disks and fast (large bandwidth) networks, diskless replication
 # works better.
-repl-diskless-sync {{ pillar['redis']['config']['repl-diskless-sync'] }}
+repl-diskless-sync {{ redis_boolean(pillar['redis']['config']['repl-diskless-sync']) }}
 
 # When diskless replication is enabled, it is possible to configure the delay
 # the server waits in order to spawn the child that transfers the RDB via socket
@@ -290,24 +281,6 @@ repl-diskless-sync {{ pillar['redis']['config']['repl-diskless-sync'] }}
 # The delay is specified in seconds, and by default is 5 seconds. To disable
 # it entirely just set it to 0 seconds and the transfer will start ASAP.
 repl-diskless-sync-delay {{ pillar['redis']['config']['repl-diskless-sync-delay'] }}
-
-# Slaves send PINGs to server in a predefined interval. It's possible to change
-# this interval with the repl_ping_slave_period option. The default value is 10
-# seconds.
-#
-# repl-ping-slave-period 10
-
-# The following option sets the replication timeout for:
-#
-# 1) Bulk transfer I/O during SYNC, from the point of view of slave.
-# 2) Master timeout from the point of view of slaves (data, pings).
-# 3) Slave timeout from the point of view of masters (REPLCONF ACK pings).
-#
-# It is important to make sure that this value is greater than the value
-# specified for repl-ping-slave-period otherwise a timeout will be detected
-# every time there is low traffic between the master and the slave.
-#
-# repl-timeout 60
 
 # Disable TCP_NODELAY on the slave socket after SYNC?
 #
@@ -322,29 +295,7 @@ repl-diskless-sync-delay {{ pillar['redis']['config']['repl-diskless-sync-delay'
 # By default we optimize for low latency, but in very high traffic conditions
 # or when the master and slaves are many hops away, turning this to "yes" may
 # be a good idea.
-repl-disable-tcp-nodelay {{ pillar['redis']['config']['repl-disable-tcp-nodelay'] }}
-
-# Set the replication backlog size. The backlog is a buffer that accumulates
-# slave data when slaves are disconnected for some time, so that when a slave
-# wants to reconnect again, often a full resync is not needed, but a partial
-# resync is enough, just passing the portion of data the slave missed while
-# disconnected.
-#
-# The bigger the replication backlog, the longer the time the slave can be
-# disconnected and later be able to perform a partial resynchronization.
-#
-# The backlog is only allocated once there is at least a slave connected.
-#
-# repl-backlog-size 1mb
-
-# After a master has no longer connected slaves for some time, the backlog
-# will be freed. The following option configures the amount of seconds that
-# need to elapse, starting from the time the last slave disconnected, for
-# the backlog buffer to be freed.
-#
-# A value of 0 means to never release the backlog.
-#
-# repl-backlog-ttl 3600
+repl-disable-tcp-nodelay {{ redis_boolean(pillar['redis']['config']['repl-disable-tcp-nodelay']) }}
 
 # The slave priority is an integer number published by Redis in the INFO output.
 # It is used by Redis Sentinel in order to select a slave to promote into a
@@ -360,28 +311,6 @@ repl-disable-tcp-nodelay {{ pillar['redis']['config']['repl-disable-tcp-nodelay'
 #
 # By default the priority is 100.
 slave-priority {{ pillar['redis']['config']['slave-priority'] }}
-
-# It is possible for a master to stop accepting writes if there are less than
-# N slaves connected, having a lag less or equal than M seconds.
-#
-# The N slaves need to be in "online" state.
-#
-# The lag in seconds, that must be <= the specified value, is calculated from
-# the last ping received from the slave, that is usually sent every second.
-#
-# This option does not GUARANTEE that N replicas will accept the write, but
-# will limit the window of exposure for lost writes in case not enough slaves
-# are available, to the specified number of seconds.
-#
-# For example to require at least 3 slaves with a lag <= 10 seconds use:
-#
-# min-slaves-to-write 3
-# min-slaves-max-lag 10
-#
-# Setting one or the other to 0 disables the feature.
-#
-# By default min-slaves-to-write is set to 0 (feature disabled) and
-# min-slaves-max-lag is set to 10.
 
 ################################## SECURITY ###################################
 
@@ -399,97 +328,6 @@ slave-priority {{ pillar['redis']['config']['slave-priority'] }}
 {% if pillar['redis']['config']['password'] is defined %}
 requirepass {{ pillar['redis']['config']['password'] }}
 {% endif %}
-
-# Command renaming.
-#
-# It is possible to change the name of dangerous commands in a shared
-# environment. For instance the CONFIG command may be renamed into something
-# hard to guess so that it will still be available for internal-use tools
-# but not available for general clients.
-#
-# Example:
-#
-# rename-command CONFIG b840fc02d524045429941cc15f59e41cb7be6c52
-#
-# It is also possible to completely kill a command by renaming it into
-# an empty string:
-#
-# rename-command CONFIG ""
-#
-# Please note that changing the name of commands that are logged into the
-# AOF file or transmitted to slaves may cause problems.
-
-################################### LIMITS ####################################
-
-# Set the max number of connected clients at the same time. By default
-# this limit is set to 10000 clients, however if the Redis server is not
-# able to configure the process file limit to allow for the specified limit
-# the max number of allowed clients is set to the current file limit
-# minus 32 (as Redis reserves a few file descriptors for internal uses).
-#
-# Once the limit is reached Redis will close all the new connections sending
-# an error 'max number of clients reached'.
-#
-# maxclients 10000
-
-# Don't use more memory than the specified amount of bytes.
-# When the memory limit is reached Redis will try to remove keys
-# according to the eviction policy selected (see maxmemory-policy).
-#
-# If Redis can't remove keys according to the policy, or if the policy is
-# set to 'noeviction', Redis will start to reply with errors to commands
-# that would use more memory, like SET, LPUSH, and so on, and will continue
-# to reply to read-only commands like GET.
-#
-# This option is usually useful when using Redis as an LRU cache, or to set
-# a hard memory limit for an instance (using the 'noeviction' policy).
-#
-# WARNING: If you have slaves attached to an instance with maxmemory on,
-# the size of the output buffers needed to feed the slaves are subtracted
-# from the used memory count, so that network problems / resyncs will
-# not trigger a loop where keys are evicted, and in turn the output
-# buffer of slaves is full with DELs of keys evicted triggering the deletion
-# of more keys, and so forth until the database is completely emptied.
-#
-# In short... if you have slaves attached it is suggested that you set a lower
-# limit for maxmemory so that there is some free RAM on the system for slave
-# output buffers (but this is not needed if the policy is 'noeviction').
-#
-# maxmemory <bytes>
-
-# MAXMEMORY POLICY: how Redis will select what to remove when maxmemory
-# is reached. You can select among five behaviors:
-#
-# volatile-lru -> remove the key with an expire set using an LRU algorithm
-# allkeys-lru -> remove any key according to the LRU algorithm
-# volatile-random -> remove a random key with an expire set
-# allkeys-random -> remove a random key, any key
-# volatile-ttl -> remove the key with the nearest expire time (minor TTL)
-# noeviction -> don't expire at all, just return an error on write operations
-#
-# Note: with any of the above policies, Redis will return an error on write
-#       operations, when there are no suitable keys for eviction.
-#
-#       At the date of writing these commands are: set setnx setex append
-#       incr decr rpush lpush rpushx lpushx linsert lset rpoplpush sadd
-#       sinter sinterstore sunion sunionstore sdiff sdiffstore zadd zincrby
-#       zunionstore zinterstore hset hsetnx hmset hincrby incrby decrby
-#       getset mset msetnx exec sort
-#
-# The default is:
-#
-# maxmemory-policy noeviction
-
-# LRU and minimal TTL algorithms are not precise algorithms but approximated
-# algorithms (in order to save memory), so you can tune it for speed or
-# accuracy. For default Redis will check five keys and pick the one that was
-# used less recently, you can change the sample size using the following
-# configuration directive.
-#
-# The default of 5 produces good enough results. 10 Approximates very closely
-# true LRU but costs a bit more CPU. 3 is very fast but not very accurate.
-#
-# maxmemory-samples 5
 
 ############################## APPEND ONLY MODE ###############################
 
@@ -511,7 +349,7 @@ requirepass {{ pillar['redis']['config']['password'] }}
 #
 # Please check http://redis.io/topics/persistence for more information.
 
-appendonly {{ pillar['redis']['config']['appendonly'] }}
+appendonly {{ redis_boolean(pillar['redis']['config']['appendonly']) }}
 
 # The name of the append only file (default: "appendonly.aof")
 
@@ -540,9 +378,7 @@ appendfilename {{ pillar['redis']['config']['appendfilename'] | yaml_dquote }}
 #
 # If unsure, use "everysec".
 
-# appendfsync always
 appendfsync {{ pillar['redis']['config']['appendfsync'] }}
-# appendfsync no
 
 # When the AOF fsync policy is set to always or everysec, and a background
 # saving process (a background save or AOF log background rewriting) is
@@ -563,7 +399,7 @@ appendfsync {{ pillar['redis']['config']['appendfsync'] }}
 # If you have latency problems turn this to "yes". Otherwise leave it as
 # "no" that is the safest pick from the point of view of durability.
 
-no-appendfsync-on-rewrite {{ pillar['redis']['config']['no-appendfsync-on-rewrite'] }}
+no-appendfsync-on-rewrite {{ redis_boolean(pillar['redis']['config']['no-appendfsync-on-rewrite']) }}
 
 # Automatic rewrite of the append only file.
 # Redis is able to automatically rewrite the log file implicitly calling
@@ -607,7 +443,7 @@ auto-aof-rewrite-min-size {{ pillar['redis']['config']['auto-aof-rewrite-min-siz
 # the server will still exit with an error. This option only applies when
 # Redis will try to read more data from the AOF file but not enough bytes
 # will be found.
-aof-load-truncated {{ pillar['redis']['config']['aof-load-truncated'] }}
+aof-load-truncated {{ redis_boolean(pillar['redis']['config']['aof-load-truncated']) }}
 
 ################################ LUA SCRIPTING  ###############################
 
@@ -626,114 +462,6 @@ aof-load-truncated {{ pillar['redis']['config']['aof-load-truncated'] }}
 #
 # Set it to 0 or a negative value for unlimited execution without warnings.
 lua-time-limit {{ pillar['redis']['config']['lua-time-limit'] }}
-
-################################ REDIS CLUSTER  ###############################
-#
-# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# WARNING EXPERIMENTAL: Redis Cluster is considered to be stable code, however
-# in order to mark it as "mature" we need to wait for a non trivial percentage
-# of users to deploy it in production.
-# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#
-# Normal Redis instances can't be part of a Redis Cluster; only nodes that are
-# started as cluster nodes can. In order to start a Redis instance as a
-# cluster node enable the cluster support uncommenting the following:
-#
-# cluster-enabled yes
-
-# Every cluster node has a cluster configuration file. This file is not
-# intended to be edited by hand. It is created and updated by Redis nodes.
-# Every Redis Cluster node requires a different cluster configuration file.
-# Make sure that instances running in the same system do not have
-# overlapping cluster configuration file names.
-#
-# cluster-config-file nodes-6379.conf
-
-# Cluster node timeout is the amount of milliseconds a node must be unreachable
-# for it to be considered in failure state.
-# Most other internal time limits are multiple of the node timeout.
-#
-# cluster-node-timeout 15000
-
-# A slave of a failing master will avoid to start a failover if its data
-# looks too old.
-#
-# There is no simple way for a slave to actually have a exact measure of
-# its "data age", so the following two checks are performed:
-#
-# 1) If there are multiple slaves able to failover, they exchange messages
-#    in order to try to give an advantage to the slave with the best
-#    replication offset (more data from the master processed).
-#    Slaves will try to get their rank by offset, and apply to the start
-#    of the failover a delay proportional to their rank.
-#
-# 2) Every single slave computes the time of the last interaction with
-#    its master. This can be the last ping or command received (if the master
-#    is still in the "connected" state), or the time that elapsed since the
-#    disconnection with the master (if the replication link is currently down).
-#    If the last interaction is too old, the slave will not try to failover
-#    at all.
-#
-# The point "2" can be tuned by user. Specifically a slave will not perform
-# the failover if, since the last interaction with the master, the time
-# elapsed is greater than:
-#
-#   (node-timeout * slave-validity-factor) + repl-ping-slave-period
-#
-# So for example if node-timeout is 30 seconds, and the slave-validity-factor
-# is 10, and assuming a default repl-ping-slave-period of 10 seconds, the
-# slave will not try to failover if it was not able to talk with the master
-# for longer than 310 seconds.
-#
-# A large slave-validity-factor may allow slaves with too old data to failover
-# a master, while a too small value may prevent the cluster from being able to
-# elect a slave at all.
-#
-# For maximum availability, it is possible to set the slave-validity-factor
-# to a value of 0, which means, that slaves will always try to failover the
-# master regardless of the last time they interacted with the master.
-# (However they'll always try to apply a delay proportional to their
-# offset rank).
-#
-# Zero is the only value able to guarantee that when all the partitions heal
-# the cluster will always be able to continue.
-#
-# cluster-slave-validity-factor 10
-
-# Cluster slaves are able to migrate to orphaned masters, that are masters
-# that are left without working slaves. This improves the cluster ability
-# to resist to failures as otherwise an orphaned master can't be failed over
-# in case of failure if it has no working slaves.
-#
-# Slaves migrate to orphaned masters only if there are still at least a
-# given number of other working slaves for their old master. This number
-# is the "migration barrier". A migration barrier of 1 means that a slave
-# will migrate only if there is at least 1 other working slave for its master
-# and so forth. It usually reflects the number of slaves you want for every
-# master in your cluster.
-#
-# Default is 1 (slaves migrate only if their masters remain with at least
-# one slave). To disable migration just set it to a very large value.
-# A value of 0 can be set but is useful only for debugging and dangerous
-# in production.
-#
-# cluster-migration-barrier 1
-
-# By default Redis Cluster nodes stop accepting queries if they detect there
-# is at least an hash slot uncovered (no available node is serving it).
-# This way if the cluster is partially down (for example a range of hash slots
-# are no longer covered) all the cluster becomes, eventually, unavailable.
-# It automatically returns available as soon as all the slots are covered again.
-#
-# However sometimes you want the subset of the cluster which is working,
-# to continue to accept queries for the part of the key space that is still
-# covered. In order to do so, just set the cluster-require-full-coverage
-# option to no.
-#
-# cluster-require-full-coverage yes
-
-# In order to setup your cluster make sure to read the documentation
-# available at http://redis.io web site.
 
 ################################## SLOW LOG ###################################
 
@@ -885,7 +613,7 @@ hll-sparse-max-bytes {{ pillar['redis']['config']['hll-sparse-max-bytes'] }}
 #
 # use "activerehashing yes" if you don't have such hard requirements but
 # want to free memory asap when possible.
-activerehashing {{ pillar['redis']['config']['activerehashing'] }}
+activerehashing {{ redis_boolean(pillar['redis']['config']['activerehashing']) }}
 
 # The client output buffer limits can be used to force disconnection of clients
 # that are not reading data from the server fast enough for some reason (a
@@ -945,4 +673,4 @@ hz {{ pillar['redis']['config']['hz'] }}
 # the file will be fsync-ed every 32 MB of data generated. This is useful
 # in order to commit the file to the disk more incrementally and avoid
 # big latency spikes.
-aof-rewrite-incremental-fsync {{ pillar['redis']['config']['aof-rewrite-incremental-fsync'] }}
+aof-rewrite-incremental-fsync {{ redis_boolean(pillar['redis']['config']['aof-rewrite-incremental-fsync']) }}
