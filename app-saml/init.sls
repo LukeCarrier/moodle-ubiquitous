@@ -5,6 +5,9 @@
 # @copyright 2017 Sascha Peter
 #
 
+{% from 'app-lets-encrypt/macros.sls'
+    import lets_encrypt_platform, lets_encrypt_restarts %}
+
 include:
   - base
   - app-base
@@ -201,9 +204,13 @@ asso.{{ domain }}.saml.idp.exampleauth.enable:
     - group: www-data
     - mode: 0644
 {% endif %}
+
+{{ lets_encrypt_platform('saml', domain, platform) }}
 {% endfor %}
 
 asso.nginx.reload:
   service.running:
     - name: nginx
     - reload: true
+
+{{ lets_encrypt_restarts('saml') }}

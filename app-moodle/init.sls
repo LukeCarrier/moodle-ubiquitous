@@ -5,6 +5,9 @@
 # @copyright 2016 Luke Carrier
 #
 
+{% from 'app-lets-encrypt/macros.sls'
+    import lets_encrypt_platform, lets_encrypt_restarts %}
+
 include:
   - base
   - app-base
@@ -82,4 +85,8 @@ moodle.{{ domain }}.config:
     - onchanges_in:
       - service: app.nginx.restart
       - service: app.php-fpm.restart
+
+{{ lets_encrypt_platform('moodle', domain, platform) }}
 {% endfor %}
+
+{{ lets_encrypt_restarts('moodle') }}
