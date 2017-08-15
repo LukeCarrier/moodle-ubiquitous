@@ -12,6 +12,7 @@
         * [Error pages](roles/app/error-pages.md)
         * [GoCD agent](roles/app/gocd-agent.md)
         * [SAML](roles/app-saml/saml.md)
+        * [Moodle](roles/app-moodle/moodle.md)
     * [Redis](roles/redis.md)
     * [GoCD](roles/gocd.md)
     * [Salt](roles/salt.md)

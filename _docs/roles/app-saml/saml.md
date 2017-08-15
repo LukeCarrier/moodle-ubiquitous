@@ -1,4 +1,4 @@
-# SSO
+# Saml
 
 [SimpleSAMLphp](https://simplesamlphp.org/docs/stable/) is used to enable a single sign on experience on the learning platforms. Configured as an Identity Provider Proxy, the IDP sits between the learning platforms and the identity providers of our integrated customers to enable a hassle free authentication experience. 
 
@@ -16,16 +16,16 @@ The IDP proxy is both, service provider (to the identity provider) and identity 
 
 All file paths are relative to the SimpleSAMLphp installation directory.
 
-- `config/authsources.php`
-- `config/module_redis.php`
-- service provider ssl `.crt` and `.pem` under `cert/`
-- identity provider ssl `.crt` and `.pem` under `cert/`
-- `metadata/saml20-idp-hosted.php`
-- `metadata/saml20-idp-remote.php`
-- `metadata/saml20-sp-remote.php`
-- `enable` files to enable the exampleauth and redis modules
-  - `modules/exampleauth/enable`
-  - `modules/redis/enable`
+* `config/authsources.php`
+* `config/module_redis.php`
+* service provider ssl `.crt` and `.pem` under `cert/`
+* identity provider ssl `.crt` and `.pem` under `cert/`
+* `metadata/saml20-idp-hosted.php`
+* `metadata/saml20-idp-remote.php`
+* `metadata/saml20-sp-remote.php`
+* `enable` files to enable the exampleauth and redis modules
+    * `modules/exampleauth/enable`
+    * `modules/redis/enable`
 
 ### Requirements
 
@@ -40,10 +40,10 @@ The identity provider is a SimpleSAMLphp server providing a set of test accounts
 
 All file paths are relative to the SimpleSAMLphp installation directory.
 
-- `config/authsources.php`
-- identity provider ssl `.crt` and `.pem` under `cert/`
-- `metadata/saml20-sp-remote.php`
-- `modules/exampleauth/enalbe`
+* `config/authsources.php`
+* identity provider ssl `.crt` and `.pem` under `cert/`
+* `metadata/saml20-sp-remote.php`
+* `modules/exampleauth/enalbe`
 
 ### Credentials
 
@@ -51,7 +51,7 @@ Test credentials are stored in the `authsources.php` file in the form of an arra
 
 The array is keyed with the `username` and `password`. The values of that key is an array with the following information:
 
-- Login
-- FirstName
-- LastName
-- Email
+* `Login`
+* `FirstName`
+* `LastName`
+* `Email`

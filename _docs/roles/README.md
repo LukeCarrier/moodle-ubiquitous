@@ -5,11 +5,12 @@ In Ubiquitous, a role is an individual Salt state with a corresponding Salt grai
 | Role | Description |
 | --- | --- |
 | [`app`](#application-server-app) | Application server (PHP, nginx) |
-| [`app-debug`](#with-debugging-support-app-debug) | Behat acceptance testing environment and Xdebug debugging and profiling |
+| [`app-debug`](#with-debugging-support-app-debug) | Xdebug debugging and profiling |
 | [`app-default-release`](#with-default-release-app-default-release) | Default release configuration for development and integration purposes |
 | [`app-error-pages`](#with-custom-error-pages-app-error-pages) | Custom HTTP error pages |
 | [`app-gocd-agent`](#with-bluegreen-deployments-app-gocd-agent) | Add-on for application server providing downtime-free deployment scripts for use with GoCD |
 | [`app-saml`](#idp-proxy-and-idp-app-saml) | Identity Provider Proxy and test Identity Provider |
+| [`app-moodle-debug`](#moodle-debugging) | Behat acceptance testing environment
 | [`av-sophos`](#sophos-antivirus-av-sophos) | Sophos Antivirus scanner and realtime protection components |
 | [`certbot`](#automated-ssl-certificates-certbot) | Automated SSL certificate issuance and renewal over ACME with Lets Encrypt |
 | [`db-pgsql`](#postgresql-database-db-pgsql) | PostgreSQL database server |
@@ -42,7 +43,7 @@ Application servers provide the frontend of the environment, serving the site th
 | --- | --- | --- |
 | `app-base` | None | None |
 
-Adds an alias for the Moodle environment (required for Behat), provides easy access to the Behat fail dump and enables remote debugging and profiling using Xdebug.
+Enables remote debugging and profiling using Xdebug.
 
 ### With default release (`app-default-release`)
 
@@ -75,6 +76,22 @@ Extends the `app` role with a series of scripts and configuration for [GoCD](htt
 | `app-base` | None | None |
 
 Installs and configures a SimpleSAMLphp identity provider proxy (and optional identity provider).
+
+## Moodle (`app-moodle`)
+
+| Dependencies | Dependants | Conflicts |
+| --- | --- | --- |
+| `app-base` | None | None |
+
+Installs and configures a Moodle site.
+
+## Moodle debugging (`app-moodle-debug`)
+
+| Dependencies | Dependants | Conflicts |
+| --- | --- | --- |
+| `app-debug` | None | None |
+
+Extends the `app-debug` role with moodle specific configuration. Adds an alias for the Moodle environment (required for Behat), provides easy access to the Behat fail dump.
 
 ## Sophos Antivirus (`av-sophos`)
 
