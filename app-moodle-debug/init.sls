@@ -6,12 +6,13 @@
 #
 
 include:
+- app-moodle
 - app-debug
 
 {% for domain, platform in salt['pillar.get']('platforms', {}).items() %}
 {% set behat_faildump = platform['user']['home'] + '/data/behat-faildump' %}
 
-app-debug.{{ domain }}.behat-faildump:
+app-moodle-debug.{{ domain }}.behat-faildump:
   file.directory:
   - name: {{ behat_faildump }}
   - user: {{ platform['user']['name'] }}
@@ -19,7 +20,7 @@ app-debug.{{ domain }}.behat-faildump:
   - mode: 0770
 
 {% if pillar['acl']['apply'] %}
-app-debug.{{ domain }}.behat-faildump.acl:
+app-moodle-debug.{{ domain }}.behat-faildump.acl:
   acl.present:
   - name: {{ behat_faildump }}
   - acl_type: user
@@ -29,7 +30,7 @@ app-debug.{{ domain }}.behat-faildump.acl:
     - app-debug.{{ domain }}.behat-faildump
 {% endif %}
 
-app-debug.{{ domain }}.nginx:
+app-moodle-debug.{{ domain }}.nginx:
   file.managed:
     - name: /etc/nginx/sites-extra/{{ platform['basename'] }}.debug.conf
     - source: salt://app-debug/nginx/platform.debug.conf.jinja
@@ -41,6 +42,10 @@ app-debug.{{ domain }}.nginx:
     - mode: 0644
 {% if pillar['systemd']['apply'] %}
     - onchanges_in:
-      - app-debug.nginx.reload
+      - app-moodle-debug.nginx.reload
 {% endif %}
 {% endfor %}
+
+app-moodle-debug.nginx.reload:
+  cmd.run:
+    - name: systemctl reload nginx || systemctl restart nginx
