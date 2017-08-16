@@ -31,6 +31,7 @@ server {
 {% endfor %}
 
 server {
+    listen 80
     server_name {{ domain }}{% if 'aliases' in platform %} {{ platform['aliases'] | join(' ') }}{% endif %};
 
     root {{ platform['user']['home'] }}/current;
@@ -63,6 +64,17 @@ server {
 {%- for lane in platform['nginx']['lanes'].values() -%}
 {{ lane_location(lane) }}
 {%- endfor %}
+{% else %}
+    location ~ ^(.+\.php)(/|$) {
+        if ($platform_maintenance != 0) {
+            return 503;
+        }
+
+        include snippets/fastcgi-php.conf;
+        fastcgi_param SCRIPT_FILENAME $document_root$1;
+        fastcgi_pass unix:/var/run/php/php7.0-fpm-{{ platform['basename'] }}.sock;
+    }
+{%- endif %}
 
     location / {
 {% if ssl and salt['file.file_exists']('/etc/letsencrypt/live/' + domain + '/fullchain.pem') %}
