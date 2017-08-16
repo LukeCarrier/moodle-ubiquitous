@@ -60,7 +60,7 @@ moodle.{{ domain }}.data:
     - require:
       - file: moodle.{{ domain }}.home
 
-moodle..{{ domain }}.localcache:
+moodle.{{ domain }}.localcache:
   file.directory:
     - name: {{ platform['user']['home'] }}/data/localcache
     - user: {{ platform['user']['name'] }}

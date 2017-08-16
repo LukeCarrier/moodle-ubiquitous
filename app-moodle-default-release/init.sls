@@ -6,6 +6,7 @@
 #
 
 include:
+  - app-moodle
   - app-default-release
 
 {% for domain, platform in salt['pillar.get']('platforms', {}).items() %}
