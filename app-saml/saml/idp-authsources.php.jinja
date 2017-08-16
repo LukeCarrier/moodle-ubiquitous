@@ -37,17 +37,15 @@ $config = array(
         //'remember.username.enabled' => FALSE,
         //'remember.username.checked' => FALSE,
 
-        {{ platform['saml']['test_user_creds_01'] | yaml_squote }} => array(
-            'Login' => array({{ platform['saml']['test_user_login_01'] | yaml_squote }}),
-            'FirstName' => array({{ platform['saml']['test_user_firstname_01'] | yaml_squote }}),
-            'LastName' => array({{ platform['saml']['test_user_lastname_01'] | yaml_squote }}),
-            'Email' => array({{ platform['saml']['test_user_email_01'] | yaml_squote }}),
+        {% for user in platform['saml']['testusers'].itervalues() %}
+
+        {{ user['credentials'] | yaml_squote }} => array(
+            'Login' => array({{ user['login'] | yaml_squote }}),
+            'FirstName' => array({{ user['firstname'] | yaml_squote }}),
+            'LastName' => array({{ user['lastname'] | yaml_squote }}),
+            'Email' => array({{ user['email'] | yaml_squote }}),
         ),
-        {{ platform['saml']['test_user_creds_02'] | yaml_squote }} => array(
-            'Login' => array({{ platform['saml']['test_user_login_02'] | yaml_squote }}),
-            'FirstName' => array({{ platform['saml']['test_user_firstname_02'] | yaml_squote }}),
-            'LastName' => array({{ platform['saml']['test_user_lastname_02'] | yaml_squote }}),
-            'Email' => array({{ platform['saml']['test_user_email_02'] | yaml_squote }}),
-        ),
+
+        {% endfor %}
     ),
 );
