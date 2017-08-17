@@ -19,8 +19,8 @@ app-default-release.{{ domain }}.release:
     - group: {{ platform ['user']['name'] }}
     - mode: 0755
     - require:
-      - user: app.{{ domain }}.user
-      - file: app.{{ domain }}.home
+      - user: app-base.{{ domain }}.user
+      - file: app-base.{{ domain }}.home
 
 app-default-release.{{ domain }}.current:
   file.symlink:
