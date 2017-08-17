@@ -58,9 +58,28 @@ asso.{{ domain }}.nginx.enabled:
       - service: app.nginx.restart
 {% endif %}
 
+{{ platform['user']['home'] }}/conf/config:
+  file.directory:
+    - user: asso
+    - group: www-data
+    - mode: 0660
+    - makedirs: True
+
+{{ platform['user']['home'] }}/conf/cert:
+  file.directory:
+    - user: asso
+    - group: www-data
+    - mode: 0660
+
+{{ platform['user']['home'] }}/conf/metadata:
+  file.directory:
+    - user: asso
+    - group: www-data
+    - mode: 0660
+
 asso.{{ domain }}.saml.config.replace:
   file.managed:
-    - name: {{ platform['user']['home'] }}/releases/simplesamlphp/config/config.php
+    - name: {{ platform['user']['home'] }}/conf/config/config.php
     - source: salt://app-saml/saml/config.php.jinja
     - template: jinja
     - context:
@@ -68,11 +87,10 @@ asso.{{ domain }}.saml.config.replace:
     - user: {{ platform['user']['name'] }}
     - group: {{ pillar['nginx']['user'] }}
 
-{% if platform['saml']['role'] == 'idpp' %}
-asso.{{ domain }}.saml.idpp.authsources.place:
+asso.{{ domain }}.saml.{{ platform['saml']['role'] }}.authsources.place:
   file.managed:
-    - name: {{ platform['user']['home'] }}/releases/simplesamlphp/config/authsources.php
-    - source: salt://app-saml/saml/idpproxy-authsources.php.jinja
+    - name: {{ platform['user']['home'] }}/conf/config/authsources.php
+    - source: salt://app-saml/saml/{{ platform['saml']['role'] }}-authsources.php.jinja
     - template: jinja
     - context:
       platform: {{ platform }}
@@ -80,9 +98,10 @@ asso.{{ domain }}.saml.idpp.authsources.place:
     - group: www-data
     - mode: 0644
 
+{% if platform['saml']['role'] == 'idpp' %}
 asso.{{ domain }}.saml.idpp.sp.cert.place:
   file.managed:
-    - name: {{ platform['user']['home'] }}/releases/simplesamlphp/cert/sp.crt
+    - name: {{ platform['user']['home'] }}/conf/cert/sp.crt
     - contents_pillar: platforms:{{ domain }}:saml:sp_cert
     - user: asso
     - group: www-data
@@ -90,7 +109,7 @@ asso.{{ domain }}.saml.idpp.sp.cert.place:
 
 asso.{{ domain }}.saml.idpp.sp.pem.place:
   file.managed:
-    - name: {{ platform['user']['home'] }}/releases/simplesamlphp/cert/sp.pem
+    - name: {{ platform['user']['home'] }}/conf/cert/sp.pem
     - contents_pillar: platforms:{{ domain }}:saml:sp_pem
     - user: asso
     - group: www-data
@@ -98,7 +117,7 @@ asso.{{ domain }}.saml.idpp.sp.pem.place:
 
 asso.{{ domain }}.saml.idpp.idp.cert.place:
   file.managed:
-    - name: {{ platform['user']['home'] }}/releases/simplesamlphp/cert/server.crt
+    - name: {{ platform['user']['home'] }}/conf/cert/server.crt
     - contents_pillar: platforms:{{ domain }}:saml:idp_cert
     - user: asso
     - group: www-data
@@ -106,7 +125,7 @@ asso.{{ domain }}.saml.idpp.idp.cert.place:
 
 asso.{{ domain }}.saml.idpp.idp.pem.place:
   file.managed:
-    - name: {{ platform['user']['home'] }}/releases/simplesamlphp/cert/server.pem
+    - name: {{ platform['user']['home'] }}/conf/cert/server.pem
     - contents_pillar: platforms:{{ domain }}:saml:idp_pem
     - user: asso
     - group: www-data
@@ -114,7 +133,7 @@ asso.{{ domain }}.saml.idpp.idp.pem.place:
 
 asso.{{ domain }}.saml.idp.metadata.idp-hosted.place:
   file.managed:
-    - name: {{ platform['user']['home'] }}/releases/simplesamlphp/metadata/saml20-idp-hosted.php
+    - name: {{ platform['user']['home'] }}/conf/metadata/saml20-idp-hosted.php
     - contents_pillar: platforms:{{ domain }}:saml:meta_saml20_idp_hosted
     - user: asso
     - group: www-data
@@ -122,7 +141,7 @@ asso.{{ domain }}.saml.idp.metadata.idp-hosted.place:
 
 asso.{{ domain }}.saml.idpp.metadata.idp-remote.place:
   file.managed:
-    - name: {{ platform['user']['home'] }}/releases/simplesamlphp/metadata/saml20-idp-remote.php
+    - name: {{ platform['user']['home'] }}/conf/metadata/saml20-idp-remote.php
     - contents_pillar: platforms:{{ domain }}:saml:meta_saml20_idp_remote
     - user: asso
     - group: www-data
@@ -130,7 +149,7 @@ asso.{{ domain }}.saml.idpp.metadata.idp-remote.place:
 
 asso.{{ domain }}.saml.idpp.metadata.sp-remote.place:
   file.managed:
-    - name: {{ platform['user']['home'] }}/releases/simplesamlphp/metadata/saml20-sp-remote.php
+    - name: {{ platform['user']['home'] }}/conf/metadata/saml20-sp-remote.php
     - contents_pillar: platforms:{{ domain }}:saml:meta_saml20_sp_remote
     - user: asso
     - group: www-data
@@ -138,40 +157,29 @@ asso.{{ domain }}.saml.idpp.metadata.sp-remote.place:
 
 asso.{{ domain}}.saml.idpp.redis.config.place:
   file.managed:
-    - name: {{ platform['user']['home'] }}/releases/simplesamlphp/config/module_redis.php
+    - name: {{ platform['user']['home'] }}/conf/config/module_redis.php
     - contents_pillar: platforms:{{ domain }}:saml:config_redis
     - user: asso
     - group: www-data
     - mode: 0660
 
-asso.{{ domain }}.saml.idpp.exampleauth.enable:
-  file.managed:
-    - name: {{ platform['user']['home'] }}/releases/simplesamlphp/modules/exampleauth/enable
-    - source: None
-    - user: asso
-    - group: www-data
-    - mode: 0644
+# asso.{{ domain }}.saml.idpp.exampleauth.enable:
+#   file.managed:
+#     - name: {{ platform['user']['home'] }}/releases/simplesamlphp/modules/exampleauth/enable
+#     - source: None
+#     - user: asso
+#     - group: www-data
+#     - mode: 0644
 
-asso.{{ domain }}.saml.idpp.redis.enable:
-  file.managed:
-    - name: {{ platform['user']['home'] }}/releases/simplesamlphp/modules/redis/enable
-    - source: None
-    - user: asso
-    - group: www-data
-    - mode: 0644
+# asso.{{ domain }}.saml.idpp.redis.enable:
+#   file.managed:
+#     - name: {{ platform['user']['home'] }}/releases/simplesamlphp/modules/redis/enable
+#     - source: None
+#     - user: asso
+#     - group: www-data
+#     - mode: 0644
 
 {% elif platform['saml']['role'] == 'idp' %}
-asso.{{ domain }}.saml.idp.authsources.place:
-  file.managed:
-    - name: {{ platform['user']['home'] }}/releases/simplesamlphp/config/authsources.php
-    - source: salt://app-saml/saml/idp-authsources.php.jinja
-    - template: jinja
-    - context:
-      platform: {{ platform }}
-    - user: asso
-    - group: www-data
-    - mode: 0644
-
 asso.{{ domain }}.saml.idp.cert.place:
   file.managed:
     - name: {{ platform['user']['home'] }}/releases/simplesamlphp/cert/saml.crt
