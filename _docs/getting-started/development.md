@@ -68,6 +68,12 @@ $ vagrant ssh --command 'sudo salt salt state.apply'
 $ vagrant ssh --command "sudo salt -G 'group:dev' state.apply"
 ```
 
+Make sure that your changes are being synced with the salt master:
+
+```
+$ vagrant auto-sync salt
+```
+
 The above may take some time to complete. Once the above commands complete, the following services should now be available to you:
 
 * [Moodle](http://192.168.120.50/) --- your development environment
