@@ -27,6 +27,13 @@ All file paths are relative to the SimpleSAMLphp installation directory.
     * `modules/exampleauth/enable`
     * `modules/redis/enable`
 
+#### Modules
+
+Modules can be configured through the salt pillar. The following modules currently have a templated configuration: 
+
+* exampleauth
+* redis
+
 ### Requirements
 
 To fully function and be able to store the browser sessions, the IDP proxy requires a data store to save the data.
@@ -43,7 +50,13 @@ All file paths are relative to the SimpleSAMLphp installation directory.
 * `config/authsources.php`
 * identity provider ssl `.crt` and `.pem` under `cert/`
 * `metadata/saml20-sp-remote.php`
-* `modules/exampleauth/enalbe`
+* `modules/exampleauth/enable`
+
+#### Modules
+
+Modules can be configured through the salt pillar. The following modules currently have a templated configuration: 
+
+* exampleauth
 
 ### Credentials
 

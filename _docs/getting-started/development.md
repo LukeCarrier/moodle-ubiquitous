@@ -51,6 +51,14 @@ You'll need to structure your Moodle development environment appropriately. Ubiq
 └── Ubiquitous
 ```
 
+For the single sign-on it will expect an additional folder `../SimpleSAMLphp` with the SimpleSAMLphp source code: 
+
+```
+.
+└── SimpleSAMLphp
+```
+
+
 Start up all of the machines necessary for a testing environment:
 
 ```
@@ -68,7 +76,7 @@ $ vagrant ssh --command 'sudo salt salt state.apply'
 $ vagrant ssh --command "sudo salt -G 'group:dev' state.apply"
 ```
 
-Make sure that your changes are being synced with the salt master:
+Make sure that your changes are being synced automatically with the salt master:
 
 ```
 $ vagrant auto-sync salt
