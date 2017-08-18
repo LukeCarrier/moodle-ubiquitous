@@ -41,7 +41,7 @@ echo "installing release files from source '${source}' to destination '${destina
 cp -r "$source" "$destination"
 
 echo "installing configuration..."
-cp "${platform_home}/config.php" "${destination}/config.php"
+"$platform_install_config_script" --domain "$domain" --destination "$destination"
 
 echo "fixing ownership..."
 chown -R "${platform_user}:${platform_user}" "${destination}"
