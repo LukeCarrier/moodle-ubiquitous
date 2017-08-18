@@ -60,22 +60,22 @@ asso.{{ domain }}.nginx.enabled:
 
 {{ platform['user']['home'] }}/conf/config:
   file.directory:
-    - user: asso
+    - user: {{ platform['user']['name'] }}
     - group: www-data
-    - mode: 0660
+    - mode: 0770
     - makedirs: True
 
 {{ platform['user']['home'] }}/conf/cert:
   file.directory:
-    - user: asso
+    - user: {{ platform['user']['name'] }}
     - group: www-data
-    - mode: 0660
+    - mode: 0770
 
 {{ platform['user']['home'] }}/conf/metadata:
   file.directory:
-    - user: asso
+    - user: {{ platform['user']['name'] }}
     - group: www-data
-    - mode: 0660
+    - mode: 0770
 
 asso.{{ domain }}.saml.config.replace:
   file.managed:
@@ -94,7 +94,7 @@ asso.{{ domain }}.saml.{{ platform['saml']['role'] }}.authsources.place:
     - template: jinja
     - context:
       platform: {{ platform }}
-    - user: asso
+    - user: {{ platform['user']['name'] }}
     - group: www-data
     - mode: 0644
 
@@ -103,7 +103,7 @@ asso.{{ domain }}.saml.idpp.sp.cert.place:
   file.managed:
     - name: {{ platform['user']['home'] }}/conf/cert/sp.crt
     - contents_pillar: platforms:{{ domain }}:saml:sp_cert
-    - user: asso
+    - user: {{ platform['user']['name'] }}
     - group: www-data
     - mode: 0660
 
@@ -111,7 +111,7 @@ asso.{{ domain }}.saml.idpp.sp.pem.place:
   file.managed:
     - name: {{ platform['user']['home'] }}/conf/cert/sp.pem
     - contents_pillar: platforms:{{ domain }}:saml:sp_pem
-    - user: asso
+    - user: {{ platform['user']['name'] }}
     - group: www-data
     - mode: 0660
 
@@ -119,7 +119,7 @@ asso.{{ domain }}.saml.idpp.idp.cert.place:
   file.managed:
     - name: {{ platform['user']['home'] }}/conf/cert/server.crt
     - contents_pillar: platforms:{{ domain }}:saml:idp_cert
-    - user: asso
+    - user: {{ platform['user']['name'] }}
     - group: www-data
     - mode: 0660
 
@@ -127,7 +127,7 @@ asso.{{ domain }}.saml.idpp.idp.pem.place:
   file.managed:
     - name: {{ platform['user']['home'] }}/conf/cert/server.pem
     - contents_pillar: platforms:{{ domain }}:saml:idp_pem
-    - user: asso
+    - user: {{ platform['user']['name'] }}
     - group: www-data
     - mode: 0660
 
@@ -135,7 +135,7 @@ asso.{{ domain }}.saml.idp.metadata.idp-hosted.place:
   file.managed:
     - name: {{ platform['user']['home'] }}/conf/metadata/saml20-idp-hosted.php
     - contents_pillar: platforms:{{ domain }}:saml:meta_saml20_idp_hosted
-    - user: asso
+    - user: {{ platform['user']['name'] }}
     - group: www-data
     - mode: 0660
 
@@ -143,7 +143,7 @@ asso.{{ domain }}.saml.idpp.metadata.idp-remote.place:
   file.managed:
     - name: {{ platform['user']['home'] }}/conf/metadata/saml20-idp-remote.php
     - contents_pillar: platforms:{{ domain }}:saml:meta_saml20_idp_remote
-    - user: asso
+    - user: {{ platform['user']['name'] }}
     - group: www-data
     - mode: 0660
 
@@ -151,7 +151,7 @@ asso.{{ domain }}.saml.idpp.metadata.sp-remote.place:
   file.managed:
     - name: {{ platform['user']['home'] }}/conf/metadata/saml20-sp-remote.php
     - contents_pillar: platforms:{{ domain }}:saml:meta_saml20_sp_remote
-    - user: asso
+    - user: {{ platform['user']['name'] }}
     - group: www-data
     - mode: 0660
 
@@ -159,7 +159,7 @@ asso.{{ domain}}.saml.idpp.redis.config.place:
   file.managed:
     - name: {{ platform['user']['home'] }}/conf/config/module_redis.php
     - contents_pillar: platforms:{{ domain }}:saml:config_redis
-    - user: asso
+    - user: {{ platform['user']['name'] }}
     - group: www-data
     - mode: 0660
 
@@ -184,7 +184,7 @@ asso.{{ domain }}.saml.idp.cert.place:
   file.managed:
     - name: {{ platform['user']['home'] }}/releases/simplesamlphp/cert/saml.crt
     - contents_pillar: platforms:{{ domain }}:saml:idp_cert
-    - user: asso
+    - user: {{ platform['user']['name'] }}
     - group: www-data
     - mode: 0660
 
@@ -192,7 +192,7 @@ asso.{{ domain }}.saml.idp.pem.place:
   file.managed:
     - name: {{ platform['user']['home'] }}/releases/simplesamlphp/cert/saml.pem
     - contents_pillar: platforms:{{ domain }}:saml:idp_pem
-    - user: asso
+    - user: {{ platform['user']['name'] }}
     - group: www-data
     - mode: 0660
 
@@ -200,7 +200,7 @@ asso.{{ domain }}.saml.idp.metadata.sp-remote.place:
   file.managed:
     - name: {{ platform['user']['home'] }}/releases/simplesamlphp/metadata/saml20-sp-remote.php
     - contents_pillar: platforms:{{ domain }}:saml:meta_saml20_sp_remote
-    - user: asso
+    - user: {{ platform['user']['name'] }}
     - group: www-data
     - mode: 0660
 
@@ -208,7 +208,7 @@ asso.{{ domain }}.saml.idp.exampleauth.enable:
   file.managed:
     - name: {{ platform['user']['home'] }}/releases/simplesamlphp/modules/exampleauth/enable
     - source: None
-    - user: asso
+    - user: {{ platform['user']['name'] }}
     - group: www-data
     - mode: 0644
 {% endif %}
