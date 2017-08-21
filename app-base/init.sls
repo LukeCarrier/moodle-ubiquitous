@@ -195,14 +195,8 @@ php.sqlsrv.{{ extension }}.ini.enabled.{{ sapi }}:
 {% endfor %}
 
 #
-# Supporting packages
+# Directories
 #
-
-moodle.dependencies:
-  pkg.installed:
-    - pkgs:
-      - ghostscript
-      - unoconv
 
 {% for home_directory in pillar['system']['home_directories'] %}
 app-base.homes.{{ home_directory }}:

@@ -16,8 +16,11 @@ include:
 # Supporting packages
 #
 
-ghostscript:
-  pkg.installed
+moodle.dependencies:
+  pkg.installed:
+    - pkgs:
+      - ghostscript
+      - unoconv
 
 #
 # Moodle platforms
