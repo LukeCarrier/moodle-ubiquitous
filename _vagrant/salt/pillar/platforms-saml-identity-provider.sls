@@ -23,6 +23,7 @@ platforms:
         session.save_handler: files
         session.save_path: /home/ubuntu/var/run/php/session
         soap.wsdl_cache_dir: /home/ubuntu/var/run/php/wsdlcache
+    role: saml
     saml:
       role: idp
       tech_contact_name: root

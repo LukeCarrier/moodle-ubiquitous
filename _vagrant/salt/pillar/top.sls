@@ -3,8 +3,6 @@ base:
     - base
     - platforms-moodle
     - platforms-moodle-logos
-    - platforms-saml-identity-provider
-    - platforms-saml-identity-proxy
 
   'roles:app-.+':
     - match: grain_pcre
