@@ -12,5 +12,7 @@ $config = array(
     'technicalcontact_email' => {{ platform['saml']['tech_contact_email'] | yaml_squote }},
     'enable.saml20-idp' => true,
     'session.cookie.name' => {{ platform['saml']['config_session_cookie_name'] | yaml_squote }},
+    {% if platform['role'] == "idpp" %}
     'store.type' => {{ platform['saml']['store_type'] | yaml_squote }},
+    {% endif %}
 );

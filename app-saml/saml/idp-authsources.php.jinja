@@ -37,7 +37,7 @@ $config = array(
         //'remember.username.enabled' => FALSE,
         //'remember.username.checked' => FALSE,
 
-        {% for user in platform['saml']['testusers'].itervalues() %}
+        {% for user in platform['saml']['testusers'] %}
 
         {{ user['credentials'] | yaml_squote }} => array(
             'Login' => array({{ user['login'] | yaml_squote }}),

@@ -77,6 +77,12 @@ asso.{{ domain }}.nginx.enabled:
     - group: www-data
     - mode: 0770
 
+{{ platform['user']['home'] }}/conf/modules:
+  file.directory:
+    - user: {{ platform['user']['name'] }}
+    - group: www-data
+    - mode: 0770
+
 asso.{{ domain }}.saml.config.replace:
   file.managed:
     - name: {{ platform['user']['home'] }}/conf/config/config.php
@@ -182,7 +188,7 @@ asso.{{ domain}}.saml.idpp.redis.config.place:
 {% elif platform['saml']['role'] == 'idp' %}
 asso.{{ domain }}.saml.idp.cert.place:
   file.managed:
-    - name: {{ platform['user']['home'] }}/releases/simplesamlphp/cert/saml.crt
+    - name: {{ platform['user']['home'] }}/conf/cert/saml.crt
     - contents_pillar: platforms:{{ domain }}:saml:idp_cert
     - user: {{ platform['user']['name'] }}
     - group: www-data
@@ -190,7 +196,7 @@ asso.{{ domain }}.saml.idp.cert.place:
 
 asso.{{ domain }}.saml.idp.pem.place:
   file.managed:
-    - name: {{ platform['user']['home'] }}/releases/simplesamlphp/cert/saml.pem
+    - name: {{ platform['user']['home'] }}/conf/cert/saml.pem
     - contents_pillar: platforms:{{ domain }}:saml:idp_pem
     - user: {{ platform['user']['name'] }}
     - group: www-data
@@ -198,7 +204,7 @@ asso.{{ domain }}.saml.idp.pem.place:
 
 asso.{{ domain }}.saml.idp.metadata.sp-remote.place:
   file.managed:
-    - name: {{ platform['user']['home'] }}/releases/simplesamlphp/metadata/saml20-sp-remote.php
+    - name: {{ platform['user']['home'] }}/conf/metadata/saml20-sp-remote.php
     - contents_pillar: platforms:{{ domain }}:saml:meta_saml20_sp_remote
     - user: {{ platform['user']['name'] }}
     - group: www-data
@@ -206,7 +212,7 @@ asso.{{ domain }}.saml.idp.metadata.sp-remote.place:
 
 asso.{{ domain }}.saml.idp.exampleauth.enable:
   file.managed:
-    - name: {{ platform['user']['home'] }}/releases/simplesamlphp/modules/exampleauth/enable
+    - name: {{ platform['user']['home'] }}/conf/modules/exampleauth/enable
     - source: None
     - user: {{ platform['user']['name'] }}
     - group: www-data
