@@ -96,10 +96,7 @@ asso.{{ domain }}.saml.config.replace:
 asso.{{ domain }}.saml.{{ platform['saml']['role'] }}.authsources.place:
   file.managed:
     - name: {{ platform['user']['home'] }}/conf/config/authsources.php
-    - source: salt://app-saml/saml/{{ platform['saml']['role'] }}-authsources.php.jinja
-    - template: jinja
-    - context:
-      platform: {{ platform }}
+    - contents_pillar: platforms:{{ domain }}:saml:authsources
     - user: {{ platform['user']['name'] }}
     - group: www-data
     - mode: 0644
