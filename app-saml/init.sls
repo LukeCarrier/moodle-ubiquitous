@@ -86,10 +86,7 @@ asso.{{ domain }}.nginx.enabled:
 asso.{{ domain }}.saml.config.replace:
   file.managed:
     - name: {{ platform['user']['home'] }}/conf/config/config.php
-    - source: salt://app-saml/saml/config.php.jinja
-    - template: jinja
-    - context:
-      platform: {{ platform }}
+    - contents_pillar: platforms:{{ domain }}:saml:config_saml
     - user: {{ platform['user']['name'] }}
     - group: {{ pillar['nginx']['user'] }}
 
