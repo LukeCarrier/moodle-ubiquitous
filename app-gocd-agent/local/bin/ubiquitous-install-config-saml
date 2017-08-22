@@ -26,6 +26,18 @@ if [ -z "$release" ]; then
     abort $ERROR_PARAMS "no release name supplied"
 fi
 
-cp -r "${platform_home}/conf/config/*" "${destination}/config/"
-cp -r "${platform_home}/conf/cert/*" "${destination}/cert/"
-cp -r "${platform_home}/conf/metadata/*" "${destination}/metadata/"
+if [ -d "${platform_home}/conf/config" ]; then
+    cp -r "${platform_home}/conf/config/*" "${destination}/config/"
+fi
+
+if [ -d "${platform_home}/conf/cert" ]; then
+    cp -r "${platform_home}/conf/cert/*" "${destination}/cert/"
+fi
+
+if [ -d "${platform_home}/conf/metadata" ]; then
+    cp -r "${platform_home}/conf/metadata/*" "${destination}/metadata/"
+fi
+
+if [ -d "${platform_home}/conf/modules" ]; then
+    cp -r "${platform_home}/conf/modules/*" "${destination}/modules/"
+fi

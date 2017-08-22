@@ -98,6 +98,22 @@ asso.{{ domain }}.saml.{{ platform['saml']['role'] }}.authsources.place:
     - group: www-data
     - mode: 0644
 
+{% for module, status in platform['saml']['modules'].items() %}
+{% if status %}
+asso.{{ domain }}.saml.idpp.{{ module }}.enable:
+  file.managed:
+    - name: {{ platform['user']['home'] }}/conf/modules/{{ module }}/enable
+    - user: {{ platform['user']['name'] }}
+    - group: www-data
+    - mode: 0644
+    - makedirs: True
+{% else %}
+asso.{{ domain }}.saml.idpp.{{ module }}.disable:
+  file.absent:
+    - name: {{ platform['user']['home'] }}/conf/modules/{{ module }}/enable
+{% endif %}
+{% endfor %}
+
 {% if platform['saml']['role'] == 'idpp' %}
 asso.{{ domain }}.saml.idpp.sp.cert.place:
   file.managed:
@@ -163,22 +179,6 @@ asso.{{ domain}}.saml.idpp.redis.config.place:
     - group: www-data
     - mode: 0660
 
-# asso.{{ domain }}.saml.idpp.exampleauth.enable:
-#   file.managed:
-#     - name: {{ platform['user']['home'] }}/releases/simplesamlphp/modules/exampleauth/enable
-#     - source: None
-#     - user: asso
-#     - group: www-data
-#     - mode: 0644
-
-# asso.{{ domain }}.saml.idpp.redis.enable:
-#   file.managed:
-#     - name: {{ platform['user']['home'] }}/releases/simplesamlphp/modules/redis/enable
-#     - source: None
-#     - user: asso
-#     - group: www-data
-#     - mode: 0644
-
 {% elif platform['saml']['role'] == 'idp' %}
 asso.{{ domain }}.saml.idp.cert.place:
   file.managed:
@@ -204,13 +204,6 @@ asso.{{ domain }}.saml.idp.metadata.sp-remote.place:
     - group: www-data
     - mode: 0660
 
-asso.{{ domain }}.saml.idp.exampleauth.enable:
-  file.managed:
-    - name: {{ platform['user']['home'] }}/conf/modules/exampleauth/enable
-    - source: None
-    - user: {{ platform['user']['name'] }}
-    - group: www-data
-    - mode: 0644
 {% endif %}
 
 {{ lets_encrypt_platform('saml', domain, platform) }}
