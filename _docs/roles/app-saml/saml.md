@@ -34,6 +34,19 @@ Modules can be configured through the salt pillar. The following modules current
 * exampleauth
 * redis
 
+##### Example configuration
+
+```yaml
+platforms:
+    example.org:
+        saml:
+            modules:
+                exampleauth: True
+                redis: True
+```
+
+> Note that if you are enable / disable a module, you will also have to add/remove the relevant module configuration in the pillar.
+
 ### Requirements
 
 To fully function and be able to store the browser sessions, the IDP proxy requires a data store to save the data.
