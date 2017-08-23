@@ -31,7 +31,7 @@ server {
 {% endfor %}
 
 server {
-    listen 80
+    listen 80;
     server_name {{ domain }}{% if 'aliases' in platform %} {{ platform['aliases'] | join(' ') }}{% endif %};
 
     root {{ platform['user']['home'] }}/current;

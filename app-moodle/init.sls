@@ -64,7 +64,7 @@ moodle.{{ domain }}.data:
     - group: {{ platform['user']['name'] }}
     - mode: 0770
     - require:
-      - file: moodle.{{ domain }}.home
+      - file: app-base.{{ domain }}.home
 
 moodle.{{ domain }}.localcache:
   file.directory:
