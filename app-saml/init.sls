@@ -32,7 +32,7 @@ os.packages:
 asso.{{ domain }}.nginx.available:
   file.managed:
     - name: /etc/nginx/sites-available/{{ platform['basename'] }}.conf
-    - source: salt://app-saml/nginx/saml.nginx.conf.jinja
+    - source: salt://app-saml/nginx/platform.conf.jinja
     - template: jinja
     - context:
       domain: {{ domain }}
@@ -117,7 +117,7 @@ asso.{{ domain }}.saml.idpp.{{ module }}.disable:
 {% if platform['saml']['role'] == 'idpp' %}
 asso.{{ domain }}.saml.idpp.sp.cert.place:
   file.managed:
-    - name: {{ platform['user']['home'] }}/conf/cert/sp.crt
+    - name: {{ platform['user']['home'] }}/conf/cert/sp.cert
     - contents_pillar: platforms:{{ domain }}:saml:sp_cert
     - user: {{ platform['user']['name'] }}
     - group: www-data
@@ -133,7 +133,7 @@ asso.{{ domain }}.saml.idpp.sp.pem.place:
 
 asso.{{ domain }}.saml.idpp.idp.cert.place:
   file.managed:
-    - name: {{ platform['user']['home'] }}/conf/cert/server.crt
+    - name: {{ platform['user']['home'] }}/conf/cert/server.cert
     - contents_pillar: platforms:{{ domain }}:saml:idp_cert
     - user: {{ platform['user']['name'] }}
     - group: www-data
@@ -147,7 +147,7 @@ asso.{{ domain }}.saml.idpp.idp.pem.place:
     - group: www-data
     - mode: 0660
 
-asso.{{ domain }}.saml.idp.metadata.idp-hosted.place:
+asso.{{ domain }}.saml.idpp.metadata.idp-hosted.place:
   file.managed:
     - name: {{ platform['user']['home'] }}/conf/metadata/saml20-idp-hosted.php
     - contents_pillar: platforms:{{ domain }}:saml:meta_saml20_idp_hosted
@@ -182,7 +182,7 @@ asso.{{ domain}}.saml.idpp.redis.config.place:
 {% elif platform['saml']['role'] == 'idp' %}
 asso.{{ domain }}.saml.idp.cert.place:
   file.managed:
-    - name: {{ platform['user']['home'] }}/conf/cert/saml.crt
+    - name: {{ platform['user']['home'] }}/conf/cert/saml.cert
     - contents_pillar: platforms:{{ domain }}:saml:idp_cert
     - user: {{ platform['user']['name'] }}
     - group: www-data
@@ -192,6 +192,14 @@ asso.{{ domain }}.saml.idp.pem.place:
   file.managed:
     - name: {{ platform['user']['home'] }}/conf/cert/saml.pem
     - contents_pillar: platforms:{{ domain }}:saml:idp_pem
+    - user: {{ platform['user']['name'] }}
+    - group: www-data
+    - mode: 0660
+
+asso.{{ domain }}.saml.idp.metadata.idp-hosted.place:
+  file.managed:
+    - name: {{ platform['user']['home'] }}/conf/metadata/saml20-idp-hosted.php
+    - contents_pillar: platforms:{{ domain }}:saml:meta_saml20_idp_hosted
     - user: {{ platform['user']['name'] }}
     - group: www-data
     - mode: 0660
