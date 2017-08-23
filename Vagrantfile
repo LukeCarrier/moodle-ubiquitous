@@ -79,7 +79,7 @@ Vagrant.configure(2) do |config|
     identityprovider.vm.synced_folder "./_vagrant", "/vagrant", type: "rsync"
     identityprovider.vm.provision "identity-provider-salt", type: "shell", path: "./_vagrant/salt/install", args: [ "--minion", "identity-provider", "--root", "/vagrant/salt" ]
 
-    identityprovider.vm.synced_folder "../SimpleSAMLphp", "/home/ubuntu/releases/vagrant", type: "rsync",
+    identityprovider.vm.synced_folder "../SimpleSAMLphp-IdP", "/home/ubuntu/releases/vagrant", type: "rsync",
                                       owner: "ubuntu", group: "ubuntu",
                                       rsync__exclude: [".git", "phpunit.xml"],
                                       rsync__rsync_path: "sudo rsync",
@@ -97,7 +97,7 @@ Vagrant.configure(2) do |config|
     identityproxy.vm.synced_folder "./_vagrant", "/vagrant", type: "rsync"
     identityproxy.vm.provision "identity-proxy-salt", type: "shell", path: "./_vagrant/salt/install", args: [ "--minion", "identity-proxy", "--root", "/vagrant/salt" ]
 
-    identityproxy.vm.synced_folder "../SimpleSAMLphp", "/home/ubuntu/releases/vagrant", type: "rsync",
+    identityproxy.vm.synced_folder "../SimpleSAMLphp-proxy", "/home/ubuntu/releases/vagrant", type: "rsync",
                                    owner: "ubuntu", group: "ubuntu",
                                    rsync__exclude: [".git", "phpunit.xml"],
                                    rsync__rsync_path: "sudo rsync",

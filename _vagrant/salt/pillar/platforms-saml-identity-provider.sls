@@ -23,15 +23,12 @@ platforms:
         session.save_handler: files
         session.save_path: /home/ubuntu/var/run/php/session
         soap.wsdl_cache_dir: /home/ubuntu/var/run/php/wsdlcache
+        error_reporting: -1
     role: saml
     saml:
       role: idp
-      tech_contact_name: root
-      tech_contact_email: root@localhost
-      config_baseurlpath: ''
-      config_adminpassword: gibberish
-      config_secretsalt: gibberish
-      config_session_cookie_name: SimpleSAMLSessionID
+      modules:
+        exampleauth: True
       idp_cert: |
         -----BEGIN CERTIFICATE-----
         MIID1TCCAr2gAwIBAgIJAMPdt3L6rRxSMA0GCSqGSIb3DQEBCwUAMIGAMQswCQYD
@@ -131,21 +128,87 @@ platforms:
               'emailAddress' => 'root@localhost',
               'contactType' => 'technical',
               'givenName' => 'root',
-              'surName' => 'root',
             ),
           ),
           'certData' => 'MIID1TCCAr2gAwIBAgIJAJI03f54IC2GMA0GCSqGSIb3DQEBCwUAMIGAMQswCQYDVQQGEwJHQjETMBEGA1UECAwKU29tZS1TdGF0ZTEPMA0GA1UEBwwGTG9uZG9uMQ4wDAYDVQQKDAVBdmFkbzEOMAwGA1UEAwwFQXZhZG8xKzApBgkqhkiG9w0BCQEWHHZsYy5zeXN0ZW1AYXZhZG9sZWFybmluZy5jb20wHhcNMTcwNjA5MDk0MDEwWhcNMjcwNjA5MDk0MDEwWjCBgDELMAkGA1UEBhMCR0IxEzARBgNVBAgMClNvbWUtU3RhdGUxDzANBgNVBAcMBkxvbmRvbjEOMAwGA1UECgwFQXZhZG8xDjAMBgNVBAMMBUF2YWRvMSswKQYJKoZIhvcNAQkBFhx2bGMuc3lzdGVtQGF2YWRvbGVhcm5pbmcuY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzKVlaeIXCVlZ0zpZHgOrEzNdLYaPJu68+oLhG5uAIIzXo2DiOthR5RvPnNlmt8t3CqPEzvsWUI5Nxv6FgoqirDUU8KAH79+CWbtXLpAfrgk0KKa5WneeSP6EHaciLH3X7qnH1MbjfyWTKH2abvL0f5P3BgfnfsNjOUgrHo0lhp994jpHfxkJBLN5WsiQmCAGgN87V9DzhgRY0wrvsA1OfYjkpRqBxJOHYeYIbMdu2rnfWmGynMP65uglCBZK1u1LNCf1vC5nUbNHY0uCios6eF9BeBTKdsxhD4YclbdU1iIa6L7GDaxVn4sU+89OuU/r2skQCbFL7fzYMIzw6diq2QIDAQABo1AwTjAdBgNVHQ4EFgQUFs5w4HRnLtvuAKqJ4r23DzaYAD8wHwYDVR0jBBgwFoAUFs5w4HRnLtvuAKqJ4r23DzaYAD8wDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQsFAAOCAQEAeo5DrJK1/XhVcmaTAahKECXFcxyYJncrPcXFuYC8Rg5rO9MvPetbPLkaT3WoWDZAhpILOLcB2kZKrY2mRYYZCXrSi5AZiF1pAoXqXkUErsmFP3Nk4onNb7VZpC0ll9sCCb97LWQMY+glV4bAsd2gCc07xIU4D2lU9lhHS0PZt9EKgKiE/b0DuDMnpJHr9SrsjklYltAloXJY0SjOiI3g45UxUIs7G54gtU/3OcQiuUSvC3DTUztW5/Zm4QaF37XMLVrb7jTqcFLh/ZrE5NbPrTPjuMS6m9UFSCKttyz0CnudtuAis4kP9i2TERIDJYo6/qV+iWCAbg2vhZ/I9hejKg==',
         );
-      testusers:
-        testavd01:
-          credentials: "test:password"
-          login: testlogin
-          firstname: testname
-          lastname: testlastname
-          email: test@test.com
-        testavd02:
-          credentials: "test2:password2"
-          login: testlogin2
-          firstname: testname2
-          lastname: testlastname2
-          email: test2@test.com
+      meta_saml20_idp_hosted: |
+        <?php
+
+        $metadata['__DYNAMIC:1__'] = array(
+          'host' => '__DEFAULT__',
+
+          // X.509 key and certificate. Relative to the cert directory.
+          'privatekey' => 'saml.pem',
+          'certificate' => 'saml.cert',
+
+          /*
+           * Authentication source to use. Must be one that is configured in
+           * 'config/authsources.php'.
+           */
+          'auth' => 'example-userpass',
+        );
+      authsources: |
+        <?php
+
+        $config = array(
+          // This is a authentication source which handles admin authentication.
+          'admin' => array(
+            // The default is to use core:AdminPassword, but it can be replaced with
+            // any authentication source.
+
+            'core:AdminPassword',
+          ),
+
+          // An authentication source which can authenticate against both SAML 2.0
+          // and Shibboleth 1.3 IdPs.
+          'default-sp' => array(
+            'saml:SP',
+
+            // The entity ID of this SP.
+            // Can be NULL/unset, in which case an entity ID is generated based on the metadata URL.
+            'entityID' => null,
+
+            // The entity ID of the IdP this should SP should contact.
+            // Can be NULL/unset, in which case the user will be shown a list of available IdPs.
+            'idp' => null,
+
+            // The URL to the discovery service.
+            // Can be NULL/unset, in which case a builtin discovery service will be used.
+            'discoURL' => null,
+          ),
+
+          'example-userpass' => array(
+            'exampleauth:UserPass',
+
+            // Give the user an option to save their username for future login attempts
+            // And when enabled, what should the default be, to save the username or not
+            //'remember.username.enabled' => FALSE,
+            //'remember.username.checked' => FALSE,
+
+            'test1:password1' => array(
+              'Login'     => array('testlogin1'),
+              'FirstName' => array('testname1'),
+              'LastName'  => array('testlastname1'),
+              'Email'     => array('test@test.com'),
+            ),
+            'test2:password2' => array(
+              'Login'     => array('testlogin2'),
+              'FirstName' => array('testname2'),
+              'LastName'  => array('testlastname2'),
+              'Email'     => array('test2@test.com'),
+            ),
+          ),
+        );
+      config_saml: |
+        <?php
+
+        $config = array(
+            'baseurlpath' => '',
+            'auth.adminpassword' => 'gibberish',
+            'secretsalt' => 'gibberish',
+            'technicalcontact_name' => 'root',
+            'technicalcontact_email' => 'root@localhost',
+            'enable.saml20-idp' => true,
+            'session.cookie.name' => 'SimpleSAMLSessionID',
+        );

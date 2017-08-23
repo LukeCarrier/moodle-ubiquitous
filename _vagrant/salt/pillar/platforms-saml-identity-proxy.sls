@@ -26,15 +26,8 @@ platforms:
     role: saml
     saml:
       role: idpp
-      tech_contact_name: root
-      tech_contact_email: root@localhost
-      config_baseurlpath: ''
-      config_adminpassword: gibberish
-      config_secretsalt: gibberish
-      config_session_cookie_name: SimpleSAMLSessionID
-      auth_source_pem: sp.pem
-      auth_source_cert: sp.crt
-      store_type: redis:Redis
+      modules:
+        exampleauth: True
       sp_cert: |
         -----BEGIN CERTIFICATE-----
         MIID1TCCAr2gAwIBAgIJAJI03f54IC2GMA0GCSqGSIb3DQEBCwUAMIGAMQswCQYD
@@ -149,7 +142,7 @@ platforms:
           'host' => '__DEFAULT__',
 
           'privatekey' => 'server.pem',
-          'certificate' => 'server.crt',
+          'certificate' => 'server.cert',
 
           'auth' => 'default-sp',
         );
@@ -157,34 +150,8 @@ platforms:
         <?php
 
         $metadata['http://192.168.120.55/saml2/idp/metadata.php'] = array (
-          'entityid' => 'http://192.168.120.55/saml2/idp/metadata.php',
-          'authproc' =>
-          array (
-            10 => array (
-              'class' => 'core:AttributeMap',
-              'Login' => 'UserName',
-            ),
-            20 => array (
-              'class' => 'core:AttributeAlter',
-              'subject' => 'Login',
-              'pattern' => '/^(.*)$/',
-              'replacement' => 'avado-idp-test-${0}',
-            ),
-          ),
-          'contacts' =>
-          array (
-            0 =>
-            array (
-              'contactType' => 'technical',
-              'givenName' => 'Luke',
-              'surName' => 'Carrier',
-              'emailAddress' =>
-              array (
-                0 => 'vlc.system@avadolearning.com',
-              ),
-            ),
-          ),
           'metadata-set' => 'saml20-idp-remote',
+          'entityid' => 'http://192.168.120.55/saml2/idp/metadata.php',
           'SingleSignOnService' =>
           array (
             0 =>
@@ -201,171 +168,80 @@ platforms:
               'Location' => 'http://192.168.120.55/saml2/idp/SingleLogoutService.php',
             ),
           ),
-          'ArtifactResolutionService' =>
-          array (
-          ),
-          'NameIDFormats' =>
-          array (
-            0 => 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
-          ),
-          'keys' =>
-          array (
-            0 =>
-            array (
-              'encryption' => false,
-              'signing' => true,
-              'type' => 'X509Certificate',
-              'X509Certificate' => 'MIID1TCCAr2gAwIBAgIJAMPdt3L6rRxSMA0GCSqGSIb3DQEBCwUAMIGAMQswCQYDVQQGEwJHQjETMBEGA1UECAwKU29tZS1TdGF0ZTEPMA0GA1UEBwwGTG9uZG9uMQ4wDAYDVQQKDAVBdmFkbzEOMAwGA1UEAwwFQXZhZG8xKzApBgkqhkiG9w0BCQEWHHZsYy5zeXN0ZW1AYXZhZG9sZWFybmluZy5jb20wHhcNMTcwNjA4MTcxNDQyWhcNMjcwNjA4MTcxNDQyWjCBgDELMAkGA1UEBhMCR0IxEzARBgNVBAgMClNvbWUtU3RhdGUxDzANBgNVBAcMBkxvbmRvbjEOMAwGA1UECgwFQXZhZG8xDjAMBgNVBAMMBUF2YWRvMSswKQYJKoZIhvcNAQkBFhx2bGMuc3lzdGVtQGF2YWRvbGVhcm5pbmcuY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0vT/NN22idTcJ/TyLh344XdT51TRLMWcbRTq/4UaD1pWzn41EtVHeCSWahTnRNU6XqKn0/RKrSbItvLrg3NtvmQ3mwPI4riRqv1Jard2RbZF/kPAFPyVRzhxf0gsQgccC23I3uVWXMLHpMd1gLTUlwehAQh8hz2Bj+O/2YtuLHokgkwFdyrbJva9Y7yEhAixzsJNxacS0L7gauxYY+t2cFgnVgRSk/4qdvigIFildC0IKSKQ+bZ88mi2Npku3xPHIe8Rj5UJUwA6mD5meJPLhFbz94mCXBP8ufsuBmkmoKcdUv93UkS9oQt/IojGYkyQCtHv1BC04KE2yDWEAkigTQIDAQABo1AwTjAdBgNVHQ4EFgQU4EvIOJOtAhc+b2Pev41CO57bxoYwHwYDVR0jBBgwFoAU4EvIOJOtAhc+b2Pev41CO57bxoYwDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQsFAAOCAQEAl+qYcVdMMcNV+ycEpm1phtnxvHAeOFpdw5CkwvTJ99npCdMYMrzzSyoCgFpJf4sheFQUdy/O7AV1dWRguuJX2kswp1L7++TSR1fqIEcXZUMT+ooPJ9iDkhtXD0SwBixKOZd5AjO2OLuCGHsBk6xcjgb1qPC7EUcqUexgU4e7099oo95tOki8O9w0VlJW6FpC9du1IKuCMwRXBJmXKxAn8XbagXE6uJIE/OZjHAtTY7MznWm33qHTCWpgfDCZgF1ttxqvhYy48tj8qz2E5QVheElMSKZLZVkyWWGRTyt43AVJPghTRqlKaoBEzpXFp+l/dEcVpYg5gJFfD6AkoPvISQ==',
-            ),
-            1 =>
-            array (
-              'encryption' => true,
-              'signing' => false,
-              'type' => 'X509Certificate',
-              'X509Certificate' => 'MIID1TCCAr2gAwIBAgIJAMPdt3L6rRxSMA0GCSqGSIb3DQEBCwUAMIGAMQswCQYDVQQGEwJHQjETMBEGA1UECAwKU29tZS1TdGF0ZTEPMA0GA1UEBwwGTG9uZG9uMQ4wDAYDVQQKDAVBdmFkbzEOMAwGA1UEAwwFQXZhZG8xKzApBgkqhkiG9w0BCQEWHHZsYy5zeXN0ZW1AYXZhZG9sZWFybmluZy5jb20wHhcNMTcwNjA4MTcxNDQyWhcNMjcwNjA4MTcxNDQyWjCBgDELMAkGA1UEBhMCR0IxEzARBgNVBAgMClNvbWUtU3RhdGUxDzANBgNVBAcMBkxvbmRvbjEOMAwGA1UECgwFQXZhZG8xDjAMBgNVBAMMBUF2YWRvMSswKQYJKoZIhvcNAQkBFhx2bGMuc3lzdGVtQGF2YWRvbGVhcm5pbmcuY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0vT/NN22idTcJ/TyLh344XdT51TRLMWcbRTq/4UaD1pWzn41EtVHeCSWahTnRNU6XqKn0/RKrSbItvLrg3NtvmQ3mwPI4riRqv1Jard2RbZF/kPAFPyVRzhxf0gsQgccC23I3uVWXMLHpMd1gLTUlwehAQh8hz2Bj+O/2YtuLHokgkwFdyrbJva9Y7yEhAixzsJNxacS0L7gauxYY+t2cFgnVgRSk/4qdvigIFildC0IKSKQ+bZ88mi2Npku3xPHIe8Rj5UJUwA6mD5meJPLhFbz94mCXBP8ufsuBmkmoKcdUv93UkS9oQt/IojGYkyQCtHv1BC04KE2yDWEAkigTQIDAQABo1AwTjAdBgNVHQ4EFgQU4EvIOJOtAhc+b2Pev41CO57bxoYwHwYDVR0jBBgwFoAU4EvIOJOtAhc+b2Pev41CO57bxoYwDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQsFAAOCAQEAl+qYcVdMMcNV+ycEpm1phtnxvHAeOFpdw5CkwvTJ99npCdMYMrzzSyoCgFpJf4sheFQUdy/O7AV1dWRguuJX2kswp1L7++TSR1fqIEcXZUMT+ooPJ9iDkhtXD0SwBixKOZd5AjO2OLuCGHsBk6xcjgb1qPC7EUcqUexgU4e7099oo95tOki8O9w0VlJW6FpC9du1IKuCMwRXBJmXKxAn8XbagXE6uJIE/OZjHAtTY7MznWm33qHTCWpgfDCZgF1ttxqvhYy48tj8qz2E5QVheElMSKZLZVkyWWGRTyt43AVJPghTRqlKaoBEzpXFp+l/dEcVpYg5gJFfD6AkoPvISQ==',
-            ),
-          ),
-        );
-      meta_saml20_sp_remote: |
-        <?php
-        /**
-         * SAML 2.0 remote SP metadata for SimpleSAMLphp.
-         *
-         * See: https://simplesamlphp.org/docs/stable/simplesamlphp-reference-sp-remote
-         */
-
-        /*
-         * Example SimpleSAMLphp SAML 2.0 SP
-         */
-        $metadata['https://saml2sp.example.org'] = array(
-          'AssertionConsumerService' => 'https://saml2sp.example.org/simplesaml/module.php/saml/sp/saml2-acs.php/default-sp',
-          'SingleLogoutService' => 'https://saml2sp.example.org/simplesaml/module.php/saml/sp/saml2-logout.php/default-sp',
-        );
-
-        /*
-         * This example shows an example config that works with Google Apps for education.
-         * What is important is that you have an attribute in your IdP that maps to the local part of the email address
-         * at Google Apps. In example, if your google account is foo.com, and you have a user that has an email john@foo.com, then you
-         * must set the simplesaml.nameidattribute to be the name of an attribute that for this user has the value of 'john'.
-         */
-        $metadata['google.com'] = array(
-          'AssertionConsumerService' => 'https://www.google.com/a/g.feide.no/acs',
-          'NameIDFormat' => 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress',
-          'simplesaml.nameidattribute' => 'uid',
-          'simplesaml.attributes' => FALSE,
-        );
-
-        $metadata['http://192.168.120.50/auth/saml2/sp/metadata.php'] = array (
-          'entityid' => 'http://192.168.120.50/auth/saml2/sp/metadata.php',
-          'description' =>
-          array (
-            'en' => 'Moodle',
-          ),
-          'OrganizationName' =>
-          array (
-            'en' => 'Moodle',
-          ),
-          'name' =>
-          array (
-            'en' => 'Moodle',
-          ),
-          'OrganizationDisplayName' =>
-          array (
-            'en' => 'Moodle',
-          ),
-          'url' =>
-          array (
-            'en' => 'http://192.168.120.50',
-          ),
-          'OrganizationURL' =>
-          array (
-            'en' => 'http://192.168.120.50',
-          ),
+          'certData' => 'MIID1TCCAr2gAwIBAgIJAMPdt3L6rRxSMA0GCSqGSIb3DQEBCwUAMIGAMQswCQYDVQQGEwJHQjETMBEGA1UECAwKU29tZS1TdGF0ZTEPMA0GA1UEBwwGTG9uZG9uMQ4wDAYDVQQKDAVBdmFkbzEOMAwGA1UEAwwFQXZhZG8xKzApBgkqhkiG9w0BCQEWHHZsYy5zeXN0ZW1AYXZhZG9sZWFybmluZy5jb20wHhcNMTcwNjA4MTcxNDQyWhcNMjcwNjA4MTcxNDQyWjCBgDELMAkGA1UEBhMCR0IxEzARBgNVBAgMClNvbWUtU3RhdGUxDzANBgNVBAcMBkxvbmRvbjEOMAwGA1UECgwFQXZhZG8xDjAMBgNVBAMMBUF2YWRvMSswKQYJKoZIhvcNAQkBFhx2bGMuc3lzdGVtQGF2YWRvbGVhcm5pbmcuY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0vT/NN22idTcJ/TyLh344XdT51TRLMWcbRTq/4UaD1pWzn41EtVHeCSWahTnRNU6XqKn0/RKrSbItvLrg3NtvmQ3mwPI4riRqv1Jard2RbZF/kPAFPyVRzhxf0gsQgccC23I3uVWXMLHpMd1gLTUlwehAQh8hz2Bj+O/2YtuLHokgkwFdyrbJva9Y7yEhAixzsJNxacS0L7gauxYY+t2cFgnVgRSk/4qdvigIFildC0IKSKQ+bZ88mi2Npku3xPHIe8Rj5UJUwA6mD5meJPLhFbz94mCXBP8ufsuBmkmoKcdUv93UkS9oQt/IojGYkyQCtHv1BC04KE2yDWEAkigTQIDAQABo1AwTjAdBgNVHQ4EFgQU4EvIOJOtAhc+b2Pev41CO57bxoYwHwYDVR0jBBgwFoAU4EvIOJOtAhc+b2Pev41CO57bxoYwDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQsFAAOCAQEAl+qYcVdMMcNV+ycEpm1phtnxvHAeOFpdw5CkwvTJ99npCdMYMrzzSyoCgFpJf4sheFQUdy/O7AV1dWRguuJX2kswp1L7++TSR1fqIEcXZUMT+ooPJ9iDkhtXD0SwBixKOZd5AjO2OLuCGHsBk6xcjgb1qPC7EUcqUexgU4e7099oo95tOki8O9w0VlJW6FpC9du1IKuCMwRXBJmXKxAn8XbagXE6uJIE/OZjHAtTY7MznWm33qHTCWpgfDCZgF1ttxqvhYy48tj8qz2E5QVheElMSKZLZVkyWWGRTyt43AVJPghTRqlKaoBEzpXFp+l/dEcVpYg5gJFfD6AkoPvISQ==',
+          'NameIDFormat' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
           'contacts' =>
           array (
             0 =>
             array (
+              'emailAddress' => 'root@localhost',
               'contactType' => 'technical',
               'givenName' => 'root',
-              'surName' => 'root',
-              'emailAddress' =>
-              array (
-                0 => 'root@localhost',
-              ),
             ),
           ),
-          'metadata-set' => 'saml20-sp-remote',
-          'AssertionConsumerService' =>
-          array (
-            0 =>
-            array (
-              'Binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
-              'Location' => 'http://192.168.120.50/auth/saml2/sp/saml2-acs.php/sso.test.alp.avadolearning.net',
-              'index' => 0,
-            ),
-            1 =>
-            array (
-              'Binding' => 'urn:oasis:names:tc:SAML:1.0:profiles:browser-post',
-              'Location' => 'http://192.168.120.50/auth/saml2/sp/saml1-acs.php/sso.test.alp.avadolearning.net',
-              'index' => 1,
-            ),
-            2 =>
-            array (
-              'Binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact',
-              'Location' => 'http://192.168.120.50/auth/saml2/sp/saml2-acs.php/sso.test.alp.avadolearning.net',
-              'index' => 2,
-            ),
-            3 =>
-            array (
-              'Binding' => 'urn:oasis:names:tc:SAML:1.0:profiles:artifact-01',
-              'Location' => 'http://192.168.120.50/auth/saml2/sp/saml1-acs.php/sso.test.alp.avadolearning.net',
-              'index' => 3,
-            ),
+        );
+
+      meta_saml20_sp_remote: |
+        <?php
+
+      authsources: |
+        <?php
+
+        $config = array(
+          // This is a authentication source which handles admin authentication.
+          'admin' => array(
+            // The default is to use core:AdminPassword, but it can be replaced with
+            // any authentication source.
+
+            'core:AdminPassword',
           ),
-          'SingleLogoutService' =>
-          array (
-            0 =>
-            array (
-              'Binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
-              'Location' => 'http://192.168.120.50/auth/saml2/sp/saml2-logout.php/sso.test.alp.avadolearning.net',
-            ),
+
+          // An authentication source which can authenticate against both SAML 2.0
+          // and Shibboleth 1.3 IdPs.
+          'default-sp' => array(
+            'saml:SP',
+
+            // The entity ID of this SP.
+            // Can be NULL/unset, in which case an entity ID is generated based on the metadata URL.
+            'entityID' => null,
+
+            // The entity ID of the IdP this should SP should contact.
+            // Can be NULL/unset, in which case the user will be shown a list of available IdPs.
+            'idp' => null,
+
+            // The URL to the discovery service.
+            // Can be NULL/unset, in which case a builtin discovery service will be used.
+            'discoURL' => null,
+
+            'privatekey'  => 'sp.pem',
+            'certificate' => 'sp.cert',
           ),
-          'keys' =>
-          array (
-            0 =>
-            array (
-              'encryption' => false,
-              'signing' => true,
-              'type' => 'X509Certificate',
-              'X509Certificate' => '
-        MIIELzCCAxegAwIBAgIBADANBgkqhkiG9w0BAQUFADCBsTEnMCUGA1UEAwwec3NvLnRlc3QuYWxwLmF2YWRvbGVhcm5pbmcubmV0MQswCQYDVQQGEwJHQjErMCkGCSqGSIb3DQEJARYcdmxjLnN5c3RlbUBhdmFkb2xlYXJuaW5nLmNvbTEUMBIGA1UEBwwLSGFtbWVyc21pdGgxFzAVBgNVBAoMDkFWQURPIExlYXJuaW5nMQ8wDQYDVQQIDAZMb25kb24xDDAKBgNVBAsMA0FMUDAeFw0xNzA2MTUxNzE3MzlaFw0yNzA2MTMxNzE3MzlaMIGxMScwJQYDVQQDDB5zc28udGVzdC5hbHAuYXZhZG9sZWFybmluZy5uZXQxCzAJBgNVBAYTAkdCMSswKQYJKoZIhvcNAQkBFhx2bGMuc3lzdGVtQGF2YWRvbGVhcm5pbmcuY29tMRQwEgYDVQQHDAtIYW1tZXJzbWl0aDEXMBUGA1UECgwOQVZBRE8gTGVhcm5pbmcxDzANBgNVBAgMBkxvbmRvbjEMMAoGA1UECwwDQUxQMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlju0J0PwUD3dAktn7k4A9KNRK/A8eTehx8Pq1d5VaAt8QP1FqEJiW4NKBqv7o5oUGyuD0IHXOD3Xs5JuSBlBozSiWL85DlJmUGXUi/DFxUiLfINUGFBiPH1ALXcW/+DAfW5AsXY+NTIkO/dfM/guf4wmy5kNlbMguygs4gGregaoYtfS9zd2TXFB5fFtdM0vcO9dTJTpYxYK4g7P2OfqSMwrfktc2EAWpUtEX1zdCcsnW3F7YJF/tNNGwzJBZYD3jBX19zU0O42ghe8IY9dXeDx9htWPB1oIUHjrNYgh9HW/u3Om4CJs6qN1uDS1Tz5A1keNOKtRxm91KgElmBoAKQIDAQABo1AwTjAdBgNVHQ4EFgQU/M8ur91L1kv+VPMuwsoHl8OGmTkwHwYDVR0jBBgwFoAU/M8ur91L1kv+VPMuwsoHl8OGmTkwDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQUFAAOCAQEANq/sYVWttSdrL8Pvn1Z+7nM+qWRWTzQ0QdjRHcxjB/y1FUy1fZmwy3/JonMycTp0xeNpR2jAi2NrvX4Mvf+Ns4wRxxVcgoZLS+0YDH8PE8aXdIi3HxotWKoAS2qtVp+fEwB7OE97NErkiQn+lx1l2tj2ohMwSPzj0gKnKOhnBvNWiINeVZUkn0xCWqLRkbqAanJaeaJuWuN13eaz5H9Bv3CtnoKc2eu7GKYexKaV5VvR5fhEfvUwjomlr4f7AN1Mrfgr86w3bqcHD1kzWYoh66pjpDxaKMfkyXkIBz0V9Utp3P4UD4IXloxDKebcuv4QEfmte0EtskVnQFadGzKNQQ==
-        ',
-            ),
-            1 =>
-            array (
-              'encryption' => true,
-              'signing' => false,
-              'type' => 'X509Certificate',
-              'X509Certificate' => '
-        MIIELzCCAxegAwIBAgIBADANBgkqhkiG9w0BAQUFADCBsTEnMCUGA1UEAwwec3NvLnRlc3QuYWxwLmF2YWRvbGVhcm5pbmcubmV0MQswCQYDVQQGEwJHQjErMCkGCSqGSIb3DQEJARYcdmxjLnN5c3RlbUBhdmFkb2xlYXJuaW5nLmNvbTEUMBIGA1UEBwwLSGFtbWVyc21pdGgxFzAVBgNVBAoMDkFWQURPIExlYXJuaW5nMQ8wDQYDVQQIDAZMb25kb24xDDAKBgNVBAsMA0FMUDAeFw0xNzA2MTUxNzE3MzlaFw0yNzA2MTMxNzE3MzlaMIGxMScwJQYDVQQDDB5zc28udGVzdC5hbHAuYXZhZG9sZWFybmluZy5uZXQxCzAJBgNVBAYTAkdCMSswKQYJKoZIhvcNAQkBFhx2bGMuc3lzdGVtQGF2YWRvbGVhcm5pbmcuY29tMRQwEgYDVQQHDAtIYW1tZXJzbWl0aDEXMBUGA1UECgwOQVZBRE8gTGVhcm5pbmcxDzANBgNVBAgMBkxvbmRvbjEMMAoGA1UECwwDQUxQMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlju0J0PwUD3dAktn7k4A9KNRK/A8eTehx8Pq1d5VaAt8QP1FqEJiW4NKBqv7o5oUGyuD0IHXOD3Xs5JuSBlBozSiWL85DlJmUGXUi/DFxUiLfINUGFBiPH1ALXcW/+DAfW5AsXY+NTIkO/dfM/guf4wmy5kNlbMguygs4gGregaoYtfS9zd2TXFB5fFtdM0vcO9dTJTpYxYK4g7P2OfqSMwrfktc2EAWpUtEX1zdCcsnW3F7YJF/tNNGwzJBZYD3jBX19zU0O42ghe8IY9dXeDx9htWPB1oIUHjrNYgh9HW/u3Om4CJs6qN1uDS1Tz5A1keNOKtRxm91KgElmBoAKQIDAQABo1AwTjAdBgNVHQ4EFgQU/M8ur91L1kv+VPMuwsoHl8OGmTkwHwYDVR0jBBgwFoAU/M8ur91L1kv+VPMuwsoHl8OGmTkwDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQUFAAOCAQEANq/sYVWttSdrL8Pvn1Z+7nM+qWRWTzQ0QdjRHcxjB/y1FUy1fZmwy3/JonMycTp0xeNpR2jAi2NrvX4Mvf+Ns4wRxxVcgoZLS+0YDH8PE8aXdIi3HxotWKoAS2qtVp+fEwB7OE97NErkiQn+lx1l2tj2ohMwSPzj0gKnKOhnBvNWiINeVZUkn0xCWqLRkbqAanJaeaJuWuN13eaz5H9Bv3CtnoKc2eu7GKYexKaV5VvR5fhEfvUwjomlr4f7AN1Mrfgr86w3bqcHD1kzWYoh66pjpDxaKMfkyXkIBz0V9Utp3P4UD4IXloxDKebcuv4QEfmte0EtskVnQFadGzKNQQ==
-        ',
-            ),
-          ),
-          'validate.authnrequest' => true,
+        );
+      config_saml: |
+        <?php
+
+        $config = array(
+          'baseurlpath'            => '',
+          'auth.adminpassword'     => 'gibberish',
+          'secretsalt'             => 'gibberish',
+          'technicalcontact_name'  => 'root',
+          'technicalcontact_email' => 'root@localhost',
+          'enable.saml20-idp'      => true,
+          'session.cookie.name'    => 'SimpleSAMLSessionID',
         );
       config_redis: |
         <?php
 
-        $config = [
-            // Predis client parameters
-            'parameters' => 'tcp://10.142.98.150:6379',
+        $config = array(
+          // Predis client parameters
+          'parameters' => 'tcp://10.142.98.150:6379',
 
-            // Predis client options
-            'options' => null,
+          // Predis client options
+          'options' => null,
 
-            // Key prefix
-            'prefix' => 'simpleSAMLphp',
+          // Key prefix
+          'prefix' => 'simpleSAMLphp',
 
-            // Lifetime for all non expiring keys
-            'lifetime' => 288000
-        ];
+          // Lifetime for all non expiring keys
+          'lifetime' => 288000
+        );

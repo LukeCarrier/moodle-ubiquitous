@@ -1,8 +1,6 @@
 base:
   '*':
     - base
-    - platforms-moodle
-    - platforms-moodle-logos
 
   'roles:app-.+':
     - match: grain_pcre
@@ -10,9 +8,15 @@ base:
     - nginx
     - php-fpm
 
+  'roles:app-moodle':
+    - match: grain
+    - platforms-moodle
+    - platforms-moodle-logos
+
   'roles:db-pgsql':
     - match: grain
     - db-pgsql
+    - platforms-moodle
 
   'roles:gocd-agent':
     - match: grain

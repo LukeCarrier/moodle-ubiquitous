@@ -18,8 +18,8 @@ All file paths are relative to the SimpleSAMLphp installation directory.
 
 * `config/authsources.php`
 * `config/module_redis.php`
-* service provider ssl `.crt` and `.pem` under `cert/`
-* identity provider ssl `.crt` and `.pem` under `cert/`
+* service provider ssl `.cert` and `.pem` under `cert/`
+* identity provider ssl `.cert` and `.pem` under `cert/`
 * `metadata/saml20-idp-hosted.php`
 * `metadata/saml20-idp-remote.php`
 * `metadata/saml20-sp-remote.php`
@@ -61,7 +61,7 @@ The identity provider is a SimpleSAMLphp server providing a set of test accounts
 All file paths are relative to the SimpleSAMLphp installation directory.
 
 * `config/authsources.php`
-* identity provider ssl `.crt` and `.pem` under `cert/`
+* identity provider ssl `.cert` and `.pem` under `cert/`
 * `metadata/saml20-sp-remote.php`
 * `modules/exampleauth/enable`
 
