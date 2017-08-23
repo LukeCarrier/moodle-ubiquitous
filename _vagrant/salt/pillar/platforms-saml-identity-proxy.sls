@@ -152,6 +152,19 @@ platforms:
         $metadata['http://192.168.120.55/saml2/idp/metadata.php'] = array (
           'metadata-set' => 'saml20-idp-remote',
           'entityid' => 'http://192.168.120.55/saml2/idp/metadata.php',
+          'authproc' =>
+          array (
+            10 => array (
+              'class' => 'core:AttributeMap',
+              'Login' => 'UserName',
+            ),
+            20 => array (
+              'class' => 'core:AttributeAlter',
+              'subject' => 'Login',
+              'pattern' => '/^(.*)$/',
+              'replacement' => 'your-idp-test-${0}',
+            ),
+          ),
           'SingleSignOnService' =>
           array (
             0 =>
@@ -180,7 +193,6 @@ platforms:
             ),
           ),
         );
-
       meta_saml20_sp_remote: |
         <?php
 
