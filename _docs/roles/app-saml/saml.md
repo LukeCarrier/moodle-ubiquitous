@@ -1,8 +1,8 @@
 # Saml
 
-[SimpleSAMLphp](https://simplesamlphp.org/docs/stable/) is used to enable a single sign on experience on the learning platforms. Configured as an Identity Provider Proxy, the IDP sits between the learning platforms and the identity providers of our integrated customers to enable a hassle free authentication experience. 
+[SimpleSAMLphp](https://simplesamlphp.org/docs/stable/) is used to enable a single sign on experience on the learning platforms. Configured as an Identity Provider Proxy, the IdP sits between the learning platforms and the identity providers of our integrated customers to enable a hassle free authentication experience. 
 
-The `app-saml` role contains all necessary configuration steps to create an identity provider proxy (IDP Proxy or `IDPP`) as well as an identity provider (IDP) to test the authentication against. Both, the IDPP and the IPD are using [SimpleSAMLphp](https://simplesamlphp.org/docs/stable/).
+The `app-saml` role contains all necessary configuration steps to create an identity provider proxy (IdP Proxy or `IDPP`) as well as an identity provider (IdP) to test the authentication against. Both, the IDPP and the IPD are using [SimpleSAMLphp](https://simplesamlphp.org/docs/stable/).
 
 ## Configuration management
 
@@ -90,13 +90,72 @@ $ wget https://getcomposer.org/composer.phar
 $ php composer.phar install
 ```
 
-## IDP Proxy
+### Add identity proxy to Moodle
+ 
+To use the SimpleSAMLphp setup with Moodle you will have to activate the SAML auth plugin. 
 
-The IDP proxy acts as bridge between the learning platform and the identity provider, handling request from the users which are trying to log into the learning platform via single sign on and managing the authentication / login process with the identity provider. The test setup assumes a working moodle site with `saml` enabled as way of authentication.
+> Note: A few steps are tailored towards a specific use case where we have a defined set of user claims which we want to expose to Moodle.
+
+* Log in as admin
+* Navigate to `Site Administration`
+* Click on `Plugins`
+* Navigate down to `Authentication`
+* Enable SAML2
+* Click into the SAML2 auth plugin
+* Hit `Regenerate Certificate` (to ensure you start off on a fresh, clean slate)
+
+To set up the SAML2 authentication:
+
+* On the IdP proxy:
+  * Navigate to `Federation`
+  * Copy the IdP metadata
+* On Moodle:
+  * Paste the IdP Metadata into the IdP metadata xml field
+  * Change the IdP label override to something suiting (i.e. `Login via SAML2`)
+  * Change `Display IdP link` to `Yes`
+  * Change `Debugging` to `Yes`
+  * Change `Allow any auth type` to `Yes`
+* These moodle settings may vary depending on metadata you want to exchange: 
+  * Change `Mapping IdP` to `UserName`
+  * Change `Mapping Moodle` to `Username`
+  * Change `Auto create users` to `Yes`
+  * Change `Data Mapping (First Name)` to `FirstName`
+  * Change `Update local (First name)` to `On every login`
+  * Change `Data mapping (Surname)` to `LastName`
+  * Change `Update local (Surname)` to `On every login`
+  * Change `Data mapping (Email address)` to `Email`
+  * Change `Update local (Email address)` to `On every login`
+
+### Attribute mapping
+
+In the `saml20-idp-remote` file, you will find an `authproc` entry similar to the one below. This entry ensures that the identity proxy is exposing the right attribute to Moodle when it repsonds. The optional `core:AttributeAlter` ensures unique prefixing of the value in case there are multiple identity providers:
+
+```php
+$metadata['http://192.168.120.60/saml2/idp/metadata.php'] = array (
+  'entityid' => 'http://192.168.120.60/saml2/idp/metadata.php',
+  'authproc' =>
+  array (
+    10 => array (
+      'class' => 'core:AttributeMap',
+      'Login' => 'UserName',
+    ),
+    20 => array (
+      'class' => 'core:AttributeAlter',
+      'subject' => 'Login',
+      'pattern' => '/^(.*)$/',
+      'replacement' => 'your-idp-test-${0}',
+    ),
+  ),
+  [snip]
+```
+
+## IdP Proxy
+
+The IdP proxy acts as bridge between the learning platform and the identity provider, handling request from the users which are trying to log into the learning platform via single sign on and managing the authentication / login process with the identity provider. The test setup assumes a working moodle site with `saml` enabled as way of authentication.
 
 *TL;DR*
 
-The IDP proxy is both, service provider (to the identity provider) and identity provider (to the learning platform).
+The IdP proxy is both, service provider (to the identity provider) and identity provider (to the learning platform).
 
 ### Configuration files
 
@@ -135,7 +194,7 @@ platforms:
 
 ### Requirements
 
-To fully function and be able to store the browser sessions, the IDP proxy requires a data store to save the data.
+To fully function and be able to store the browser sessions, the IdP proxy requires a data store to save the data.
 One option to use as data store is Redis, for which we have a [role here](../redis.md).
 
 ## Identity Provider
@@ -172,6 +231,14 @@ The array is keyed with the `username` and `password`. The values of that key is
 
 ### Caused by: Exception: Unable to validate Signature
 
-Potential causes:
+* Potential causes:
+  * Sometimes the meta data on the identity provider refreshes
+* Resolutions:
+  * Update the metadata of the identity provider on the service provider side
 
-* Sometimes the meta data on the identity provider refreshes - update the metadata of the identity provider on the service provider side (identity proxy)
+### Exception - Setting secure cookie on plain HTTP is not allowed.
+
+* Potential causes: 
+  * Newer Moodle versions (3.2+) ship with the `secure cookies only` option turned on by default
+* Resolution: 
+  * As an admin, turn off `secure cookies only` under `Site Administration -> Security -> HTTP security`
