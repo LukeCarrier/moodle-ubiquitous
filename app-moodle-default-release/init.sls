@@ -10,13 +10,13 @@ include:
   - app-default-release
 
 {% for domain, platform in salt['pillar.get']('platforms', {}).items() %}
-app-default-release.{{ domain }}.data:
+app-moodle-default-release.{{ domain }}.data:
   file.directory:
     - name: {{ platform['moodle']['dataroot'] }}
     - user: {{ platform ['user']['name'] }}
     - group: {{ platform ['user']['name'] }}
     - mode: 0770
     - require:
-      - user: app.{{ domain }}.user
-      - file: app.{{ domain }}.home
+      - user: app-base.{{ domain }}.user
+      - file: app-base.{{ domain }}.home
 {% endfor %}
