@@ -184,6 +184,104 @@ platforms:
       meta_saml20_sp_remote: |
         <?php
 
+        $metadata['http://192.168.120.50/auth/saml2/sp/metadata.php'] = array (
+          'entityid' => 'http://192.168.120.50/auth/saml2/sp/metadata.php',
+          'description' =>
+          array (
+            'en' => 'Moodle',
+          ),
+          'OrganizationName' =>
+          array (
+            'en' => 'Moodle',
+          ),
+          'name' =>
+          array (
+            'en' => 'Moodle',
+          ),
+          'OrganizationDisplayName' =>
+          array (
+            'en' => 'Moodle',
+          ),
+          'url' =>
+          array (
+            'en' => 'http://192.168.120.50',
+          ),
+          'OrganizationURL' =>
+          array (
+            'en' => 'http://192.168.120.50',
+          ),
+          'contacts' =>
+          array (
+            0 =>
+            array (
+              'contactType' => 'technical',
+              'givenName' => 'Admin',
+              'surName' => 'User',
+              'emailAddress' =>
+              array (
+                0 => 'noreply@192.168.120.50',
+              ),
+            ),
+          ),
+          'metadata-set' => 'saml20-sp-remote',
+          'AssertionConsumerService' =>
+          array (
+            0 =>
+            array (
+              'Binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
+              'Location' => 'http://192.168.120.50/auth/saml2/sp/saml2-acs.php/192.168.120.50',
+              'index' => 0,
+            ),
+            1 =>
+            array (
+              'Binding' => 'urn:oasis:names:tc:SAML:1.0:profiles:browser-post',
+              'Location' => 'http://192.168.120.50/auth/saml2/sp/saml1-acs.php/192.168.120.50',
+              'index' => 1,
+            ),
+            2 =>
+            array (
+              'Binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact',
+              'Location' => 'http://192.168.120.50/auth/saml2/sp/saml2-acs.php/192.168.120.50',
+              'index' => 2,
+            ),
+            3 =>
+            array (
+              'Binding' => 'urn:oasis:names:tc:SAML:1.0:profiles:artifact-01',
+              'Location' => 'http://192.168.120.50/auth/saml2/sp/saml1-acs.php/192.168.120.50',
+              'index' => 3,
+            ),
+          ),
+          'SingleLogoutService' =>
+          array (
+            0 =>
+            array (
+              'Binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
+              'Location' => 'http://192.168.120.50/auth/saml2/sp/saml2-logout.php/192.168.120.50',
+            ),
+          ),
+          'keys' =>
+          array (
+            0 =>
+            array (
+              'encryption' => false,
+              'signing' => true,
+              'type' => 'X509Certificate',
+              'X509Certificate' => '
+        MIID6TCCAtGgAwIBAgIBADANBgkqhkiG9w0BAQUFADCBjjEPMA0GA1UEAwwGbW9vZGxlMQswCQYDVQQGEwJBVTElMCMGCSqGSIb3DQEJARYWbm9yZXBseUAxOTIuMTY4LjEyMC41MDEUMBIGA1UEBwwLbW9vZGxldmlsbGUxDzANBgNVBAoMBm1vb2RsZTEPMA0GA1UECAwGbW9vZGxlMQ8wDQYDVQQLDAZtb29kbGUwHhcNMTcwODIyMTkxNDQyWhcNMjcwODIwMTkxNDQyWjCBjjEPMA0GA1UEAwwGbW9vZGxlMQswCQYDVQQGEwJBVTElMCMGCSqGSIb3DQEJARYWbm9yZXBseUAxOTIuMTY4LjEyMC41MDEUMBIGA1UEBwwLbW9vZGxldmlsbGUxDzANBgNVBAoMBm1vb2RsZTEPMA0GA1UECAwGbW9vZGxlMQ8wDQYDVQQLDAZtb29kbGUwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDnDLM10Nx6i4uaJypoAUF1L42cTgeOq1vbihEPsgAUpNkzZHZCJZnygOVHL8pnCAxxl9/LqgzCpbQ4aZUXksJRa/fs22oS6ROV02iQO69NArvCKSoLt5K06Nf/SjOZDsfIHdu666SV2oO1wb82fTIS2ut2j9UOoMfTfI2dHxWpyYTwvqbh03YtFB3IbySW3dm7AXS3M0SLnwdqFKRuoqFVyUy4R++WHU/Xa/IGUPlaFY/hGXlViiP2TYPFkhVOrDWY6Lz1Wv7TVTq+mo6DwsMY16DQAJm4xOZviRdA5xTHajaCht7EZTmkV35walCALtW9gtQdSgUIPyxc694iQ4f/AgMBAAGjUDBOMB0GA1UdDgQWBBR4m6yiHiT/Z7o4Lp7oqMi3TitbkDAfBgNVHSMEGDAWgBR4m6yiHiT/Z7o4Lp7oqMi3TitbkDAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBBQUAA4IBAQB2XtxE5fgyEFB+WyvEStyC1iG3El7Q+IsKWN87zcsZkeFs28zo9TO3nhUMfGqoPEnD6ea03mwHytxLOHRPIwzfg/Na3GX7e2MG95gzyhEdm8UbN6gHptRB6YR2qaEmlPhtyGQo6isIi2RrVtXBoSI/IazKDwtMrAoZqKUtz1P1icw0DHd0jYG4zqpVFrZ1daELhBNiE5zxWi5oAEAcnbouIYmjcanGulfHxYo0Sgni48sgTuQ1ivAl5oWLUnpGb6x7jIVDrjeM9aCWABKLA+XFQ6khR7iqdV98SuiBhqtWReHsLh4SDbp94qgZB1ojMHGJTRRwgSHQSGYmE7e6nOky
+        ',
+            ),
+            1 =>
+            array (
+              'encryption' => true,
+              'signing' => false,
+              'type' => 'X509Certificate',
+              'X509Certificate' => '
+        MIID6TCCAtGgAwIBAgIBADANBgkqhkiG9w0BAQUFADCBjjEPMA0GA1UEAwwGbW9vZGxlMQswCQYDVQQGEwJBVTElMCMGCSqGSIb3DQEJARYWbm9yZXBseUAxOTIuMTY4LjEyMC41MDEUMBIGA1UEBwwLbW9vZGxldmlsbGUxDzANBgNVBAoMBm1vb2RsZTEPMA0GA1UECAwGbW9vZGxlMQ8wDQYDVQQLDAZtb29kbGUwHhcNMTcwODIyMTkxNDQyWhcNMjcwODIwMTkxNDQyWjCBjjEPMA0GA1UEAwwGbW9vZGxlMQswCQYDVQQGEwJBVTElMCMGCSqGSIb3DQEJARYWbm9yZXBseUAxOTIuMTY4LjEyMC41MDEUMBIGA1UEBwwLbW9vZGxldmlsbGUxDzANBgNVBAoMBm1vb2RsZTEPMA0GA1UECAwGbW9vZGxlMQ8wDQYDVQQLDAZtb29kbGUwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDnDLM10Nx6i4uaJypoAUF1L42cTgeOq1vbihEPsgAUpNkzZHZCJZnygOVHL8pnCAxxl9/LqgzCpbQ4aZUXksJRa/fs22oS6ROV02iQO69NArvCKSoLt5K06Nf/SjOZDsfIHdu666SV2oO1wb82fTIS2ut2j9UOoMfTfI2dHxWpyYTwvqbh03YtFB3IbySW3dm7AXS3M0SLnwdqFKRuoqFVyUy4R++WHU/Xa/IGUPlaFY/hGXlViiP2TYPFkhVOrDWY6Lz1Wv7TVTq+mo6DwsMY16DQAJm4xOZviRdA5xTHajaCht7EZTmkV35walCALtW9gtQdSgUIPyxc694iQ4f/AgMBAAGjUDBOMB0GA1UdDgQWBBR4m6yiHiT/Z7o4Lp7oqMi3TitbkDAfBgNVHSMEGDAWgBR4m6yiHiT/Z7o4Lp7oqMi3TitbkDAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBBQUAA4IBAQB2XtxE5fgyEFB+WyvEStyC1iG3El7Q+IsKWN87zcsZkeFs28zo9TO3nhUMfGqoPEnD6ea03mwHytxLOHRPIwzfg/Na3GX7e2MG95gzyhEdm8UbN6gHptRB6YR2qaEmlPhtyGQo6isIi2RrVtXBoSI/IazKDwtMrAoZqKUtz1P1icw0DHd0jYG4zqpVFrZ1daELhBNiE5zxWi5oAEAcnbouIYmjcanGulfHxYo0Sgni48sgTuQ1ivAl5oWLUnpGb6x7jIVDrjeM9aCWABKLA+XFQ6khR7iqdV98SuiBhqtWReHsLh4SDbp94qgZB1ojMHGJTRRwgSHQSGYmE7e6nOky
+        ',
+            ),
+          ),
+          'validate.authnrequest' => true,
+        );
       authsources: |
         <?php
 
