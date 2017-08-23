@@ -30,6 +30,10 @@ base:
     - match: grain
     - app-default-release
 
+  'roles:app-moodle-default-release':
+    - match: grain
+    - app-moodle-default-release
+
   'roles:app-error-pages':
     - match: grain
     - app-error-pages
