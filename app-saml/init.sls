@@ -83,11 +83,11 @@ asso.{{ domain }}.nginx.enabled:
     - group: {{ pillar['nginx']['user'] }}
     - mode: 0770
 
-{% for file, value in platform['saml']['config'] %}
-asso.{{ domain }}.saml.config.place:
+{% for file, value in platform['saml']['config'].items() %}
+asso.{{ domain }}.saml.{{ platform['saml']['role'] }}.config.{{ file }}.place:
   file.managed:
     - name: {{ platform['user']['home'] }}/conf/config/{{ file }}
-    - contents_pillar: platforms:{{ domain }}:saml:{{ file }}
+    - contents_pillar: platforms:{{ domain }}:saml:config:{{ file }}
     - user: {{ platform['user']['name'] }}
     - group: {{ pillar['nginx']['user'] }}
     - mode: 0644
@@ -95,7 +95,7 @@ asso.{{ domain }}.saml.config.place:
 
 {% for module, status in platform['saml']['modules'].items() %}
 {% if status %}
-asso.{{ domain }}.saml.idpp.{{ module }}.enable:
+asso.{{ domain }}.saml.{{ platform['saml']['role'] }}.{{ module }}.enable:
   file.managed:
     - name: {{ platform['user']['home'] }}/conf/modules/{{ module }}/enable
     - user: {{ platform['user']['name'] }}
@@ -103,27 +103,27 @@ asso.{{ domain }}.saml.idpp.{{ module }}.enable:
     - mode: 0644
     - makedirs: True
 {% else %}
-asso.{{ domain }}.saml.idpp.{{ module }}.disable:
+asso.{{ domain }}.saml.{{ platform['saml']['role'] }}.{{ module }}.disable:
   file.absent:
     - name: {{ platform['user']['home'] }}/conf/modules/{{ module }}/enable
 {% endif %}
 {% endfor %}
 
-{% for file, value in platform['saml']['certs'].items() %}
+{% for file, value in platform['saml']['cert'].items() %}
 asso.{{ domain }}.saml.{{ platform['saml']['role'] }}.cert.{{ file }}.place:
   file.managed:
     - name: {{ platform['user']['home'] }}/conf/cert/{{ file }}
-    - contents_pillar: platforms:{{ domain }}:saml:{{ file }}
+    - contents_pillar: platforms:{{ domain }}:saml:cert:{{ file }}
     - user: {{ platform['user']['name'] }}
     - group: {{ pillar['nginx']['user'] }}
     - mode: 0660
 {% endfor %}
 
-{% for file, value in platform['saml']['metadata'] %}
+{% for file, value in platform['saml']['metadata'].items() %}
 asso.{{ domain }}.saml.{{ platform['saml']['role'] }}.metadata.{{ file }}.place:
   file.managed:
     - name: {{ platform['user']['home'] }}/conf/metadata/{{ file }}
-    - contents_pillar: platforms:{{ domain }}:saml:{{ file }}
+    - contents_pillar: platforms:{{ domain }}:saml:metadata:{{ file }}
     - user: {{ platform['user']['name'] }}
     - group: {{ pillar['nginx']['user'] }}
     - mode: 0660
