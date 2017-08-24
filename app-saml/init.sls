@@ -61,42 +61,37 @@ asso.{{ domain }}.nginx.enabled:
 {{ platform['user']['home'] }}/conf/config:
   file.directory:
     - user: {{ platform['user']['name'] }}
-    - group: www-data
+    - group: {{ pillar['nginx']['user'] }}
     - mode: 0770
     - makedirs: True
 
 {{ platform['user']['home'] }}/conf/cert:
   file.directory:
     - user: {{ platform['user']['name'] }}
-    - group: www-data
+    - group: {{ pillar['nginx']['user'] }}
     - mode: 0770
 
 {{ platform['user']['home'] }}/conf/metadata:
   file.directory:
     - user: {{ platform['user']['name'] }}
-    - group: www-data
+    - group: {{ pillar['nginx']['user'] }}
     - mode: 0770
 
 {{ platform['user']['home'] }}/conf/modules:
   file.directory:
     - user: {{ platform['user']['name'] }}
-    - group: www-data
+    - group: {{ pillar['nginx']['user'] }}
     - mode: 0770
 
-asso.{{ domain }}.saml.config.replace:
+{% for file, value in platform['saml']['config'] %}
+asso.{{ domain }}.saml.config.place:
   file.managed:
-    - name: {{ platform['user']['home'] }}/conf/config/config.php
-    - contents_pillar: platforms:{{ domain }}:saml:config_saml
+    - name: {{ platform['user']['home'] }}/conf/config/{{ file }}
+    - contents_pillar: platforms:{{ domain }}:saml:{{ file }}
     - user: {{ platform['user']['name'] }}
     - group: {{ pillar['nginx']['user'] }}
-
-asso.{{ domain }}.saml.{{ platform['saml']['role'] }}.authsources.place:
-  file.managed:
-    - name: {{ platform['user']['home'] }}/conf/config/authsources.php
-    - contents_pillar: platforms:{{ domain }}:saml:authsources
-    - user: {{ platform['user']['name'] }}
-    - group: www-data
     - mode: 0644
+{% endfor %}
 
 {% for module, status in platform['saml']['modules'].items() %}
 {% if status %}
@@ -104,7 +99,7 @@ asso.{{ domain }}.saml.idpp.{{ module }}.enable:
   file.managed:
     - name: {{ platform['user']['home'] }}/conf/modules/{{ module }}/enable
     - user: {{ platform['user']['name'] }}
-    - group: www-data
+    - group: {{ pillar['nginx']['user'] }}
     - mode: 0644
     - makedirs: True
 {% else %}
@@ -114,105 +109,25 @@ asso.{{ domain }}.saml.idpp.{{ module }}.disable:
 {% endif %}
 {% endfor %}
 
-{% if platform['saml']['role'] == 'idpp' %}
-asso.{{ domain }}.saml.idpp.sp.cert.place:
+{% for file, value in platform['saml']['certs'].items() %}
+asso.{{ domain }}.saml.{{ platform['saml']['role'] }}.cert.{{ file }}.place:
   file.managed:
-    - name: {{ platform['user']['home'] }}/conf/cert/sp.cert
-    - contents_pillar: platforms:{{ domain }}:saml:sp_cert
+    - name: {{ platform['user']['home'] }}/conf/cert/{{ file }}
+    - contents_pillar: platforms:{{ domain }}:saml:{{ file }}
     - user: {{ platform['user']['name'] }}
-    - group: www-data
+    - group: {{ pillar['nginx']['user'] }}
     - mode: 0660
+{% endfor %}
 
-asso.{{ domain }}.saml.idpp.sp.pem.place:
+{% for file, value in platform['saml']['metadata'] %}
+asso.{{ domain }}.saml.{{ platform['saml']['role'] }}.metadata.{{ file }}.place:
   file.managed:
-    - name: {{ platform['user']['home'] }}/conf/cert/sp.pem
-    - contents_pillar: platforms:{{ domain }}:saml:sp_pem
+    - name: {{ platform['user']['home'] }}/conf/metadata/{{ file }}
+    - contents_pillar: platforms:{{ domain }}:saml:{{ file }}
     - user: {{ platform['user']['name'] }}
-    - group: www-data
+    - group: {{ pillar['nginx']['user'] }}
     - mode: 0660
-
-asso.{{ domain }}.saml.idpp.idp.cert.place:
-  file.managed:
-    - name: {{ platform['user']['home'] }}/conf/cert/server.cert
-    - contents_pillar: platforms:{{ domain }}:saml:idp_cert
-    - user: {{ platform['user']['name'] }}
-    - group: www-data
-    - mode: 0660
-
-asso.{{ domain }}.saml.idpp.idp.pem.place:
-  file.managed:
-    - name: {{ platform['user']['home'] }}/conf/cert/server.pem
-    - contents_pillar: platforms:{{ domain }}:saml:idp_pem
-    - user: {{ platform['user']['name'] }}
-    - group: www-data
-    - mode: 0660
-
-asso.{{ domain }}.saml.idpp.metadata.idp-hosted.place:
-  file.managed:
-    - name: {{ platform['user']['home'] }}/conf/metadata/saml20-idp-hosted.php
-    - contents_pillar: platforms:{{ domain }}:saml:meta_saml20_idp_hosted
-    - user: {{ platform['user']['name'] }}
-    - group: www-data
-    - mode: 0660
-
-asso.{{ domain }}.saml.idpp.metadata.idp-remote.place:
-  file.managed:
-    - name: {{ platform['user']['home'] }}/conf/metadata/saml20-idp-remote.php
-    - contents_pillar: platforms:{{ domain }}:saml:meta_saml20_idp_remote
-    - user: {{ platform['user']['name'] }}
-    - group: www-data
-    - mode: 0660
-
-asso.{{ domain }}.saml.idpp.metadata.sp-remote.place:
-  file.managed:
-    - name: {{ platform['user']['home'] }}/conf/metadata/saml20-sp-remote.php
-    - contents_pillar: platforms:{{ domain }}:saml:meta_saml20_sp_remote
-    - user: {{ platform['user']['name'] }}
-    - group: www-data
-    - mode: 0660
-
-asso.{{ domain}}.saml.idpp.redis.config.place:
-  file.managed:
-    - name: {{ platform['user']['home'] }}/conf/config/module_redis.php
-    - contents_pillar: platforms:{{ domain }}:saml:config_redis
-    - user: {{ platform['user']['name'] }}
-    - group: www-data
-    - mode: 0660
-
-{% elif platform['saml']['role'] == 'idp' %}
-asso.{{ domain }}.saml.idp.cert.place:
-  file.managed:
-    - name: {{ platform['user']['home'] }}/conf/cert/saml.cert
-    - contents_pillar: platforms:{{ domain }}:saml:idp_cert
-    - user: {{ platform['user']['name'] }}
-    - group: www-data
-    - mode: 0660
-
-asso.{{ domain }}.saml.idp.pem.place:
-  file.managed:
-    - name: {{ platform['user']['home'] }}/conf/cert/saml.pem
-    - contents_pillar: platforms:{{ domain }}:saml:idp_pem
-    - user: {{ platform['user']['name'] }}
-    - group: www-data
-    - mode: 0660
-
-asso.{{ domain }}.saml.idp.metadata.idp-hosted.place:
-  file.managed:
-    - name: {{ platform['user']['home'] }}/conf/metadata/saml20-idp-hosted.php
-    - contents_pillar: platforms:{{ domain }}:saml:meta_saml20_idp_hosted
-    - user: {{ platform['user']['name'] }}
-    - group: www-data
-    - mode: 0660
-
-asso.{{ domain }}.saml.idp.metadata.sp-remote.place:
-  file.managed:
-    - name: {{ platform['user']['home'] }}/conf/metadata/saml20-sp-remote.php
-    - contents_pillar: platforms:{{ domain }}:saml:meta_saml20_sp_remote
-    - user: {{ platform['user']['name'] }}
-    - group: www-data
-    - mode: 0660
-
-{% endif %}
+{% endfor %}
 
 {{ lets_encrypt_platform('saml', domain, platform) }}
 {% endfor %}
