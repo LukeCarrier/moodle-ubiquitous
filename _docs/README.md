@@ -5,7 +5,7 @@ Ubiquitous is a multi-purpose Moodle hosting environment.
 It fulfils three requirements:
 
 1. _Provisioning_ of machines with either a container or virtualisation platform
-    * In local development environments we manage [VirtualBox](https://www.virtualbox.org/) virtual machines with [Vagrant](https://www.vagrantup.com/) (version [1.9.6](https://releases.hashicorp.com/vagrant/1.9.6/) for now, because of [this bug](https://github.com/mitchellh/vagrant/issues/8770)).
+    * In local development environments we manage [VirtualBox](https://www.virtualbox.org/) virtual machines with [Vagrant](https://www.vagrantup.com/).
     * Continuous integration platforms run on purpose-built [Docker](https://www.docker.com/) containers.
     * Production deployments can use your tool of choice.
 2. _Configuration management_ across these machines
