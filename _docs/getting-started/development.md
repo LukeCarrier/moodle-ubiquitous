@@ -156,7 +156,7 @@ $CFG->debugdisplay = true;
 $CFG->behat_prefix        = 'b_';
 $CFG->behat_dataroot      = '/home/ubuntu/data/behat';
 $CFG->behat_faildump_path = '/home/ubuntu/data/behat-faildump';
-$CFG->behat_wwwroot       = 'http://localhost/behat';
+$CFG->behat_wwwroot       = 'http://192.168.120.50/behat';
 $CFG->behat_profiles = array(
 'chrome' => array(
     'extensions' => array(
@@ -203,7 +203,7 @@ $CFG->behat_config = array_merge(array(
     'extensions' => array(
         'Behat\MinkExtension' => array(
             'selenium2' => array(
-                'wd_host' => 'http://localhost:4444/wd/hub',
+                'wd_host' => 'http://192.168.120.100:4444/wd/hub',
                 'capabilities' => array(
                     'browserVersion'    => 'ANY',
                     'deviceType'        => 'ANY',
@@ -323,7 +323,7 @@ Issues can occur when applying Salt states to minions when the versions between 
 $ vagrant provision
 ```
 
-See the [Salt troubleshooting documentation](../roles/salt.md#typeerror-bool-object-is-not-iterable) or further information.
+See the [Salt troubleshooting documentation](../roles/salt.md#typeerror-bool-object-is-not-iterable) for further information.
 
 ## Advanced topics
 
