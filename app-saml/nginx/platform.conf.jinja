@@ -1,4 +1,5 @@
 {% set ssl = 'ssl' in platform['nginx'] and platform['nginx']['ssl'] %}
+{% set ssl_certificate = platform['nginx']['ssl_certificate'] %}
 
 server {
     listen 80;
@@ -29,7 +30,7 @@ server {
     }
 
     location / {
-{% if ssl and salt['file.file_exists']('/etc/letsencrypt/live/' + domain + '/fullchain.pem') %}
+{% if ssl and salt['file.file_exists'](ssl_certificate) %}
         return 301 https://$host$request_uri;
 {% else %}
         location ~ \.php(/|$) {
@@ -59,7 +60,7 @@ server {
     }
 }
 
-{% if ssl and salt['file.file_exists']('/etc/letsencrypt/live/' + domain + '/fullchain.pem') %}
+{% if ssl and salt['file.file_exists'](ssl_certificate) %}
 server {
     listen 443 ssl;
     server_name {{ domain }}{% if 'aliases' in platform %} {{ platform['aliases'] | join(' ') }}{% endif %};
@@ -91,7 +92,6 @@ server {
         include fastcgi.conf;
         fastcgi_pass unix:/var/run/php/php7.0-fpm-{{ platform['basename'] }}.sock;
     }
-
 
     location ~ \.php(/|$) {
         # Default Debian configuration is too greedy -- doesn't handle URLs

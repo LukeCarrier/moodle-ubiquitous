@@ -5,9 +5,6 @@
 # @copyright 2017 Sascha Peter
 #
 
-{% from 'app-lets-encrypt/macros.sls'
-    import lets_encrypt_platform, lets_encrypt_restarts %}
-
 include:
   - base
   - app-base
@@ -29,6 +26,13 @@ os.packages:
     - libgmp-dev
 
 {% for domain, platform in salt['pillar.get']('platforms', {}).items() %}
+
+{% if 'lets_encrypt' in platform %}
+# TODO: This needs refactoring not to import the macro's for every platform/domain.
+{% from 'app-lets-encrypt/macros.sls'
+    import lets_encrypt_platform, lets_encrypt_restarts %}
+{% endif %}
+
 asso.{{ domain }}.nginx.available:
   file.managed:
     - name: /etc/nginx/sites-available/{{ platform['basename'] }}.conf
@@ -129,7 +133,10 @@ asso.{{ domain }}.saml.{{ platform['saml']['role'] }}.metadata.{{ file }}.place:
     - mode: 0660
 {% endfor %}
 
+{% if 'lets_encrypt' in platform %}
 {{ lets_encrypt_platform('saml', domain, platform) }}
+{{ lets_encrypt_restarts('saml') }}
+{% endif %}
 {% endfor %}
 
 asso.nginx.reload:
@@ -137,4 +144,4 @@ asso.nginx.reload:
     - name: nginx
     - reload: true
 
-{{ lets_encrypt_restarts('saml') }}
+
