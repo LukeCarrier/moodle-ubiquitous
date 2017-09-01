@@ -1,5 +1,5 @@
 {% macro lets_encrypt_platform(app, domain, platform) %}
-{% if 'lets_encrypt' in platform %}
+{% if 'lets_encrypt' in platform and platform['lets_encrypt']['enabled'] %}
 app-{{ app }}-lets-encrypt.{{ domain }}.nginx-acme-challenge:
   file.managed:
     - name: /etc/nginx/sites-extra/{{ platform['basename'] }}.lets-encrypt.conf
@@ -26,11 +26,20 @@ app-{{ app }}-lets-encrypt.{{ domain }}.cert:
 {% endmacro %}
 
 {% macro lets_encrypt_restarts(app) %}
+app-{{ app }}-null:
+  cmd.run:
+    - name: /bin/false
+    - unless: /bin/true
+
 app-{{ app }}-lets-encrypt.nginx-pre-certbot:
   cmd.run:
     - name: systemctl reload nginx || systemctl restart nginx
+  onchanges:
+    - app-{{ app }}-null
 
 app-{{ app }}-lets-encrypt.nginx-post-certbot:
   cmd.run:
     - name: systemctl restart nginx
+  onchanges:
+    - app-{{ app }}-null
 {% endmacro %}
