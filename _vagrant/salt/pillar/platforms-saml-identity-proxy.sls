@@ -7,6 +7,9 @@ platforms:
       home: /home/ubuntu
     nginx:
       client_max_body_size: 1024m
+      ssl: true
+      ssl_certificate: /home/ubuntu/conf/cert/idp.cert
+      ssl_certificate_key: /home/ubuntu/conf/cert/idp.pem
     php:
       fpm:
         pm: dynamic
@@ -142,8 +145,8 @@ platforms:
           $metadata['__DYNAMIC:1__'] = array(
             'host' => '__DEFAULT__',
 
-            'privatekey' => 'server.pem',
-            'certificate' => 'server.cert',
+            'privatekey' => 'idp.pem',
+            'certificate' => 'idp.cert',
 
             'auth' => 'default-sp',
           );

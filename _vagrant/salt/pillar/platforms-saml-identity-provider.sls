@@ -7,6 +7,9 @@ platforms:
       home: /home/ubuntu
     nginx:
       client_max_body_size: 1024m
+      ssl: true
+      ssl_certificate: /etc/letsencrypt/live/identity.avadolearning.net/fullchain.pem
+      ssl_certificate_key: /etc/letsencrypt/live/identity.avadolearning.net/privkey.pem
     php:
       fpm:
         pm: dynamic
@@ -141,8 +144,8 @@ platforms:
             'host' => '__DEFAULT__',
 
             // X.509 key and certificate. Relative to the cert directory.
-            'privatekey' => 'saml.pem',
-            'certificate' => 'saml.cert',
+            'privatekey' => 'idp.pem',
+            'certificate' => 'idp.cert',
 
             /*
              * Authentication source to use. Must be one that is configured in

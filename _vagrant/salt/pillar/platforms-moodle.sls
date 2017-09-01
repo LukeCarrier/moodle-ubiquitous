@@ -25,6 +25,9 @@ platforms:
             PHP_VALUE: |
               max_execution_time=60
               memory_limit=128m
+      ssl: true
+      ssl_certificate: /etc/letsencrypt/live/identity.avadolearning.net/fullchain.pem
+      ssl_certificate_key: /etc/letsencrypt/live/identity.avadolearning.net/privkey.pem
     php:
       fpm:
         pm: dynamic
