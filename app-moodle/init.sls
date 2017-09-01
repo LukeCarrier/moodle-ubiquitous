@@ -5,9 +5,6 @@
 # @copyright 2016 Luke Carrier
 #
 
-{% from 'app-lets-encrypt/macros.sls'
-    import lets_encrypt_platform, lets_encrypt_restarts %}
-
 include:
   - base
   - app-base
@@ -27,6 +24,11 @@ moodle.dependencies:
 #
 
 {% for domain, platform in salt['pillar.get']('platforms', {}).items() %}
+{% if 'lets_encrypt' in platform %}
+{% from 'app-lets-encrypt/macros.sls'
+    import lets_encrypt_platform, lets_encrypt_restarts %}
+{% endif %}
+
 moodle.{{ domain }}.nginx.available:
   file.managed:
     - name: /etc/nginx/sites-available/{{ platform['basename'] }}.conf
@@ -89,7 +91,8 @@ moodle.{{ domain }}.config:
       - service: app.nginx.restart
       - service: app.php-fpm.restart
 
+{% if 'lets_encrypt' in platform %}
 {{ lets_encrypt_platform('moodle', domain, platform) }}
-{% endfor %}
-
 {{ lets_encrypt_restarts('moodle') }}
+{% endif %}
+{% endfor %}
