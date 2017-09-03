@@ -39,6 +39,12 @@ The following machines are provided for testing production configurations:
 * A GoCD instance for testing deployment pipelines
 * A nameserver running BIND for testing your DNS configuration.
 
+The following machines are provided for testing a single sign on experience: 
+
+* A redis server (and optional redis slaves) as data storage / cache
+* An identity provider proxy to allow multi identity provider setups
+* A test identity provider to authenticate against
+
 Machines can be started and stopped independently or by using Vagrant groups. You're also able to add your own machines as required.
 
 ## [Continuous integration and test environments](test.md)

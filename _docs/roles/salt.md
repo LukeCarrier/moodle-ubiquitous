@@ -10,7 +10,7 @@ Salt is used as a configuration management system, converging the state of all r
 
 ```
 roles:
-  - app
+  - app-moodle
 ```
 
 *Note:* the `base` state and states suffixed with `-base` are extended by others using `include` and should not be applied directly.

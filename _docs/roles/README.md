@@ -5,10 +5,12 @@ In Ubiquitous, a role is an individual Salt state with a corresponding Salt grai
 | Role | Description |
 | --- | --- |
 | [`app`](#application-server-app) | Application server (PHP, nginx) |
-| [`app-debug`](#with-debugging-support-app-debug) | Behat acceptance testing environment and Xdebug debugging and profiling |
+| [`app-debug`](#with-debugging-support-app-debug) | Xdebug debugging and profiling |
 | [`app-default-release`](#with-default-release-app-default-release) | Default release configuration for development and integration purposes |
 | [`app-error-pages`](#with-custom-error-pages-app-error-pages) | Custom HTTP error pages |
 | [`app-gocd-agent`](#with-bluegreen-deployments-app-gocd-agent) | Add-on for application server providing downtime-free deployment scripts for use with GoCD |
+| [`app-saml`](#idp-proxy-and-idp-app-saml) | Identity Provider Proxy and test Identity Provider |
+| [`app-moodle-debug`](#moodle-debugging) | Behat acceptance testing environment
 | [`av-sophos`](#sophos-antivirus-av-sophos) | Sophos Antivirus scanner and realtime protection components |
 | [`certbot`](#automated-ssl-certificates-certbot) | Automated SSL certificate issuance and renewal over ACME with Lets Encrypt |
 | [`db-pgsql`](#postgresql-database-db-pgsql) | PostgreSQL database server |
@@ -19,6 +21,7 @@ In Ubiquitous, a role is an individual Salt state with a corresponding Salt grai
 | [`mail-relay`](#mail-relay-mail-relay) | Relay mail to an SMTP server for external delivery |
 | [`mount-cifs`](#cifs-shares-mount-cifs) | Mount remote CIFS shares |
 | [`named`](#name-server-named) | Bind DNS server |
+| [`redis`](#redis-redis) | Redis master and slave instances |
 | [`salt`](#salt-master-salt) | Salt master for configuration management |
 | [`selenium-hub`](#selenium-hub-selenium-hub) | Selenium grid hub server |
 | [`selenium-node-chrome`](#selenium-chrome-node-selenium-node-chrome) | Selenium grid node (Chrome) |
@@ -38,15 +41,15 @@ Application servers provide the frontend of the environment, serving the site th
 
 | Dependencies | Dependants | Conflicts |
 | --- | --- | --- |
-| `app` | None | None |
+| `app-base` | None | None |
 
-Adds an alias for the Moodle environment (required for Behat), provides easy access to the Behat fail dump and enables remote debugging and profiling using Xdebug.
+Enables remote debugging and profiling using Xdebug.
 
 ### With default release (`app-default-release`)
 
 | Dependencies | Dependants | Conflicts |
 | --- | --- | --- |
-| `app` | None | `app-gocd-agent` |
+| `app-base` | None | `app-gocd-agent` |
 
 Allows administrators to configuration manage the active release rather than assuming a dedicated deployment tool.
 
@@ -54,7 +57,7 @@ Allows administrators to configuration manage the active release rather than ass
 
 | Dependencies | Dependants | Conflicts |
 | --- | --- | --- |
-| `app` | None | None |
+| `app-base` | None | None |
 
 Allows branding error pages.
 
@@ -62,9 +65,33 @@ Allows branding error pages.
 
 | Dependencies | Dependants | Conflicts |
 | --- | --- | --- |
-| `app`, `gocd-agent` | None | `app-default-release` |
+| `app-base`, `gocd-agent` | None | `app-default-release` |
 
 Extends the `app` role with a series of scripts and configuration for [GoCD](https://www.gocd.io/) that enables upgrades without downtime.
+
+## IDP Proxy and IDP (`app-saml`)
+
+| Dependencies | Dependants | Conflicts |
+| --- | --- | --- |
+| `app-base` | None | None |
+
+Installs and configures a SimpleSAMLphp identity provider proxy (and optional identity provider).
+
+## Moodle (`app-moodle`)
+
+| Dependencies | Dependants | Conflicts |
+| --- | --- | --- |
+| `app-base` | None | None |
+
+Installs and configures a Moodle site.
+
+## Moodle debugging (`app-moodle-debug`)
+
+| Dependencies | Dependants | Conflicts |
+| --- | --- | --- |
+| `app-debug` | None | None |
+
+Extends the `app-debug` role with moodle specific configuration. Adds an alias for the Moodle environment (required for Behat), provides easy access to the Behat fail dump.
 
 ## Sophos Antivirus (`av-sophos`)
 
@@ -145,6 +172,14 @@ Mount CIFS shares on remote servers.
 | None | None | None |
 
 Installs the [Bind](https://www.isc.org/downloads/bind/) DNS server, suited for use in internal name resolution, and configures zones.
+
+## Redis (`redis`)
+
+| Dependencies | Dependants | Conflicts |
+| --- | --- | --- |
+| None | None | None |
+
+Installs and configures a [redis](https://redis.io/) server and two redis slave instances.
 
 ## Salt master (`salt`)
 

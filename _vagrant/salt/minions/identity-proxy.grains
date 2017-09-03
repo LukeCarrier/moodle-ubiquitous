@@ -1,0 +1,8 @@
+environment: dev
+group: dev
+roles:
+  - app-saml
+  - app-debug
+  - app-default-release
+saml-platforms:
+  - identity-proxy

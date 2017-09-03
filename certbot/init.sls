@@ -17,7 +17,8 @@ certbot.pkg:
       - pkgrepo: certbot.repo
 
 # Work around Salt's acme execution module, whose __virtual__ function doesn't
-# yet accommodate the letsencrypt-auto => certbot name change.
+# yet accommodate the letsencrypt-auto => certbot name change and doesn't
+# instruct the CLI to run in a non-interactive state.
 certbot.letsencrypt-auto:
   file.managed:
     - name: /usr/bin/letsencrypt-auto
@@ -33,3 +34,11 @@ certbot.root:
     - user: {{ pillar['nginx']['user'] }}
     - group: {{ pillar['nginx']['user'] }}
     - mode: 0750
+
+certbot.acme-challenge-snippet:
+  file.managed:
+    - name: /etc/nginx/snippets/acme-challenge.conf
+    - source: salt://certbot/nginx/acme-challenge.conf
+    - user: root
+    - group: root
+    - mode: 0644

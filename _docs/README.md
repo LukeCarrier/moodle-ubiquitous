@@ -27,6 +27,8 @@ The technical specifications of the environment are as follows:
 * [PHP 7.0](http://php.net/), with the FPM SAPI and OPcache
 * [PostgreSQL 9.5](http://www.postgresql.org/)
 * [Selenium](http://www.seleniumhq.org/) hub and nodes.
+* Single sign on with [SimpleSAMLphp](https://simplesamlphp.org/)
+* Data caching with [Redis 3](https://redis.io/)
 
 ## License
 

@@ -22,11 +22,6 @@ base:
     - match: grain
     - named
 
-  'roles:app':
-    - match: grain
-    - app
-    - certbot
-
   'roles:app-debug':
     - match: grain
     - app-debug
@@ -35,6 +30,10 @@ base:
     - match: grain
     - app-default-release
 
+  'roles:app-moodle-default-release':
+    - match: grain
+    - app-moodle-default-release
+
   'roles:app-error-pages':
     - match: grain
     - app-error-pages
@@ -42,6 +41,14 @@ base:
   'roles:app-gocd-agent':
     - match: grain
     - app-gocd-agent
+
+  'roles:app-lets-encrypt':
+    - match: grain
+    - app-lets-encrypt
+
+  # 'roles:ssl-local':
+  #   - match: grain
+  #   - ssl-local
 
   'roles:db-pgsql':
     - match: grain
@@ -78,3 +85,15 @@ base:
   'roles:selenium-node-firefox':
     - match: grain
     - selenium-node-firefox
+
+  'roles:app-moodle':
+    - match: grain
+    - app-moodle
+
+  'roles:app-saml':
+    - match: grain
+    - app-saml
+
+  'roles:redis':
+    - match: grain
+    - redis

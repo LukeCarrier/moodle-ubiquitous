@@ -6,12 +6,7 @@ server {
 
     root /var/www/html;
 
-    location /.well-known/acme-challenge/ {
-        root /var/www/acme;
-
-        default_type text/plain;
-        try_files $uri =404;
-    }
+    include snippets/acme-challenge.conf
 
     location / {
 {% if salt['pillar.get']('gocd-server:nginx:use_ssl', False) %}

@@ -10,6 +10,12 @@ A sample Moodle configuration for both development and production deployment com
 * [PostgreSQL 9.5](http://www.postgresql.org/)
 * [Selenium](http://www.seleniumhq.org/) Hub and nodes
 
+An add-on single sign-on experience comprised of:
+
+* Identity provider proxy with [SimpleSAMLphp](https://simplesamlphp.org/)
+* Identity provider with [SimpleSAMLphp](https://simplesamlphp.org/)
+* Optional data storage [Redis](https://redis.io/) Master and slave instances
+
 ---
 
 ## Status
