@@ -1,9 +1,9 @@
 # Ubiquitous Moodle
 
-A sample Moodle configuration for both development and production deployment comprised of:
+A sample [Moodle](https://moodle.org/) and [SimpleSAMLphp](https://simplesamlphp.org/) configuration for both development and production deployment comprised of:
 
 * [Ubuntu 16.04.2 LTS](https://www.ubuntu.com/)
-* Configuration management with [Salt](https://docs.saltstack.com/en/getstarted/)
+* Configuration management with [Salt](https://saltstack.com/)
 * Continuous delivery with [GoCD](https://www.gocd.io/)
 * Static file serving with [nginx](http://nginx.org/)
 * [PHP 7.0](http://php.net/), with the FPM SAPI and OPcache

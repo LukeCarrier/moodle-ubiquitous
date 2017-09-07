@@ -1,6 +1,6 @@
 # Ubiquitous Moodle
 
-Ubiquitous is a multi-purpose Moodle hosting environment.
+Ubiquitous is a multi-purpose [Moodle](https://moodle.org/) and [SimpleSAMLphp](https://simplesamlphp.org/) hosting environment.
 
 It fulfils three requirements:
 
@@ -26,7 +26,7 @@ The technical specifications of the environment are as follows:
 * Static file serving with [nginx](http://nginx.org/)
 * [PHP 7.0](http://php.net/), with the FPM SAPI and OPcache
 * [PostgreSQL 9.5](http://www.postgresql.org/)
-* [Selenium](http://www.seleniumhq.org/) hub and nodes.
+* [Selenium](http://www.seleniumhq.org/) Hub and nodes
 
 ## License
 
