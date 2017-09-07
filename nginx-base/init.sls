@@ -56,6 +56,14 @@ nginx.ssl-params:
     - require:
       - pkg: nginx
 
+nginx.acme-challenge:
+  file.managed:
+  - name: /etc/nginx/snippets/acme-challenge.conf
+  - source: salt://nginx-base/nginx/acme-challenge.conf
+  - user: root
+  - group: root
+  - mode: 0644
+
 {% if pillar['systemd']['apply'] %}
 nginx.service:
   service.running:

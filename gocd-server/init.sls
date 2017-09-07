@@ -70,6 +70,8 @@ go-server.iptables.https:
     - user: root
     - group: root
     - mode: 0644
+    - require:
+      - file: nginx.acme-challenge
 {% if pillar['systemd']['apply'] %}
     - watch_in:
       - service: nginx.reload
