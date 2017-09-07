@@ -6,7 +6,8 @@
 
 ## [Getting started](getting-started/README.md)
 
-* [In development](getting-started/development.md)
+* [For Moodle development](getting-started/development/moodle.md)
+* [For SimpleSAMLphp development](getting-started/development/saml.md)
 * [In test/integration](getting-started/test.md)
 * [In production](getting-started/production.md)
 

@@ -24,9 +24,13 @@ graph TB
 
 See the subchapters for detailed instructions on each of the different tools.
 
-## [Local development environments](development.md)
+## Local development environments
 
-In development environments machines are managed by Vagrant. The default environment provides the following machines:
+In development environments machines are managed by Vagrant, which allows machines can be started and stopped independently or by using Vagrant groups. You're also able to add your own machines as required.
+
+### [For Moodle](development/moodle.md)
+
+ The default environment provides the following machines:
 
 * A Salt master to provision all of the machines
 * An application server running nginx and PHP-FPM, preconfigured for remote debugging with Xdebug
@@ -34,12 +38,19 @@ In development environments machines are managed by Vagrant. The default environ
 * A mail server running MailCatcher, allowing you to see outbound email in real-time
 * A complete Selenium environment, consisting of a hub server, a Firefox node and a Chrome node.
 
-The following machines are provided for testing production configurations:
+### [For SimpleSAMLphp](development/saml.md)
+
+The following machines are provided for testing a single sign on experience:
+
+* An Identity Provider with a built-in authentication source for simulating more complex IdPs.
+* An Identity Provider Proxy capable of sitting between federations.
+
+### Utilities
+
+The following machines are provided for testing more complex configurations:
 
 * A GoCD instance for testing deployment pipelines
 * A nameserver running BIND for testing your DNS configuration.
-
-Machines can be started and stopped independently or by using Vagrant groups. You're also able to add your own machines as required.
 
 ## [Continuous integration and test environments](test.md)
 
