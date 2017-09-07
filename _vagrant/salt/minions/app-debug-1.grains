@@ -1,7 +1,7 @@
 environment: dev
 group: dev
 roles:
-  - app
-  - app-debug
-  - app-default-release
+  - app-moodle
+  - app-moodle-debug
+  - app-moodle-default-release
   - app-error-pages
