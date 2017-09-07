@@ -3,7 +3,7 @@ base:
     - base
     - platforms
 
-  'roles:app':
+  'roles:app-moodle':
     - match: grain
     - app
 
