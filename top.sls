@@ -48,6 +48,9 @@ base:
   'roles:app-ssl-certs':
     - match: grain
     - app-ssl-certs
+  'roles:app-lets-encrypt':
+    - match: grain
+    - app-lets-encrypt
 
   'roles:db-pgsql':
     - match: grain
