@@ -19,7 +19,7 @@ Vagrant.configure(2) do |config|
     salt.vm.synced_folder ".", "/srv/salt", type: "rsync"
     salt.vm.synced_folder "./_vagrant/salt/pillar", "/srv/pillar", type: "rsync"
     salt.vm.provision "salt-salt", type: "shell", path: "./_vagrant/salt/install",
-                      args: [ "--master", "app-debug-1,db-pgsql-1,gocd,named,mail-debug,salt,selenium-hub,selenium-node-chrome,selenium-node-firefox", "--minion", "salt", "--root", "/srv/salt/_vagrant/salt" ]
+                      args: [ "--master", "app-debug-1,identity-proxy,identity-provider,db-pgsql-1,gocd,named,mail-debug,salt,selenium-hub,selenium-node-chrome,selenium-node-firefox", "--minion", "salt", "--root", "/srv/salt/_vagrant/salt" ]
   end
 
   config.vm.define "gocd" do |gocd|
@@ -66,6 +66,42 @@ Vagrant.configure(2) do |config|
                                rsync__exclude: [".git", "phpunit.xml"],
                                rsync__rsync_path: "sudo rsync",
                                rsync__args: ["--archive", "--compress", "--delete"]
+  end
+
+  config.vm.define "identity-provider" do |identityprovider|
+    identityprovider.vm.network "private_network", ip: "192.168.120.55",
+                         netmask: "255.255.255.0"
+    identityprovider.vm.hostname = "identity-provider.moodle"
+
+    identityprovider.ssh.port = 2232
+    identityprovider.vm.network "forwarded_port", guest: 22, host: identityprovider.ssh.port
+
+    identityprovider.vm.synced_folder "./_vagrant", "/vagrant", type: "rsync"
+    identityprovider.vm.provision "identity-provider-salt", type: "shell", path: "./_vagrant/salt/install", args: [ "--minion", "identity-provider", "--root", "/vagrant/salt" ]
+
+    identityprovider.vm.synced_folder "../SimpleSAMLphp-provider", "/home/ubuntu/releases/vagrant", type: "rsync",
+                                      owner: "ubuntu", group: "ubuntu",
+                                      rsync__exclude: [".git", "phpunit.xml"],
+                                      rsync__rsync_path: "sudo rsync",
+                                      rsync__args: ["--archive", "--compress", "--delete"]
+  end
+
+  config.vm.define "identity-proxy" do |identityproxy|
+    identityproxy.vm.network "private_network", ip: "192.168.120.60",
+                         netmask: "255.255.255.0"
+    identityproxy.vm.hostname = "identity-proxy.moodle"
+
+    identityproxy.ssh.port = 2233
+    identityproxy.vm.network "forwarded_port", guest: 22, host: identityproxy.ssh.port
+
+    identityproxy.vm.synced_folder "./_vagrant", "/vagrant", type: "rsync"
+    identityproxy.vm.provision "identity-proxy-salt", type: "shell", path: "./_vagrant/salt/install", args: [ "--minion", "identity-proxy", "--root", "/vagrant/salt" ]
+
+    identityproxy.vm.synced_folder "../SimpleSAMLphp-proxy", "/home/ubuntu/releases/vagrant", type: "rsync",
+                                   owner: "ubuntu", group: "ubuntu",
+                                   rsync__exclude: [".git", "phpunit.xml"],
+                                   rsync__rsync_path: "sudo rsync",
+                                   rsync__args: ["--archive", "--compress", "--delete"]
   end
 
   config.vm.define "db-pgsql-1" do |db1|
@@ -144,6 +180,10 @@ Vagrant.configure(2) do |config|
         "app-debug-1",
         "db-pgsql-1",
         "mail-debug",
+      ],
+      "identity" => [
+        "identity-provider",
+        "identity-proxy",
       ],
       "selenium" => [
         "selenium-hub",

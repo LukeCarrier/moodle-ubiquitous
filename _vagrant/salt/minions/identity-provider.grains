@@ -1,0 +1,10 @@
+environment: dev
+group: dev
+roles:
+  - app-saml
+  - app-debug
+  - app-default-release
+  - app-error-pages
+  - app-ssl-certs
+saml-platforms:
+  - identity-provider

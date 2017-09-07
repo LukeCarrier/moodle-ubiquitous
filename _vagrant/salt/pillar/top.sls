@@ -13,6 +13,16 @@ base:
     - platforms-moodle
     - platforms-moodle-logos
 
+  'roles:app-saml':
+    - match: grain
+    - platforms-saml-logos
+  'G@roles:app-saml and G@saml-platforms:identity-provider':
+    - match: compound
+    - platforms-saml-identity-provider
+  'G@roles:app-saml and G@saml-platforms:identity-proxy':
+    - match: compound
+    - platforms-saml-identity-proxy
+
   'roles:db-pgsql':
     - match: grain
     - db-pgsql
