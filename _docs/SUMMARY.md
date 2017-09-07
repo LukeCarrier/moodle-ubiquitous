@@ -26,6 +26,7 @@
         * [Let's Encrypt](roles/app/addons/lets-encrypt.md)
         * [SSL certificates](roles/app/addons/ssl-certs.md)
 * [PostgreSQL](roles/db-pgsql.md)
+* [Redis](roles/redis.md)
 * [MailCatcher](roles/mail-debug.md)
 * [Mail relay](roles/mail-relay.md)
 * [iptables](roles/iptables.md)

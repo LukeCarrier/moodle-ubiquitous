@@ -90,3 +90,7 @@ base:
   'roles:selenium-node-firefox':
     - match: grain
     - selenium-node-firefox
+
+  'roles:redis':
+    - match: grain
+    - redis
