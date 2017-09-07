@@ -30,6 +30,9 @@ base:
   'roles:app-debug':
     - match: grain
     - app-debug
+  'roles:app-moodle-debug':
+    - match: grain
+    - app-moodle-debug
   'roles:app-default-release':
     - match: grain
     - app-default-release
