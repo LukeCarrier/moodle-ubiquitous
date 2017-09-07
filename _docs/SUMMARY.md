@@ -16,6 +16,7 @@
 * [GoCD agent and server](roles/gocd.md)
 * [Application servers](roles/app/README.md)
     * [Moodle](roles/app/moodle.md)
+    * [SAML](roles/app/saml.md)
     * Addons
         * [Debugging](roles/app/addons/debug.md)
         * [Default release](roles/app/addons/default-release.md)

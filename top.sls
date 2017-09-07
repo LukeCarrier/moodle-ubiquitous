@@ -26,6 +26,9 @@ base:
     - match: grain
     - app-moodle
     - certbot
+  'roles:app-saml':
+    - match: grain
+    - app-saml
 
   'roles:app-debug':
     - match: grain
