@@ -1,0 +1,34 @@
+#!/bin/bash
+
+#
+# Ubiquitous Moodle
+#
+# @author Luke Carrier <luke@carrier.im>
+# @copyright 2016 Luke Carrier
+#
+
+domain=''
+destination=''
+
+while true; do
+    case "$1" in
+        -d|--domain  ) domain="$2"  ; shift 2 ;;
+        -r|--release ) release="$2" ; shift 2 ;;
+        *            ) break        ;         ;;
+    esac
+done
+
+. "$(dirname $(dirname $(readlink -fn $0)))/lib/ubiquitous-lib"
+
+require_root
+require_platform "$domain"
+if [ -z "$release" ]; then
+    abort $ERROR_PARAMS "no release name supplied"
+fi
+
+destination="${platform_releases_dir}/${release}"
+if [ ! -d "$destination" ]; then
+    abort $ERROR_PARAMS "release directory '${destination}' does not exist"
+fi
+
+rsync -ar "${platform_home}/conf/" "$destination"

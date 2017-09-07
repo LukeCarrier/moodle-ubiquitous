@@ -9,6 +9,7 @@
 include:
   - base
   - app-base
+  - app-ubiquitous-dirs
 
 #
 # Supporting packages
@@ -19,6 +20,19 @@ app-moodle.dependencies:
     - pkgs:
       - ghostscript
       - unoconv
+
+#
+# Configuration installation
+#
+
+/usr/local/ubiquitous/bin/ubiquitous-install-config-moodle:
+  file.managed:
+    - source: salt://app-moodle/local/bin/ubiquitous-install-config-moodle
+    - user: root
+    - group: root
+    - mode: 0755
+    - require:
+      - file: app-ubiquitous-dirs.bin
 
 #
 # Moodle platforms

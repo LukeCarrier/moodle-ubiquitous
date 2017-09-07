@@ -9,6 +9,17 @@
 include:
   - base
   - app-base
+  - app-ubiquitous-dirs
+
+app-saml.install-config:
+  file.managed:
+    - name: /usr/local/ubiquitous/bin/ubiquitous-install-config-saml
+    - source: salt://app-saml/local/bin/ubiquitous-install-config-saml
+    - user: root
+    - group: root
+    - mode: 0755
+    - require:
+      - file: app-ubiquitous-dirs.bin
 
 {% set platforms = salt['pillar.get']('platforms') | selectattr('saml', 'defined') %}
 {% for domain, platform in platforms %}
@@ -104,7 +115,7 @@ app-saml.{{ domain }}.saml.{{ module }}:
   file.managed:
     - name: {{ platform['user']['home'] }}/conf/modules/{{ module }}/enable
     - user: {{ platform['user']['name'] }}
-    - group: {{ platform['user']['nam{{ file }}e'] }}
+    - group: {{ platform['user']['name'] }}
     - mode: 0640
     - makedirs: True
 {% else %}

@@ -14,6 +14,8 @@ shopt -s extglob
 shopt -s nullglob
 
 UBIQUITOUS_PREFIX="/usr/local/ubiquitous"
+UBIQUITOUS_BIN="${UBIQUITOUS_PREFIX}/bin"
+UBIQUITOUS_INSTALL_CONFIG="${UBIQUITOUS_BIN}/ubiquitous-install-config-%s"
 UBIQUITOUS_PLATFORMS="${UBIQUITOUS_PREFIX}/etc/ubiquitous-platforms"
 
 UBIQUITOUS_RELEASES_DIR="%s/releases"
@@ -71,8 +73,15 @@ require_platform() {
     # Configuration items in the platforms file, written by Salt
     platform_domain="$(echo "$raw" | cut -d: -f1)"
     platform_basename="$(echo "$raw" | cut -d: -f2)"
-    platform_user="$(echo "$raw" | cut -d: -f3)"
-    platform_home="$(echo "$raw" | cut -d: -f4)"
+    platform_role="$(echo "$raw" | cut -d: -f3)"
+    platform_user="$(echo "$raw" | cut -d: -f4)"
+    platform_home="$(echo "$raw" | cut -d: -f5)"
+
+    # Ensure that platform role is valid
+    platform_install_config_script="$(printf "$UBIQUITOUS_INSTALL_CONFIG" "$platform_role")"
+    if [ ! -x "$platform_install_config_script" ]; then
+        abort $ERROR_PARAMS "invalid platform role '${platform_role}'"
+    fi
 
     # Paths derived from the home directory and basename
     platform_releases_dir="$(printf "$UBIQUITOUS_RELEASES_DIR" "$platform_home")"
