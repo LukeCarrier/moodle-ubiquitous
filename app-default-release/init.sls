@@ -6,7 +6,7 @@
 #
 
 include:
-  - app
+  - app-base
 
 {% for domain, platform in salt['pillar.get']('platforms', {}).items() %}
 {% if 'default_release' in platform %}
@@ -19,18 +19,7 @@ app-default-release.{{ domain }}.release:
     - group: {{ platform ['user']['name'] }}
     - mode: 0755
     - require:
-      - user: app.{{ domain }}.user
-      - file: app.{{ domain }}.home
-
-app-default-release.{{ domain }}.data:
-  file.directory:
-    - name: {{ platform['moodle']['dataroot'] }}
-    - user: {{ platform ['user']['name'] }}
-    - group: {{ platform ['user']['name'] }}
-    - mode: 0770
-    - require:
-      - user: app.{{ domain }}.user
-      - file: app.{{ domain }}.home
+      - app-base.{{ domain }}.releases
 
 app-default-release.{{ domain }}.current:
   file.symlink:

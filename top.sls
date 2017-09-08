@@ -30,15 +30,15 @@ base:
   'roles:app-debug':
     - match: grain
     - app-debug
-
   'roles:app-default-release':
     - match: grain
     - app-default-release
-
+  'roles:app-moodle-default-release':
+    - match: grain
+    - app-moodle-default-release
   'roles:app-error-pages':
     - match: grain
     - app-error-pages
-
   'roles:app-gocd-agent':
     - match: grain
     - app-gocd-agent
