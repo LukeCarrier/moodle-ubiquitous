@@ -107,6 +107,28 @@ php.packages:
       - pkg: php.packages
       - file: /etc/php/7.0/fpm/php-fpm.conf
 
+/etc/php/7.0/fpm/pools-available/__default__.conf:
+  file.managed:
+    - source: salt://app-base/php-fpm/__default__.conf.jinja
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 0644
+    - require:
+      - pkg: php.packages
+      - file: /etc/php/7.0/fpm/pools-available
+
+/etc/php/7.0/fpm/pools-enabled/__default__.conf:
+  file.symlink:
+    - target: /etc/php/7.0/fpm/pools-available/__default__.conf
+    - user: root
+    - group: root
+    - mode: 0644
+    - require:
+      - pkg: php.packages
+      - file: /etc/php/7.0/fpm/pools-enabled
+      - file: /etc/php/7.0/fpm/pools-available/__default__.conf
+
 /var/run/php:
   file.directory:
     - user: {{ pillar['nginx']['user'] }}
