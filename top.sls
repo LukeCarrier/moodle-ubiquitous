@@ -22,9 +22,9 @@ base:
     - match: grain
     - named
 
-  'roles:app':
+  'roles:app-moodle':
     - match: grain
-    - app
+    - app-moodle
     - certbot
 
   'roles:app-debug':

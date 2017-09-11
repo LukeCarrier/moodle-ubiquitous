@@ -20,7 +20,7 @@ $ tune2fs /dev/xxx | grep 'Default mount options'    # ext* filesystems
 
 ## Platforms
 
-A "platform" is an individual Moodle site, its corresponding local user account, nginx `server {}` and its PHP-FPM `[pool]`. Individual application servers can serve multiple platforms. The list of platforms to be installed on each application server is determined based on the contents of the Salt pillar `platforms`, allowing variable allocation of platforms using the Salt top file.
+A "platform" is an individual [Moodle](moodle.md) or [SimpleSAMLphp](saml.md) site, its corresponding local user account, nginx `server {}` and its PHP-FPM `[pool]`. Individual application servers can serve multiple platforms. The list of platforms to be installed on each application server is determined based on the contents of the Salt pillar `platforms`, allowing variable allocation of platforms using the Salt top file.
 
 Per-platform user accounts contain a directory structure like the following:
 

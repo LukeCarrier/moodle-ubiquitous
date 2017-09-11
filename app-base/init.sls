@@ -15,7 +15,7 @@ include:
 
 /etc/logrotate.d/nginx:
   file.managed:
-    - source: salt://app/logrotate/nginx
+    - source: salt://app-base/logrotate/nginx
     - user: root
     - group: root
     - mode: 0644
@@ -78,7 +78,7 @@ php.packages:
 
 /etc/php/7.0/fpm/php-fpm.conf:
   file.managed:
-    - source: salt://app/php-fpm/php-fpm.conf
+    - source: salt://app-base/php-fpm/php-fpm.conf
     - user: root
     - group: root
     - mode: 0644
@@ -106,7 +106,6 @@ php.packages:
     - require:
       - pkg: php.packages
       - file: /etc/php/7.0/fpm/php-fpm.conf
-      - file: /etc/php/7.0/fpm/pools-enabled
 
 /var/run/php:
   file.directory:
@@ -122,7 +121,7 @@ php.packages:
 
 /etc/logrotate.d/php7.0-fpm:
   file.managed:
-    - source: salt://app/logrotate/php7.0-fpm
+    - source: salt://app-base/logrotate/php7.0-fpm
     - user: root
     - group: root
     - mode: 0644
@@ -176,7 +175,7 @@ php.sqlsrv.{{ extension }}.pecl:
 php.sqlsrv.{{ extension }}.ini.available:
   file.managed:
     - name: /etc/php/7.0/mods-available/{{ extension }}.ini
-    - source: salt://app/php/extension.ini.jinja
+    - source: salt://app-base/php/extension.ini.jinja
     - template: jinja
     - context:
       extension: {{ extension }}
@@ -195,21 +194,11 @@ php.sqlsrv.{{ extension }}.ini.enabled.{{ sapi }}:
 {% endfor %}
 
 #
-# Supporting packages
-#
-
-moodle.dependencies:
-  pkg.installed:
-    - pkgs:
-      - ghostscript
-      - unoconv
-
-#
-# Required directories
+# Directories
 #
 
 {% for home_directory in pillar['system']['home_directories'] %}
-homes.{{ home_directory }}:
+app-base.homes.{{ home_directory }}:
   file.directory:
     - name: {{ home_directory }}
     - user: root
@@ -217,21 +206,35 @@ homes.{{ home_directory }}:
     - mode: 755
 
 {% if pillar['acl']['apply'] %}
-homes.{{ home_directory }}.acl:
+app-base.homes.{{ home_directory }}.acl:
   acl.present:
     - name: {{ home_directory }}
     - acl_type: user
     - acl_name: {{ pillar['nginx']['user'] }}
     - perms: rx
+    - require:
+      - file: app-base.homes.{{ home_directory }}
 {% endif %}
 {% endfor %}
 
 #
-# Moodle platforms
+# Platforms
 #
 
 {% for domain, platform in salt['pillar.get']('platforms', {}).items() %}
-app.{{ domain }}.user:
+{% if platform['php']['values']['session.save_path'] %}
+app-base.{{ domain }}.session.dir.create:
+  file.directory:
+    - name: {{ platform['php']['values']['session.save_path'] }}
+    - user: {{ platform['user']['name'] }}
+    - group: {{ platform['user']['name'] }}
+    - mode: 0770
+    - makedirs: True
+    - require:
+      - user: {{ platform['user']['name'] }}
+{% endif %}
+
+app-base.{{ domain }}.user:
   user.present:
     - name: {{ platform['user']['name'] }}
     - fullname: {{ domain }}
@@ -239,7 +242,7 @@ app.{{ domain }}.user:
     - home: {{ platform['user']['home'] }}
     - gid_from_name: true
 
-app.{{ domain }}.home:
+app-base.{{ domain }}.home:
   file.directory:
     - name: {{ platform['user']['home'] }}
     - user: {{ platform['user']['name'] }}
@@ -249,26 +252,26 @@ app.{{ domain }}.home:
       - user: {{ platform['user']['name'] }}
 
 {% if pillar['acl']['apply'] %}
-app.{{ domain }}.home.acl:
+app-base.{{ domain }}.home.acl:
   acl.present:
     - name: {{ platform['user']['home'] }}
     - acl_type: user
     - acl_name: {{ pillar['nginx']['user'] }}
     - perms: rx
     - require:
-      - file: app.{{ domain }}.home
+      - file: app-base.{{ domain }}.home
 
-app.{{ domain }}.home.acl.default:
+app-base.{{ domain }}.home.acl.default:
   acl.present:
     - name: {{ platform['user']['home'] }}
     - acl_type: default:user
     - acl_name: {{ pillar['nginx']['user'] }}
     - perms: rx
     - require:
-      - file: app.{{ domain }}.home
+      - file: app-base.{{ domain }}.home
 {% endif %}
 
-app.{{ domain }}.releases:
+app-base.{{ domain }}.releases:
   file.directory:
     - name: {{ platform['user']['home'] }}/releases
     - makedirs: True
@@ -276,84 +279,37 @@ app.{{ domain }}.releases:
     - group: {{ platform['user']['name'] }}
     - mode: 0770
     - require:
-      - file: app.{{ domain }}.home
+      - file: app-base.{{ domain }}.home
 
 {% if pillar['acl']['apply'] %}
-app.{{ domain }}.releases.acl:
+app-base.{{ domain }}.releases.acl:
   acl.present:
     - name: {{ platform['user']['home'] }}/releases
     - acl_type: user
     - acl_name: {{ pillar['nginx']['user'] }}
     - perms: rx
     - require:
-      - file: app.{{ domain }}.releases
+      - file: app-base.{{ domain }}.releases
 
-app.{{ domain }}.releases.acl.default:
+app-base.{{ domain }}.releases.acl.default:
   acl.present:
     - name: {{ platform['user']['home'] }}/releases
     - acl_type: default:user
     - acl_name: {{ pillar['nginx']['user'] }}
     - perms: rx
     - require:
-      - file: app.{{ domain }}.home
+      - file: app-base.{{ domain }}.home
 {% endif %}
 
-app.{{ domain }}.data:
-  file.directory:
-    - name: {{ platform['user']['home'] }}/data
-    - user: {{ platform['user']['name'] }}
-    - group: {{ platform['user']['name'] }}
-    - mode: 0770
-    - require:
-      - file: app.{{ domain }}.home
-
-app.{{ domain }}.localcache:
-  file.directory:
-    - name: {{ platform['user']['home'] }}/data/localcache
-    - user: {{ platform['user']['name'] }}
-    - group: {{ platform['user']['name'] }}
-    - mode: 0770
-    - require:
-      - file: app.{{ domain }}.data
-
-app.{{ domain }}.nginx.log:
+app-base.{{ domain }}.nginx.log:
   file.directory:
     - name: /var/log/nginx/{{ platform['basename'] }}
     - user: www-data
     - group: adm
     - mode: 0750
 
-app.{{ domain }}.nginx.available:
-  file.managed:
-    - name: /etc/nginx/sites-available/{{ platform['basename'] }}.conf
-    - source: salt://app/nginx/platform.conf.jinja
-    - template: jinja
-    - context:
-      domain: {{ domain }}
-      instance: blue
-    - user: root
-    - group: root
-    - mode: 0644
-    - require:
-      - pkg: nginx
-{% if pillar['systemd']['apply'] %}
-    - onchanges_in:
-      - app.nginx.restart
-{% endif %}
-
-app.{{ domain }}.nginx.enabled:
-  file.symlink:
-    - name: /etc/nginx/sites-enabled/{{ platform['basename'] }}.conf
-    - target: /etc/nginx/sites-available/{{ platform['basename'] }}.conf
-    - require:
-      - file: app.{{ domain }}.nginx.available
-{% if pillar['systemd']['apply'] %}
-    - onchanges_in:
-      - app.nginx.restart
-{% endif %}
-
 {% for name, contents in platform['nginx'].get('extra', {}).items() %}
-app.{{ domain }}.nginx.extra.{{ name }}:
+app-base.{{ domain }}.nginx.extra.{{ name }}:
   file.managed:
     - name: /etc/nginx/sites-extra/{{ platform['basename'] }}.{{ name }}.conf
     - contents: {{ contents | yaml_encode }}
@@ -366,7 +322,7 @@ app.{{ domain }}.nginx.extra.{{ name }}:
 {% endif %}
 {% endfor %}
 
-app.{{ domain }}.php-fpm.log:
+app-base.{{ domain }}.php-fpm.log:
   file.directory:
     - name: /var/log/php7.0-fpm/{{ platform['basename'] }}
     - user: {{ platform['user']['name'] }}
@@ -374,10 +330,10 @@ app.{{ domain }}.php-fpm.log:
     - mode: 0750
 
 {% for instance in ['blue', 'green'] %}
-app.{{ domain }}.{{ instance }}.php-fpm:
+app-base.{{ domain }}.{{ instance }}.php-fpm:
   file.managed:
     - name: /etc/php/7.0/fpm/pools-available/{{ platform['basename'] }}.{{ instance }}.conf
-    - source: salt://app/php-fpm/platform.conf.jinja
+    - source: salt://app-base/php-fpm/platform.conf.jinja
     - template: jinja
     - context:
       domain: {{ domain }}
@@ -389,30 +345,10 @@ app.{{ domain }}.{{ instance }}.php-fpm:
       - pkg: php.packages
 {% if pillar['systemd']['apply'] %}
     - onchanges_in:
-      - app.php-fpm.reload
+      - service: app.php-fpm.restart
 {% endif %}
 {% endfor %}
-
-app.{{ domain }}.config:
-  file.managed:
-    - name: {{ platform['user']['home'] }}/config.php
-    - source: salt://app/moodle/config.php.jinja
-    - template: jinja
-    - context:
-      cfg: {{ platform['moodle'] }}
-    - user: {{ platform['user']['name'] }}
-    - group: {{ platform['user']['name'] }}
-    - mode: 0660
 {% endfor %}
-
-{% if pillar['systemd']['apply'] %}
-app.nginx.reload:
-  cmd.run:
-    - name: systemctl reload nginx || systemctl restart nginx
-
-app.nginx.restart:
-  cmd.run:
-    - name: systemctl restart nginx
 
 app.php-fpm.enable:
   service.running:
@@ -421,15 +357,16 @@ app.php-fpm.enable:
     - require:
       - php.packages
 
-app.php-fpm.reload:
+app.php-fpm.restart:
   cmd.run:
     - name: systemctl reload php7.0-fpm || systemctl restart php7.0-fpm
     - require:
       - php.packages
 
-app.php-fpm.restart:
+app.nginx.reload:
   cmd.run:
-    - name: systemctl restart php7.0-fpm
-    - require:
-      - php.packages
-{% endif %}
+    - name: systemctl reload nginx || systemctl restart nginx
+
+app.nginx.restart:
+  cmd.run:
+    - name: systemctl restart nginx
