@@ -5,6 +5,7 @@
 # @copyright 2016 Luke Carrier
 #
 
+{% from 'app-base/macros.sls' import app_platform, app_restarts %}
 include:
   - base
   - app-base
@@ -13,7 +14,7 @@ include:
 # Supporting packages
 #
 
-moodle.dependencies:
+app-moodle.dependencies:
   pkg.installed:
     - pkgs:
       - ghostscript
@@ -22,6 +23,9 @@ moodle.dependencies:
 #
 # Moodle platforms
 #
+
+{% for domain, platform in salt['pillar.get']('platforms', {}).items() if 'moodle' in platform %}
+{{ app_platform('moodle', domain, platform) }}
 
 moodle.{{ domain }}.nginx.available:
   file.managed:
@@ -39,7 +43,7 @@ moodle.{{ domain }}.nginx.available:
       - pkg: nginx
 {% if pillar['systemd']['apply'] %}
     - onchanges_in:
-      - service: app.nginx.restart
+      - service: app-moodle.nginx.restart
 {% endif %}
 
 moodle.{{ domain }}.nginx.enabled:
@@ -50,7 +54,7 @@ moodle.{{ domain }}.nginx.enabled:
       - file: moodle.{{ domain }}.nginx.available
 {% if pillar['systemd']['apply'] %}
     - onchanges_in:
-      - service: app.nginx.restart
+      - service: app-moodle.nginx.restart
 {% endif %}
 
 moodle.{{ domain }}.data:
@@ -81,6 +85,6 @@ moodle.{{ domain }}.config:
     - user: {{ platform['user']['name'] }}
     - group: {{ platform['user']['name'] }}
     - mode: 0660
-    - onchanges_in:
-      - service: app.nginx.restart
-      - service: app.php-fpm.restart
+{% endfor %}
+
+{{ app_restarts('moodle') }}
