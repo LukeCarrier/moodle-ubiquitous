@@ -126,6 +126,23 @@ php.packages:
     - group: root
     - mode: 0644
 
+app-base.php-fpm.enable:
+  service.running:
+    - name: php7.0-fpm
+    - enable: True
+    - require:
+      - php.packages
+      - /etc/php/7.0/fpm/php-fpm.conf
+      - /etc/php/7.0/fpm/pools-available
+      - /etc/php/7.0/fpm/pools-enabled
+      - /etc/php/7.0/fpm/pools-extra
+      - /etc/php/7.0/fpm/pool.d
+      - /etc/php/7.0/fpm/pools-available/__default__.conf
+      - /etc/php/7.0/fpm/pools-enabled/__default__.conf
+      - /var/run/php
+      - /var/log/php7.0-fpm
+      - /etc/logrotate.d/php7.0-fpm
+
 #
 # SQL Server drivers for PHP
 #
