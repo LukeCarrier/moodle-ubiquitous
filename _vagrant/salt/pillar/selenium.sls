@@ -1,10 +1,10 @@
 selenium:
   server_jar:
-    source: http://selenium-release.storage.googleapis.com/3.4/selenium-server-standalone-3.4.0.jar
-    source_hash: 21cbbd775678821b6b72c208b8d59664a4c7381b3c50b008b331914d2834ec8d
+    source: http://selenium-release.storage.googleapis.com/3.5/selenium-server-standalone-3.5.3.jar
+    source_hash: 66c137224997e631573aa2354c13db4f467dccb08a5345aea15ea70b69728f2f
   chromedriver:
-    source: https://chromedriver.storage.googleapis.com/2.30/chromedriver_linux64.zip
-    source_hash: 342f4f8db4f9c5f14fdd8a255d2188bf735e6785d678fce93eab0b316307e474
+    source: https://chromedriver.storage.googleapis.com/2.32/chromedriver_linux64.zip
+    source_hash: 1e053ebec954790bab426f1547faa6328abff607b246e4493a9d927b1e13d7e4
 
 selenium-hub:
   port: 4444
