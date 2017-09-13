@@ -25,8 +25,9 @@ app-moodle.dependencies:
 # Configuration installation
 #
 
-/usr/local/ubiquitous/bin/ubiquitous-install-config-moodle:
+app-moodle.install-config:
   file.managed:
+    - name: /usr/local/ubiquitous/bin/ubiquitous-install-config-moodle
     - source: salt://app-moodle/local/bin/ubiquitous-install-config-moodle
     - user: root
     - group: root
@@ -41,7 +42,7 @@ app-moodle.dependencies:
 {% for domain, platform in salt['pillar.get']('platforms', {}).items() if 'moodle' in platform %}
 {{ app_platform('moodle', domain, platform) }}
 
-moodle.{{ domain }}.nginx.available:
+app-moodle.{{ domain }}.nginx.available:
   file.managed:
     - name: /etc/nginx/sites-available/{{ platform['basename'] }}.conf
     - source: salt://app-moodle/nginx/platform.conf.jinja
@@ -60,18 +61,18 @@ moodle.{{ domain }}.nginx.available:
       - service: app-moodle.nginx.restart
 {% endif %}
 
-moodle.{{ domain }}.nginx.enabled:
+app-moodle.{{ domain }}.nginx.enabled:
   file.symlink:
     - name: /etc/nginx/sites-enabled/{{ platform['basename'] }}.conf
     - target: /etc/nginx/sites-available/{{ platform['basename'] }}.conf
     - require:
-      - file: moodle.{{ domain }}.nginx.available
+      - file: app-moodle.{{ domain }}.nginx.available
 {% if pillar['systemd']['apply'] %}
     - onchanges_in:
       - service: app-moodle.nginx.restart
 {% endif %}
 
-moodle.{{ domain }}.data:
+app-moodle.{{ domain }}.data:
   file.directory:
     - name: {{ platform['user']['home'] }}/data
     - user: {{ platform['user']['name'] }}
@@ -80,16 +81,16 @@ moodle.{{ domain }}.data:
     - require:
       - file: app-base.{{ domain }}.home
 
-moodle.{{ domain }}.localcache:
+app-moodle.{{ domain }}.localcache:
   file.directory:
     - name: {{ platform['user']['home'] }}/data/localcache
     - user: {{ platform['user']['name'] }}
     - group: {{ platform['user']['name'] }}
     - mode: 0770
     - require:
-      - file: moodle.{{ domain }}.data
+      - file: app-moodle.{{ domain }}.data
 
-moodle.{{ domain }}.config:
+app-moodle.{{ domain }}.config:
   file.managed:
     - name: {{ platform['user']['home'] }}/config.php
     - source: salt://app-moodle/moodle/config.php.jinja
