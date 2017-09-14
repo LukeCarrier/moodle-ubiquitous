@@ -6,10 +6,16 @@
 # @copyright 2017 Sascha Peter
 #
 
+{% from 'app-base/macros.sls' import app_platform, app_restarts %}
+
 include:
   - base
   - app-base
   - app-ubiquitous-dirs
+
+#
+# Configuration installation
+#
 
 app-saml.install-config:
   file.managed:
@@ -21,8 +27,13 @@ app-saml.install-config:
     - require:
       - file: app-ubiquitous-dirs.bin
 
-{% set platforms = salt['pillar.get']('platforms') | selectattr('saml', 'defined') %}
-{% for domain, platform in platforms %}
+#
+# SimpleSAMLphp platforms
+#
+
+{% for domain, platform in salt['pillar.get']('platforms', {}).items() if 'saml' in platform %}
+{{ app_platform('saml', domain, platform) }}
+
 app-saml.{{ domain }}.nginx.available:
   file.managed:
     - name: /etc/nginx/sites-available/{{ platform['basename'] }}.conf
@@ -147,10 +158,7 @@ app-saml.{{ domain }}.saml.metadata.{{ file }}:
     - group: {{ platform['user']['name'] }}
     - mode: 0660
 {% endfor %}
+{% endfor %}
 
-app-saml.nginx.reload:
-  service.running:
-    - name: nginx
-    - reload: true
+{{ app_restarts('saml') }}
 
-{% lets_encrypt_all('moodle', platforms) %}
