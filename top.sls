@@ -45,6 +45,9 @@ base:
   'roles:app-gocd-agent':
     - match: grain
     - app-gocd-agent
+  'roles:app-ssl-certs':
+    - match: grain
+    - app-ssl-certs
 
   'roles:db-pgsql':
     - match: grain

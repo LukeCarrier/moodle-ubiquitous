@@ -22,6 +22,7 @@
         * [Error pages](roles/app/addons/error-pages.md)
         * [GoCD agent](roles/app/addons/gocd-agent.md)
         * [Let's Encrypt](roles/app/addons/lets-encrypt.md)
+        * [SSL certificates](roles/app/addons/ssl-certs.md)
 * [PostgreSQL](roles/db-pgsql.md)
 * [MailCatcher](roles/mail-debug.md)
 * [Mail relay](roles/mail-relay.md)
