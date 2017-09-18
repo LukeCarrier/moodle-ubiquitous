@@ -6,6 +6,8 @@
 #
 
 {% from 'app-base/macros.sls' import app_platform, app_restarts %}
+{% from 'app-lets-encrypt/macros.sls' import lets_encrypt_all %}
+
 include:
   - base
   - app-base
@@ -103,3 +105,5 @@ app-moodle.{{ domain }}.config:
 {% endfor %}
 
 {{ app_restarts('moodle') }}
+
+{{ lets_encrypt_all('moodle', platforms) }}

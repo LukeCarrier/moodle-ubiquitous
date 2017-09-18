@@ -7,6 +7,7 @@
 #
 
 {% from 'app-base/macros.sls' import app_platform, app_restarts %}
+{% from 'app-lets-encrypt/macros.sls' import lets_encrypt_all %}
 
 include:
   - base
@@ -162,3 +163,4 @@ app-saml.{{ domain }}.saml.metadata.{{ file }}:
 
 {{ app_restarts('saml') }}
 
+{{ lets_encrypt_all('saml', platforms) }}

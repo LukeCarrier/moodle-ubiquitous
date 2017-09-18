@@ -26,11 +26,6 @@ app-{{ app }}-lets-encrypt.{{ domain }}.cert:
 {% endmacro %}
 
 {% macro lets_encrypt_restarts(app) %}
-app-{{ app }}-null:
-  cmd.run:
-    - name: /bin/false
-    - unless: /bin/true
-
 app-{{ app }}-lets-encrypt.nginx-pre-certbot:
   cmd.run:
     - name: systemctl reload nginx || systemctl restart nginx
@@ -42,4 +37,14 @@ app-{{ app }}-lets-encrypt.nginx-post-certbot:
     - name: systemctl restart nginx
   onchanges:
     - app-{{ app }}-null
+{% endmacro %}
+
+{% macro lets_encrypt_all(app, platforms) %}
+{% for domain, platform in salt['pillar.get']('platforms', {}).items() if 'lets_encrypt' in platform %}
+{{ lets_encrypt_platform(app, domain, platform) }}
+
+{% if loop.last %}
+{{ lets_encrypt_restarts(app) }}
+{% endif %}
+{% endfor %}
 {% endmacro %}
