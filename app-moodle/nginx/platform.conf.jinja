@@ -1,4 +1,7 @@
 {% set platform = pillar['platforms'][domain] %}
+{% set ssl = 'ssl' in platform['nginx']
+    and salt['file.file_exists'](platform['nginx']['ssl']['certificate'])
+    and salt['file.file_exists'](platform['nginx']['ssl']['certificate_key']) %}
 
 {%- macro lane_location(lane) %}
     location ~ {{ lane['location'] | replace('\\\\', '\\') }} {
@@ -21,15 +24,33 @@
 
 {% for source, destination in platform.get('rewrites', {}).items() %}
 server {
+    listen 80;
     server_name {{ source }};
 
     root {{ platform['user']['home'] }}/current;
-    rewrite ^ https://{{ destination }}$request_uri? permanent;
+    rewrite ^ $scheme://{{ destination }}$request_uri? permanent;
 }
 {% endfor %}
 
+{% if ssl %}
 server {
+    listen 80;
     server_name {{ domain }}{% if 'aliases' in platform %} {{ platform['aliases'] | join(' ') }}{% endif %};
+
+    root {{ platform['user']['home'] }}/current;
+    rewrite ^ https://$host$request_uri? permanent;
+}
+{% endif %}
+
+server {
+    listen {{ '443 ssl' if ssl else '80' }};
+    server_name {{ domain }}{% if 'aliases' in platform %} {{ platform['aliases'] | join(' ') }}{% endif %};
+
+{% if ssl %}
+    ssl on;
+    ssl_certificate {{ platform['nginx']['ssl']['certificate'] }};
+    ssl_certificate_key {{ platform['nginx']['ssl']['certificate_key'] }};
+{% endif %}
 
     root {{ platform['user']['home'] }}/current;
     index index.php index.html;
