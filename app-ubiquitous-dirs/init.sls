@@ -1,3 +1,10 @@
+#
+# Ubiquitous Moodle
+#
+# @author Luke Carrier <luke@carrier.im>
+# @copyright 2016 Luke Carrier
+#
+
 app-ubiquitous-dirs:
   file.directory:
     - name: /usr/local/ubiquitous
