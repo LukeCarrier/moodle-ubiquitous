@@ -147,3 +147,15 @@ app-{{ app }}.nginx.restart:
   cmd.run:
     - name: systemctl restart nginx
 {% endmacro %}
+
+{% macro php_fpm_status_clients(platform_basename) %}
+location ~ ^/(status|ping)$ {
+{% for client in salt['pillar.get']('php-fpm:status_clients', []) %}
+    allow {{ client }};
+{% endfor %}
+    deny all;
+
+    include fastcgi.conf;
+    fastcgi_pass unix:/var/run/php/php7.0-fpm-{{ platform_basename }}.sock;
+}
+{% endmacro %}

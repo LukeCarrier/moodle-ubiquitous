@@ -1,3 +1,5 @@
+{% from 'app-base/macros.sls' import php_fpm_status_clients %}
+
 {% set platform = pillar['platforms'][domain] %}
 {% set ssl = 'ssl' in platform['nginx']
     and salt['file.file_exists'](platform['nginx']['ssl']['certificate'])
@@ -38,7 +40,12 @@ server {
     server_name {{ domain }}{% if 'aliases' in platform %} {{ platform['aliases'] | join(' ') }}{% endif %};
 
     root {{ platform['user']['home'] }}/current;
-    rewrite ^ https://$host$request_uri? permanent;
+
+    location / {
+        rewrite ^ https://$host$request_uri? permanent;
+    }
+
+    {{ php_fpm_status_clients(platform['basename']) | indent(4) }}
 }
 {% endif %}
 
@@ -66,15 +73,7 @@ server {
 
     include "sites-extra/{{ platform['basename'] }}.*.conf";
 
-    location ~ ^/(status|ping)$ {
-{% for client in salt['pillar.get']('php-fpm:status_clients', []) %}
-        allow {{ client }};
-{% endfor %}
-        deny all;
-
-        include fastcgi.conf;
-        fastcgi_pass unix:/var/run/php/php7.0-fpm-{{ platform['basename'] }}.sock;
-    }
+    {{ php_fpm_status_clients(platform['basename']) | indent(4) }}
 
     {{ salt['pillar.get']('maintenance:override-conditions', '') | indent(4) }}
 
