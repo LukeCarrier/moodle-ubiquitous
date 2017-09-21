@@ -44,3 +44,11 @@ base:
   'roles:selenium-.+':
     - match: grain_pcre
     - selenium
+
+  'roles:redis':
+    - match: grain
+    - redis
+
+  'roles:redis-sentinel':
+    - match: grain
+    - redis-sentinel
