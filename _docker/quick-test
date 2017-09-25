@@ -1,0 +1,101 @@
+#!/bin/bash
+
+#
+# Ubiquitous Moodle
+#
+# @author Luke Carrier <luke@carrier.im>
+# @copyright 2016 Luke Carrier
+#
+
+args=()
+extra_volumes=()
+tag='lukecarrier/moodle-ubiquitous'
+trust_hosts=()
+debug=0
+
+while true; do
+    case "$1" in
+        -c|--component-dir ) component_dir="$2" ; shift 2 ;;
+        -h|--trust-host    ) trust_hosts+="$2"  ; shift 2 ;;
+        -i|--identity-file ) identity_file="$2" ; shift 2 ;;
+        -p|--platform-dir  ) platform_dir="$2"  ; shift 2 ;;
+        -t|--tag           ) tag="$2"           ; shift 2 ;;
+        -a|--args          ) args+=($2)         ; shift 2 ;;
+        -d|--debug         ) debug=1            ; shift 1 ;;
+        *                  ) break              ;         ;;
+    esac
+done
+
+if [ -n "$component_dir" ] && [ -z "$platform_dir" ]; then
+    test_type='component'
+    test_dir="$component_dir"
+    test_prepare='/usr/local/ubiquitous/bin/ubiquitous-prepare-component --source-directory /app --project-file tests/integration/componentmgr.json'
+elif [ -z "$component_dir" ] && [ -n "$platform_dir" ]; then
+    test_type='platform'
+    test_dir="$platform_dir"
+    test_prepare='/usr/local/ubiquitous/bin/ubiquitous-prepare-platform --source-directory /app'
+else
+    echo 'one of --component-dir or --platform-dir must be specified' >&2
+    exit 1
+fi
+
+install_identity=''
+if [ -n "$identity_file" ]; then
+    identity_file="$(readlink -fn $identity_file)"
+    extra_volumes+=('--volume')
+    extra_volumes+=("$identity_file":/identity)
+    read -r -d '' install_identity <<EOF
+mkdir "\${HOME}/.ssh"
+chmod 0700 "\${HOME}/.ssh"
+cp /identity "\${HOME}/.ssh/id_rsa"
+chmod 0600 "\${HOME}/.ssh/id_rsa"
+EOF
+
+    for host in ${trust_hosts[@]}; do
+        install_identity+="$(printf "\nssh-keyscan -H $host >> \${HOME}/.ssh/known_hosts")"
+    done
+fi
+
+set -euo pipefail
+IFS=$'\n\t'
+
+shopt -s extglob
+shopt -s nullglob
+
+entrypoint_script=''
+trap_exit() {
+    if [ -n "$entrypoint_script" ] && [ -f "$entrypoint_script" ]; then
+        echo "removing entrypoint script ${entrypoint_script}"
+        rm -f "$entrypoint_script"
+    fi
+}
+trap trap_exit EXIT
+
+test_dir="$(readlink -fn "$test_dir")"
+echo "using --${test_type}-dir ${test_dir} against container with tag ${tag}"
+
+[ $debug -ne 0 ] && debug='exec /bin/bash'
+
+entrypoint_script="$(mktemp -p /tmp ubiqt.XXXXXXX)"
+set +e
+read -r -d '' script <<EOF
+/usr/local/ubiquitous/bin/ubiquitous-ctl start
+${install_identity}
+${test_prepare}
+/usr/local/ubiquitous/bin/ubiquitous-prepare
+/usr/local/ubiquitous/bin/ubiquitous-run-tests ${args[@]}
+${debug}
+EOF
+set -e
+echo "writing entrypoint script to ${entrypoint_script} with contents:"
+echo "$script"
+echo "$script" >"$entrypoint_script"
+
+docker run -it \
+        --volume "$test_dir":/app --volume "$entrypoint_script":/entrypoint \
+        ${extra_volumes[@]} \
+        --workdir /app --memory 4g --memory-swap 4g \
+        --publish 8080:80 --publish 8044:4444 \
+        --publish 8055:5555 --publish 8056:5556 --publish 8057:5557 --publish 8058:5558 \
+        --publish 8065:5995 --publish 8066:5996 --publish 8067:5997 --publish 8068:5998 \
+        "$tag" /bin/bash /entrypoint
