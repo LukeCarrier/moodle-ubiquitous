@@ -5,3 +5,4 @@ roles:
   - app-moodle-debug
   - app-moodle-default-release
   - app-error-pages
+  - app-ssl-certs
