@@ -1,0 +1,13 @@
+{% from 'redis/macros.sls' import redis_config_option %}
+
+{%- for dict in pillar['redis-sentinel'] %}
+{%-   set key = dict.keys()[0] -%}
+{%-   if key == 'sentinel' -%}
+{%-     for sentinel_dict in dict.values()[0] %}
+{{ redis_config_option(
+        'sentinel ' + sentinel_dict.keys()[0], sentinel_dict.values()[0]) }}
+{%-     endfor %}
+{%-   else %}
+{{ redis_config_option(key, dict.values()[0]) }}
+{%-   endif -%}
+{% endfor -%}

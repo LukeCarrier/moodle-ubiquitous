@@ -94,3 +94,6 @@ base:
   'roles:redis':
     - match: grain
     - redis
+  'roles:redis-sentinel':
+    - match: grain
+    - redis-sentinel
