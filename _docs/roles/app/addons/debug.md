@@ -2,6 +2,12 @@
 
 The `app-debug` role is intended for use in development and integration environments. It installs and configures the Xdebug extension for PHP debugging and profiling, including raising web server timeouts to accommodate debugging sessions.
 
+## Specialised versions
+
+Specialised versions of this role exist for use with specific applications:
+
+* [`app-moodle-debug`](moodle-debug.md) creates the Behat `faildump` directory and provides aliases for the Moodle installation at `/behat`, required for the [acceptance testing environment](https://docs.moodle.org/dev/Running_acceptance_test).
+
 
 ## Xdebug
 
