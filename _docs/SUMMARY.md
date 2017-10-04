@@ -21,6 +21,7 @@
     * [SAML](roles/app/saml.md)
     * Addons
         * [Debugging](roles/app/addons/debug.md)
+            * [Moodle](roles/app/addons/moodle-debug.md)
         * [Default release](roles/app/addons/default-release.md)
         * [Error pages](roles/app/addons/error-pages.md)
         * [GoCD agent](roles/app/addons/gocd-agent.md)
