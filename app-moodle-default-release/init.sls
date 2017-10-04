@@ -9,7 +9,7 @@ include:
   - app-moodle
   - app-default-release
 
-{% for domain, platform in salt['pillar.get']('platforms', {}).items() %}
+{% for domain, platform in salt['pillar.get']('platforms', {}).items() if 'moodle' in platform %}
 app-moodle-default-release.{{ domain }}.data:
   file.directory:
     - name: {{ platform['moodle']['dataroot'] }}
