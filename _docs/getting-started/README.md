@@ -26,7 +26,7 @@ See the subchapters for detailed instructions on each of the different tools.
 
 ## Local development environments
 
-In development environments machines are managed by Vagrant, which allows machines can be started and stopped independently or by using Vagrant groups. You're also able to add your own machines as required.
+In development environments machines are managed by Vagrant, which allows machines to be started and stopped independently or by using Vagrant groups. You're also able to add your own machines as required.
 
 ### [For Moodle](development/moodle.md)
 
@@ -58,4 +58,4 @@ In this configuration, all of the [roles](../roles/README.md) required for a bar
 
 ## [Production deployments](production.md)
 
-Ubiquitous does not provide a provision tool configuration for production environments. Our manual installation instructions can be automated with your preferred tool.
+Ubiquitous does not provide a provisioning tool configuration for production environments. Our manual installation instructions can be automated with your preferred tool.
