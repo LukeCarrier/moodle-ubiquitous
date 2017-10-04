@@ -4,8 +4,9 @@
 
 * [Introduction](README.md)
 
-## [Getting started](getting-started/README.md)
+## Getting started
 
+* [Introduction](getting-started/README.md)
 * [For Moodle development](getting-started/development/moodle.md)
 * [For SimpleSAMLphp development](getting-started/development/saml.md)
 * [In test/integration](getting-started/test.md)
