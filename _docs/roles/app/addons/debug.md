@@ -31,4 +31,4 @@ Since Moodle serves many assets via PHP, you'll probably want to disable the _No
 
 ### Profiling
 
-Xdebug profiler output is written to `{home}/data/profiling` for each platform when enabled. These Callgrind format files can be opened with a tool such as [KCachegrind](https://kcachegrind.github.io/).
+Xdebug profiler output is written to `{home}/data/profiling` for each platform when enabled. For easier access this directory is also made accessible over HTTP at `/data/profiling`. These Callgrind format files can be opened with a tool such as [KCachegrind](https://kcachegrind.github.io/).
