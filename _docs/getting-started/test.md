@@ -79,7 +79,7 @@ The recommended approach for building the container image is to allow the Docker
 The Docker container image can be built from the [Dockerfile](../../Dockerfile) with a single command:
 
 ```
-$ docker build .
+$ docker build -f _docker/allinone/Dockerfile .
 ```
 
 ## Testing the containers

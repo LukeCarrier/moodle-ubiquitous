@@ -30,9 +30,9 @@ RUN apt-get update \
 # Install Salt and accomanying configuration
 RUN curl -L https://bootstrap.saltstack.com | sh -s -- -X \
         && sed -i "s/#file_client:.*/file_client: local/" /etc/salt/minion
-COPY ./_docker/salt/grain/ci /etc/salt/grains
+COPY ./_docker/allinone/salt/grain/ci /etc/salt/grains
 COPY . /srv/salt/
-COPY ./_docker/salt/pillar /srv/pillar/
+COPY ./_docker/allinone/salt/pillar /srv/pillar/
 
 # Apply the states in two passes:
 # -> one with no platforms declared to perform the installation of the services
@@ -41,7 +41,7 @@ COPY ./_docker/salt/pillar /srv/pillar/
 # This workaround allows Ubiquitous to function despite the lack of an init
 # system.
 RUN salt-call --log-level=$salt_log_level --local state.apply
-COPY ./_docker/salt/pillar_post/* /srv/pillar/
+COPY ./_docker/allinone/salt/pillar_post/* /srv/pillar/
 RUN bash $shell_args /usr/local/ubiquitous/bin/ubiquitous-ctl start postgresql \
         && cp /usr/local/ubiquitous/share/postgresql-template-charset.sql /tmp/postgresql-template-charset.sql \
         && sudo -u postgres psql --file /tmp/postgresql-template-charset.sql \
