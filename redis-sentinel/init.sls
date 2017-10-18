@@ -14,7 +14,7 @@ redis-sentinel.iptables.redis-sentinel:
     - chain: INPUT
     - jump: ACCEPT
     - proto: tcp
-    - dport: 6379
+    - dport: 26379
     - save: True
     - require:
       - iptables: iptables.default.input.established
