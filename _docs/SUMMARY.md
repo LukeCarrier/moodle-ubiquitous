@@ -36,6 +36,8 @@
 * [CIFS mounts](roles/mount-cifs.md)
 * [BIND](roles/named.md)
 * [Selenium](roles/selenium.md)
+* Utilities
+    * [Java](roles/java-base.md)
 
 ## Developing Ubiquitous
 
