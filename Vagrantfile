@@ -140,6 +140,10 @@ Vagrant.configure(2) do |config|
   end
 
   config.vm.define "selenium-node-chrome" do |seleniumnodechrome|
+    seleniumnodechrome.vm.provider "virtualbox" do |v|
+      v.memory = 2048
+    end
+
     seleniumnodechrome.vm.network "private_network", ip: "192.168.120.105",
                                   netmask: "255.255.255.0"
     seleniumnodechrome.vm.hostname = "selenium-node-chrome.moodle"
