@@ -14,7 +14,7 @@ A sample [Moodle](https://moodle.org/) and [SimpleSAMLphp](https://simplesamlphp
 
 ## Status
 
-[![Docker Build Status](https://img.shields.io/docker/build/lukecarrier/moodle-ubiquitous.svg?style=flat-square)](https://hub.docker.com/r/lukecarrier/moodle-ubiquitous/)
+[![Travis branch](https://img.shields.io/travis/LukeCarrier/moodle-ubiquitous/better-containers.svg)](https://travis-ci.org/LukeCarrier/moodle-ubiquitous)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bhttps%3A%2F%2Fgithub.com%2FLukeCarrier%2Fmoodle-ubiquitous.svg?type=shield)](https://app.fossa.io/projects/git%2Bhttps%3A%2F%2Fgithub.com%2FLukeCarrier%2Fmoodle-ubiquitous?ref=badge_shield)
 
 ## Documentation

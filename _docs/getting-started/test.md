@@ -1,6 +1,24 @@
 # Using Ubiquitous in test environments
 
-The testing configuration is designed for use in continuous integration platforms built around containers. In this setup, all services are installed to a single container. At test time, the hosting service will either mount a volume or copy the files into the container, then run a series of shell commands which will start the services and run the tests.
+The testing configuration is designed for use in continuous integration platforms built around containers. Services can either be installed to and run from a single container or be broken out into multiple containers. At test time, the hosting service will either mount a volume or copy the files into the container, then run a series of shell commands which will start the services and run the tests.
+
+## Obtaining containers
+
+[Pre-built containers](https://hub.docker.com/u/ubiquitous/) are made available on Docker Hub. Since these containers may change on a whim, potentially interfering with your test results, you're advised to follow the instructions below to build your own.
+
+Details on building the containers can be found in the [developer documentation](../development/docker.md).
+
+## All-in-one container
+
+This container rolls all of the services into a single container and is comprised of the following roles:
+
+* `app` and `app-debug` provide an application server ready for remote debugging and code coverage analysis.
+* `db-pgsql` allows hosting a PostgreSQL database.
+* `selenium-hub` and `selenium-node-chrome` run acceptance tests for Behat.
+
+## Per-service containers
+
+Per-service containers are a work in progress.
 
 ## Usage
 
@@ -20,7 +38,7 @@ $ docker run -it \
         --publish 8080:80 --publish 8044:4444 \
         --publish 8055:5555 --publish 8056:5556 --publish 8057:5557 --publish 8058:5558 \
         --publish 8065:5995 --publish 8066:5996 --publish 8067:5997 --publish 8068:5998 \
-        --entrypoint /bin/bash lukecarrier/moodle-ubiquitous
+        --entrypoint /bin/bash ubiquitous/allinone
 ```
 
 Within the container:
@@ -43,7 +61,7 @@ $ docker run -it \
         --publish 8080:80 --publish 8044:4444 \
         --publish 8055:5555 --publish 8056:5556 --publish 8057:5557 --publish 8058:5558 \
         --publish 8065:5995 --publish 8066:5996 --publish 8067:5997 --publish 8068:5998 \
-        --entrypoint /bin/bash lukecarrier/moodle-ubiquitous
+        --entrypoint /bin/bash ubiquitous/allinone
 ```
 
 Within the container:
@@ -68,20 +86,6 @@ $ vim ~/.ssh/id_rsa
 $ chmod 0600 ~/.ssh/id_rsa
 ```
 
-## Pre-built containers
-
-[Pre-built containers](https://hub.docker.com/r/lukecarrier/moodle-ubiquitous/) are made available on Docker Hub. Since these containers may change on a whim, potentially interfering with your test results, you're advised to follow the instructions below to build your own container images.
-
-## Building containers
-
-The recommended approach for building the container image is to allow the Docker Hub to run the build against your Git repository using webhooks, ensuring that your container image is always up to date. See [the Docker Hub automated builds](https://docs.docker.com/docker-hub/builds/), Docker Hub will perform automated builds of the container image from the repository.
-
-The Docker container image can be built from the [Dockerfile](../../Dockerfile) with a single command:
-
-```
-$ docker build -f _docker/allinone/Dockerfile .
-```
-
 ## Testing the containers
 
 First, prepare an alternative Moodle directory you can mount as a volume on your container. Reusing an existing directory is not recommended as you will need a different configuration file. Git worktrees may be useful for this:
@@ -101,7 +105,7 @@ $ docker run -it \
         --publish 8080:80 --publish 8044:4444 \
         --publish 8055:5555 --publish 8056:5556 --publish 8057:5557 --publish 8058:5558 \
         --publish 8065:5995 --publish 8066:5996 --publish 8067:5997 --publish 8068:5998 \
-        --entrypoint /bin/bash lukecarrier/moodle-ubiquitous
+        --entrypoint /bin/bash ubiquitous/allinone
 ```
 
 Note the `--publish` arguments here, which make the following services accessible once started inside the container:
@@ -147,18 +151,6 @@ $ /usr/local/ubiquitous/bin/ubiquitous-run-tests
 
 The Docker configuration differs from other configurations in a number of ways due to design constraints of tools it's designed to operate within.
 
-### All roles bundled together
-
-Docker images contain the following role loadout:
-
-* `app`
-* `app-debug`
-* `db-pgsql`
-* `selenium-hub`
-* `selenium-node-chrome`.
-
-As more CI services adopt [Docker Compose](https://docs.docker.com/compose/) or similar to support multiple containers, we will revisit this decision.
-
 ### Filesystem ACLs
 
 Ubiquitous ordinarily requires that application server `/home` filesystems support extended attributes and, in turn, ACLs. Since none of Docker's many filesystems support ACLs, we instead run all services under the user account that owns the platform files.
@@ -178,7 +170,7 @@ These configurations should form a good base for your own environment.
 For entire platforms:
 
 ```yaml
-image: lukecarrier/moodle-ubiquitous
+image: ubiquitous/allinone
 
 pipelines:
   default:
@@ -193,7 +185,7 @@ pipelines:
 For individual components:
 
 ```yaml
-image: lukecarrier/moodle-ubiquitous
+image: ubiquitous/allinone
 
 pipelines:
   default:

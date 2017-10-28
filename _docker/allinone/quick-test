@@ -9,7 +9,7 @@
 
 args=()
 extra_volumes=()
-tag='lukecarrier/moodle-ubiquitous'
+tag='ubiquitous/allinone'
 trust_hosts=()
 debug=0
 

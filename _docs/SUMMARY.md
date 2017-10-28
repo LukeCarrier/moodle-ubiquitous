@@ -43,5 +43,6 @@
 ## Developing Ubiquitous
 
 * [Introduction](development/README.md)
+* [Docker](development/docker.md)
 * [Documentation](development/docs.md)
 * [Testing](development/tests.md)
