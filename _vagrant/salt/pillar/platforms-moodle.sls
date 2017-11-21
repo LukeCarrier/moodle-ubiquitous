@@ -25,9 +25,10 @@ platforms:
             PHP_VALUE: |
               max_execution_time=60
               memory_limit=128m
-      ssl:
-        certificate: /etc/nginx/ssl/app-debug-1.moodle.crt
-        certificate_key: /etc/nginx/ssl/app-debug-1.moodle.pem
+      # Uncomment and change $CFG->wwwroot to enable SSL
+      #ssl:
+      #  certificate: /etc/nginx/ssl/app-debug-1.moodle.crt
+      #  certificate_key: /etc/nginx/ssl/app-debug-1.moodle.pem
     ssl:
       app-debug-1.moodle:
         public: |
