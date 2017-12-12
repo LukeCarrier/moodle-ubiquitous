@@ -289,6 +289,16 @@ Run the tests with:
 $ vagrant ssh app-debug-1 --command 'cd current && php admin/tool/behat/cli/run.php --profile=chrome'
 ```
 
+Finally, to keep an eye on the test runs, a VNC viewer capable of displaying thumbnails of multiple servers (such as [VNC Thumbnail Viewer](https://thetechnologyteacher.wordpress.com/vncthumbnailviewer/) may be useful:
+
+```
+$ java -classpath VncThumbnailViewer.jar VncThumbnailViewer \
+        HOST 192.168.120.105 PORT 5995 \
+        HOST 192.168.120.105 PORT 5996 \
+        HOST 192.168.120.105 PORT 5997 \
+        HOST 192.168.120.105 PORT 5998
+```
+
 Further detail on using Behat is available in our [`app-debug` role documentation](../roles/app/debug.md#behat).
 
 ### PHPUnit
