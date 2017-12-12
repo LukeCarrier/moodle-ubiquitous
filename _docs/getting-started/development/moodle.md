@@ -265,8 +265,8 @@ $ vagrant ssh salt --command "sudo salt -G 'group:selenium' state.apply"
 Once complete, the following services will be available to you:
 
 * [Selenium Grid console](http://192.168.120.100:4444/grid/console) --- see an overview of available nodes, helpful for diagnosing registration issues
-* VNC for the Selenium Chrome node at `192.168.120.105:5999` --- use an [open-source tool](https://en.wikipedia.org/wiki/Comparison_of_remote_desktop_software) to connect to it
-* VNC for the Selenium Firefox node at `192.168.120.110:5999`.
+* VNC for the Selenium Chrome node at `192.168.120.105:5555` through `:5558` --- use an [open-source tool](https://en.wikipedia.org/wiki/Comparison_of_remote_desktop_software) to connect to it
+* VNC for the Selenium Firefox node at `192.168.120.110:5555` through `:5558`.
 
 Then ensure that all of the Behat-related options are present in your Moodle `config.php` (see the recommended configuration for advice) and run the following command to bootstrap your test site:
 
