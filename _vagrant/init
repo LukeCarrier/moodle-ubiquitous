@@ -1,0 +1,40 @@
+#!/bin/bash
+
+#
+# Ubiquitous Moodle
+#
+# @author Luke Carrier <luke@carrier.im>
+# @copyright 2016 Luke Carrier
+#
+
+require_inst() {
+    command="$1"
+    if ! command -v "$command" >/dev/null; then
+        echo "'$command' is not installed or on PATH">&2
+        exit 1
+    fi
+}
+
+vagrant_up_apply() {
+    machine="$1"
+    vagrant up "$machine"
+    vagrant ssh -c 'sudo salt-call -l debug --state-output mixed state.apply' "$machine"
+}
+
+vagrant_up_apply_halt() {
+    machine="$1"
+    vagrant_up_apply "$machine"
+    vagrant halt "$machine"
+}
+
+require_inst vagrant
+
+vagrant_up_apply salt
+for machine in \
+        gocd named \
+        app-debug-1 db-pgsql-1 \
+        identity-proxy identity-provider \
+        selenium-hub selenium-node-chrome selenium-node-firefox; do
+    vagrant_up_apply_halt "$machine"
+done
+vagrant halt salt
