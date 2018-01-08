@@ -22,23 +22,6 @@ graph LR
     end
 ```
 
-## Getting started
-
-First, prepare your development by installing the following applications:
-
-* [VirtualBox](https://www.virtualbox.org/) --- desktop virtualisation
-* [Vagrant](https://www.vagrantup.com/) --- command line tool for managing virtualised development environments.
-
-Then install some Vagrant plugins that'll make it easier to manage larger environments:
-
-```
-# Manage virtual machines in groups
-$ vagrant plugin install vagrant-group
-
-# Automatically manage Guest Additions versions
-$ vagrant plugin install vagrant-vbguest
-```
-
 You'll need to structure your Moodle development environment appropriately. Ubiquitous sets up a synced folder for `../Moodle` relative to itself to get your source code to the application server:
 
 ```
@@ -66,10 +49,10 @@ The first time you start the servers, and whenever you make changes to the Salt 
 ```
 # Provision the Salt master first, opening the ports necessary for
 # master-minion configuration
-$ vagrant ssh --command 'sudo salt salt state.apply'
+$ vagrant ssh --command 'sudo salt-call state.apply'
 
 # Then converge the rest of the machines
-$ vagrant ssh --command "sudo salt -G 'group:dev' state.apply"
+$ vagrant group ssh --command "sudo salt-call state.apply"
 ```
 
 Make sure that your changes are being synced automatically with the salt master:
@@ -259,7 +242,7 @@ Ubiquitous packages a Selenium Grid comprised of Chrome and Firefox nodes. To us
 $ vagrant group up selenium
 
 # If it's your first time, let Salt configure them
-$ vagrant ssh salt --command "sudo salt -G 'group:selenium' state.apply"
+$ vagrant group ssh selenium --command "sudo salt-call state.apply"
 ```
 
 Once complete, the following services will be available to you:

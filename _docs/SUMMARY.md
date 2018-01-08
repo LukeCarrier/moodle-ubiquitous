@@ -7,8 +7,9 @@
 ## Getting started
 
 * [Introduction](getting-started/README.md)
-* [For Moodle development](getting-started/development/moodle.md)
-* [For SimpleSAMLphp development](getting-started/development/saml.md)
+* [For development](getting-started/development/README.md)
+    * [Of Moodle](getting-started/development/moodle.md)
+    * [Of SimpleSAMLphp](getting-started/development/saml.md)
 * [In test/integration](getting-started/test.md)
 * [In production](getting-started/production.md)
 
