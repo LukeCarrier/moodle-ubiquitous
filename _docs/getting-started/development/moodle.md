@@ -26,12 +26,6 @@ $ vagrant ssh --command 'sudo salt-call state.apply'
 $ vagrant group ssh --command "sudo salt-call state.apply"
 ```
 
-Make sure that your changes are being synced automatically with the Salt master:
-
-```
-$ vagrant rsync-auto salt
-```
-
 The above may take some time to complete. Once the above commands complete, the following services should now be available to you:
 
 * [Moodle](http://192.168.120.50/) --- your development environment
