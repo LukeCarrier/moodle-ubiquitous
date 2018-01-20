@@ -65,6 +65,11 @@ $ vagrant plugin install vagrant-vbguest
 1. Install [VirtualBox](https://www.virtualbox.org/). We recommend using the Oracle-supplied packages rather than those provided by your distribution.
 2. Install [Vagrant](https://www.vagrantup.com/), using the appropriate package for your distribution and system architecture.
 3. Install the [`vagrant-group`](https://github.com/vagrant-group/vagrant-group), [`vagrant-scp`](https://github.com/invernizzi/vagrant-scp) and [`vagrant-vbguest`](https://github.com/dotless-de/vagrant-vbguest) Vagrant plugins.
+4. Increase the `inotify` watch limit to ensure your editor, IDE and `vagrant rsync-auto` processes don't exhaust the number of watchers:
+
+   ```
+   echo fs.inotify.max_user_watches=524288 | sudo tee /etc/sysctl.d/40-max-user-watches.conf && sudo sysctl --system
+   ```
 
 ### macOS
 
