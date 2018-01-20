@@ -60,20 +60,31 @@ $ vagrant plugin install vagrant-scp
 $ vagrant plugin install vagrant-vbguest
 ```
 
-## Linux
+### Linux
 
 1. Install [VirtualBox](https://www.virtualbox.org/). We recommend using the Oracle-supplied packages rather than those provided by your distribution.
 2. Install [Vagrant](https://www.vagrantup.com/), using the appropriate package for your distribution and system architecture.
 3. Install the [`vagrant-group`](https://github.com/vagrant-group/vagrant-group), [`vagrant-scp`](https://github.com/invernizzi/vagrant-scp) and [`vagrant-vbguest`](https://github.com/dotless-de/vagrant-vbguest) Vagrant plugins.
 
-## macOS
+### macOS
 
 1. Install [VirtualBox](https://www.virtualbox.org/). If the installation fails to complete [because a kernel extension wasn't trusted](https://developer.apple.com/library/content/technotes/tn2459/_index.html), approve the installation and re-run the installation package. It should complete successfully the second time.
 2. Install [Vagrant](https://www.vagrantup.com/).
 3. Install the [`vagrant-group`](https://github.com/vagrant-group/vagrant-group), [`vagrant-scp`](https://github.com/invernizzi/vagrant-scp) and [`vagrant-vbguest`](https://github.com/dotless-de/vagrant-vbguest) Vagrant plugins.
 
-## Windows
+### Windows
 
 1. Install [VirtualBox](https://www.virtualbox.org/).
 2. Install [Vagrant](https://www.vagrantup.com/).
 3. Install the [`vagrant-group`](https://github.com/vagrant-group/vagrant-group), [`vagrant-scp`](https://github.com/invernizzi/vagrant-scp) and [`vagrant-vbguest`](https://github.com/dotless-de/vagrant-vbguest) Vagrant plugins.
+
+## Now what?
+
+Once the above dependencies are installed you'll want to get some of the virtual machines running. There are two options here:
+
+1. Prepare just the virtual machines you need (recommended). We have instructions for both [Moodle](moodle.md) and [SimpleSAMLphp](saml.md) and are working to complete documentation for the infrastructure components.
+2. Go all in and prepare all of them, because a few months from now you might decide you want to start using them and not want to wait, right? To bring up and configure all of the machines one by one, run:
+
+   ```
+   $ ./_vagrant/init
+   ```
