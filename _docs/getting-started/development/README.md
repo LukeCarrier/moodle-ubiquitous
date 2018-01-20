@@ -53,6 +53,9 @@ Then install some Vagrant plugins that'll make it easier to manage larger enviro
 # Manage virtual machines in groups
 $ vagrant plugin install vagrant-group
 
+# Easily transfer files between machines
+$ vagrant plugin install vagrant-scp
+
 # Automatically manage Guest Additions versions
 $ vagrant plugin install vagrant-vbguest
 ```
@@ -61,16 +64,16 @@ $ vagrant plugin install vagrant-vbguest
 
 1. Install [VirtualBox](https://www.virtualbox.org/). We recommend using the Oracle-supplied packages rather than those provided by your distribution.
 2. Install [Vagrant](https://www.vagrantup.com/), using the appropriate package for your distribution and system architecture.
-3. Install the [`vagrant-group`](https://github.com/vagrant-group/vagrant-group) and [`vagrant-vbguest`](https://github.com/dotless-de/vagrant-vbguest) Vagrant plugins.
+3. Install the [`vagrant-group`](https://github.com/vagrant-group/vagrant-group), [`vagrant-scp`](https://github.com/invernizzi/vagrant-scp) and [`vagrant-vbguest`](https://github.com/dotless-de/vagrant-vbguest) Vagrant plugins.
 
 ## macOS
 
 1. Install [VirtualBox](https://www.virtualbox.org/). If the installation fails to complete [because a kernel extension wasn't trusted](https://developer.apple.com/library/content/technotes/tn2459/_index.html), approve the installation and re-run the installation package. It should complete successfully the second time.
 2. Install [Vagrant](https://www.vagrantup.com/).
-3. Install the [`vagrant-group`](https://github.com/vagrant-group/vagrant-group) and [`vagrant-vbguest`](https://github.com/dotless-de/vagrant-vbguest) Vagrant plugins.
+3. Install the [`vagrant-group`](https://github.com/vagrant-group/vagrant-group), [`vagrant-scp`](https://github.com/invernizzi/vagrant-scp) and [`vagrant-vbguest`](https://github.com/dotless-de/vagrant-vbguest) Vagrant plugins.
 
 ## Windows
 
 1. Install [VirtualBox](https://www.virtualbox.org/).
 2. Install [Vagrant](https://www.vagrantup.com/).
-3. Install the [`vagrant-group`](https://github.com/vagrant-group/vagrant-group) and [`vagrant-vbguest`](https://github.com/dotless-de/vagrant-vbguest) Vagrant plugins.
+3. Install the [`vagrant-group`](https://github.com/vagrant-group/vagrant-group), [`vagrant-scp`](https://github.com/invernizzi/vagrant-scp) and [`vagrant-vbguest`](https://github.com/dotless-de/vagrant-vbguest) Vagrant plugins.
