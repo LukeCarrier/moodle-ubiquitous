@@ -8,14 +8,6 @@ You'll need to structure your Moodle development environment appropriately. Ubiq
 └── Ubiquitous
 ```
 
-For the single sign-on it will expect an additional folder `../SimpleSAMLphp` with the SimpleSAMLphp source code:
-
-```
-.
-└── SimpleSAMLphp
-```
-
-
 Start up all of the machines necessary for a testing environment:
 
 ```
