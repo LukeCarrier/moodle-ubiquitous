@@ -179,20 +179,22 @@ Vagrant.configure(2) do |config|
 
   if Vagrant.has_plugin? "vagrant-group"
     config.group.groups = {
-      "dev" => [
+      "infrastructure" => [
         "salt",
-        "app-debug-1",
-        "db-pgsql-1",
         "mail-debug",
-      ],
-      "identity" => [
-        "identity-provider",
-        "identity-proxy",
       ],
       "selenium" => [
         "selenium-hub",
         "selenium-node-chrome",
         "selenium-node-firefox",
+      ],
+      "moodle" => [
+        "app-debug-1",
+        "db-pgsql-1",
+      ],
+      "saml" => [
+        "identity-provider",
+        "identity-proxy",
       ],
     }
   end

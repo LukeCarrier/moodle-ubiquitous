@@ -16,6 +16,13 @@ Each expects the presence of a SimpleSAMLphp installation:
 └── Ubiquitous
 ```
 
+Start up all of the machines necessary for a development environment:
+
+```
+$ vagrant up salt
+$ vagrant group up saml
+```
+
 To use the Salt-generated configuration, you'll want to `scp` it from the box, copy it into your SimpleSAMLphp installation and then sync the installation bac to the machine:
 
 ```bash

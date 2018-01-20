@@ -8,10 +8,11 @@ You'll need to structure your Moodle development environment appropriately. Ubiq
 └── Ubiquitous
 ```
 
-Start up all of the machines necessary for a testing environment:
+Start up all of the machines necessary for a development environment:
 
 ```
-$ vagrant group up dev
+$ vagrant up salt
+$ vagrant group up moodle
 ```
 
 The first time you start the servers, and whenever you make changes to the Salt states, you'll need to apply the states to the machines:
