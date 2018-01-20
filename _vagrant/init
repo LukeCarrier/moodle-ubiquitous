@@ -7,6 +7,19 @@
 # @copyright 2016 Luke Carrier
 #
 
+log() {
+    local level="$1"
+    local message="$2"
+
+    local date="$(date)"
+    echo "[${date} : ${level}] ${message}"
+}
+
+log_subproc() {
+    "$@" >>"$LOG_STDOUT" 2>>"$LOG_STDERR"
+    return $?
+}
+
 require_inst() {
     local command="$1"
     if ! command -v "$command" >/dev/null; then
@@ -17,24 +30,94 @@ require_inst() {
 
 vagrant_up_apply() {
     local machine="$1"
-    vagrant up "$machine"
-    vagrant ssh -c 'sudo salt-call -l debug --state-output mixed state.apply' "$machine"
+
+    local status_raw="$(vagrant --machine-readable status "$machine")"
+    local status="$(echo "$status_raw" | grep ",$machine,state," | cut -d, -f4)"
+    local status_human="$(echo "$status_raw" | grep ",$machine,state-human-short," | cut -d, -f4)"
+
+    if ! log_subproc vagrant up "$machine"; then
+        log error "\"${machine}\" failed to start -- do the synced folders exist?"
+        return 1
+    fi
+
+    if [ "$status" != "not_created" ]; then
+        log warn "reprovisioning \"${machine}\" to update Salt configuration (Vagrant reported it was in the \"${status_human}\" state)"
+        log_subproc vagrant rsync "$machine"
+        if ! log_subproc vagrant provision "$machine"; then
+            log error "failed to provision \"${machine}\""
+            return 1
+        fi
+    fi
+
+    log info "updating \"${machine}\""
+    if ! log_subproc vagrant ssh -c 'sudo apt-get update && sudo apt-get dist-upgrade -y' "$machine"; then
+        log error "failed to update \"${machine}\""
+        return 1
+    fi
+
+    log info "applying states to \"${machine}\""
+    if ! log_subproc vagrant ssh -c 'sudo salt-call -l debug --state-output mixed state.apply'; then
+        log error "failed to apply states to \"${machine}\""
+        return 1
+    fi
 }
 
 vagrant_up_apply_halt() {
     local machine="$1"
     vagrant_up_apply "$machine"
-    vagrant halt "$machine"
+    log info "shutting down \"${machine}\""
+    log_subproc vagrant halt "$machine"
 }
+
+MACHINES=()
+
+#eval set -- "$(getopt -o "m:" --long "include-machine:" -- "$@")"
+while true; do
+    case "$1" in
+        -m|--machine) MACHINES+=("$2") ; shift 2 ;;
+        *           ) break                      ;;
+    esac
+done
+
+if [[ "${#MACHINES[@]}" -eq 0 ]]; then
+    MACHINES=(
+        gocd
+        named
+        mail-debug
+
+        selenium-hub
+        selenium-node-chrome
+        selenium-node-firefox
+
+        app-debug-1
+        db-pgsql-1
+
+        identity-proxy
+        identity-provider
+    )
+fi
 
 require_inst vagrant
 
+LOG_STDOUT=$(mktemp -t ubiinit.out.XXXXXXXXXX)
+LOG_STDERR=$(mktemp -t ubiinit.err.XXXXXXXXXX)
+log info "logging subprocess output to \"${LOG_STDOUT}\""
+log info "logging subprocess errors to \"${LOG_STDERR}\""
+log info "watch progress in realtime with:"
+log info "  $ tail -f \"${LOG_STDOUT}\" \"${LOG_STDERR}\""
+log info "  $ watch -n 1 tail \"${LOG_STDOUT}\" \"${LOG_STDERR}\""
+
+log info "including machines ${MACHINES[*]}"
+
+log info 'preparing "salt"'
 vagrant_up_apply salt
-for machine in \
-        gocd named \
-        app-debug-1 db-pgsql-1 \
-        identity-proxy identity-provider \
-        selenium-hub selenium-node-chrome selenium-node-firefox; do
-    vagrant_up_apply_halt "$machine"
+
+for machine in "${MACHINES[@]}"; do
+    log info "preparing \"${machine}\""
+    if ! vagrant_up_apply_halt "$machine"; then
+        log error "failed to prepare \"$machine\""
+    fi
 done
-vagrant halt salt
+
+log info 'complete; shutting down "salt"'
+log_subproc vagrant halt salt

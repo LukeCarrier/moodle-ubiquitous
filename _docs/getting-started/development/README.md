@@ -93,3 +93,19 @@ Once the above dependencies are installed you'll want to get some of the virtual
    ```
    $ ./_vagrant/init
    ```
+
+## Maintaining your environment
+
+Ubiquitous changes frequently to keep up with the relentless pace of software development. To keep your installation up to date, you should periodically:
+
+1. update your checkout with a `git fetch && git rebase origin/master`;
+2. update packages on the virtual machines with `apt update && apt dist-upgrade` and reboot them to apply updates to the kernels and system services; and
+3. apply the newly-updated Salt states to them.
+
+Running `init` should suffice:
+
+```
+$ git fetch
+$ git rebase origin/master
+$ ./_vagrant/init
+```
