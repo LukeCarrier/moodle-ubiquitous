@@ -1,27 +1,5 @@
 # Using Ubiquitous for Moodle development
 
-In development environments, Ubiquitous servers are created and managed in VirtualBox by Vagrant based on definitions in the `Vagrantfile`. Once created, Vagrant's shell provisioner runs a script which installs the Salt master and minion daemons, seeds configuration and keys. Server configuration is managed by Salt.
-
-A complete configuration with all machines started is configured like so:
-
-```mermaid
-graph LR
-    subgraph dev
-        salt["Salt (192.168.120.5)"]
-        salt-->app-debug-1["app-debug-1 (192.168.120.50)"]
-        salt-->db-pgsql-1["db-pgsql-1 (192.168.120.150)"]
-        salt-->mail-debug["mail-debug (192.168.120.200)"]
-    end
-    subgraph selenium
-        selenium-hub["selenium-hub (192.168.120.100)"]
-        selenium-node-chrome["selenium-node-chrome (192.168.120.105)"]
-        selenium-node-firefox["selenium-node-firefox (192.168.120.110)"]
-        salt-->selenium-hub
-        salt-->selenium-node-chrome
-        salt-->selenium-node-firefox
-    end
-```
-
 You'll need to structure your Moodle development environment appropriately. Ubiquitous sets up a synced folder for `../Moodle` relative to itself to get your source code to the application server:
 
 ```

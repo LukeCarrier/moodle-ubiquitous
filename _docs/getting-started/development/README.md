@@ -4,6 +4,42 @@ Before getting a development environment configured you'll need to install some 
 
 Note that guides within this document are provided on a best-effort basis. If you're struggling to get started, please open [an issue](https://github.com/AVADOLearning/moodle-ubiquitous/issues).
 
+## The end result
+
+In development environments, Ubiquitous servers are created and managed in VirtualBox by Vagrant based on definitions in the `Vagrantfile`. Once created, Vagrant's shell provisioner runs a script which installs the Salt master and minion daemons, seeds configuration and keys. Server configuration is managed by Salt.
+
+A complete configuration with all machines started is configured like so:
+
+```mermaid
+graph LR
+    subgraph infrastructure
+        salt["Salt (192.168.120.5)"]
+        salt-->gocd["GoCD (192.168.120.10)"]
+        salt-->named["BIND (192.168.120.15)"]
+        salt-->mail-debug["mail-debug (192.168.120.200)"]
+    end
+    subgraph selenium
+        salt-->selenium-hub["selenium-hub (192.168.120.100)"]
+        salt-->selenium-node-chrome["selenium-node-chrome (192.168.120.105)"]
+        selenium-node-firefox["selenium-node-firefox (192.168.120.110)"]
+
+        selenium-hub-->selenium-node-chrome
+        selenium-hub-->selenium-node-firefox
+    end
+    subgraph moodle
+        salt-->app-debug-1["app-debug-1 (192.168.120.50)"]
+        salt-->db-pgsql-1["db-pgsql-1 (192.168.120.150)"]
+        app-debug-1-->db-pgsql-1
+        app-debug-1-->mail-debug
+    end
+    subgraph saml
+        salt-->identity-provider["Identity provider (192.168.120.55)"]
+        salt-->identity-proxy["Identity proxy (192.168.120.60)"]
+    end
+```
+
+Note that you're _very likely_ to need to use all of the machines, and should start only those necessary for the task at hand.
+
 ## The general idea
 
 First, prepare your development by installing the following applications:
