@@ -8,7 +8,7 @@
 #
 
 require_inst() {
-    command="$1"
+    local command="$1"
     if ! command -v "$command" >/dev/null; then
         echo "'$command' is not installed or on PATH">&2
         exit 1
@@ -16,13 +16,13 @@ require_inst() {
 }
 
 vagrant_up_apply() {
-    machine="$1"
+    local machine="$1"
     vagrant up "$machine"
     vagrant ssh -c 'sudo salt-call -l debug --state-output mixed state.apply' "$machine"
 }
 
 vagrant_up_apply_halt() {
-    machine="$1"
+    local machine="$1"
     vagrant_up_apply "$machine"
     vagrant halt "$machine"
 }
