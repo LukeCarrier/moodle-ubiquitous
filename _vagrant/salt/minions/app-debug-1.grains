@@ -12,5 +12,6 @@ roles:
   - web-error-pages
   - web-ssl-certs
   - app-moodle
+  - app-crontab
   - app-moodle-debug
   - app-moodle-default-release
