@@ -21,6 +21,10 @@ A sample [Moodle](https://moodle.org/) and [SimpleSAMLphp](https://simplesamlphp
 
 For detailed instructions on how to get started with Ubiquitous, please see [the manual](https://lukecarrier.gitbooks.io/ubiquitous-moodle/).
 
+## Contributors
+
+The Ubiquitous Authors are detailed in the [GitHub contributor list](https://github.com/LukeCarrier/moodle-ubiquitous/graphs/contributors).
+
 ## License
 
 Ubiquitous Moodle is released under the terms of the [GPL v3](LICENSE.md). This is the same license as the core Moodle distribution.
