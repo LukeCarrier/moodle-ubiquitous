@@ -86,6 +86,9 @@ base:
     - match: grain
     - web-lets-encrypt
 
+  'roles:app-crontab':
+    - match: grain
+    - app-crontab
   'roles:app-debug':
     - match: grain
     - app-debug
