@@ -3,7 +3,7 @@
 #
 # @author Luke Carrier <luke@carrier.im>
 # @author Sascha Peter <sascha.o.peter@gmail.com>
-# @copyright 2017 Sascha Peter
+# @copyright 2018 The Ubiquitous Authors
 #
 
 {% from 'app-base/macros.sls' import app_platform, app_restarts %}

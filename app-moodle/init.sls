@@ -2,7 +2,7 @@
 # Ubiquitous Moodle
 #
 # @author Luke Carrier <luke@carrier.im>
-# @copyright 2016 Luke Carrier
+# @copyright 2018 The Ubiquitous Authors
 #
 
 {% from 'app-base/macros.sls' import app_platform, app_restarts %}
