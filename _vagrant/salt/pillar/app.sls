@@ -128,3 +128,7 @@ web-error-pages:
           <h2>Error 504</h2>
           <p>Don't panic. Something went wrong on <em>our</em> side.</p>
           <p>We might be unusually busy at the moment &mdash; try reloading the page. If this doesn't help, try clearing your cookies and retrying after a few minutes.</p>
+
+mail-relay:
+  relayhost: '192.168.120.200:1025'
+  root_address: 'root@dev.local'
