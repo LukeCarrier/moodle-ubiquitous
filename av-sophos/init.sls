@@ -1,3 +1,10 @@
+#
+# Ubiquitous Moodle
+#
+# @author Luke Carrier <luke@carrier.im>
+# @copyright 2018 The Ubiquitous Authors
+#
+
 {% if salt['pillar.get']('av-sophos:on_access', False) %}
   {% set savdstatus_expect = 'On-access scanning is running' %}
   {% set savdctl_action = 'enable' %}

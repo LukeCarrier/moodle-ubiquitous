@@ -1,3 +1,10 @@
+#
+# Ubiquitous Moodle
+#
+# @author Luke Carrier <luke@carrier.im>
+# @copyright 2018 The Ubiquitous Authors
+#
+
 mount-cifs.pkgs:
   pkg.latest:
     - pkgs:
