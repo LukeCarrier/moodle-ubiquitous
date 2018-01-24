@@ -237,7 +237,14 @@ Then ensure that all of the Behat-related options are present in your Moodle `co
 $ vagrant ssh app-debug-1 --command 'php current/admin/tool/behat/cli/init.php'
 ```
 
-The acceptance test site will then be accessible from each of the application servers at [`{wwwroot}/behat`](http://192.168.120.50/behat/).
+Alternatively, configure multiple parallel environments --- each Selenium node ships with four browser instances configured by default:
+
+```
+$ vagrant ssh app-debug-1 --command 'php current/admin/tool/behat/cli/init.php --parallel=4'
+$ vagrant ssh app-debug-1 --command 'for i in {1..4}; do ln -s "${HOME}/current" "${HOME}/current/behatrun${i}"; done'
+```
+
+The acceptance test site will then be accessible from each of the application servers at [`{wwwroot}/behat`](http://192.168.120.50/behat/) or at `{wwwroot}/behat/behatrun{number}`, where `{number}` is an instance number between 1 and the value supplied for `--parallel`.
 
 Some of the tests attempt to upload files within the Moodle source tree to the application. We must therefore synchronise the Moodle source tree to the Selenium nodes and apply a patch [for Moodle < 3.2](https://github.com/moodle/moodle/compare/MOODLE_31_STABLE...LukeCarrier:MDL-NOBUG-selenium-remote-node-file-upload-pre-32) or [for Moodle >= 3.2](https://github.com/moodle/moodle/compare/master...LukeCarrier:MDL-NOBUG-selenium-remote-node-file-upload-32-onwards) to Moodle to allow it to locate these files:
 
