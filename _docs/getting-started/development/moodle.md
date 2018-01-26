@@ -23,7 +23,7 @@ The first time you start the servers, and whenever you make changes to the Salt 
 $ vagrant ssh --command 'sudo salt-call state.apply'
 
 # Then converge the rest of the machines
-$ vagrant group ssh moodle --command "sudo salt-call state.apply"
+$ vagrant group ssh moodle --command 'sudo salt-call state.apply'
 ```
 
 The above may take some time to complete. Once the above commands complete, the following services should now be available to you:
@@ -207,7 +207,7 @@ Ubiquitous packages a Selenium Grid comprised of Chrome and Firefox nodes. To us
 $ vagrant group up selenium
 
 # If it's your first time, let Salt configure them
-$ vagrant group ssh selenium --command "sudo salt-call state.apply"
+$ vagrant group ssh selenium --command 'sudo salt-call state.apply'
 ```
 
 Once complete, the following services will be available to you:
