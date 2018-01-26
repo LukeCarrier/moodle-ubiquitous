@@ -109,3 +109,50 @@ $ git fetch
 $ git rebase origin/master
 $ ./_vagrant/init
 ```
+
+## Troubleshooting
+
+### I can't access my VMs!
+
+For reasons we've been unable to identify, VirtualBox sometimes fails to configure the host-only network adapter (usually named `vboxnet0`) used as the private network between the virtual machines. When this happens, the adapter will be shown as `state DOWN`:
+
+```
+$ ip addr show
+[snip]
+5: vboxnet0: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN group default qlen 1000
+    link/ether 0a:00:27:00:00:00 brd ff:ff:ff:ff:ff:ff
+```
+
+To rectify this, add a network configuration for the adapter and bring up the link:
+
+```
+$ sudo ip addr add 192.168.120.1/24 dev vboxnet0
+$ sudo ip link set vboxnet0 up
+```
+
+## TypeError: 'bool' object is not iterable
+
+Issues can occur when applying Salt states to minions when the versions between the master and minions differ (e.g. when machines are provisioned at different times or destroyed and rebuilt). To remedy, allow Vagrant to reprovision your Salt master and minions:
+
+```
+$ vagrant provision
+```
+
+See the [Salt troubleshooting documentation](../roles/salt.md#typeerror-bool-object-is-not-iterable) for further information.
+
+## Advanced topics
+
+### Adding your own virtual machines
+
+It's sometimes useful to be able to spin up additional machines with different configurations, for instance when unit testing against multiple platforms. This is possible within Vagrant environment by creating a `Vagrantfile.local` file in the same directory as the `Vagrantfile`.
+
+For instance, to add an additional Vagrant VM running SQL Server:
+
+```ruby
+config.vm.define "db-mssql-1" do |dbmssql1|
+  dbmssql1.vm.box = "msabramo/mssqlserver2014express"
+
+  dbmssql1.vm.network "private_network", ip: "192.168.120.160"
+  dbmssql1.vm.hostname = "db-mssql-1.moodle"
+end
+```
