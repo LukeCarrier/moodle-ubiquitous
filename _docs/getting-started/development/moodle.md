@@ -198,6 +198,19 @@ Moodle has three distinct environments for development:
 * The Behat environment, which is a replica of the above with a different `wwwroot` and no content
 * The PHPUnit environment, which is accessible only via the CLI.
 
+Before using any of these, you'll first want to install the testing dependencies via [Composer](https://getcomposer.org/), so that they may be synced to the application server (installing them directly on the application server would cause them to be deleted on every sync, and IDEs usually need access to the libraries for code intelligence anyway). From your host machine, in the `Moodle` directory:
+
+```
+$ composer install
+```
+
+Or, if you do not have Composer installed globally:
+
+```
+$ curl -o composer.phar https://getcomposer.org/composer.phar
+$ composer install
+```
+
 ### Behat
 
 Ubiquitous packages a Selenium Grid comprised of Chrome and Firefox nodes. To use it, first bring up the Selenium grid:
