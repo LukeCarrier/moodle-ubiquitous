@@ -1,5 +1,6 @@
 Vagrant.configure(2) do |config|
   config.vm.box = "ubuntu/xenial64"
+  config.vm.box_version = ">= 20180126.0.0"
 
   config.vm.provider "virtualbox" do |v|
     v.customize [ "modifyvm", :id, "--uartmode1", "disconnected" ]
