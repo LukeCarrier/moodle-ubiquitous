@@ -56,7 +56,7 @@ vagrant_up_apply() {
     fi
 
     log info "applying states to \"${machine}\""
-    if ! log_subproc vagrant ssh -c 'sudo salt-call -l debug --state-output mixed state.apply'; then
+    if ! log_subproc vagrant ssh -c 'sudo salt-call -l debug --state-output mixed state.apply' "$machine"; then
         log error "failed to apply states to \"${machine}\""
         return 1
     fi
