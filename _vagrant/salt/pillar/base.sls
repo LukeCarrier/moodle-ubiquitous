@@ -1,10 +1,10 @@
 users:
-  ubuntu:
+  vagrant:
     fullname: Administrative user
     password: gibberish
     groups: # Primary group is always named after user name
       - sudo
-    home: /home/ubuntu
+    home: /home/vagrant
 
 acl:
   apply: True

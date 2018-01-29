@@ -89,8 +89,8 @@ Vagrant.configure(2) do |config|
     seleniumnodechrome.vm.synced_folder "./_vagrant", "/vagrant", type: "rsync"
     seleniumnodechrome.vm.provision "selenium-node-chrome-salt", type: "shell", path: "./_vagrant/salt/install", args: ["--minion", "selenium-node-chrome", "--root", "/vagrant/salt" ]
 
-    seleniumnodechrome.vm.synced_folder "../Moodle", "/home/ubuntu/moodle", type: "rsync",
-                                        owner: "ubuntu", group: "ubuntu",
+    seleniumnodechrome.vm.synced_folder "../Moodle", "/home/vagrant/moodle", type: "rsync",
+                                        owner: "vagrant", group: "vagrant",
                                         rsync__exclude: ".git/",
                                         rsync__args: ["--rsync-path='sudo rsync'", "--archive", "--compress", "--delete"]
   end
@@ -106,8 +106,8 @@ Vagrant.configure(2) do |config|
     seleniumnodefirefox.vm.synced_folder "./_vagrant", "/vagrant", type: "rsync"
     seleniumnodefirefox.vm.provision "selenium-node-firefox-salt", type: "shell", path: "./_vagrant/salt/install", args: ["--minion", "selenium-node-firefox", "--root", "/vagrant/salt" ]
 
-    seleniumnodefirefox.vm.synced_folder "../Moodle", "/home/ubuntu/moodle", type: "rsync",
-                                        owner: "ubuntu", group: "ubuntu",
+    seleniumnodefirefox.vm.synced_folder "../Moodle", "/home/vagrant/moodle", type: "rsync",
+                                        owner: "vagrant", group: "vagrant",
                                         rsync__exclude: ".git/",
                                         rsync__args: ["--rsync-path='sudo rsync'", "--archive", "--compress", "--delete"]
   end
@@ -123,8 +123,8 @@ Vagrant.configure(2) do |config|
     appdebug1.vm.synced_folder "./_vagrant", "/vagrant", type: "rsync"
     appdebug1.vm.provision "app-debug-1-salt", type: "shell", path: "./_vagrant/salt/install", args: [ "--minion", "app-debug-1", "--root", "/vagrant/salt" ]
 
-    appdebug1.vm.synced_folder "../Moodle", "/home/ubuntu/releases/vagrant", type: "rsync",
-                               owner: "ubuntu", group: "ubuntu",
+    appdebug1.vm.synced_folder "../Moodle", "/home/vagrant/releases/vagrant", type: "rsync",
+                               owner: "vagrant", group: "vagrant",
                                rsync__exclude: [".git", "phpunit.xml", "behatrun*"],
                                rsync__rsync_path: "sudo rsync",
                                rsync__args: ["--archive", "--compress", "--delete"]
@@ -153,8 +153,8 @@ Vagrant.configure(2) do |config|
     identityprovider.vm.synced_folder "./_vagrant", "/vagrant", type: "rsync"
     identityprovider.vm.provision "identity-provider-salt", type: "shell", path: "./_vagrant/salt/install", args: [ "--minion", "identity-provider", "--root", "/vagrant/salt" ]
 
-    identityprovider.vm.synced_folder "../SimpleSAMLphp-provider", "/home/ubuntu/releases/vagrant", type: "rsync",
-                                      owner: "ubuntu", group: "ubuntu",
+    identityprovider.vm.synced_folder "../SimpleSAMLphp-provider", "/home/vagrant/releases/vagrant", type: "rsync",
+                                      owner: "vagrant", group: "vagrant",
                                       rsync__exclude: [".git", "phpunit.xml"],
                                       rsync__rsync_path: "sudo rsync",
                                       rsync__args: ["--archive", "--compress", "--delete"]
@@ -171,8 +171,8 @@ Vagrant.configure(2) do |config|
     identityproxy.vm.synced_folder "./_vagrant", "/vagrant", type: "rsync"
     identityproxy.vm.provision "identity-proxy-salt", type: "shell", path: "./_vagrant/salt/install", args: [ "--minion", "identity-proxy", "--root", "/vagrant/salt" ]
 
-    identityproxy.vm.synced_folder "../SimpleSAMLphp-proxy", "/home/ubuntu/releases/vagrant", type: "rsync",
-                                   owner: "ubuntu", group: "ubuntu",
+    identityproxy.vm.synced_folder "../SimpleSAMLphp-proxy", "/home/vagrant/releases/vagrant", type: "rsync",
+                                   owner: "vagrant", group: "vagrant",
                                    rsync__exclude: [".git", "phpunit.xml"],
                                    rsync__rsync_path: "sudo rsync",
                                    rsync__args: ["--archive", "--compress", "--delete"]

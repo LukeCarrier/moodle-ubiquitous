@@ -65,8 +65,8 @@ $CFG = new stdClass();
     $CFG->dbtype    = 'pgsql';
     $CFG->dblibrary = 'native';
     $CFG->dbhost    = '192.168.120.150';
-    $CFG->dbname    = 'ubuntu';
-    $CFG->dbuser    = 'ubuntu';
+    $CFG->dbname    = 'vagrant';
+    $CFG->dbuser    = 'vagrant';
     $CFG->dbpass    = 'gibberish';
     $CFG->prefix    = 'mdl_';
     $CFG->dboptions = array (
@@ -94,7 +94,7 @@ $CFG->wwwroot = 'http://192.168.120.50';
 $CFG->admin   = 'admin';
 
 // Data directory
-$CFG->dataroot             = '/home/ubuntu/data/base';
+$CFG->dataroot             = '/home/vagrant/data/base';
 $CFG->directorypermissions = 0770;
 
 // Send mails via MailCatcher on mail-debug
@@ -112,8 +112,8 @@ $CFG->debugdisplay = true;
 
 // Behat testing environment
 $CFG->behat_prefix        = 'b_';
-$CFG->behat_dataroot      = '/home/ubuntu/data/behat';
-$CFG->behat_faildump_path = '/home/ubuntu/data/behat-faildump';
+$CFG->behat_dataroot      = '/home/vagrant/data/behat';
+$CFG->behat_faildump_path = '/home/vagrant/data/behat-faildump';
 $CFG->behat_wwwroot       = 'http://192.168.120.50/behat';
 $CFG->behat_profiles = array(
 'chrome' => array(

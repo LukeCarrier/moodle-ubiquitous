@@ -31,8 +31,8 @@ Digging into a more detailed log (e.g. with `--log-level debug`), you see error 
 [DEBUG   ] Could not LazyLoad pkg.normalize_name: 'pkg.normalize_name' is not available.
 [DEBUG   ] Could not LazyLoad pkg.check_db: 'pkg.check_db' is not available.
 [DEBUG   ] Could not LazyLoad pkg.normalize_name: 'pkg.normalize_name' is not available.
-[INFO    ] Executing command ['dpkg', '--get-selections', '*'] in directory '/home/ubuntu'
-[INFO    ] Executing command ['systemd-run', '--scope', 'apt-get', '-q', '-y', '-o', 'DPkg::Options::=--force-confold', '-o', 'DPkg::Options::=--force-confdef', 'install', 'oracle-java8-installer', 'oracle-java8-set-default'] in directory '/home/ubuntu'
+[INFO    ] Executing command ['dpkg', '--get-selections', '*'] in directory '/home/vagrant'
+[INFO    ] Executing command ['systemd-run', '--scope', 'apt-get', '-q', '-y', '-o', 'DPkg::Options::=--force-confold', '-o', 'DPkg::Options::=--force-confdef', 'install', 'oracle-java8-installer', 'oracle-java8-set-default'] in directory '/home/vagrant'
 [ERROR   ] Command '['systemd-run', '--scope', 'apt-get', '-q', '-y', '-o', 'DPkg::Options::=--force-confold', '-o', 'DPkg::Options::=--force-confdef', 'install', 'oracle-java8-installer', 'oracle-java8-set-default']' failed with return code: 100
 [ERROR   ] stdout: Reading package lists...
 Building dependency tree...
@@ -71,7 +71,7 @@ Errors were encountered while processing:
 [ERROR   ] stderr: Running scope as unit run-rbcf21cf658494074a733a48ca9e01fb0.scope.
 E: Sub-process /usr/bin/dpkg returned an error code (1)
 [ERROR   ] retcode: 100
-[INFO    ] Executing command ['dpkg-query', '--showformat', '${Status} ${Package} ${Version} ${Architecture}', '-W'] in directory '/home/ubuntu'
+[INFO    ] Executing command ['dpkg-query', '--showformat', '${Status} ${Package} ${Version} ${Architecture}', '-W'] in directory '/home/vagrant'
 [ERROR   ] Problem encountered installing package(s). Additional info follows:
 
 errors:

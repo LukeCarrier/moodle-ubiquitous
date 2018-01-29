@@ -1,13 +1,13 @@
 platforms:
   dev.local:
-    basename: ubuntu
+    basename: vagrant
     name: Local test site
     email: root@localhost
     lang: en
     default_release: vagrant
     user:
-      name: ubuntu
-      home: /home/ubuntu
+      name: vagrant
+      home: /home/vagrant
     nginx:
       client_max_body_size: 1024m
       ssl:
@@ -82,8 +82,8 @@ platforms:
         post_max_size: 1024m
         upload_max_filesize: 1024m
         session.save_handler: files
-        session.save_path: /home/ubuntu/var/run/php/session
-        soap.wsdl_cache_dir: /home/ubuntu/var/run/php/wsdlcache
+        session.save_path: /home/vagrant/var/run/php/session
+        soap.wsdl_cache_dir: /home/vagrant/var/run/php/wsdlcache
     saml:
       modules:
         exampleauth: True

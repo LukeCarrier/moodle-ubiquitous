@@ -13,11 +13,11 @@ Selenium is a browser automation framework that is driven by Behat for use in th
 Subsets of the test suite appear to complete successfully, but larger sets run successfully some way before intermittently failing. You notice a possible degradation in performance as the tests run and Behat exits with an error along the lines of the following:
 
 ```
-Fatal error: Uncaught WebDriver\Exception\UnknownError: Session [18740936-a403-4b5f-b485-eba79347655b] was terminated due to FORWARDING_TO_NODE_FAILED in /home/ubuntu/releases/test/vendor/behat/mink-selenium2-driver/src/Selenium2Driver.php on line 352
+Fatal error: Uncaught WebDriver\Exception\UnknownError: Session [18740936-a403-4b5f-b485-eba79347655b] was terminated due to FORWARDING_TO_NODE_FAILED in /home/vagrant/releases/test/vendor/behat/mink-selenium2-driver/src/Selenium2Driver.php on line 352
 ```
 
 ```
-Fatal error: Uncaught WebDriver\Exception\UnknownError: Session [b3b6ab2c-7529-4e37-8994-19839cebe40d] was terminated due to PROXY_REREGISTRATION in /home/ubuntu/releases/test/vendor/behat/mink-selenium2-driver/src/Selenium2Driver.php on line 350
+Fatal error: Uncaught WebDriver\Exception\UnknownError: Session [b3b6ab2c-7529-4e37-8994-19839cebe40d] was terminated due to PROXY_REREGISTRATION in /home/vagrant/releases/test/vendor/behat/mink-selenium2-driver/src/Selenium2Driver.php on line 350
 ```
 
 These errors indicate that something is wrong with the Selenium node. Examine `/var/log/selenium-node.log` on the affected machine and refer to appropriate troubleshooting steps on this page.

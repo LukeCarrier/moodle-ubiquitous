@@ -96,8 +96,8 @@ Then start the container:
 ```
 $ cd Ubiquitous/
 $ docker run -it \
-        --volume "$(dirname $PWD)/MoodleDocker":/home/ubuntu/releases/test \
-        --workdir /home/ubuntu/releases/test --memory 4g --memory-swap 4g \
+        --volume "$(dirname $PWD)/MoodleDocker":/home/vagrant/releases/test \
+        --workdir /home/vagrant/releases/test --memory 4g --memory-swap 4g \
         --publish 8080:80 --publish 8044:4444 \
         --publish 8055:5555 --publish 8056:5556 --publish 8057:5557 --publish 8058:5558 \
         --publish 8065:5995 --publish 8066:5996 --publish 8067:5997 --publish 8068:5998 \

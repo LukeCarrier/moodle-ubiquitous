@@ -105,5 +105,5 @@ $ sudo -u www-data \
         REQUEST_METHOD=GET \
         SCRIPT_NAME=/status \
         SCRIPT_FILENAME=/status \
-        cgi-fcgi -bind -connect /var/run/php/php7.0-fpm-ubuntu.sock
+        cgi-fcgi -bind -connect /var/run/php/php7.0-fpm-vagrant.sock
 ```

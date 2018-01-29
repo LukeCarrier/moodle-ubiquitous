@@ -31,7 +31,7 @@ Add a remote server and configure a path mapping for the application's root dire
     * _Name_ to `app-debug-1`.
     * _Host_ to `192.168.120.50`.
 5. Enable _Use path mappings_.
-6. Locate the root directory of the application and fill in the _Absolute path on the server_ field to `/home/ubuntu/releases/vagrant`.
+6. Locate the root directory of the application and fill in the _Absolute path on the server_ field to `/home/vagrant/releases/vagrant`.
 
 Since Moodle serves many assets via PHP, you'll probably want to disable the _Notify if debug session was finished without being paused_ option (_Languages & Frameworks_ -> _PHP_ -> _Debug_, under _Advanced settings_). This will silence the warnings when no breakpoint pauses handling of these requests.
 
