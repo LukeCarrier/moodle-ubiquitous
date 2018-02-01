@@ -178,7 +178,9 @@ $CFG->behat_config = array_merge(array(
 ), $CFG->behat_profiles);
 
 // Selenium node path configuration
-// Requires https://github.com/moodle/moodle/compare/master...LukeCarrier:MDL-NOBUG-selenium-remote-node-file-upload-master
+// Requires a patch:
+// -> Moodle < 3.2: https://github.com/moodle/moodle/compare/MOODLE_31_STABLE...LukeCarrier:MDL-NOBUG-selenium-remote-node-file-upload-pre-32
+// -> Moodle >= 3.2: https://github.com/moodle/moodle/compare/master...LukeCarrier:MDL-NOBUG-selenium-remote-node-file-upload-32-onwards
 $CFG->behat_node_dirroot = '/var/lib/selenium/moodle';
 $CFG->behat_node_dir_sep = '/';
 
@@ -237,7 +239,7 @@ $ vagrant ssh app-debug-1 --command 'php current/admin/tool/behat/cli/init.php'
 
 The acceptance test site will then be accessible from each of the application servers at [`{wwwroot}/behat`](http://192.168.120.50/behat/).
 
-Some of the tests attempt to upload files within the Moodle source tree to the application. We must therefore synchronise the Moodle source tree to the Selenium nodes and apply [a patch](https://github.com/moodle/moodle/compare/master...LukeCarrier:MDL-NOBUG-selenium-remote-node-file-upload-master) to Moodle to allow it to locate these files:
+Some of the tests attempt to upload files within the Moodle source tree to the application. We must therefore synchronise the Moodle source tree to the Selenium nodes and apply a patch [for Moodle < 3.2](https://github.com/moodle/moodle/compare/MOODLE_31_STABLE...LukeCarrier:MDL-NOBUG-selenium-remote-node-file-upload-pre-32) or [for Moodle >= 3.2](https://github.com/moodle/moodle/compare/master...LukeCarrier:MDL-NOBUG-selenium-remote-node-file-upload-32-onwards) to Moodle to allow it to locate these files:
 
 ```
 $ vagrant rsync selenium-node-chrome
