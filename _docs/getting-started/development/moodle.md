@@ -181,7 +181,7 @@ $CFG->behat_config = array_merge(array(
 // Requires a patch:
 // -> Moodle < 3.2: https://github.com/moodle/moodle/compare/MOODLE_31_STABLE...LukeCarrier:MDL-NOBUG-selenium-remote-node-file-upload-pre-32
 // -> Moodle >= 3.2: https://github.com/moodle/moodle/compare/master...LukeCarrier:MDL-NOBUG-selenium-remote-node-file-upload-32-onwards
-$CFG->behat_node_dirroot = '/var/lib/selenium/moodle';
+$CFG->behat_node_dirroot = '/home/vagrant/moodle';
 $CFG->behat_node_dir_sep = '/';
 
 // PHPUnit testing environment
