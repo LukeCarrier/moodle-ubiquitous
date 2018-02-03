@@ -38,7 +38,7 @@ graph LR
     end
 ```
 
-Note that you're _very likely_ to need to use all of the machines, and should start only those necessary for the task at hand.
+Note that you're _very unlikely_ to need to use all of the machines, and should start only those necessary for the task at hand.
 
 ## The general idea
 
