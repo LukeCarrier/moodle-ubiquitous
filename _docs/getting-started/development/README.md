@@ -140,6 +140,41 @@ $ vagrant provision
 
 See the [Salt troubleshooting documentation](../roles/salt.md#typeerror-bool-object-is-not-iterable) for further information.
 
+## failed to open /dev/vboxnetctl
+
+This error [usually manifests itself as an issue setting up host-only network adapters](https://github.com/hashicorp/vagrant/issues/1671):
+
+```
+==> app-debug-1: Clearing any previously set network interfaces...
+There was an error while executing `VBoxManage`, a CLI used by Vagrant
+for controlling VirtualBox. The command and stderr is shown below.
+
+Command: ["hostonlyif", "create"]
+
+Stderr: 0%...
+Progress state: NS_ERROR_FAILURE
+VBoxManage: error: Failed to create the host-only adapter
+VBoxManage: error: VBoxNetAdpCtl: Error while adding new interface: failed to open /dev/vboxnetctl: No such file or directory
+VBoxManage: error: Details: code NS_ERROR_FAILURE (0x80004005), component HostNetworkInterfaceWrap, interface IHostNetworkInterface
+VBoxManage: error: Context: "RTEXITCODE handleCreate(HandlerArg*)" at line 94 of file VBoxManageHostonly.cpp
+```
+
+The problem seems to occur when updating VirtualBox whilst virtual machines are still running, which prevents the VirtualBox kernel modules from being unloaded. To resolve the problem:
+
+1. Use the VirtualBox GUI to shut down all running virtual machines, then for Ubuntu:
+
+   ```
+   $ sudo systemctl restart vboxdrv.service
+   ```
+
+   macOS:
+
+   ```
+   $ sudo /Library/StartupItems/VirtualBox/VirtualBox restart
+   ```
+
+2. Retry. If the problem persists, try rebooting your host machine.
+
 ## Advanced topics
 
 ### Adding your own virtual machines
