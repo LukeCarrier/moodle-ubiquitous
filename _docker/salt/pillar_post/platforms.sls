@@ -15,6 +15,13 @@ platforms:
             PHP_VALUE: |
               max_execution_time=3600
               memory_limit=1024m
+        medium:
+          location: ^(/theme/styles\.php)(/|$)
+          fastcgi_read_timeout: 300
+          fastcgi_params:
+            PHP_VALUE: |
+              max_execution_time=300
+              memory_limit=1024m
         fast:
           location: ^(.+\.php)(/|$)
           fastcgi_read_timeout: 60
