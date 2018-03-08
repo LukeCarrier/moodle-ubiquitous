@@ -38,7 +38,7 @@
 * [BIND](roles/named.md)
 * [Selenium](roles/selenium.md)
 * Utilities
-    * [Java](roles/java-base.md)
+    * [Java](roles/utilities/java-base.md)
 
 ## Developing Ubiquitous
 
