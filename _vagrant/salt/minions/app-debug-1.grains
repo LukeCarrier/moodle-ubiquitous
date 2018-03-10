@@ -2,6 +2,7 @@ environment: dev
 group: dev
 roles:
   - ntp
+  - admin
   - sshd
   - app-moodle
   - app-moodle-debug

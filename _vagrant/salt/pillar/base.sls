@@ -6,6 +6,12 @@ users:
       - sudo
     home: /home/vagrant
 
+packages:
+  - git
+  - htop
+  - tree
+  - vim
+
 acl:
   apply: True
 

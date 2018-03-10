@@ -6,6 +6,10 @@
 #
 
 base:
+  'roles:admin':
+    - match: grain
+    - admin
+
   'roles:nftables':
     - match: grain
     - nftables

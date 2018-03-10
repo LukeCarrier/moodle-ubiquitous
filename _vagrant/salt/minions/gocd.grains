@@ -1,5 +1,6 @@
 environment: dev
 roles:
   - ntp
+  - admin
   - sshd
   - gocd-server

@@ -2,5 +2,6 @@ environment: dev
 group: dev
 roles:
   - ntp
+  - admin
   - sshd
   - mail-debug
