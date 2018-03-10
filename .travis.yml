@@ -9,6 +9,10 @@ before_install:
     docker build \
         --file _docker/allinone/Dockerfile \
         --tag ubiquitous/allinone .
+  - |
+    if [ "$TRAVIS_BRANCH" == 'better-containers' ]; then
+      docker build _docker/ubuntu-python -t ubiquitous/ubuntu-python:16.04
+    fi
 script:
   - /bin/true
 after_success:
@@ -16,4 +20,5 @@ after_success:
     if [ "$TRAVIS_BRANCH" == 'better-containers' ]; then
       docker login -u="$DOCKER_USERNAME" --password-stdin <<<"$DOCKER_PASSWORD"
       docker push ubiquitous/allinone
+      docker push ubiquitous/ubuntu-python:16.04
     fi
