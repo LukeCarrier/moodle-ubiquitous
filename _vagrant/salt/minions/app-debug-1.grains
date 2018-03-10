@@ -1,6 +1,7 @@
 environment: dev
 group: dev
 roles:
+  - ntp
   - app-moodle
   - app-moodle-debug
   - app-moodle-default-release

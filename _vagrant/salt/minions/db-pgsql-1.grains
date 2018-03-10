@@ -1,4 +1,5 @@
 environment: dev
 group: dev
 roles:
+  - ntp
   - db-pgsql

@@ -10,6 +10,10 @@ base:
     - match: grain
     - nftables
 
+  'roles:ntp':
+    - match: grain
+    - ntp
+
   'roles:salt':
     - match: grain
     - salt

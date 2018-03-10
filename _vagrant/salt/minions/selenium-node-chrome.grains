@@ -1,4 +1,5 @@
 environment: dev
 group: selenium
 roles:
+  - ntp
   - selenium-node-chrome

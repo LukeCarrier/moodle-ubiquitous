@@ -1,6 +1,7 @@
 environment: dev
 group: dev
 roles:
+  - ntp
   - app-saml
   - app-debug
   - app-default-release
