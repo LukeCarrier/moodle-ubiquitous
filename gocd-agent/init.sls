@@ -6,7 +6,6 @@
 #
 
 include:
-  - base
   - gocd-base
 
 go-agent:

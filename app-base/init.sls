@@ -6,7 +6,6 @@
 #
 
 include:
-  - base
   - nginx-base
 
 #

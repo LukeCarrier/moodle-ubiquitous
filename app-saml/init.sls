@@ -10,7 +10,6 @@
 {% from 'app-lets-encrypt/macros.sls' import lets_encrypt_all %}
 
 include:
-  - base
   - app-base
   - app-ubiquitous-dirs
 

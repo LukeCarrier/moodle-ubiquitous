@@ -5,9 +5,6 @@
 # @copyright 2018 The Ubiquitous Authors
 #
 
-include:
-  - base
-
 #
 # PostgreSQL server
 #
