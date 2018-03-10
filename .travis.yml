@@ -1,24 +1,49 @@
 sudo: required
-
 language: python
 services:
   - docker
 
-before_install:
-  - |
-    docker build \
-        --file _docker/allinone/Dockerfile \
-        --tag ubiquitous/allinone .
-  - |
-    if [ "$TRAVIS_BRANCH" == 'better-containers' ]; then
-      docker build _docker/ubuntu-python -t ubiquitous/ubuntu-python:16.04
-    fi
-script:
-  - /bin/true
-after_success:
-  - |
-    if [ "$TRAVIS_BRANCH" == 'better-containers' ]; then
-      docker login -u="$DOCKER_USERNAME" --password-stdin <<<"$DOCKER_PASSWORD"
-      docker push ubiquitous/allinone
-      docker push ubiquitous/ubuntu-python:16.04
-    fi
+matrix:
+  include:
+    - before_script:
+      - |
+        curl -L https://bootstrap.saltstack.com | sudo sh -s -- -X
+        sudo apt install python-pip
+        sudo salt-call --local pip.uninstall docker-py
+        sudo salt-call --local pip.install docker
+      - docker build _docker/ubuntu-python -t ubiquitous/ubuntu-python:16.04
+      - sudo _docker/service/build -c ubiquitous/selenium-hub -m selenium-hub
+      - sudo _docker/service/build -c ubiquitous/selenium-node-chrome -m selenium-node-chrome
+      - sudo _docker/service/build -c ubiquitous/selenium-node-firefox -m selenium-node-firefox
+      script:
+        - /bin/true
+      after_success:
+        - |
+          if [ "$TRAVIS_BRANCH" == 'better-containers' ]; then
+            containers=(
+              ubiquitous/ubuntu-python:16.04
+
+              ubiquitous/selenium-hub
+              ubiquitous/selenium-node-chrome
+              ubiquitous/selenium-node-firefox
+            )
+
+            docker login -u="$DOCKER_USERNAME" --password-stdin <<<"$DOCKER_PASSWORD"
+            for container in "${containers[@]}"; do
+              docker push "$container"
+            done
+          fi
+
+    - before_script:
+      - |
+        docker build \
+            --file _docker/allinone/Dockerfile \
+            --tag ubiquitous/allinone .
+      script:
+        - /bin/true
+      after_success:
+        - |
+          docker login -u="$DOCKER_USERNAME" --password-stdin <<<"$DOCKER_PASSWORD"
+          docker push ubiquitous/allinone
+      after_failure:
+        - salt-call --versions-report
