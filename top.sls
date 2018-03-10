@@ -14,6 +14,10 @@ base:
     - match: grain
     - ntp
 
+  'roles:sshd':
+    - match: grain
+    - sshd
+
   'roles:salt':
     - match: grain
     - salt

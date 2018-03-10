@@ -112,35 +112,6 @@ systemd.journald:
 {% endif %}
 
 #
-# SSH daemon
-#
-
-ssh:
-  pkg.installed:
-    - name: openssh-server
-  file.managed:
-    - name: /etc/ssh/sshd_config
-    - source: salt://base/sshd/sshd_config.jinja
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 0644
-    - require:
-      - pkg: openssh-server
-
-{% if pillar['systemd']['apply'] %}
-ssh.service:
-  service.running:
-    - name: ssh
-    - enable: True
-    - reload: True
-    - require:
-      - pkg: openssh-server
-    - watch:
-      - file: /etc/ssh/sshd_config
-{% endif %}
-
-#
 # Useful administrative tools
 #
 
