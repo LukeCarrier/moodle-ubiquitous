@@ -37,7 +37,12 @@ $ docker build _docker/ubuntu-python -t ubiquitous/ubuntu-python:16.04
 Then, to build:
 
 ```
-sudo salt-call -l debug --local docker.sls_build ubiquitous/<name> base=ubiquitous/ubuntu-python:16.04 mods=<roles>
+$ sudo salt-call \
+        -l debug --local \
+        --file-root "$PWD" \
+        --pillar-root "${PWD}/_docker/service/salt/pillar" \
+        docker.sls_build ubiquitous/base \
+        base=ubiquitous/ubuntu-python:16.04 mods=base
 ```
 
 ## Automating container builds
