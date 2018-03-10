@@ -28,10 +28,16 @@ Test that the execution module is ready to go:
 $ sudo salt-call -l debug --local sys.argspec 'docker.*'
 ```
 
+Since the Salt `docker` module expects a Python installation to be present on the container, build our base container:
+
+```
+$ docker build _docker/ubuntu-python -t ubiquitous/ubuntu-python:16.04
+```
+
 Then, to build:
 
 ```
-sudo salt-call -l debug --local docker.sls_build ubiquitous/<name> base=ubuntu:16.04 mods=<roles>
+sudo salt-call -l debug --local docker.sls_build ubiquitous/<name> base=ubiquitous/ubuntu-python:16.04 mods=<roles>
 ```
 
 ## Automating container builds
