@@ -8,7 +8,7 @@
 certbot.repo:
   pkgrepo.managed:
     - ppa: certbot/certbot
-    - keyserver: http://keyserver.ubuntu.com
+    - keyserver: hkp://pool.sks-keyservers.net:80
 
 certbot.pkg:
   pkg.installed:
