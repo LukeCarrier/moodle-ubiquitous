@@ -6,7 +6,6 @@
 #
 
 include:
-  - base
   - selenium-base
 
 selenium-hub.systemd:

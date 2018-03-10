@@ -6,7 +6,6 @@
 #
 
 include:
-  - base
   - selenium-base
 
 selenium-node.x11vnc.pkgs:

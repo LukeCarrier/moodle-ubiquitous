@@ -8,7 +8,6 @@
 {% from 'selenium-node-base/macros.sls' import selenium_node_instance %}
 
 include:
-  - base
   - selenium-base
   - selenium-node-base
 
