@@ -43,3 +43,4 @@
 ## Developing Ubiquitous
 
 * [Introduction](development/README.md)
+* [Documentation](development/docs.md)
