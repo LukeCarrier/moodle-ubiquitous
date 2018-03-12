@@ -1,0 +1,31 @@
+#!/bin/bash
+
+#
+# Ubiquitous Moodle
+#
+# @author Luke Carrier <luke@carrier.im>
+# @copyright 2018 The Ubiquitous Authors
+#
+
+while true; do
+    case "$1" in
+        -s|--salt-dir) SALT_DIR="$2" ; shift 2 ;;
+        *            ) break                   ;;
+    esac
+done
+
+NAMES="$(cd "$(dirname "$0")" && pwd -P)/names"
+SALT_PYTHON="${SALT_DIR}/bin/python"
+SALT_RUNTESTS="${SALT_DIR}/tests/runtests.py"
+
+if [ ! -f "${SALT_PYTHON}" ]; then
+    echo "virtualenv not created in ${SALT_DIR}" >&2
+    exit 1
+fi
+
+cp _modules/*.py "${SALT_DIR}/salt/modules"
+cp _states/*.py "${SALT_DIR}/salt/states"
+cp _tests/unit/modules/test_*.py "${SALT_DIR}/tests/unit/modules"
+cp _tests/unit/states/test_*.py "${SALT_DIR}/tests/unit/states"
+
+"$SALT_PYTHON" "$SALT_RUNTESTS" --names-file "$NAMES"

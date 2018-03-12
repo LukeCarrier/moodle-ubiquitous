@@ -44,3 +44,4 @@
 
 * [Introduction](development/README.md)
 * [Documentation](development/docs.md)
+* [Testing](development/tests.md)
