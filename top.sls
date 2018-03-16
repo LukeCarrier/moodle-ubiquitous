@@ -6,6 +6,10 @@
 #
 
 base:
+  'roles:nftables':
+    - match: grain
+    - nftables
+
   'roles:salt':
     - match: grain
     - salt
