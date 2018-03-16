@@ -5,6 +5,9 @@
 # @copyright 2018 The Ubiquitous Authors
 #
 
+include:
+  - systemd
+
 {% set conf_dir = '/etc/datadog-agent' %}
 {% set additional_checksd = salt['pillar.get'](
     'datadog-agent:config:additional_checksd', conf_dir + '/checks.d') %}
@@ -77,16 +80,6 @@ datadog-agent.integrations.{{ integration_name }}.{{ config_name }}:
       - cmd: datadog-agent.restart
 {% endfor %}
 {% endfor %}
-
-{% if salt['pillar.get']('datadog-agent:journald:grant_group_membership') %}
-datadog-agent.journald.grant-group-membership:
-  user.present:
-    - name: dd-agent
-    - groups:
-      - systemd-journal
-    - onchanges_in:
-      - datadog-agent.restart
-{% endif %}
 
 datadog-agent.service:
   service.running:

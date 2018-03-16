@@ -37,6 +37,7 @@
 * [CIFS mounts](roles/mount-cifs.md)
 * [BIND](roles/named.md)
 * [Selenium](roles/selenium.md)
+* [systemd](roles/systemd.md)
 * Utilities
     * [Java](roles/utilities/java-base.md)
 

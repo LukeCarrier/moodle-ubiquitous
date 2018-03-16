@@ -1,0 +1,4 @@
+[Journal]
+{% for option, value in salt['pillar.get']('systemd:journal:config', {}).items() %}
+{{ option }}={{ value }}
+{% endfor %}
