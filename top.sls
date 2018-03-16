@@ -34,6 +34,10 @@ base:
     - match: grain
     - gocd-agent
 
+  'roles:moodle-componentmgr':
+    - match: grain
+    - moodle-componentmgr
+
   'roles:named':
     - match: grain
     - named
