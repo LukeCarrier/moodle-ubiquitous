@@ -1,0 +1,8 @@
+export NVM_DIR={{ nvm_dir | yaml_squote }}
+if [ -s "${NVM_DIR}/nvm.sh" ]; then
+    . "${NVM_DIR}/nvm.sh"
+fi
+
+if [ -n "$BASH_VERSION" -a -s "${NVM_DIR}/bash_completion" ]; then
+    . "${NVM_DIR}/bash_completion"
+fi

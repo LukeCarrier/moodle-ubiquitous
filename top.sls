@@ -38,6 +38,10 @@ base:
     - match: grain
     - moodle-componentmgr
 
+  'roles:nvm':
+    - match: grain
+    - nvm
+
   'roles:named':
     - match: grain
     - named
