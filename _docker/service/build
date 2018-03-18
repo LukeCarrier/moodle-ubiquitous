@@ -1,0 +1,38 @@
+#!/bin/bash
+
+#
+# Ubiquitous Moodle
+#
+# @author Luke Carrier <luke@carrier.im>
+# @copyright 2018 The Ubiquitous Authors
+#
+
+implode() {
+    local IFS="$1"
+    shift
+    echo "$*"
+}
+
+MODULES=()
+EXTRA_FILEREFS=()
+
+while true; do
+    case "$1" in
+        -c|--container     ) CONTAINER="$2"         ; shift 2 ;;
+        -m|--module        ) MODULES+=("$2")        ; shift 2 ;;
+        -f|--extra-filerefs) EXTRA_FILEREFS+=("$2") ; shift 2 ;;
+        *                  ) break                            ;;
+    esac
+done
+MODULES="$(implode , ${MODULES[@]})"
+EXTRA_FILEREFS="$(implode , ${EXTRA_FILEREFS[@]})"
+SALT_CALL="${SALT_CALL:-salt-call}"
+
+"$SALT_CALL" \
+        --local \
+        --file-root "$PWD" \
+        --pillar-root "${PWD}/_docker/service/salt/pillar" \
+        docker.sls_build "$CONTAINER" \
+        base=ubiquitous/ubuntu-python:16.04 \
+        "mods=${MODULES}" "extra_filerefs=${EXTRA_FILEREFS}"
+exit $?

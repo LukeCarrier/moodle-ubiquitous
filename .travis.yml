@@ -12,6 +12,7 @@ matrix:
         sudo salt-call --local pip.uninstall docker-py
         sudo salt-call --local pip.install docker
       - docker build _docker/ubuntu-python -t ubiquitous/ubuntu-python:16.04
+      - sudo _docker/service/build -c ubiquitous/moodle-build -m moodle-componentmgr -m nvm
       - sudo _docker/service/build -c ubiquitous/selenium-hub -m selenium-hub
       - sudo _docker/service/build -c ubiquitous/selenium-node-chrome -m selenium-node-chrome
       - sudo _docker/service/build -c ubiquitous/selenium-node-firefox -m selenium-node-firefox
@@ -22,6 +23,8 @@ matrix:
           if [ "$TRAVIS_BRANCH" == 'better-containers' ]; then
             containers=(
               ubiquitous/ubuntu-python:16.04
+
+              ubiquitous/moodle-build
 
               ubiquitous/selenium-hub
               ubiquitous/selenium-node-chrome

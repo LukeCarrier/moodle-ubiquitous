@@ -1,0 +1,28 @@
+#!/bin/bash
+
+#
+# Ubiquitous Moodle
+#
+# @author Luke Carrier <luke@carrier.im>
+# @copyright 2018 The Ubiquitous Authors
+#
+
+docker build _docker/ubuntu-python -t ubiquitous/ubuntu-python:16.04
+
+containers=(
+    ubiquitous/moodle-build:moodle-componentmgr,nvm
+
+    ubiquitous/selenium-hub:selenium-hub
+    ubiquitous/selenium-node-chrome:selenium-node-chrome
+    ubiquitous/selenium-node-firefox:selenium-node-firefox
+)
+
+for line in "${containers[@]}"; do
+    parts=($(echo "$line" | tr ':' "\n"))
+    container="${parts[0]}"
+    mods="${parts[1]}"
+    extra_filerefs="${parts[2]}"
+    if ! _docker/service/build -c "$container" -m "$mods" -f "$extra_filerefs"; then
+        echo "failed to build container \"${container}\" with modules \"${mods}\" and extra file references \"${extra_filerefs}\"" >&2
+    fi
+done
