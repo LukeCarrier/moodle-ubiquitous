@@ -5,14 +5,10 @@
 # @copyright 2018 The Ubiquitous Authors
 #
 
-#
-# Hosts file
-#
-
-/etc/hosts:
+salt-minion.list:
   file.managed:
-    - source: salt://base/network/hosts.jinja
-    - template: jinja
+    - name: /etc/apt/sources.list.d/saltstack.list
+    - source: salt://salt-minion/lists/saltstack.list
     - user: root
     - group: root
-    - mode: 644
+    - mode: 0644

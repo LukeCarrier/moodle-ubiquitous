@@ -25,6 +25,9 @@ base:
   'roles:salt':
     - match: grain
     - salt
+  'roles:salt-minion':
+    - match: grain
+    - salt-minion
 
   'roles:gocd-server':
     - match: grain

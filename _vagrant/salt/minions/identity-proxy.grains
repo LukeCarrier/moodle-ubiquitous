@@ -4,6 +4,7 @@ roles:
   - ntp
   - admin
   - sshd
+  - salt-minion
   - app-saml
   - app-debug
   - app-default-release

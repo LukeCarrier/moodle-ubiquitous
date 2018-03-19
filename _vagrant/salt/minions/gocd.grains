@@ -3,4 +3,5 @@ roles:
   - ntp
   - admin
   - sshd
+  - salt-minion
   - gocd-server

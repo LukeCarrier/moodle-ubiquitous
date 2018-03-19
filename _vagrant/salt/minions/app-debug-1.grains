@@ -4,6 +4,7 @@ roles:
   - ntp
   - admin
   - sshd
+  - salt-minion
   - app-moodle
   - app-moodle-debug
   - app-moodle-default-release
