@@ -3,6 +3,10 @@ base:
     - base
     - platforms
 
+  'roles:nvm':
+    - match: grain
+    - nvm
+
   'roles:app-moodle':
     - match: grain
     - app

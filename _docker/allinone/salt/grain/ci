@@ -1,5 +1,7 @@
 environment: integration
 roles:
+  - moodle-componentmgr
+  - nvm
   - app-moodle
   - app-debug
   - app-default-release

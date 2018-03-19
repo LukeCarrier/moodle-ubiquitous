@@ -47,5 +47,3 @@ RUN bash $shell_args /usr/local/ubiquitous/bin/ubiquitous-ctl start postgresql \
         && sudo -u postgres psql --file /tmp/postgresql-template-charset.sql \
         && salt-call --log-level=$salt_log_level --local state.apply \
         && bash $shell_args /usr/local/ubiquitous/bin/ubiquitous-ctl stop
-
-RUN bash $shell_args /usr/local/ubiquitous/bin/ubiquitous-build-deps
