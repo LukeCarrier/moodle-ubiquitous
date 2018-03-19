@@ -1,6 +1,7 @@
 environment: dev
 group: selenium
 roles:
+  - hosts
   - ntp
   - admin
   - sshd

@@ -1,6 +1,7 @@
 environment: dev
 group: dev
 roles:
+  - hosts
   - ntp
   - admin
   - sshd

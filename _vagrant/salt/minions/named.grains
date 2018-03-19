@@ -1,5 +1,6 @@
 environment: dev
 roles:
+  - hosts
   - ntp
   - admin
   - sshd

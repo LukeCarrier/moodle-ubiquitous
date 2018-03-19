@@ -5,13 +5,9 @@
 # @copyright 2018 The Ubiquitous Authors
 #
 
-#
-# Hosts file
-#
-
-/etc/hosts:
+hosts./etc/hosts:
   file.managed:
-    - source: salt://base/network/hosts.jinja
+    - source: salt://hosts/network/hosts.jinja
     - template: jinja
     - user: root
     - group: root
