@@ -1,36 +1,38 @@
 <?php // Moodle configuration file
 
+{%- set cfg = salt['pillar.get']('platforms:' + domain + ':moodle') -%}
+
 // Boilerplate
 unset($CFG);
 global $CFG;
 $CFG = new stdClass();
 
 // Database
-$CFG->dbtype    = {{ cfg['dbtype'] | json }};
-$CFG->dblibrary = {{ cfg['dblibrary'] | json }};
-$CFG->dbhost    = {{ cfg['dbhost'] | json }};
-$CFG->dbname    = {{ cfg['dbname'] | json }};
-$CFG->dbuser    = {{ cfg['dbuser'] | json }};
-$CFG->dbpass    = {{ cfg['dbpass'] | json }};
-$CFG->prefix    = {{ cfg['prefix'] | json }};
+$CFG->dbtype    = {{ cfg['dbtype'] | yaml_squote }};
+$CFG->dblibrary = {{ cfg['dblibrary'] | yaml_squote }};
+$CFG->dbhost    = {{ cfg['dbhost'] | yaml_squote }};
+$CFG->dbname    = {{ cfg['dbname'] | yaml_squote }};
+$CFG->dbuser    = {{ cfg['dbuser'] | yaml_squote }};
+$CFG->dbpass    = {{ cfg['dbpass'] | yaml_squote }};
+$CFG->prefix    = {{ cfg['prefix'] | yaml_squote }};
 $CFG->dboptions = array(
 {% for key, value in cfg['dboptions'].items() %}
-    {{ key | json }} => {{ value | json }},
+    {{ key | yaml_squote }} => {{ value | json }},
 {% endfor %}
 );
 
 // Source directory
 {% if 'dirroot' in cfg %}
-$CFG->dirroot  = {{ cfg['dirroot'] | json }};
+$CFG->dirroot  = {{ cfg['dirroot'] | yaml_squote }};
 {% endif %}
 
 // Web configuration
-$CFG->wwwroot  = {{ cfg['wwwroot'] | json }};
+$CFG->wwwroot  = {{ cfg['wwwroot'] | yaml_squote }};
 $CFG->sslproxy = {{ cfg['sslproxy'] | default(False) | json }};
-$CFG->admin    = {{ cfg['admin'] | json }};
+$CFG->admin    = {{ cfg['admin'] | yaml_squote }};
 
 // Data directory
-$CFG->dataroot             = {{ cfg['dataroot'] | json }};
+$CFG->dataroot             = {{ cfg['dataroot'] | yaml_squote }};
 $CFG->directorypermissions = {{ cfg['directorypermissions'] }};
 
 {% if 'pre_bootstrap' in cfg %}

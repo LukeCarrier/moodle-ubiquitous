@@ -19,7 +19,7 @@ app-default-release.{{ domain }}.release:
     - group: {{ platform ['user']['name'] }}
     - mode: 0755
     - require:
-      - app-base.{{ domain }}.releases
+      - file: app.{{ domain }}.releases
 
 app-default-release.{{ domain }}.current:
   file.symlink:
@@ -30,8 +30,8 @@ app-default-release.{{ domain }}.current:
     - require:
       - file: app-default-release.{{ domain }}.release
     - onchanges_in:
-      - app-default-release.nginx.reload
-      - app-default-release.php-fpm.reload
+      - cmd: app-default-release.nginx.reload
+      - cmd: app-default-release.php-fpm.reload
 
 app-default-release.{{ domain }}.nginx:
   file.symlink:
@@ -39,7 +39,7 @@ app-default-release.{{ domain }}.nginx:
     - target: /etc/nginx/sites-available/{{ platform['basename'] }}.conf
 {% if pillar['systemd']['apply'] %}
     - onchanges_in:
-      - app-default-release.nginx.reload
+      - cmd: app-default-release.nginx.reload
 {% endif %}
 
 app-default-release.{{ domain }}.php-fpm.blue:
@@ -48,7 +48,7 @@ app-default-release.{{ domain }}.php-fpm.blue:
     - target: /etc/php/7.0/fpm/pools-available/{{ platform['basename'] }}.blue.conf
 {% if pillar['systemd']['apply'] %}
     - onchanges_in:
-      - app-default-release.php-fpm.reload
+      - cmd: app-default-release.php-fpm.reload
 {% endif %}
 
 app-default-release.{{ domain }}.php-fpm.green:
@@ -56,7 +56,7 @@ app-default-release.{{ domain }}.php-fpm.green:
     - name: /etc/php/7.0/fpm/pools-available/{{ platform['basename'] }}.green.conf
 {% if pillar['systemd']['apply'] %}
     - onchanges_in:
-      - app-default-release.php-fpm.reload
+      - cmd: app-default-release.php-fpm.reload
 {% endif %}
 {% endif %}
 {% endfor %}

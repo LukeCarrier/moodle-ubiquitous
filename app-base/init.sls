@@ -5,31 +5,7 @@
 # @copyright 2018 The Ubiquitous Authors
 #
 
-include:
-  - nginx-base
-
-#
-# nginx
-#
-
-/etc/logrotate.d/nginx:
-  file.managed:
-    - source: salt://app-base/logrotate/nginx
-    - user: root
-    - group: root
-    - mode: 0644
-
-/etc/nginx/sites-extra:
-  file.directory:
-    - user: root
-    - group: root
-    - mode: 755
-
-#
-# PHP
-#
-
-php.packages:
+app.php.packages:
   pkg.installed:
     - pkgs:
       - php7.0-dev
@@ -49,113 +25,131 @@ php.packages:
       - php7.0-xmlrpc
       - php7.0-zip
 
-/etc/php/7.0/fpm/php-fpm.conf:
+app.php-fpm.php-fpm.conf:
   file.managed:
+    - name: /etc/php/7.0/fpm/php-fpm.conf
     - source: salt://app-base/php-fpm/php-fpm.conf
     - user: root
     - group: root
     - mode: 0644
 
-/etc/php/7.0/fpm/pools-available:
+app.php-fpm.pools-available:
   file.directory:
+    - name: /etc/php/7.0/fpm/pools-available
     - user: root
     - group: root
     - mode: 755
 
-/etc/php/7.0/fpm/pools-enabled:
+app.php-fpm.pools-enabled:
   file.directory:
+    - name: /etc/php/7.0/fpm/pools-enabled
     - user: root
     - group: root
     - mode: 755
 
-/etc/php/7.0/fpm/pools-extra:
+app.php-fpm.pools-extra:
   file.directory:
+    - name: /etc/php/7.0/fpm/pools-extra
     - user: root
     - group: root
     - mode: 755
 
-/etc/php/7.0/fpm/pool.d:
+app.php-fpm.pool.d:
   file.absent:
+    - name: /etc/php/7.0/fpm/pool.d
     - require:
-      - pkg: php.packages
-      - file: /etc/php/7.0/fpm/php-fpm.conf
+      - pkg: app.php.packages
+      - file: app.php-fpm.php-fpm.conf
 
-/etc/php/7.0/fpm/pools-available/__default__.conf:
+app.php-fpm.pools-available.__default__:
   file.managed:
+    - name: /etc/php/7.0/fpm/pools-available/__default__.conf
     - source: salt://app-base/php-fpm/__default__.conf.jinja
     - template: jinja
     - user: root
     - group: root
     - mode: 0644
     - require:
-      - pkg: php.packages
-      - file: /etc/php/7.0/fpm/pools-available
+      - pkg: app.php.packages
 
-/etc/php/7.0/fpm/pools-enabled/__default__.conf:
+app.php-fpm.pools-enabled.__default__:
   file.symlink:
+    - name: /etc/php/7.0/fpm/pools-enabled/__default__.conf
     - target: /etc/php/7.0/fpm/pools-available/__default__.conf
     - user: root
     - group: root
     - mode: 0644
     - require:
-      - pkg: php.packages
-      - file: /etc/php/7.0/fpm/pools-enabled
-      - file: /etc/php/7.0/fpm/pools-available/__default__.conf
+      - pkg: app.php.packages
+      - file: app.php-fpm.pools-enabled
+      - file: app.php-fpm.pools-available.__default__
 
-/var/run/php:
+app.php-fpm.run:
   file.directory:
+    - name: /var/run/php
     - user: {{ pillar['nginx']['user'] }}
     - group: {{ pillar['nginx']['user'] }}
     - mode: 0750
 
-/var/log/php7.0-fpm:
+app.php-fpm.log:
   file.directory:
+    - name: /var/log/php7.0-fpm
     - user: root
     - group: root
     - mode: 0755
 
-/etc/logrotate.d/php7.0-fpm:
+{% for acl in salt['pillar.get']('php:fpm:log_acl', []) %}
+app.php-fpm.log.acl:
+  acl.present:
+    - name: /var/log/php7.0-fpm
+    - acl_type: {{ acl['acl_type'] }}
+    - acl_name: {{ acl['acl_name'] }}
+    - perms: {{ acl['perms'] }}
+    - recurse: True
+{% endfor %}
+
+app.php-fpm.logrotate:
   file.managed:
-    - source: salt://app-base/logrotate/php7.0-fpm
+    - name: /etc/logrotate.d/php7.0-fpm
+    - source: salt://app-base/logrotate/php7.0-fpm.jinja
+    - template: jinja
     - user: root
     - group: root
     - mode: 0644
 
-app-base.php-fpm.enable:
+{% if pillar['systemd']['apply'] %}
+app.php-fpm.enable:
   service.running:
     - name: php7.0-fpm
     - enable: True
     - require:
-      - php.packages
-      - /etc/php/7.0/fpm/php-fpm.conf
-      - /etc/php/7.0/fpm/pools-available
-      - /etc/php/7.0/fpm/pools-enabled
-      - /etc/php/7.0/fpm/pools-extra
-      - /etc/php/7.0/fpm/pool.d
-      - /etc/php/7.0/fpm/pools-available/__default__.conf
-      - /etc/php/7.0/fpm/pools-enabled/__default__.conf
-      - /var/run/php
-      - /var/log/php7.0-fpm
-      - /etc/logrotate.d/php7.0-fpm
+      - pkg: app.php.packages
+      - file: app.php-fpm.php-fpm.conf
+      - file: app.php-fpm.pools-available
+      - file: app.php-fpm.pools-enabled
+      - file: app.php-fpm.pools-extra
+      - file: app.php-fpm.pool.d
+      - file: app.php-fpm.pools-available.__default__
+      - file: app.php-fpm.pools-enabled.__default__
+      - file: app.php-fpm.run
+      - file: app.php-fpm.log
+      - file: app.php-fpm.logrotate
+{% endif %}
 
-#
-# SQL Server drivers for PHP
-#
-
-php.sqlsrv.repo:
+app.php.sqlsrv.repo:
   pkgrepo.managed:
     - file: /etc/apt/sources.list.d/mssql-release.list
     - humanname:
     - name: deb [arch=amd64] https://packages.microsoft.com/ubuntu/16.04/prod xenial main
     - key_url: https://packages.microsoft.com/keys/microsoft.asc
 
-php.sqlsrv.msodbcsql.license:
+app.php.sqlsrv.msodbcsql.license:
   debconf.set:
     - name: 'msodbcsql'
     - data:
         'msodbcsql/accept_eula': { 'type': 'boolean', 'value': True }
 
-php.sqlsrv.deps:
+app.php.sqlsrv.deps:
   pkg.latest:
     - pkgs:
       - build-essential
@@ -163,28 +157,29 @@ php.sqlsrv.deps:
       - g++
       - unixodbc-dev
     - require:
-      - pkgrepo: php.sqlsrv.repo
+      - pkgrepo: app.php.sqlsrv.repo
+      - debconf: app.php.sqlsrv.msodbcsql.license
 
 # Temporarily work around ODBC client packaging failing to check the debconf
 # database and requiring ACCEPT_EULA environment variable to be set at install
 # time.
 #
 # See https://connect.microsoft.com/SQLServer/Feedback/Details/3105172
-php.sqlsrv.pkgs:
+app.php.sqlsrv.pkgs:
   cmd.run:
     - name: apt-get install --assume-yes msodbcsql
     - env:
       - ACCEPT_EULA: Y
     - unless: dpkg -l | grep msodbcsql
     - require:
-      - pkg: php.sqlsrv.deps
+      - pkg: app.php.sqlsrv.deps
 
 {% for extension, priority in {'sqlsrv': 20, 'pdo_sqlsrv': 20}.items() %}
-php.sqlsrv.{{ extension }}.pecl:
+app.php.sqlsrv.{{ extension }}.pecl:
   pecl.installed:
     - name: {{ extension }}
 
-php.sqlsrv.{{ extension }}.ini.available:
+app.php.sqlsrv.{{ extension }}.ini.available:
   file.managed:
     - name: /etc/php/7.0/mods-available/{{ extension }}.ini
     - source: salt://app-base/php/extension.ini.jinja
@@ -194,23 +189,19 @@ php.sqlsrv.{{ extension }}.ini.available:
       priority: {{ priority }}
 
 {% for sapi in ['cli', 'fpm'] %}
-php.sqlsrv.{{ extension }}.ini.enabled.{{ sapi }}:
+app.php.sqlsrv.{{ extension }}.ini.enabled.{{ sapi }}:
   file.symlink:
     - name: /etc/php/7.0/{{ sapi }}/conf.d/{{ priority }}-{{ extension }}.ini
     - target: /etc/php/7.0/mods-available/{{ extension }}.ini
 {% if pillar['systemd']['apply'] %}
     - onchanges_in:
-      - service: app-base.php-fpm.restart
+      - service: app.php-fpm.restart
 {% endif %}
 {% endfor %}
 {% endfor %}
 
-#
-# Directories
-#
-
 {% for home_directory in pillar['system']['home_directories'] %}
-app-base.homes.{{ home_directory }}:
+app.homes.{{ home_directory }}:
   file.directory:
     - name: {{ home_directory }}
     - user: root
@@ -218,17 +209,19 @@ app-base.homes.{{ home_directory }}:
     - mode: 755
 
 {% if pillar['acl']['apply'] %}
-app-base.homes.{{ home_directory }}.acl:
+app.homes.{{ home_directory }}.acl:
   acl.present:
     - name: {{ home_directory }}
     - acl_type: user
     - acl_name: {{ pillar['nginx']['user'] }}
     - perms: rx
     - require:
-      - file: app-base.homes.{{ home_directory }}
+      - file: app.homes.{{ home_directory }}
 {% endif %}
 {% endfor %}
 
-app-base.php-fpm.restart:
+{% if pillar['systemd']['apply'] %}
+app.php-fpm.restart:
   cmd.run:
     - name: systemctl restart php7.0-fpm
+{% endif %}

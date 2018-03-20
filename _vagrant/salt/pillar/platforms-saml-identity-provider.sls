@@ -10,6 +10,7 @@ platforms:
       home: /home/vagrant
     nginx:
       client_max_body_size: 1024m
+      fastcgi_pass: unix:/var/run/php/php7.0-fpm-vagrant.sock
       ssl:
         certificate: /etc/nginx/ssl/identity-provider.moodle.crt
         certificate_key: /etc/nginx/ssl/identity-provider.moodle.pem
@@ -68,6 +69,9 @@ platforms:
           -----END PRIVATE KEY-----
     php:
       fpm:
+        listen: /var/run/php/php7.0-fpm-vagrant.sock
+        allowed_clients:
+          - 127.0.0.1
         pm: dynamic
         pm.max_children: 10
         pm.start_servers: 5

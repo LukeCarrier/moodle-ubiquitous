@@ -5,9 +5,11 @@
 # @copyright 2018 The Ubiquitous Authors
 #
 
-{% macro app_platform(app, domain, platform) %}
+{% macro app_platform(app, domain) %}
+{% set platform = salt['pillar.get']('platforms:' + domain) %}
+
 {% if platform['php']['values']['session.save_path'] %}
-app-base.{{ domain }}.php.session_save_path:
+app.{{ domain }}.php.session_save_path:
   file.directory:
     - name: {{ platform['php']['values']['session.save_path'] }}
     - user: {{ platform['user']['name'] }}
@@ -18,14 +20,14 @@ app-base.{{ domain }}.php.session_save_path:
       - user: {{ platform['user']['name'] }}
 {% endif %}
 
-app-base.{{ domain }}.user:
+app.{{ domain }}.user:
   user.present:
     - name: {{ platform['user']['name'] }}
     - fullname: {{ domain }}
     - shell: /bin/bash
     - home: {{ platform['user']['home'] }}
 
-app-base.{{ domain }}.home:
+app.{{ domain }}.home:
   file.directory:
     - name: {{ platform['user']['home'] }}
     - user: {{ platform['user']['name'] }}
@@ -35,26 +37,26 @@ app-base.{{ domain }}.home:
       - user: {{ platform['user']['name'] }}
 
 {% if pillar['acl']['apply'] %}
-app-base.{{ domain }}.home.acl:
+app.{{ domain }}.home.acl:
   acl.present:
     - name: {{ platform['user']['home'] }}
     - acl_type: user
     - acl_name: {{ pillar['nginx']['user'] }}
     - perms: rx
     - require:
-      - file: app-base.{{ domain }}.home
+      - file: app.{{ domain }}.home
 
-app-base.{{ domain }}.home.acl.default:
+app.{{ domain }}.home.acl.default:
   acl.present:
     - name: {{ platform['user']['home'] }}
     - acl_type: default:user
     - acl_name: {{ pillar['nginx']['user'] }}
     - perms: rx
     - require:
-      - file: app-base.{{ domain }}.home
+      - file: app.{{ domain }}.home
 {% endif %}
 
-app-base.{{ domain }}.releases:
+app.{{ domain }}.releases:
   file.directory:
     - name: {{ platform['user']['home'] }}/releases
     - makedirs: True
@@ -62,50 +64,29 @@ app-base.{{ domain }}.releases:
     - group: {{ platform['user']['name'] }}
     - mode: 0770
     - require:
-      - file: app-base.{{ domain }}.home
+      - file: app.{{ domain }}.home
 
 {% if pillar['acl']['apply'] %}
-app-base.{{ domain }}.releases.acl:
+app.{{ domain }}.releases.acl:
   acl.present:
     - name: {{ platform['user']['home'] }}/releases
     - acl_type: user
     - acl_name: {{ pillar['nginx']['user'] }}
     - perms: rx
     - require:
-      - file: app-base.{{ domain }}.releases
+      - file: app.{{ domain }}.releases
 
-app-base.{{ domain }}.releases.acl.default:
+app.{{ domain }}.releases.acl.default:
   acl.present:
     - name: {{ platform['user']['home'] }}/releases
     - acl_type: default:user
     - acl_name: {{ pillar['nginx']['user'] }}
     - perms: rx
     - require:
-      - file: app-base.{{ domain }}.home
+      - file: app.{{ domain }}.home
 {% endif %}
 
-app-base.{{ domain }}.nginx.log:
-  file.directory:
-    - name: /var/log/nginx/{{ platform['basename'] }}
-    - user: www-data
-    - group: adm
-    - mode: 0750
-
-{% for name, contents in platform['nginx'].get('extra', {}).items() %}
-app-base.{{ domain }}.nginx.extra.{{ name }}:
-  file.managed:
-    - name: /etc/nginx/sites-extra/{{ platform['basename'] }}.{{ name }}.conf
-    - contents: {{ contents | yaml_encode }}
-    - user: root
-    - group: root
-    - mode: 0644
-{% if pillar['systemd']['apply'] %}
-    - onchanges_in:
-      - app-{{ app }}.nginx.reload
-{% endif %}
-{% endfor %}
-
-app-base.{{ domain }}.php-fpm.log:
+app.{{ domain }}.php-fpm.log:
   file.directory:
     - name: /var/log/php7.0-fpm/{{ platform['basename'] }}
     - user: {{ platform['user']['name'] }}
@@ -113,7 +94,7 @@ app-base.{{ domain }}.php-fpm.log:
     - mode: 0750
 
 {% for instance in ['blue', 'green'] %}
-app-base.{{ domain }}.{{ instance }}.php-fpm:
+app.{{ domain }}.{{ instance }}.php-fpm:
   file.managed:
     - name: /etc/php/7.0/fpm/pools-available/{{ platform['basename'] }}.{{ instance }}.conf
     - source: salt://app-base/php-fpm/platform.conf.jinja
@@ -125,7 +106,7 @@ app-base.{{ domain }}.{{ instance }}.php-fpm:
     - group: root
     - mode: 0644
     - require:
-      - pkg: php.packages
+      - pkg: app.php.packages
 {% if pillar['systemd']['apply'] %}
     - onchanges_in:
       - service: app-{{ app }}.php-fpm.reload
@@ -135,26 +116,10 @@ app-base.{{ domain }}.{{ instance }}.php-fpm:
 
 {% macro app_restarts(app) %}
 app-{{ app }}.php-fpm.reload:
+{% if pillar['systemd']['apply'] %}
   cmd.run:
     - name: systemctl reload php7.0-fpm || systemctl restart php7.0-fpm
-
-app-{{ app }}.nginx.reload:
-  cmd.run:
-    - name: systemctl reload nginx || systemctl restart nginx
-
-app-{{ app }}.nginx.restart:
-  cmd.run:
-    - name: systemctl restart nginx
-{% endmacro %}
-
-{% macro php_fpm_status_clients(platform_basename) %}
-location ~ ^/(status|ping)$ {
-{% for client in salt['pillar.get']('php-fpm:status_clients', []) %}
-    allow {{ client }};
-{% endfor %}
-    deny all;
-
-    include fastcgi.conf;
-    fastcgi_pass unix:/var/run/php/php7.0-fpm-{{ platform_basename }}.sock;
-}
+{% else %}
+  test.succeed_without_changes: []
+{% endif %}
 {% endmacro %}

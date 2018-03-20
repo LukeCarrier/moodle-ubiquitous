@@ -49,10 +49,14 @@ base:
     - match: grain
     - named
 
+  'roles:web-moodle':
+    - match: grain
+    - web-moodle
+    - certbot
+
   'roles:app-moodle':
     - match: grain
     - app-moodle
-    - certbot
   'roles:app-saml':
     - match: grain
     - app-saml

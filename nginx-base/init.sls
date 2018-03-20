@@ -64,6 +64,25 @@ nginx.acme-challenge:
   - group: root
   - mode: 0644
 
+{% for acl in salt['pillar.get']('nginx:log_acl', []) %}
+nginx.log.acl:
+  acl.present:
+    - name: /var/log/nginx
+    - acl_type: {{ acl['acl_type'] }}
+    - acl_name: {{ acl['acl_name'] }}
+    - perms: {{ acl['perms'] }}
+    - recurse: True
+{% endfor %}
+
+nginx.logrotate:
+  file.managed:
+    - name: /etc/logrotate.d/nginx
+    - source: salt://nginx-base/logrotate/nginx.jinja
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 0644
+
 {% if pillar['systemd']['apply'] %}
 nginx.service:
   service.running:

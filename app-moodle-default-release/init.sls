@@ -17,6 +17,6 @@ app-moodle-default-release.{{ domain }}.data:
     - group: {{ platform ['user']['name'] }}
     - mode: 0770
     - require:
-      - user: app-base.{{ domain }}.user
-      - file: app-base.{{ domain }}.home
+      - user: app.{{ domain }}.user
+      - file: app.{{ domain }}.home
 {% endfor %}

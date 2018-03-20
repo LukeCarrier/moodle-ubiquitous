@@ -1,4 +1,4 @@
-{% from 'app-base/macros.sls' import php_fpm_status_clients %}
+{% from 'web-base/macros.sls' import php_fpm_status_clients %}
 
 {% set platform = pillar['platforms'][domain] %}
 {% set ssl = 'ssl' in platform['nginx']
@@ -20,7 +20,7 @@
 {%- for parameter, value in lane.get('fastcgi_params', {}).items() %}
         fastcgi_param {{ parameter }} {{ value | json | replace('\\\\n', '\n') }};
 {%- endfor %}
-        fastcgi_pass unix:/var/run/php/php7.0-fpm-{{ platform['basename'] }}.sock;
+        fastcgi_pass {{ platform['nginx']['fastcgi_pass'] }};
     }
 {%- endmacro %}
 
@@ -45,7 +45,7 @@ server {
         rewrite ^ https://$host$request_uri? permanent;
     }
 
-    {{ php_fpm_status_clients(platform['basename']) | indent(4) }}
+    {{ php_fpm_status_clients(domain) | indent(4) }}
 }
 {% endif %}
 
@@ -73,7 +73,7 @@ server {
 
     include "sites-extra/{{ platform['basename'] }}.*.conf";
 
-    {{ php_fpm_status_clients(platform['basename']) | indent(4) }}
+    {{ php_fpm_status_clients(domain) | indent(4) }}
 
     {{ salt['pillar.get']('maintenance:override-conditions', '') | indent(4) }}
 
@@ -89,7 +89,7 @@ server {
 
         include snippets/fastcgi-php.conf;
         fastcgi_param SCRIPT_FILENAME $document_root$1;
-        fastcgi_pass unix:/var/run/php/php7.0-fpm-{{ platform['basename'] }}.sock;
+        fastcgi_pass {{ platform['nginx']['fastcgi_pass'] }};
     }
 {%- endif %}
 }

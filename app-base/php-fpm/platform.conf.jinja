@@ -2,9 +2,9 @@
 
 [{{ domain }}]
 
-listen = /var/run/php/php7.0-fpm-{{ platform['basename'] }}.sock
+listen = {{ platform['php']['fpm']['listen'] }}
 listen.backlog = 128
-listen.allowed_clients = 127.0.0.1
+listen.allowed_clients = {{ platform['php']['fpm']['allowed_clients'] | join(',') }}
 listen.owner = {{ pillar['nginx']['user'] }}
 listen.group = {{ pillar['nginx']['user'] }}
 listen.mode = 0600

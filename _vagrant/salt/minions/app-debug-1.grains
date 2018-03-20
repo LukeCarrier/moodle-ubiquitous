@@ -6,6 +6,7 @@ roles:
   - admin
   - sshd
   - salt-minion
+  - web-moodle
   - app-moodle
   - app-moodle-debug
   - app-moodle-default-release
