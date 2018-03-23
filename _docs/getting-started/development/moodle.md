@@ -163,12 +163,10 @@ $CFG->behat_config = array_merge(array(
             'selenium2' => array(
                 'wd_host' => 'http://192.168.120.100:4444/wd/hub',
                 'capabilities' => array(
-                    'browserVersion'    => 'ANY',
                     'deviceType'        => 'ANY',
                     'name'              => 'ANY',
                     'deviceOrientation' => 'ANY',
                     'ignoreZoomSetting' => 'ANY',
-                    'version'           => 'ANY',
                     'platform'          => 'ANY',
                 ),
             ),
