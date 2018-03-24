@@ -1,0 +1,43 @@
+version: '2'
+
+services:
+  hub:
+    image: ubiquitous/selenium-hub
+    entrypoint:
+      - /usr/bin/java
+      - -XX:NewSize=128m
+      - -XX:MaxNewSize=128m
+      - -XX:SurvivorRatio=8
+      - -Xms512m
+      - -Xmx512m
+      - -Djava.net.preferIPv4Stack=true
+      - -jar
+      - /opt/selenium/selenium-server.jar
+      - -role
+      - hub
+      - -hubConfig
+      - /opt/selenium/hub.json
+    ports:
+      - '4444:4444'
+  node-chrome:
+    image: ubiquitous/selenium-node-chrome
+    entrypoint:
+      - /usr/bin/java
+      - -Dwebdriver.chrome.driver=/opt/selenium/chromedriver/chromedriver
+      - -jar
+      - /opt/selenium/selenium-server.jar
+      - -role
+      - node
+      - -nodeConfig
+      - /opt/selenium/node.1.json
+  node-firefox:
+    image: ubiquitous/selenium-node-firefox
+    entrypoint:
+      - /usr/bin/java
+      - -Dwebdriver.chrome.driver=/opt/selenium/chromedriver/chromedriver
+      - -jar
+      - /opt/selenium/selenium-server.jar
+      - -role
+      - node
+      - -nodeConfig
+      - /opt/selenium/node.1.json
