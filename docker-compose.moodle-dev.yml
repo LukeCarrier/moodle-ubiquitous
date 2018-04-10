@@ -1,0 +1,40 @@
+version: '2'
+
+services:
+  web:
+    image: ubiquitous/moodle-web
+    entrypoint:
+      - nginx
+      - -g
+      - daemon off;
+    ports:
+      - '8080:80'
+    volumes:
+      - ../Moodle:/root/releases/docker
+  app:
+    image: ubiquitous/moodle-app
+    entrypoint:
+      - php-fpm7.0
+      - --nodaemonize
+      - --allow-to-run-as-root
+      - --fpm-config
+      - /etc/php/7.0/fpm/php-fpm.conf
+    volumes:
+      - ../Moodle:/root/releases/docker
+      - ../MoodleData/Data:/root/data
+  db-pgsql:
+    image: ubiquitous/db-pgsql
+    environment:
+      - LANG=en_GB.UTF-8
+      - LC_ALL=en_GB.UTF-8
+    entrypoint:
+      - /usr/local/ubiquitous/bin/ubiquitous-pgsql-cluster
+      - --foreground
+      - --skip-systemctl-redirect
+      - '9.5'
+      - main
+      - start
+    ports:
+      - '5432:5432'
+    volumes:
+      - ../MoodleData/PostgreSQL:/var/lib/postgresql
