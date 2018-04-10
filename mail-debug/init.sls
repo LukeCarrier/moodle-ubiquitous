@@ -28,7 +28,6 @@ mailcatcher:
     - fullname: MailCatcher user
     - shell: /bin/bash
     - home: /var/mailcatcher
-    - gid_from_name: true
   cmd.run:
     - name: gem install --user-install mailcatcher
     - runas: mailcatcher

@@ -29,4 +29,3 @@ selenium.user:
     - fullname: Selenium user
     - shell: /bin/bash
     - home: /var/lib/selenium
-    - gid_from_name: true

@@ -24,7 +24,6 @@ app-base.{{ domain }}.user:
     - fullname: {{ domain }}
     - shell: /bin/bash
     - home: {{ platform['user']['home'] }}
-    - gid_from_name: true
 
 app-base.{{ domain }}.home:
   file.directory:

@@ -54,7 +54,6 @@ user.{{ username }}:
     - fullname: {{ user['fullname'] }}
     - shell: /bin/bash
     - home: {{ user['home'] }}
-    - gid_from_name: True
     - groups: {{ user['groups'] }}
     - require:
       - group: admin
