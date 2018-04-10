@@ -45,6 +45,8 @@ $ sudo salt-call \
         base=ubiquitous/ubuntu-python:16.04 mods=base
 ```
 
+Note: at the present time Python versions on the host and container must match in order for this to work, as the "thin" installation Salt ships to the containers are derived from the running Salt installation.
+
 ## Automating container builds
 
 To ensure that your container image is always up to date we recommend using [Travis](https://travis-ci.org/) to run builds triggered using webhooks. Use of Docker Hub isn't possible for either type of container image:
