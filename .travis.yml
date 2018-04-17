@@ -13,8 +13,8 @@ matrix:
         sudo salt-call --local pip.install docker
       - docker build _docker/ubuntu-python -t ubiquitous/ubuntu-python:16.04
       - sudo _docker/service/build -c ubiquitous/moodle-build -m moodle-componentmgr -m nvm
-      - sudo _docker/service/build -c ubiquitous/moodle-web -m web-moodle -m web-default-release
-      - sudo _docker/service/build -c ubiquitous/moodle-app -m app-moodle -m app-moodle-default-release
+      - sudo _docker/service/build -c ubiquitous/moodle-web -m web-moodle -m web-default-release -f salt://web-base/macros.sls
+      - sudo _docker/service/build -c ubiquitous/moodle-app -m app-moodle -m app-moodle-default-release -f salt://app-base/macros.sls
       - sudo _docker/service/build -c ubiquitous/selenium-hub -m selenium-hub
       - sudo _docker/service/build -c ubiquitous/selenium-node-chrome -m selenium-node-chrome
       - sudo _docker/service/build -c ubiquitous/selenium-node-firefox -m selenium-node-firefox

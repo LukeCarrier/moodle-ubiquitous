@@ -12,8 +12,8 @@ docker build _docker/ubuntu-python -t ubiquitous/ubuntu-python:16.04
 containers=(
     ubiquitous/moodle-build:moodle-componentmgr,nvm
 
-    ubiquitous/moodle-web:admin,web-moodle,web-moodle-default-release
-    ubiquitous/moodle-app:admin,app-moodle,app-moodle-default-release
+    ubiquitous/moodle-web:web-moodle,web-moodle-default-release:salt://web-base/macros.sls
+    ubiquitous/moodle-app:app-moodle,app-moodle-default-release:salt://app-base/macros.sls
 
     ubiquitous/selenium-hub:selenium-hub
     ubiquitous/selenium-node-chrome:selenium-node-chrome
