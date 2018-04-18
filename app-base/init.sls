@@ -44,7 +44,6 @@ php.packages:
       - php7.0-mbstring
       - php7.0-mcrypt
       - php7.0-opcache
-      - php7.0-pdo
       - php7.0-pgsql
       - php7.0-soap
       - php7.0-xml
