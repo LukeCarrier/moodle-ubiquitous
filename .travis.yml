@@ -7,7 +7,7 @@ matrix:
   include:
     - before_script:
       - |
-        curl -L https://bootstrap.saltstack.com | sudo sh -s -- -X
+        curl -L https://bootstrap.saltstack.com | sudo sh -s -- -g https://github.com/LukeCarrier/salt.git -X git add-docker-slsbuild-extrafilerefs
         sudo apt install python-pip
         sudo salt-call --local pip.uninstall docker-py
         sudo salt-call --local pip.install docker
