@@ -10,6 +10,8 @@ platforms:
       name: root
       home: /root
     nginx:
+      access_log: /dev/stdout
+      error_log: /dev/stderr
       client_max_body_size: 1024m
       fastcgi_pass: app:9000
       lanes:

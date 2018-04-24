@@ -1,5 +1,7 @@
 nginx:
   user: root
+  access_log: /dev/stdout
+  error_log: /dev/stderr
 
 php:
   fpm:
