@@ -4,7 +4,9 @@
 
 listen = {{ platform['php']['fpm']['listen'] }}
 listen.backlog = 128
+{% if 'allowed_clients' in platform['php']['fpm'] %}
 listen.allowed_clients = {{ platform['php']['fpm']['allowed_clients'] | join(',') }}
+{% endif %}
 listen.owner = {{ pillar['nginx']['user'] }}
 listen.group = {{ pillar['nginx']['user'] }}
 listen.mode = 0600

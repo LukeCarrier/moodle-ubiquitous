@@ -28,7 +28,8 @@ app.php.packages:
 app.php-fpm.php-fpm.conf:
   file.managed:
     - name: /etc/php/7.0/fpm/php-fpm.conf
-    - source: salt://app-base/php-fpm/php-fpm.conf
+    - source: salt://app-base/php-fpm/php-fpm.conf.jinja
+    - template: jinja
     - user: root
     - group: root
     - mode: 0644

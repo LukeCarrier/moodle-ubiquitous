@@ -1,0 +1,7 @@
+[global]
+
+{% for option, value in salt['pillar.get']('php:fpm:global', {}).items() %}
+{{ option }} = {{ value }}
+{% endfor %}
+
+include = /etc/php/7.0/fpm/pools-enabled/*.conf
