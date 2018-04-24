@@ -29,17 +29,9 @@ app-default-release.{{ domain }}.current:
     - group: {{ platform['user']['name'] }}
     - require:
       - file: app-default-release.{{ domain }}.release
-    - onchanges_in:
-      - cmd: app-default-release.nginx.reload
-      - cmd: app-default-release.php-fpm.reload
-
-app-default-release.{{ domain }}.nginx:
-  file.symlink:
-    - name: /etc/nginx/sites-enabled/{{ platform['basename'] }}.conf
-    - target: /etc/nginx/sites-available/{{ platform['basename'] }}.conf
 {% if pillar['systemd']['apply'] %}
     - onchanges_in:
-      - cmd: app-default-release.nginx.reload
+      - cmd: app-default-release.php-fpm.reload
 {% endif %}
 
 app-default-release.{{ domain }}.php-fpm.blue:
@@ -62,10 +54,6 @@ app-default-release.{{ domain }}.php-fpm.green:
 {% endfor %}
 
 {% if pillar['systemd']['apply'] %}
-app-default-release.nginx.reload:
-  cmd.run:
-    - name: systemctl reload nginx || systemctl restart nginx
-
 app-default-release.php-fpm.reload:
   cmd.run:
     - name: systemctl reload php7.0-fpm || systemctl restart php7.0-fpm
