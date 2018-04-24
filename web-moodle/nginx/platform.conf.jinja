@@ -4,6 +4,10 @@
 {% set ssl = 'ssl' in platform['nginx']
     and salt['file.file_exists'](platform['nginx']['ssl']['certificate'])
     and salt['file.file_exists'](platform['nginx']['ssl']['certificate_key']) %}
+{% set access_log = platform['nginx']['access_log']
+    | default('/var/log/nginx/' + platform['basename'] + '/access.log') %}
+{% set error_log = platform['nginx']['error_log']
+    | default('/var/log/nginx/' + platform['basename'] + '/error.log') %}
 
 {%- macro lane_location(lane) %}
     location ~ {{ lane['location'] | replace('\\\\', '\\') }} {
@@ -62,8 +66,8 @@ server {
     root {{ platform['user']['home'] }}/current;
     index index.php index.html;
 
-    access_log /var/log/nginx/{{ platform['basename'] }}/access.log{% if 'access_log_format' in platform['nginx'] %} {{ platform['nginx']['access_log_format'] }}{% endif %};
-    error_log /var/log/nginx/{{ platform['basename'] }}/error.log error;
+    access_log {{ access_log }}{% if 'access_log_format' in platform['nginx'] %} {{ platform['nginx']['access_log_format'] }}{% endif %};
+    error_log {{ error_log }} error;
 
     add_header X-Backend-Server $hostname;
 

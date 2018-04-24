@@ -30,8 +30,8 @@ http {
     # Logging
     #
 
-    access_log /var/log/nginx/access.log;
-    error_log /var/log/nginx/error.log;
+    access_log {{ salt['pillar.get']('nginx:access_log', '/var/log/nginx/access.log') }};
+    error_log {{ salt['pillar.get']('nginx:error_log', '/var/log/nginx/error.log') }};
 
     #
     # Gzip
