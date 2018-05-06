@@ -5,45 +5,45 @@
 # @copyright 2018 The Ubiquitous Authors
 #
 
-app-ubiquitous-dirs:
+ubiquitous-dirs:
   file.directory:
     - name: /usr/local/ubiquitous
     - user: root
     - group: root
     - mode: 0755
 
-app-ubiquitous-dirs.bin:
+ubiquitous-dirs.bin:
   file.directory:
     - name: /usr/local/ubiquitous/bin
     - user: root
     - group: root
     - mode: 0755
     - require:
-      - file: app-ubiquitous-dirs
+      - file: ubiquitous-dirs
 
-app-ubiquitous-dirs.lib:
+ubiquitous-dirs.lib:
   file.directory:
     - name: /usr/local/ubiquitous/lib
     - user: root
     - group: root
     - mode: 0755
     - require:
-      - file: app-ubiquitous-dirs
+      - file: ubiquitous-dirs
 
-app-ubiquitous-dirs.etc:
+ubiquitous-dirs.etc:
   file.directory:
     - name: /usr/local/ubiquitous/etc
     - user: root
     - group: root
     - mode: 0755
     - require:
-      - file: app-ubiquitous-dirs
+      - file: ubiquitous-dirs
 
-app-ubiquitous-dirs.share:
+ubiquitous-dirs.share:
   file.directory:
     - name: /usr/local/ubiquitous/share
     - user: root
     - group: root
     - mode: 0755
     - require:
-      - file: app-ubiquitous-dirs
+      - file: ubiquitous-dirs

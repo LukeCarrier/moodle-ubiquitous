@@ -10,7 +10,7 @@
 #
 
 include:
-  - app-ubiquitous-dirs
+  - ubiquitous-dirs
 
 {% for script in ['info', 'install-release', 'set-current-release']: %}
 /usr/local/ubiquitous/bin/ubiquitous-{{ script }}:
@@ -20,7 +20,7 @@ include:
     - group: root
     - mode: 0755
     - require:
-      - file: app-ubiquitous-dirs.bin
+      - file: ubiquitous-dirs.bin
 {% endfor %}
 
 {% for name, contents in salt['pillar.get']('gocd-agent:scripts', {}).items() %}
@@ -31,7 +31,7 @@ include:
     - group: root
     - mode: 0755
     - require:
-      - file: app-ubiquitous-dirs.bin
+      - file: ubiquitous-dirs.bin
 {% endfor %}
 
 /usr/local/ubiquitous/lib/ubiquitous-lib:
@@ -41,7 +41,7 @@ include:
     - group: root
     - mode: 0755
     - require:
-      - file: app-ubiquitous-dirs.lib
+      - file: ubiquitous-dirs.lib
 
 /usr/local/ubiquitous/etc/ubiquitous-platforms:
   file.managed:
@@ -51,7 +51,7 @@ include:
     - group: root
     - mode: 0600
     - require:
-      - file: app-ubiquitous-dirs.etc
+      - file: ubiquitous-dirs.etc
 
 #
 # Sudo
