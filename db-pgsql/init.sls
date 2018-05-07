@@ -14,7 +14,9 @@ include:
 
 postgresql-server:
   pkg.installed:
-    - name: postgresql-9.5
+    - pkgs:
+      - postgresql-9.5
+      - postgresql-client-common
     - allow_updates: True
 
 {% if pillar['systemd']['apply'] %}
