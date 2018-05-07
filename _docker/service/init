@@ -15,6 +15,8 @@ containers=(
     ubiquitous/moodle-web:web-moodle,web-moodle-default-release:salt://web-base/macros.sls
     ubiquitous/moodle-app:app-moodle,app-moodle-default-release:salt://app-base/macros.sls
 
+    ubiquitous/db-pgsql:admin,db-pgsql
+
     ubiquitous/selenium-hub:selenium-hub
     ubiquitous/selenium-node-chrome:selenium-node-chrome
     ubiquitous/selenium-node-firefox:selenium-node-firefox

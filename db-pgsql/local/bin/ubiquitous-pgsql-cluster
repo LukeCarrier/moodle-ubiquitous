@@ -1,0 +1,129 @@
+#!/bin/bash
+
+#
+# Ubiquitous Moodle
+#
+# @author Luke Carrier <luke@carrier.im>
+# @copyright 2018 The Ubiquitous Authors
+#
+
+set -euo pipefail
+IFS=$'\n\t'
+
+ACTION="${@: -1:1}"
+POSTGRES_CLUSTER_NAME="${@: -2:1}"
+POSTGRES_CLUSTER_VERSION="${@: -3:1}"
+POSTGRES_CLUSTER_DATA="/var/lib/postgresql/${POSTGRES_CLUSTER_VERSION}/${POSTGRES_CLUSTER_NAME}"
+POSTGRES_CLUSTER_CONF="/etc/postgresql/${POSTGRES_CLUSTER_VERSION}/${POSTGRES_CLUSTER_NAME}"
+POSTGRES_CLUSTER_CONF_BACKUP="/tmp/postgresql-${POSTGRES_CLUSTER_VERSION}-${POSTGRES_CLUSTER_NAME}"
+
+pg_list_databases() {
+    local user_name="$1"
+    local user_password="$2"
+
+    PGPASSWORD="$user_password" psql \
+            --list --no-align --tuples-only \
+            --host=localhost --port=5432 --username="$user_name"
+    local status=$?
+
+    return $status
+}
+
+pg_ensure_user_exists() {
+    local user_name="$1"
+    local user_password="$2"
+
+    set +e
+    pg_list_databases "$user_name" "$user_password" >/dev/null
+    local status=$?
+    set -e
+
+    if [ "$status" -ne 0 ]; then
+        echo "creating user ${user_name}..."
+        sudo -u postgres psql --command "create user \"${user_name}\" password '${user_password}'"
+    fi
+}
+
+pg_ensure_database_exists() {
+    local user_name="$1"
+    local user_password="$2"
+    local database_name="$3"
+    local database_encoding="$4"
+
+    set +e
+    local databases="$(pg_list_databases "$user_name" "$user_password")"
+    echo "$databases" | grep "$database_name" >/dev/null
+    local status=$?
+    set -e
+
+    if [ "$status" -ne 0 ]; then
+        echo "creating database ${database_name}..."
+        sudo -u postgres createdb -E "$database_encoding" -O "$user_name" "$database_name"
+    fi
+}
+
+pg_parse_entry() {
+    local raw="$1"
+    user_name="$(echo "$raw" | cut -d: -f1)"
+    user_password="$(echo "$raw" | cut -d: -f2)"
+    database_name="$(echo "$raw" | cut -d: -f3)"
+    database_encoding="$(echo "$raw" | cut -d: -f4)"
+}
+
+UBIQUITOUS_PREFIX="/usr/local/ubiquitous"
+UBIQUITOUS_PGSQL="${UBIQUITOUS_PREFIX}/etc/ubiquitous-pgsql"
+
+if [[ "$ACTION" = "start" ]]; then
+    if [ ! -d "$POSTGRES_CLUSTER_DATA" ]; then
+        echo "creating cluster..."
+        if [ -d "$POSTGRES_CLUSTER_CONF" ]; then
+            mv "$POSTGRES_CLUSTER_CONF" "$POSTGRES_CLUSTER_CONF_BACKUP"
+        fi
+        pg_createcluster "$POSTGRES_CLUSTER_VERSION" "$POSTGRES_CLUSTER_NAME"
+        if [ -d "$POSTGRES_CLUSTER_CONF_BACKUP" ]; then
+            rm -rf "$POSTGRES_CLUSTER_CONF"
+            mv "$POSTGRES_CLUSTER_CONF_BACKUP" "$POSTGRES_CLUSTER_CONF"
+        fi
+        chown -R postgres:postgres "$POSTGRES_CLUSTER_DATA"
+    fi
+
+    echo -n "starting the cluster"
+    (/usr/bin/pg_ctlcluster "$@") &
+
+    echo -n "waiting for cluster to become available..."
+    while ! sudo -u postgres pg_isready >/dev/null; do
+        echo -n .
+        sleep 0.1
+    done
+    echo "done"
+
+    while read raw; do
+        set +e
+        echo "$raw" | grep : >/dev/null
+        if [ $? -ne 0 ]; then
+            continue
+        fi
+        set -e
+
+        pg_parse_entry "$raw"
+        echo "ensuring user ${user_name} and database ${database_name} exist..."
+        pg_ensure_user_exists "$user_name" "$user_password"
+        pg_ensure_database_exists \
+                "$user_name" "$user_password" \
+                "$database_name" "$database_encoding"
+    done <"$UBIQUITOUS_PGSQL"
+
+    echo "restarting the cluster..."
+    stop=()
+    for arg in "$@"; do
+        if [ "$arg" == "start" ]; then
+            stop+=( "stop" )
+        else
+            stop+=( "$arg" )
+        fi
+    done
+    /usr/bin/pg_ctlcluster "${stop[@]}"
+fi
+
+echo "performing cluster operation..."
+/usr/bin/pg_ctlcluster "$@"

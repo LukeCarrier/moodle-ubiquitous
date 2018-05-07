@@ -1,0 +1,5 @@
+{% for domain, platform in salt['pillar.get']('platforms', {}).items() if 'pgsql' in platform %}
+{% set user = platform['pgsql']['user'] %}
+{% set database = platform['pgsql']['database'] %}
+{{ user['name'] }}:{{ user['password'] }}:{{ database['name'] }}:{{ database['encoding'] }}
+{% endfor %}

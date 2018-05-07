@@ -1,11 +1,3 @@
-users:
-  ubuntu:
-    fullname: Administrative user
-    password: gibberish
-    groups: # Primary group is always named after user name
-      - sudo
-    home: /home/ubuntu
-
 acl:
   apply: False
 

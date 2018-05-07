@@ -5,15 +5,18 @@
 # @copyright 2018 The Ubiquitous Authors
 #
 
-#
-# PostgreSQL server
-#
+{% set cluster_user = salt['pillar.get']('postgresql:user', 'postgres') %}
+{% set cluster_group = salt['pillar.get']('postgresql:group', 'postgres') %}
+
+include:
+  - ubiquitous-dirs
 
 postgresql-server:
   pkg.installed:
     - pkgs:
       - postgresql-9.5
       - postgresql-client-common
+      - sudo
     - allow_updates: True
 
 {% if pillar['systemd']['apply'] %}
@@ -57,7 +60,30 @@ postgresql-server.pg_hba.conf:
     - require:
       - cmd: postgresql-server.cluster
 
+db-pgsql.local.etc.pgsql:
+  file.managed:
+    - name: /usr/local/ubiquitous/etc/ubiquitous-pgsql
+    - source: salt://db-pgsql/local/etc/ubiquitous-pgsql.jinja
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 0600
+    - require:
+      - file: ubiquitous-dirs.etc
+
+db-pgsql.local.bin.pgsql-cluster:
+  file.managed:
+    - name: /usr/local/ubiquitous/bin/ubiquitous-pgsql-cluster
+    - source: salt://db-pgsql/local/bin/ubiquitous-pgsql-cluster
+    - user: root
+    - group: root
+    - mode: 0755
+    - require:
+      - file: ubiquitous-dirs.bin
+
+{% if not salt['pillar.get']('postgresql:defer_creation', False) %}
 {% for domain, platform in salt['pillar.get']('platforms', {}).items() %}
+{% if 'pgsql' in platform %}
 moodle.{{ domain }}.postgres:
   postgres_user.present:
     - user: postgres
@@ -78,4 +104,6 @@ moodle.{{ domain }}.postgres:
 {% if pillar['systemd']['apply'] %}
       - service: postgresql-server.service
 {% endif %}
+{% endif %}
 {% endfor %}
+{% endif %}
