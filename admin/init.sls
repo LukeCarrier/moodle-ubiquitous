@@ -5,19 +5,21 @@
 # @copyright 2018 The Ubiquitous Authors
 #
 
+{% if 'packages' in pillar %}
 admin.packages:
   pkg.installed:
     - pkgs:
 {% for package in pillar['packages'] %}
       - {{ package }}
 {% endfor %}
+{% endif %}
 
 admin.group:
   group.present:
     - name: admin
     - system: True
 
-{% for username, user in pillar['users'].items() %}
+{% for username, user in salt['pillar.get']('users', {}).items() %}
 admin.user.{{ username }}:
   user.present:
     - name: {{ username }}
