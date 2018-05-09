@@ -10,16 +10,16 @@
 docker build _docker/ubuntu-python -t ubiquitous/ubuntu-python:16.04
 
 containers=(
-    ubiquitous/moodle-build:moodle-componentmgr,nvm
+    ubiquitous/moodle-build:admin,moodle-componentmgr,nvm
 
-    ubiquitous/moodle-web:web-moodle,web-moodle-default-release:salt://web-base/macros.sls
-    ubiquitous/moodle-app:app-moodle,app-moodle-default-release:salt://app-base/macros.sls
+    ubiquitous/moodle-web:admin,web-moodle,web-moodle-default-release:salt://web-base/macros.sls
+    ubiquitous/moodle-app:admin,app-moodle,app-moodle-default-release:salt://app-base/macros.sls
 
     ubiquitous/db-pgsql:admin,db-pgsql
 
-    ubiquitous/selenium-hub:selenium-hub
-    ubiquitous/selenium-node-chrome:selenium-node-chrome
-    ubiquitous/selenium-node-firefox:selenium-node-firefox
+    ubiquitous/selenium-hub:admin,selenium-hub
+    ubiquitous/selenium-node-chrome:admin,selenium-node-chrome
+    ubiquitous/selenium-node-firefox:admin,selenium-node-firefox
 )
 
 for line in "${containers[@]}"; do
