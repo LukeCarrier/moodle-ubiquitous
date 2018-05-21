@@ -43,17 +43,3 @@ matrix:
               docker push "$container"
             done
           fi
-
-    - before_script:
-      - |
-        docker build \
-            --file _docker/allinone/Dockerfile \
-            --tag ubiquitous/allinone .
-      script:
-        - /bin/true
-      after_success:
-        - |
-          docker login -u="$DOCKER_USERNAME" --password-stdin <<<"$DOCKER_PASSWORD"
-          docker push ubiquitous/allinone
-      after_failure:
-        - salt-call --versions-report
