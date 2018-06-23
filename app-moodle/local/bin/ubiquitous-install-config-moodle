@@ -18,7 +18,9 @@ while true; do
     esac
 done
 
-. "$(dirname $(dirname $(readlink -fn $0)))/lib/ubiquitous-lib"
+set -euo pipefail
+IFS=$'\n\t'
+. "$(dirname $(dirname $(readlink -fn $0)))/lib/ubiquitous-core"
 
 require_root
 require_platform "$domain"
@@ -27,4 +29,4 @@ if [ ! -d "$destination" ]; then
     abort $ERROR_PARAMS "release directory '${destination}' does not exist"
 fi
 
-cp -f "${platform_home}/config.php" "${destination}/config.php"
+cp -fp "${platform_home}/config.php" "${destination}/config.php"

@@ -42,14 +42,6 @@ app-default-release.{{ domain }}.php-fpm.blue:
     - onchanges_in:
       - cmd: app-default-release.php-fpm.reload
 {% endif %}
-
-app-default-release.{{ domain }}.php-fpm.green:
-  file.absent:
-    - name: /etc/php/7.0/fpm/pools-available/{{ platform['basename'] }}.green.conf
-{% if pillar['systemd']['apply'] %}
-    - onchanges_in:
-      - cmd: app-default-release.php-fpm.reload
-{% endif %}
 {% endif %}
 {% endfor %}
 

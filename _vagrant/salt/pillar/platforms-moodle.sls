@@ -1,6 +1,7 @@
 platforms:
   dev.local:
     basename: vagrant
+    role: moodle
     name: Local test site
     email: root@localhost
     lang: en

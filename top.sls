@@ -61,6 +61,9 @@ base:
     - match: grain
     - app-saml
 
+  'roles: web-cd':
+    - match: grain
+    - web-cd
   'roles:web-default-release':
     - match: grain
     - web-default-release
@@ -71,6 +74,9 @@ base:
   'roles:app-moodle-debug':
     - match: grain
     - app-moodle-debug
+  'roles:app-cd':
+    - match: grain
+    - app-cd
   'roles:app-default-release':
     - match: grain
     - app-default-release
@@ -80,9 +86,6 @@ base:
   'roles:app-error-pages':
     - match: grain
     - app-error-pages
-  'roles:app-gocd-agent':
-    - match: grain
-    - app-gocd-agent
   'roles:app-ssl-certs':
     - match: grain
     - app-ssl-certs

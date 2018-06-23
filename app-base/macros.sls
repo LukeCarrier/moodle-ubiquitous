@@ -101,7 +101,7 @@ app.{{ domain }}.{{ instance }}.php-fpm:
     - template: jinja
     - context:
       domain: {{ domain }}
-      instance: blue
+      instance: {{ instance }}
     - user: root
     - group: root
     - mode: 0644

@@ -9,7 +9,7 @@
 
 include:
   - app-base
-  - ubiquitous-dirs
+  - ubiquitous-cli-base
 
 #
 # Supporting packages
@@ -33,7 +33,7 @@ app-moodle.install-config:
     - group: root
     - mode: 0755
     - require:
-      - file: ubiquitous-dirs.bin
+      - file: ubiquitous-cli.bin
 
 #
 # Moodle platforms

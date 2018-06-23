@@ -20,10 +20,13 @@ while true; do
     esac
 done
 
-. "$(dirname $(dirname $(readlink -fn $0)))/lib/ubiquitous-lib"
+set -euo pipefail
+IFS=$'\n\t'
+. "$(dirname $(dirname $(readlink -fn $0)))/lib/ubiquitous-core"
+. "$(dirname $(dirname $(readlink -fn $0)))/lib/ubiquitous-cd-app"
 
 require_root
-require_platform "$domain"
+require_app "$domain"
 if [ -z "$release" ]; then
     abort $ERROR_PARAMS "no release name supplied"
 fi
@@ -36,7 +39,7 @@ fi
 echo "determining current state..."
 if [ $platform_current_phpfpm_config_state -eq 0 ]; then
     phpfpm_active_instance="$(phpfpm_resolve_instance "$platform_basename")"
-    phpfpm_inactive_instance="$(other_instance "${phpfpm_active_instance}")"
+    phpfpm_inactive_instance="$(phpfpm_other_instance "${phpfpm_active_instance}")"
     echo "  detected active php-fpm pool '${phpfpm_active_instance}'; provisioning '${phpfpm_inactive_instance}'"
 else
     phpfpm_inactive_instance='blue'
@@ -49,16 +52,6 @@ phpfpm_inactive_socket="$(phpfpm_resolve_socket "$platform_basename" "$phpfpm_in
 
 echo "enabling pool '${phpfpm_inactive_instance}'..."
 phpfpm_enable_instance "$platform_basename" "$phpfpm_inactive_instance" "$reload"
-
-if [ -f "${release_dir}/admin/cli/alternative_component_cache.php" ]; then
-    echo "rebuilding component cache..."
-    sudo -u "$platform_user" php "${release_dir}/admin/cli/alternative_component_cache.php" --rebuild || true
-else
-    echo "skipping component cache rebuild (CLI script does not exist)"
-fi
-
-echo "pointing '${platform_current_link}' at release directory '${release_dir}'..."
-sudo -u "$platform_user" ln -sfn "$release_dir" "$platform_current_link"
 
 echo "disabling previously active php-fpm pool '${phpfpm_active_instance}'..."
 phpfpm_disable_instance "$platform_basename" "$phpfpm_active_instance" "$reload"

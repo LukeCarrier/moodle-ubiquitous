@@ -6,7 +6,7 @@
 #
 
 include:
-  - ubiquitous-dirs
+  - ubiquitous-cli-base
 
 app-error-pages.ubiquitous-error-pages:
   file.directory:
@@ -15,7 +15,7 @@ app-error-pages.ubiquitous-error-pages:
     - group: root
     - mode: 0755
     - require:
-      - ubiquitous-dirs.share
+      - ubiquitous-cli.share
 
 app-error-pages.share.ubiquitous-error-pages.logos:
   file.directory:

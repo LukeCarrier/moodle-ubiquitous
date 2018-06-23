@@ -1,0 +1,39 @@
+#!/bin/bash
+
+#
+# Ubiquitous Moodle
+#
+# @author Luke Carrier <luke@carrier.im>
+# @copyright 2018 The Ubiquitous Authors
+#
+
+domain=''
+reload=1
+release=''
+
+while true; do
+    case "$1" in
+        -d|--domain         ) domain="$2"  ; shift 2 ;;
+        -m|--manually-reload) reload=0     ; shift 1 ;;
+        -r|--release        ) release="$2" ; shift 2 ;;
+        *                   ) break        ;         ;;
+    esac
+done
+
+set -euo pipefail
+IFS=$'\n\t'
+. "$(dirname $(dirname $(readlink -fn $0)))/lib/ubiquitous-core"
+
+require_root
+require_platform "$domain"
+if [ -z "$release" ]; then
+    abort $ERROR_PARAMS "no release name supplied"
+fi
+
+release_dir="${platform_releases_dir}/${release}"
+if [ ! -d "${release_dir}" ]; then
+    abort $ERROR_PARAMS "release directory '${release_dir}' does not exist, is release name '${release}' valid?"
+fi
+
+echo "pointing '${platform_current_link}' at release directory '${release_dir}'..."
+sudo -u "$platform_user" ln -sfn "$release_dir" "$platform_current_link"

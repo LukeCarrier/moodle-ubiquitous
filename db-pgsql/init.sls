@@ -9,7 +9,7 @@
 {% set cluster_group = salt['pillar.get']('postgresql:group', 'postgres') %}
 
 include:
-  - ubiquitous-dirs
+  - ubiquitous-cli-base
 
 postgresql-server:
   pkg.installed:
@@ -69,7 +69,7 @@ db-pgsql.local.etc.pgsql:
     - group: root
     - mode: 0600
     - require:
-      - file: ubiquitous-dirs.etc
+      - file: ubiquitous-cli.etc
 
 db-pgsql.local.bin.pgsql-cluster:
   file.managed:
@@ -79,7 +79,7 @@ db-pgsql.local.bin.pgsql-cluster:
     - group: root
     - mode: 0755
     - require:
-      - file: ubiquitous-dirs.bin
+      - file: ubiquitous-cli.bin
 
 {% if not salt['pillar.get']('postgresql:defer_creation', False) %}
 {% for domain, platform in salt['pillar.get']('platforms', {}).items() %}

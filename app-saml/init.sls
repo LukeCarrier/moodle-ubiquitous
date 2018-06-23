@@ -11,7 +11,7 @@
 
 include:
   - app-base
-  - ubiquitous-dirs
+  - ubiquitous-cli-base
 
 #
 # Configuration installation
@@ -25,7 +25,7 @@ app-saml.install-config:
     - group: root
     - mode: 0755
     - require:
-      - file: ubiquitous-dirs.bin
+      - file: ubiquitous-cli.bin
 
 #
 # SimpleSAMLphp platforms

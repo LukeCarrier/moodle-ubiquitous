@@ -20,7 +20,9 @@ while true; do
     esac
 done
 
-. "$(dirname $(dirname $(readlink -fn $0)))/lib/ubiquitous-lib"
+set -euo pipefail
+IFS=$'\n\t'
+. "$(dirname "$(dirname "$(readlink -fn "$0")")")/lib/ubiquitous-core"
 
 require_root
 require_platform "$domain"
@@ -32,7 +34,7 @@ if [ ! -d "$source" ]; then
 fi
 
 destination="${platform_releases_dir}/${release}"
-if [ -d "${destination}" ]; then
+if [ -d "$destination" ]; then
     echo "removing existing destination '${destination}'..."
     rm -rf "$destination"
 fi
@@ -41,11 +43,13 @@ echo "installing release files from source '${source}' to destination '${destina
 cp -r "$source" "$destination"
 
 echo "installing configuration..."
-"$platform_install_config_script" --domain "$domain" --destination "$destination"
+if [ -x "$platform_install_config_script" ]; then
+    "$platform_install_config_script" --domain "$domain" --destination "$destination"
+fi
 
 echo "fixing ownership..."
-chown -R "${platform_user}:${platform_user}" "${destination}"
+chown -R "${platform_user}:${platform_user}" "$destination"
 
 echo "fixing permissions..."
-find "${destination}" -type d -exec chmod 0770 {} \;
-find "${destination}" -type f -exec chmod 0660 {} \;
+find "$destination" -type d -exec chmod 0770 {} \;
+find "$destination" -type f -exec chmod 0660 {} \;

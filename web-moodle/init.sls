@@ -10,7 +10,7 @@
 
 include:
   - web-base
-  - ubiquitous-dirs
+  - ubiquitous-cli-base
 
 {% for domain, platform in salt['pillar.get']('platforms', {}).items() if 'moodle' in platform %}
 {{ web_platform('moodle', domain, platform) }}
