@@ -29,28 +29,9 @@ app-debug.{{ domain }}.php-fpm:
     - onchanges_in:
       - app-debug.php-fpm.reload
 {% endif %}
-
-app-debug.{{ domain }}.nginx:
-  file.managed:
-    - name: /etc/nginx/sites-extra/{{ platform['basename'] }}.debug.conf
-    - source: salt://app-debug/nginx/platform.debug.conf.jinja
-    - template: jinja
-    - context:
-      domain: {{ domain }}
-    - user: root
-    - group: root
-    - mode: 0644
-{% if pillar['systemd']['apply'] %}
-    - onchanges_in:
-      - app-debug.nginx.reload
-{% endif %}
 {% endfor %}
 
 {% if pillar['systemd']['apply'] %}
-app-debug.nginx.reload:
-  cmd.run:
-    - name: systemctl reload nginx || systemctl restart nginx
-
 app-debug.php-fpm.reload:
   cmd.run:
     - name: systemctl reload php7.0-fpm || systemctl restart php7.0-fpm

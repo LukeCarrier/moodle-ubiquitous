@@ -61,9 +61,12 @@ base:
     - match: grain
     - app-saml
 
-  'roles: web-cd':
+  'roles:web-cd':
     - match: grain
     - web-cd
+  'roles:web-debug':
+    - match: grain
+    - web-debug
   'roles:web-default-release':
     - match: grain
     - web-default-release
