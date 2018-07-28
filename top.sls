@@ -86,9 +86,9 @@ base:
   'roles:app-error-pages':
     - match: grain
     - app-error-pages
-  'roles:app-ssl-certs':
+  'roles:web-ssl-certs':
     - match: grain
-    - app-ssl-certs
+    - web-ssl-certs
   'roles:app-lets-encrypt':
     - match: grain
     - app-lets-encrypt

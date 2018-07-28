@@ -10,6 +10,6 @@ roles:
   - app-debug
   - app-default-release
   - app-error-pages
-  - app-ssl-certs
+  - web-ssl-certs
 saml-platforms:
   - identity-provider
