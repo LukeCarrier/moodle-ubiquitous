@@ -67,6 +67,9 @@ base:
   'roles:web-debug':
     - match: grain
     - web-debug
+  'roles:web-moodle-debug':
+    - match: grain
+    - web-moodle-debug
   'roles:web-default-release':
     - match: grain
     - web-default-release
