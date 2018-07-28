@@ -11,6 +11,7 @@ matrix:
         sudo apt install python-pip
         sudo salt-call --local pip.uninstall docker-py
         sudo salt-call --local pip.install docker
+      - echo 1 | sudo tee /proc/sys/net/ipv4/ip_forward
       - docker build _docker/ubuntu-python -t ubiquitous/ubuntu-python:16.04
       - sudo _docker/service/build -c ubiquitous/moodle-build -m moodle-componentmgr -m admin -m nvm
       - sudo _docker/service/build -c ubiquitous/moodle-web -m admin -m web-moodle -m web-default-release -f salt://web-base/macros.sls
