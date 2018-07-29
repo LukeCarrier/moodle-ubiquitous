@@ -6,7 +6,7 @@
 #
 
 {% from 'web-base/macros.sls' import web_platform, web_restarts %}
-{% from 'app-lets-encrypt/macros.sls' import lets_encrypt_all %}
+{% from 'web-lets-encrypt/macros.sls' import lets_encrypt_all %}
 
 include:
   - web-base

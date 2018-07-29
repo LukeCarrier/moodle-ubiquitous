@@ -6,5 +6,5 @@
 #
 
 include:
-  - app-base
+  - web-base
   - certbot

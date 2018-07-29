@@ -95,9 +95,9 @@ base:
   'roles:web-ssl-certs':
     - match: grain
     - web-ssl-certs
-  'roles:app-lets-encrypt':
+  'roles:web-lets-encrypt':
     - match: grain
-    - app-lets-encrypt
+    - web-lets-encrypt
 
   'roles:db-pgsql':
     - match: grain
