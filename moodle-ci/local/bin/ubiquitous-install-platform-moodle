@@ -1,0 +1,58 @@
+#!/bin/bash
+
+#
+# Ubiquitous Moodle
+#
+# @author Luke Carrier <luke@carrier.im>
+# @copyright 2018 The Ubiquitous Authors
+#
+
+domain=''
+with_base=0
+base_options=''
+with_behat=0
+behat_options=''
+with_phpunit=0
+phpunit_options=''
+
+while true; do
+    case "$1" in
+        -d|--domain               ) domain="$2"          ; shift 2 ;;
+	-i|--with-base            ) with_base=1          ; shift 1 ;;
+	-I|--with-base-options    ) base_options="$2"    ; shift 2 ;;
+	-b|--with-behat           ) with_behat=1         ; shift 1 ;;
+	-B|--with-behat-options   ) behat_options="$2"   ; shift 2 ;;
+	-p|--with-phpunit         ) with_phpunit=1       ; shift 1 ;;
+	-P|--with-phpunit-options ) phpunit_options="$2" ; shift 2 ;;
+        *                         ) break                ;         ;;
+    esac
+done
+
+set -euo pipefail
+IFS=$'\n\t'
+. "$(dirname "$(dirname "$(readlink -fn "$0")")")/lib/ubiquitous-core"
+
+require_root
+require_platform "$domain"
+
+if [ "$with_base" -ne 0 ]; then
+    echo "installing base site..."
+    sudo -iu "$platform_user" php "${platform_current_link}/admin/cli/install_database.php" \
+            ${base_options[@]}
+fi
+
+if [ "$with_phpunit" -ne 0 ]; then
+    echo "installing phpunit site..."
+    sudo -iu "$platform_user" php "${platform_current_link}/admin/tool/phpunit/cli/init.php" \
+            ${phpunit_options[@]}
+    sudo -iu "$platform_user" php "${platform_current_link}/admin/tool/phpunit/cli/util.php" \
+            --buildconfig
+    sudo -iu "$platform_user" php "${platform_current_link}/admin/tool/phpunit/cli/util.php" \
+            --buildcomponentconfigs
+fi
+
+if [ "$with_behat" -ne 0 ]; then
+    echo "installing behat site..."
+    sudo -iu "$platform_user" php "${platform_current_link}/admin/tool/behat/cli/init.php" \
+            ${behat_options[@]}
+fi

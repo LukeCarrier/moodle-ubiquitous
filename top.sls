@@ -40,6 +40,9 @@ base:
   'roles:moodle-componentmgr':
     - match: grain
     - moodle-componentmgr
+  'roles:moodle-ci':
+    - match: grain
+    - moodle-ci
 
   'roles:nvm':
     - match: grain

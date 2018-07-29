@@ -7,7 +7,7 @@
 # @copyright 2018 The Ubiquitous Authors
 #
 
-. "$(cd "$(dirname "$0")" && pwd -P)/ubiquitous-platforms"
+. "$(cd "$(dirname "$(dirname "$0")")" && pwd -P)/etc/ubiquitous-paths"
 
 # Extended globbing and disabling literal expansion on 0 results required for
 # symlink handling.
