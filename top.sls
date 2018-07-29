@@ -73,6 +73,15 @@ base:
   'roles:web-default-release':
     - match: grain
     - web-default-release
+  'roles:web-error-pages':
+    - match: grain
+    - web-error-pages
+  'roles:web-ssl-certs':
+    - match: grain
+    - web-ssl-certs
+  'roles:web-lets-encrypt':
+    - match: grain
+    - web-lets-encrypt
 
   'roles:app-debug':
     - match: grain
@@ -89,15 +98,6 @@ base:
   'roles:app-moodle-default-release':
     - match: grain
     - app-moodle-default-release
-  'roles:app-error-pages':
-    - match: grain
-    - app-error-pages
-  'roles:web-ssl-certs':
-    - match: grain
-    - web-ssl-certs
-  'roles:web-lets-encrypt':
-    - match: grain
-    - web-lets-encrypt
 
   'roles:db-pgsql':
     - match: grain

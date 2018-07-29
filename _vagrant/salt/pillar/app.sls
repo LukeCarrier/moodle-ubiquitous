@@ -8,7 +8,7 @@ php:
       pid: /run/php/php7.0-fpm.pid
       error_log: /var/log/php7.0-fpm/fpm.log
 
-app-error-pages:
+web-error-pages:
   error-pages:
     - 400
     - 401

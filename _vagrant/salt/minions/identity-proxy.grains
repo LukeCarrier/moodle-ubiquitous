@@ -6,11 +6,11 @@ roles:
   - admin
   - sshd
   - salt-minion
+  - web-debug
+  - web-error-pages
+  - web-ssl-certs
   - app-saml
   - app-debug
   - app-default-release
-  - app-error-pages
-  - web-debug
-  - web-ssl-certs
 saml-platforms:
   - identity-proxy
