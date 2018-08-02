@@ -1,0 +1,3 @@
+{% for command in salt['pillar.get']('gocd-agent:sudo_commands') %}
+go ALL=(ALL) NOPASSWD: {{ command }}
+{% endfor %}

@@ -8,25 +8,16 @@
 include:
   - gocd-base
 
-go-agent:
+gocd-agent.pkgs:
   pkg.installed:
+    - name: go-agent
     - require:
       - file: /etc/apt/sources.list.d/gocd.list
       - cmd: /etc/apt/sources.list.d/gocd.list
     - require_in:
       - file: /var/go/.ssh
 
-{% if pillar['systemd']['apply'] %}
-go-agent.service:
-  service.running:
-    - name: go-agent
-    - enable: True
-    - require:
-      - pkg: go-agent
-      - file: go-agent.defaults
-{% endif %}
-
-go-agent.defaults:
+gocd-agent.defaults:
   file.managed:
     - name: /etc/default/go-agent
     - source: salt://gocd-agent/gocd/agent-defaults.jinja
@@ -35,4 +26,31 @@ go-agent.defaults:
     - group: go
     - mode: 0640
     - require:
-      - pkg: go-agent
+      - pkg: gocd-agent.pkgs
+
+{% if pillar['systemd']['apply'] %}
+gocd-agent.service:
+  service.running:
+    - name: go-agent
+    - enable: True
+    - require:
+      - pkg: gocd-agent.pkgs
+      - file: gocd-agent.defaults
+{% endif %}
+
+{% if 'sudo_commands' in pillar['gocd-agent'] %}
+gocd-agent.sudo.pkgs:
+  pkg.installed:
+    - name: sudo
+
+gocd-agent.sudo.config:
+  file.managed:
+    - name: /etc/sudoers.d/gocd
+    - source: salt://gocd-agent/sudo/gocd.jinja
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 0440
+    - require:
+      - pkg: gocd-agent.sudo.pkgs
+{% endif %}

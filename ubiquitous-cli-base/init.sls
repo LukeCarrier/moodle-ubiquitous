@@ -69,14 +69,6 @@ ubiquitous-cd.local.bin.ubiquitous-{{ script }}:
     - file: ubiquitous-cli.bin
 {% endfor %}
 
-ubiquitous-cd.sudoers:
-  file.managed:
-    - name: /etc/sudoers.d/ubiquitous-cd
-    - source: salt://ubiquitous-cli-base/sudo/ubiquitous-cd
-    - user: root
-    - group: root
-    - mode: 0440
-
 {% for name, contents in salt['pillar.get']('ubiquitous-cd:scripts', {}).items() %}
 /usr/local/ubiquitous/bin/{{ name }}:
   file.managed:
