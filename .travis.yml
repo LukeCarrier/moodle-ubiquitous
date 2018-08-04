@@ -13,13 +13,29 @@ matrix:
         sudo salt-call --local pip.install docker
       - echo 1 | sudo tee /proc/sys/net/ipv4/ip_forward
       - docker build _docker/ubuntu-python -t ubiquitous/ubuntu-python:16.04
-      - sudo _docker/service/build -c ubiquitous/moodle-build -m moodle-componentmgr -m admin -m nvm
-      - sudo _docker/service/build -c ubiquitous/moodle-web -m admin -m web-moodle -m web-default-release -f salt://web-base/macros.sls
-      - sudo _docker/service/build -c ubiquitous/moodle-app -m admin -m app-moodle -m app-moodle-default-release -f salt://app-base/macros.sls
-      - sudo _docker/service/build -c ubiquitous/db-pgsql -m admin -m db-pgsql
-      - sudo _docker/service/build -c ubiquitous/selenium-hub -m admin -m selenium-hub
-      - sudo _docker/service/build -c ubiquitous/selenium-node-chrome -m admin -m selenium-node-chrome
-      - sudo _docker/service/build -c ubiquitous/selenium-node-firefox -m admin -m selenium-node-firefox
+      - |
+        sudo _docker/service/build -c ubiquitous/moodle-build \
+                -m admin -m moodle-componentmgr -m nvm
+      - |
+        sudo _docker/service/build -c ubiquitous/moodle-web \
+                -m admin -m web-moodle -m web-default-release \
+                -f salt://web-base/macros.sls
+      - |
+        sudo _docker/service/build -c ubiquitous/moodle-app \
+                -m admin -m app-moodle -m app-moodle-default-release \
+                -f salt://app-base/macros.sls
+      - |
+        sudo _docker/service/build -c ubiquitous/db-pgsql \
+                -m admin -m db-pgsql
+      - |
+        sudo _docker/service/build -c ubiquitous/selenium-hub \
+                -m admin -m selenium-hub
+      - |
+        sudo _docker/service/build -c ubiquitous/selenium-node-chrome \
+                -m admin -m selenium-node-chrome
+      - |
+        sudo _docker/service/build -c ubiquitous/selenium-node-firefox \
+                -m admin -m selenium-node-firefox
       script:
         - /bin/true
       after_success:
