@@ -21,8 +21,18 @@ matrix:
                 -m admin -m web-moodle -m web-default-release \
                 -f salt://web-base/macros.sls
       - |
+        sudo _docker/service/build -c ubiquitous/moodle-web-debug \
+                -m admin -m web-moodle -m web-moodle-debug \
+                -m web-default-release \
+                -f salt://web-base/macros.sls
+      - |
         sudo _docker/service/build -c ubiquitous/moodle-app \
                 -m admin -m app-moodle -m app-moodle-default-release \
+                -f salt://app-base/macros.sls
+      - |
+        sudo _docker/service/build -c ubiquitous/moodle-app-debug \
+                -m admin -m app-moodle -m app-moodle-debug \
+                -m app-moodle-default-release \
                 -f salt://app-base/macros.sls
       - |
         sudo _docker/service/build -c ubiquitous/db-pgsql \
@@ -46,7 +56,9 @@ matrix:
 
               ubiquitous/moodle-build
               ubiquitous/moodle-web
+              ubiquitous/moodle-web-debug
               ubiquitous/moodle-app
+              ubiquitous/moodle-app-debug
 
               ubiquitous/db-pgsql
 

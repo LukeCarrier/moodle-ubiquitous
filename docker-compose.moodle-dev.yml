@@ -2,7 +2,7 @@ version: '2'
 
 services:
   web:
-    image: ubiquitous/moodle-web
+    image: ubiquitous/moodle-web-debug
     entrypoint:
       - nginx
       - -g
@@ -12,7 +12,7 @@ services:
     volumes:
       - ../Moodle:/root/releases/docker
   app:
-    image: ubiquitous/moodle-app
+    image: ubiquitous/moodle-app-debug
     entrypoint:
       - php-fpm7.0
       - --nodaemonize
