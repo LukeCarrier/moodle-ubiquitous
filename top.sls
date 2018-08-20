@@ -67,6 +67,10 @@ base:
     - match: grain
     - av-sophos
 
+  'roles:datadog-agent':
+    - match: grain
+    - datadog-agent
+
   'roles:mount-cifs':
     - match: grain
     - mount-cifs
