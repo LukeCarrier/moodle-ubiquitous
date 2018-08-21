@@ -1,0 +1,5 @@
+{% set platform = pillar['platforms'][domain] %}
+
+{% for option, value in platform['tideways'].items() %}
+env[TIDEWAYS_{{ option | upper }}] = {{ value | yaml_squote }}
+{% endfor %}

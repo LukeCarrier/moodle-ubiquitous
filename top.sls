@@ -101,6 +101,9 @@ base:
   'roles:app-moodle-default-release':
     - match: grain
     - app-moodle-default-release
+  'roles:app-tideways':
+    - match: grain
+    - app-tideways
 
   'roles:db-pgsql':
     - match: grain
