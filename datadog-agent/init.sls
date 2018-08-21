@@ -88,6 +88,17 @@ datadog-agent.journald.grant-group-membership:
       - datadog-agent.restart
 {% endif %}
 
+{% if salt['pillar.get']('datadog-agent:postfix:grant_agent_find') %}
+datadog-agent.postfix.grant-agent-find:
+  file.managed:
+    - name: /etc/sudoers.d/datadog-agent-postfix
+    - source: salt://datadog-agent/sudo/postfix.jinja
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 0440
+{% endif %}
+
 datadog-agent.service:
   service.running:
     - name: datadog-agent

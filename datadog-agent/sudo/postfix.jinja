@@ -1,0 +1,5 @@
+{% for instance in salt['pillar.get']('datadog-agent:postfix:grant_agent_find') %}
+{% for queue in instance['queues'] %}
+dd-agent ALL=({{ instance.get('user', 'postfix') }}) NOPASSWD:/usr/bin/find {{ instance['directory'] }}/{{ queue }} -type f
+{% endfor %}
+{% endfor %}
