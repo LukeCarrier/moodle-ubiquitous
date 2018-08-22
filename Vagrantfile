@@ -20,7 +20,7 @@ Vagrant.configure(2) do |config|
     salt.vm.synced_folder ".", "/srv/salt", type: "rsync"
     salt.vm.synced_folder "./_vagrant/salt/pillar", "/srv/pillar", type: "rsync"
     salt.vm.provision "salt-salt", type: "shell", path: "./_vagrant/salt/install",
-                      args: [ "--master", "app-debug-1,identity-proxy,identity-provider,db-pgsql-1,gocd,named,mail-debug,salt,selenium-hub,selenium-node-chrome,selenium-node-firefox", "--minion", "salt", "--root", "/srv/salt/_vagrant/salt" ]
+                      args: [ "--master", "app-debug-1,identity-proxy,identity-provider,db-mssql-1,db-pgsql-1,gocd,named,mail-debug,salt,selenium-hub,selenium-node-chrome,selenium-node-firefox", "--minion", "salt", "--root", "/srv/salt/_vagrant/salt" ]
   end
 
   config.vm.define "gocd" do |gocd|
@@ -128,6 +128,22 @@ Vagrant.configure(2) do |config|
                                rsync__exclude: [".git", "phpunit.xml", "behatrun*"],
                                rsync__rsync_path: "sudo rsync",
                                rsync__args: ["--archive", "--compress", "--delete"]
+  end
+
+  config.vm.define "db-mssql-1" do |dbmssql1|
+    dbmssql1.vm.provider "virtualbox" do |v|
+      v.memory = 2048
+    end
+
+    dbmssql1.vm.network "private_network", ip: "192.168.120.155",
+                   netmask: "255.255.255.0"
+    dbmssql1.vm.hostname = "db-mssql-1.moodle"
+
+    dbmssql1.ssh.port = 2234
+    dbmssql1.vm.network "forwarded_port", guest: 22, host: dbmssql1.ssh.port
+
+    dbmssql1.vm.synced_folder "./_vagrant", "/vagrant", type: "rsync"
+    dbmssql1.vm.provision "db-mssql-1-salt", type: "shell", path: "./_vagrant/salt/install", args: [ "--minion", "db-mssql-1", "--root", "/vagrant/salt" ]
   end
 
   config.vm.define "db-pgsql-1" do |db1|
