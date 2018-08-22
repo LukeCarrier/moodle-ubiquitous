@@ -9,7 +9,6 @@
 
 root="$(pwd)"
 
-eval set -- "$(getopt -o "air:" --long "master:,minions:,root:" -- "$@")"
 while true; do
     case "$1" in
         -a|--master ) master="$2"  ; shift 2 ;;
@@ -22,7 +21,7 @@ done
 temp="$(mktemp -d)"
 
 minion_keys='/etc/salt/pki/minion'
-local_minion_keys='vagrant/salt/minions'
+local_minion_keys='_vagrant/salt/minions'
 minion_pem='minion.pem'
 minion_pub='minion.pub'
 
