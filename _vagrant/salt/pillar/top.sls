@@ -23,6 +23,11 @@ base:
     - match: compound
     - platforms-saml-identity-proxy
 
+  'roles:db-mssql':
+    - match: grain
+    - db-mssql
+    - platforms-moodle
+
   'roles:db-pgsql':
     - match: grain
     - db-pgsql

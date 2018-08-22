@@ -111,6 +111,22 @@ platforms:
         session.save_handler: files
         session.save_path: /home/vagrant/var/run/php/session
         soap.wsdl_cache_dir: /home/vagrant/var/run/php/wsdlcache
+    mssql:
+      login:
+        name: vagrant
+        password: P4$$word
+      database:
+        name: vagrant
+        options:
+        alter:
+          - COLLATE Latin1_General_CS_AS
+          - SET ANSI_NULLS ON
+          - SET QUOTED_IDENTIFIER ON
+          - SET READ_COMMITTED_SNAPSHOT ON
+      user:
+        name: vagrant
+        roles:
+          - db_owner
     pgsql:
       user:
         name: vagrant
