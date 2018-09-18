@@ -36,26 +36,6 @@ app.{{ domain }}.home:
     - require:
       - user: {{ platform['user']['name'] }}
 
-{% if pillar['acl']['apply'] %}
-app.{{ domain }}.home.acl:
-  acl.present:
-    - name: {{ platform['user']['home'] }}
-    - acl_type: user
-    - acl_name: {{ pillar['nginx']['user'] }}
-    - perms: rx
-    - require:
-      - file: app.{{ domain }}.home
-
-app.{{ domain }}.home.acl.default:
-  acl.present:
-    - name: {{ platform['user']['home'] }}
-    - acl_type: default:user
-    - acl_name: {{ pillar['nginx']['user'] }}
-    - perms: rx
-    - require:
-      - file: app.{{ domain }}.home
-{% endif %}
-
 app.{{ domain }}.releases:
   file.directory:
     - name: {{ platform['user']['home'] }}/releases
@@ -65,26 +45,6 @@ app.{{ domain }}.releases:
     - mode: 0770
     - require:
       - file: app.{{ domain }}.home
-
-{% if pillar['acl']['apply'] %}
-app.{{ domain }}.releases.acl:
-  acl.present:
-    - name: {{ platform['user']['home'] }}/releases
-    - acl_type: user
-    - acl_name: {{ pillar['nginx']['user'] }}
-    - perms: rx
-    - require:
-      - file: app.{{ domain }}.releases
-
-app.{{ domain }}.releases.acl.default:
-  acl.present:
-    - name: {{ platform['user']['home'] }}/releases
-    - acl_type: default:user
-    - acl_name: {{ pillar['nginx']['user'] }}
-    - perms: rx
-    - require:
-      - file: app.{{ domain }}.home
-{% endif %}
 
 app.{{ domain }}.php-fpm.log:
   file.directory:

@@ -52,6 +52,44 @@ web.{{ domain }}.nginx.extra.{{ name }}:
       - web-{{ app }}.nginx.reload
 {% endif %}
 {% endfor %}
+
+{% if pillar['acl']['apply'] %}
+web.{{ domain }}.home.acl:
+  acl.present:
+    - name: {{ platform['user']['home'] }}
+    - acl_type: user
+    - acl_name: {{ pillar['nginx']['user'] }}
+    - perms: rx
+    - require:
+      - file: web.{{ domain }}.home
+
+web.{{ domain }}.home.acl.default:
+  acl.present:
+    - name: {{ platform['user']['home'] }}
+    - acl_type: default:user
+    - acl_name: {{ pillar['nginx']['user'] }}
+    - perms: rx
+    - require:
+      - file: web.{{ domain }}.home
+
+web.{{ domain }}.releases.acl:
+  acl.present:
+    - name: {{ platform['user']['home'] }}/releases
+    - acl_type: user
+    - acl_name: {{ pillar['nginx']['user'] }}
+    - perms: rx
+    - require:
+      - file: web.{{ domain }}.releases
+
+web.{{ domain }}.releases.acl.default:
+  acl.present:
+    - name: {{ platform['user']['home'] }}/releases
+    - acl_type: default:user
+    - acl_name: {{ pillar['nginx']['user'] }}
+    - perms: rx
+    - require:
+      - file: web.{{ domain }}.home
+{% endif %}
 {% endmacro %}
 
 {% macro php_fpm_status_clients(domain) %}

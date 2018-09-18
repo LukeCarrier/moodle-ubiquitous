@@ -14,3 +14,23 @@ web.nginx.sites-extra:
     - user: root
     - group: root
     - mode: 755
+
+{% for home_directory in pillar['system']['home_directories'] %}
+web.homes.{{ home_directory }}:
+  file.directory:
+    - name: {{ home_directory }}
+    - user: root
+    - group: root
+    - mode: 755
+
+{% if pillar['acl']['apply'] %}
+web.homes.{{ home_directory }}.acl:
+  acl.present:
+    - name: {{ home_directory }}
+    - acl_type: user
+    - acl_name: {{ pillar['nginx']['user'] }}
+    - perms: rx
+    - require:
+      - file: web.homes.{{ home_directory }}
+{% endif %}
+{% endfor %}

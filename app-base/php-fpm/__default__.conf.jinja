@@ -2,12 +2,12 @@
 listen = /var/run/php/php7.0-fpm-__default__.sock
 listen.backlog = 128
 listen.allowed_clients = 127.0.0.1
-listen.owner = {{ pillar['nginx']['user'] }}
-listen.group = {{ pillar['nginx']['user'] }}
+listen.owner = {{ salt['pillar.get']('app:php:fpm:socket_owner', 'www-data') }}
+listen.group = {{ salt['pillar.get']('app:php:fpm:socket_group', 'www-data') }}
 listen.mode = 0600
 
-user = {{ pillar['nginx']['user'] }}
-group = {{ pillar['nginx']['user'] }}
+user = www-data
+group = www-data
 
 pm = static
-pm.max_children = 10
+pm.max_children = 1

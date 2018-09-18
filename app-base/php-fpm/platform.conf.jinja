@@ -3,13 +3,17 @@
 [{{ domain }}]
 
 listen = {{ platform['php']['fpm']['listen'] }}
-listen.backlog = 128
+{% if 'listen_backlog' in platform['php']['fpm'] %}
+listen.backlog = {{ platform['php']['fpm']['listen_backlog'] }}
+{% endif %}
 {% if 'allowed_clients' in platform['php']['fpm'] %}
 listen.allowed_clients = {{ platform['php']['fpm']['allowed_clients'] | join(',') }}
 {% endif %}
-listen.owner = {{ pillar['nginx']['user'] }}
-listen.group = {{ pillar['nginx']['user'] }}
+listen.owner = {{ salt['pillar.get']('app:php:fpm:socket_owner', 'www-data') }}
+listen.group = {{ salt['pillar.get']('app:php:fpm:socket_group', 'www-data') }}
+{% if salt['pillar.get']('app:php:fpm:socket_mode') %}
 listen.mode = 0600
+{% endif %}
 
 user = {{ platform['user']['name'] }}
 group = {{ platform['user']['name'] }}

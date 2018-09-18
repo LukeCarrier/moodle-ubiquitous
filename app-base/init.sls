@@ -88,8 +88,8 @@ app.php-fpm.pools-enabled.__default__:
 app.php-fpm.run:
   file.directory:
     - name: /var/run/php
-    - user: {{ pillar['nginx']['user'] }}
-    - group: {{ pillar['nginx']['user'] }}
+    - user: {{ salt['pillar.get']('app:php:fpm:socket_owner', 'www-data') }}
+    - group: {{ salt['pillar.get']('app:php:fpm:socket_owner', 'www-data') }}
     - mode: 0750
 
 app.php-fpm.log:
@@ -208,17 +208,6 @@ app.homes.{{ home_directory }}:
     - user: root
     - group: root
     - mode: 755
-
-{% if pillar['acl']['apply'] %}
-app.homes.{{ home_directory }}.acl:
-  acl.present:
-    - name: {{ home_directory }}
-    - acl_type: user
-    - acl_name: {{ pillar['nginx']['user'] }}
-    - perms: rx
-    - require:
-      - file: app.homes.{{ home_directory }}
-{% endif %}
 {% endfor %}
 
 {% if pillar['systemd']['apply'] %}
