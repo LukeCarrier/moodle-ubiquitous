@@ -23,7 +23,9 @@ admin.group:
 admin.user.{{ username }}:
   user.present:
     - name: {{ username }}
+{% if 'password' in user %}
     - password: {{ user['password'] }}
+{% endif %}
     - fullname: {{ user['fullname'] }}
     - shell: /bin/bash
     - home: {{ user['home'] }}
