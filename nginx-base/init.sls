@@ -5,11 +5,11 @@
 # @copyright 2018 The Ubiquitous Authors
 #
 
+{% from "nginx-base/map.jinja" import nginx with context %}
+
 nginx:
   pkg.installed:
-    - pkgs:
-      - nginx
-      - nginx-extras
+    - pkgs: {{ nginx.packages | yaml }}
 
 nginx.conf:
   file.managed:
