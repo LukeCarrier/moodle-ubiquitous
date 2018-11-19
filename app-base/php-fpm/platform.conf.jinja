@@ -37,6 +37,10 @@ slowlog = /var/log/php7.0-fpm/{{ platform['basename'] }}/slow.log
 request_slowlog_timeout = {{ platform['php']['fpm']['request_slowlog_timeout'] }}
 {% endif %}
 
+{% if 'request_terminate_timeout' in platform['php']['fpm'] %}
+request_terminate_timeout = {{ platform['php']['fpm']['request_terminate_timeout'] }}
+{% endif %}
+
 catch_workers_output = no
 php_flag[log_errors] = On
 php_value[error_log] = /var/log/php7.0-fpm/{{ platform['basename'] }}/pool.log
