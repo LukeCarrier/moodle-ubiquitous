@@ -32,6 +32,11 @@ pm.status_path = /status
 ping.path = /ping
 ping.response = pong
 
+{% if 'request_slowlog_timeout' in platform['php']['fpm'] %}
+slowlog = /var/log/php7.0-fpm/{{ platform['basename'] }}/slow.log
+request_slowlog_timeout = {{ platform['php']['fpm']['request_slowlog_timeout'] }}
+{% endif %}
+
 catch_workers_output = no
 php_flag[log_errors] = On
 php_value[error_log] = /var/log/php7.0-fpm/{{ platform['basename'] }}/pool.log
