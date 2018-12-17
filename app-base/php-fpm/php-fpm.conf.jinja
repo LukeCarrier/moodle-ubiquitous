@@ -1,6 +1,6 @@
 [global]
 
-{% for option, value in salt['pillar.get']('php:fpm:global', {}).items() %}
+{% for option, value in salt['pillar.get']('php:fpm:global', {'error_log': '/var/log/php7.0-fpm/fpm.log'}).items() %}
 {{ option }} = {{ value }}
 {% endfor %}
 
