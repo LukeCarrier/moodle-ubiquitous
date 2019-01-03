@@ -26,7 +26,7 @@ app-moodle-debug.{{ domain }}.behat-faildump.acl:
   acl.present:
   - name: {{ behat_faildump }}
   - acl_type: user
-  - acl_name: {{ pillar['app']['php']['fpm']['socket_owner'] }}
+  - acl_name: {{ salt['pillar.get']('php:fpm:socket_group', 'www-data') }}
   - perms: rx
   - require:
     - app-moodle-debug.{{ domain }}.behat-faildump

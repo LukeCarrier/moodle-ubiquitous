@@ -88,8 +88,8 @@ app.php-fpm.pools-enabled.__default__:
 app.php-fpm.run:
   file.directory:
     - name: /var/run/php
-    - user: {{ salt['pillar.get']('app:php:fpm:socket_owner', 'www-data') }}
-    - group: {{ salt['pillar.get']('app:php:fpm:socket_owner', 'www-data') }}
+    - user: {{ salt['pillar.get']('php:fpm:socket_owner', 'www-data') }}
+    - group: {{ salt['pillar.get']('php:fpm:socket_owner', 'www-data') }}
     - mode: 0750
 
 app.php-fpm.log:
