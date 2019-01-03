@@ -1,0 +1,11 @@
+{
+  "Sentinels_addresses_list": {{ pillar['redis-sentinel-tunnel']['sentinel_addresses'] | json }},
+  "Databases": [
+{% for database in pillar['redis-sentinel-tunnel']['databases'] %}
+    {
+      "Name": {{ database['name'] | json }},
+      "Local_port": {{ database['port'] | string | json }}
+    }{{ ',' if not loop.last else '' }}
+{% endfor %}
+  ]
+}

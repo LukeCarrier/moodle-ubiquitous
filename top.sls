@@ -158,3 +158,6 @@ base:
   'roles:redis-sentinel':
     - match: grain
     - redis-sentinel
+  'roles:redis-sentinel-tunnel':
+    - match: grain
+    - redis-sentinel-tunnel
