@@ -11,7 +11,7 @@ platforms:
       home: /home/vagrant
     nginx:
       client_max_body_size: 1024m
-      fastcgi_pass: unix:/var/run/php/php7.0-fpm-vagrant.sock
+      fastcgi_pass: localhost:9000
       lanes:
         slow:
           location: ^((/admin|/backup|/course/report|/report)/.+\.php|/course/delete\.php)(/|$)
@@ -92,9 +92,7 @@ platforms:
           -----END PRIVATE KEY-----
     php:
       fpm:
-        listen: /var/run/php/php7.0-fpm-vagrant.sock
-        allowed_clients:
-          - 127.0.0.1
+        listen: 9000
         pm: dynamic
         pm.max_children: 10
         pm.start_servers: 5

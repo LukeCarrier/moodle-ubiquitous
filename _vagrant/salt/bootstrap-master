@@ -1,0 +1,157 @@
+#!/bin/bash
+
+# Configure a Salt master
+#
+# Install Salt using Salt Bootstrap, then prepare Salt environments with
+# isolated state and pillar trees. Each tree has a Git repository created,
+# pushes to which will update the content of the tree.
+#
+# Example:
+#     $ ./salt-master.sh -e lp -e mgmt
+
+repo_dir=/home/vagrant
+repo_owner=vagrant
+environments=()
+master_config_file=/etc/salt/master.d/local.conf
+auto_accept_minions=0
+salt_bootstrap=1
+
+while true; do
+    case "$1" in
+        -d|--repo-dir)
+            repo_dir="$2"
+            shift 2
+            ;;
+        -o|--repo-owner)
+            repo_owner="$2"
+            shift 2
+            ;;
+        -e|--environment)
+            environments+=("$2")
+            shift 2
+            ;;
+        -c|--master-config-file)
+            master_config_file="$2"
+            shift 2
+            ;;
+        -a|--auto-accept-minions)
+            auto_accept_minions=1
+            shift 1
+            ;;
+        -s|--salt-skip-install)
+            salt_bootstrap=0
+            shift 1
+            ;;
+        *)
+            break
+            ;;
+    esac
+done
+
+set -euo pipefail
+IFS=$'\n\t'
+
+echo 'Installing Salt master via Salt Bootstrap...'
+export DEBIAN_FRONTEND=noninteractive
+if [ $salt_bootstrap -ne 0 ]; then
+    curl -qL https://bootstrap.saltstack.com | sh -s -- -M -N >/dev/null
+fi
+echo '' >"$master_config_file"
+
+echo 'Preparing environments...'
+declare -A file_repos
+declare -A pillar_repos
+declare -A file_roots
+declare -A pillar_roots
+if [ ${#environments[@]} -gt 0 ]; then
+    for environment in "${environments[@]}"; do
+        file_repos["$environment"]="${repo_dir}/${environment}/state.git"
+        pillar_repos["$environment"]="${repo_dir}/${environment}/pillar.git"
+
+        file_roots["$environment"]="/srv/salt/${environment}/state"
+        pillar_roots["$environment"]="/srv/salt/${environment}/pillar"
+    done
+
+    all_repos=("${file_repos[@]}" "${pillar_repos[@]}")
+    all_roots=("${file_roots[@]}" "${pillar_roots[@]}")
+
+    echo 'Initialising repositiories...'
+    for repo in "${all_repos[@]}"; do
+        if [ -d "$repo" ]; then
+            echo "Skipping ${repo} -- directory already exists"
+            continue
+        fi
+
+        sudo -u "$repo_owner" mkdir -p "$repo"
+        sudo -u "$repo_owner" GIT_DIR="$repo" git init --bare
+    done
+
+    echo 'Setting up post-receive hooks...'
+    for environment in "${environments[@]}"; do
+        repo="${file_repos[$environment]}"
+        root="${file_roots[$environment]}"
+        sudo -u "$repo_owner" tee "${repo}/hooks/post-receive" >/dev/null <<EOF
+#!/bin/sh
+GIT_WORK_TREE=${root} git checkout -f master
+EOF
+        chmod +x "$repo"/hooks/post-receive
+
+        repo="${pillar_repos[$environment]}"
+        root="${pillar_roots[$environment]}"
+        sudo -u "$repo_owner" tee "${repo}/hooks/post-receive" >/dev/null <<EOF
+#!/bin/sh
+GIT_WORK_TREE=${root} git checkout -f master
+EOF
+        chmod +x "$repo"/hooks/post-receive
+    done
+    
+    echo 'Initialising roots...'
+    for root in "${all_roots[@]}"; do
+        mkdir -p "$root"
+        chown "$repo_owner:${repo_owner}" "$root"
+        chmod 0700 "$root"
+    done
+    salt_config="file_roots:\n"
+    for environment in "${!file_roots[@]}"; do
+        root="${file_roots[$environment]}"
+        salt_config+="  ${environment}:\n"
+        salt_config+="    - ${root}\n"
+    done
+    salt_config+="pillar_roots:\n"
+    for root in "${!pillar_roots[@]}"; do
+        root="${pillar_roots[$environment]}"
+        salt_config+="  ${environment}:\n"
+        salt_config+="    - ${root}\n"
+    done
+    echo -e "$salt_config" >>"$master_config_file"
+fi
+
+if [ $auto_accept_minions -eq 1 ]; then
+    echo 'Automatically accepting minion keys via reactor...'
+    mkdir -p /srv/reactor
+    tee "/srv/reactor/auth-pending.sls" >/dev/null <<EOF
+{# Remove accepted key following authentication failure #}
+{% if not data['result'] %}
+minion_remove:
+  wheel.key.delete:
+    - args:
+      - match: {{ data['id'] }}
+{% endif %}
+
+{# Accept a new key #}
+{% if 'act' in data and data['act'] == 'pend' %}
+minion_add:
+  wheel.key.accept:
+    - args:
+      - match: {{ data['id'] }}
+{% endif %}
+EOF
+
+    salt_config+="reactor:\n"
+    salt_config+="  - 'salt/auth':\n"
+    salt_config+="    - /srv/reactor/auth-pending.sls\n"
+fi
+echo -e "$salt_config" >>"$master_config_file"
+
+echo 'Restarting Salt...'
+systemctl restart salt-master

@@ -1,25 +1,28 @@
 base:
   '*':
-    - base
+    - admin
 
   'roles:app-.+':
     - match: grain_pcre
     - app
-    - nginx
-    - php-fpm
 
-  'roles:app-moodle':
-    - match: grain
+  'roles:web-.+':
+    - match: grain_pcre
+    - nginx
+    - web
+
+  'roles:.+-moodle':
+    - match: grain_pcre
     - platforms-moodle
     - platforms-moodle-logos
 
-  'roles:app-saml':
-    - match: grain
+  'roles:.+-saml':
+    - match: grain_pcre
     - platforms-saml-logos
-  'G@roles:app-saml and G@saml-platforms:identity-provider':
+  'P@roles:.+-saml and G@saml-platforms:identity-provider':
     - match: compound
     - platforms-saml-identity-provider
-  'G@roles:app-saml and G@saml-platforms:identity-proxy':
+  'P@roles:.+-saml and G@saml-platforms:identity-proxy':
     - match: compound
     - platforms-saml-identity-proxy
 

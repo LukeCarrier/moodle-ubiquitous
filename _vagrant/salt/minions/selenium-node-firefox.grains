@@ -1,9 +1,0 @@
-environment: dev
-group: selenium
-roles:
-  - hosts
-  - ntp
-  - admin
-  - sshd
-  - salt-minion
-  - selenium-node-firefox
