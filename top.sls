@@ -161,3 +161,7 @@ base:
   'roles:redis-sentinel-tunnel':
     - match: grain
     - redis-sentinel-tunnel
+
+  'roles:twemproxy':
+    - match: grain
+    - twemproxy
