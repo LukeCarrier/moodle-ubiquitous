@@ -6,7 +6,7 @@ server {
 
     root /var/www/html;
 
-    include snippets/acme-challenge.conf
+    include snippets/acme-challenge.conf;
 
     location / {
 {% if salt['pillar.get']('gocd-server:nginx:use_ssl', False) %}
