@@ -9,35 +9,37 @@ include:
   - gocd-base
   - nginx-base
 
-go-server:
+gocd-server.pkgs:
   pkg.installed:
+  - name: go-server
   - require:
-    - file: /etc/apt/sources.list.d/gocd.list
-    - cmd: /etc/apt/sources.list.d/gocd.list
+    - pkgrepo: gocd.repo
   - require_in:
-    - file: /var/go/.ssh
+    - file: gocd.ssh
 
 {% if pillar['systemd']['apply'] %}
-go-server.service:
+gocd-server.service:
   service.running:
   - name: go-server
   - enable: True
   - require:
-    - pkg: go-server
+    - pkg: gocd-server.pkgs
 {% endif %}
 
-/var/go/users:
+gocd-server.users:
   file.managed:
+    - name: /var/go/users
     - source: salt://gocd-server/gocd/users.jinja
     - template: jinja
     - user: go
     - group: go
     - mode: 0600
     - require:
-      - pkg: go-server
+      - pkg: gocd-server.pkgs
 
-/etc/nginx/sites-available/gocd-server.conf:
+gocd-server.nginx.available:
   file.managed:
+    - name: /etc/nginx/sites-available/gocd-server.conf
     - source: salt://gocd-server/nginx/gocd-server.conf.jinja
     - template: jinja
     - user: root
@@ -50,9 +52,12 @@ go-server.service:
       - service: nginx.reload
 {% endif %}
 
-/etc/nginx/sites-enabled/gocd-server.conf:
+gocd-server.nginx.enabled:
   file.symlink:
+    - name: /etc/nginx/sites-enabled/gocd-server.conf
     - target: /etc/nginx/sites-available/gocd-server.conf
+    - require:
+      - file: gocd-server.nginx.available
 {% if pillar['systemd']['apply'] %}
     - require_in:
       - service: nginx.reload
