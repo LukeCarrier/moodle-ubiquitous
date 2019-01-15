@@ -1,0 +1,2 @@
+{{ type }} {{ item }}
+  {{ pillar['haproxy'][type + 's'][item] | indent(2) }}

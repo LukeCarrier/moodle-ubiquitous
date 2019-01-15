@@ -124,6 +124,10 @@ base:
     - match: grain
     - datadog-agent
 
+  'roles:haproxy':
+    - match: grain
+    - haproxy
+
   'roles:mount-cifs':
     - match: grain
     - mount-cifs

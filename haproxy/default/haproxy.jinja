@@ -1,0 +1,2 @@
+CONFIG=/etc/haproxy/haproxy.cfg
+EXTRAOPTS='{% for type in ['backends', 'frontends'] %}{% for item in salt['pillar.get']('haproxy:' + type, {}).keys() %}-f /etc/haproxy/{{ type }}.d/{{ item }}.cfg {% endfor%}{% endfor%} {{ salt['pillar.get']('haproxy:default:EXTRAOPTS', '') }}'
