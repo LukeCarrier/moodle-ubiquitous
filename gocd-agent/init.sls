@@ -12,8 +12,7 @@ gocd-agent.pkgs:
   pkg.installed:
     - name: go-agent
     - require:
-      - file: /etc/apt/sources.list.d/gocd.list
-      - cmd: /etc/apt/sources.list.d/gocd.list
+      - pkgrepo: gocd.repo
     - require_in:
       - file: /var/go/.ssh
 
