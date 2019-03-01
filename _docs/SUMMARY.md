@@ -31,11 +31,11 @@
 * [PostgreSQL](roles/db-pgsql.md)
 * [Redis](roles/redis.md)
 * [MailCatcher](roles/mail-debug.md)
-* [Mail relay](roles/mail-relay.md)
 * [nftables](roles/nftables.md)
 * [Sophos AV](roles/av-sophos.md)
 * [CIFS mounts](roles/mount-cifs.md)
 * [BIND](roles/named.md)
+* [Postfix](roles/postfix.md)
 * [Selenium](roles/selenium.md)
 * [systemd](roles/systemd.md)
 * Utilities

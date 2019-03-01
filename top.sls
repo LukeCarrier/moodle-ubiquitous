@@ -136,9 +136,9 @@ base:
     - match: grain
     - mail-debug
 
-  'roles:mail-relay':
+  'roles:postfix':
     - match: grain
-    - mail-relay
+    - postfix
 
   'roles:selenium':
     - match: grain
