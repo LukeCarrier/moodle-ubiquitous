@@ -11,6 +11,3 @@ __pycache__/
 /node_modules/
 /npm-*.log
 /package-lock.json
-
-# GitBook
-/_book/
