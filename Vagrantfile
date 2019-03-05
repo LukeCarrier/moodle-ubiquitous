@@ -17,7 +17,7 @@ def provision_master(v)
   v.vm.synced_folder ".", "/srv/salt", type: "rsync"
   v.vm.synced_folder SALT_PILLAR_DIR, "/srv/pillar", type: "rsync"
 
-  v.vm.provision "salt-salt", type: "shell", path: "./_vagrant/salt/bootstrap-master",
+  v.vm.provision "salt-master", type: "shell", path: "./_vagrant/salt/bootstrap-master",
                  args: [ "--auto-accept-minions" ]
 end
 
@@ -32,14 +32,14 @@ def provision_minion(v, master, roles)
 
   v.vm.synced_folder "./_vagrant", "/vagrant", type: "rsync"
   v.vm.provision(
-      "#{v.vm.hostname}-salt-install", type: "shell",
+      "salt-install", type: "shell",
       path: "./_vagrant/salt/bootstrap-minion",
       args: args)
   v.vm.provision(
-      "#{v.vm.hostname}-salt-wait", type: "shell",
+      "salt-wait", type: "shell",
       inline: "until salt-call test.ping; do sleep 1; done")
   v.vm.provision(
-      "#{v.vm.hostname}-salt-apply", type: "shell",
+      "salt-apply", type: "shell",
       inline: "salt-call --state-output mixed state.apply")
 end
 
