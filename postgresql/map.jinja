@@ -76,5 +76,5 @@
         'stats_temp_directory': '/var/run/postgresql/10-main.pg_stat_tmp',
       })
     },
-  }, grain='osrelease', merge=salt['pillar.get']('postgresql:config', {}))
+  }, grain='osrelease', merge=salt['pillar.get']('postgresql', {}))
 %}

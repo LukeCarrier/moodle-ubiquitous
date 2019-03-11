@@ -31,9 +31,9 @@ base:
     - db-mssql
     - platforms-moodle
 
-  'roles:db-pgsql':
+  'roles:postgresql':
     - match: grain
-    - db-pgsql
+    - postgresql
     - platforms-moodle
 
   'roles:gocd-agent':

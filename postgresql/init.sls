@@ -5,42 +5,41 @@
 # @copyright 2018 The Ubiquitous Authors
 #
 
-{% from "db-pgsql/map.jinja" import postgresql with context %}
+{% from 'postgresql/map.jinja' import postgresql with context %}
 {% set cluster_user = salt['pillar.get']('postgresql:user', 'postgres') %}
 {% set cluster_group = salt['pillar.get']('postgresql:group', 'postgres') %}
 
 include:
   - ubiquitous-cli-base
 
-postgresql-server:
-  pkg.installed:
+postgresql.pkgs:
+  pkg.latest:
     - pkgs: {{ postgresql.packages | yaml }}
-    - allow_updates: True
 
 {% if pillar['systemd']['apply'] %}
-postgresql-server.service:
+postgresql.service:
   service.running:
     - name: postgresql
     - enable: True
 
-postgresql-server.reload:
-  service.running:
-    - name: postgresql
-    - watch:
-      - cmd: postgresql-server.cluster
-      - file: postgresql-server.postgresql.conf
-      - file: postgresql-server.pg_hba.conf
+postgresql.reload:
+  cmd.run:
+    - name: systemctl restart postgresql@{{ postgresql.version }}-main
+    - onchanges:
+      - cmd: postgresql.cluster
+      - file: postgresql.postgresql.conf
+      - file: postgresql.pg_hba.conf
 {% endif %}
 
-postgresql-server.cluster:
+postgresql.cluster:
   cmd.run:
     - name: pg_createcluster {{ postgresql.version }} main
     - unless: test -d /var/lib/postgresql/{{ postgresql.version }}/main
 
-postgresql-server.postgresql.conf:
+postgresql.postgresql.conf:
   file.managed:
     - name: /etc/postgresql/{{ postgresql.version }}/main/postgresql.conf
-    - source: salt://db-pgsql/postgres/postgresql.conf.jinja
+    - source: salt://postgresql/postgres/postgresql.conf.jinja
     - template: jinja
     - context:
       config: {{ postgresql.config | yaml }}
@@ -48,23 +47,23 @@ postgresql-server.postgresql.conf:
     - group: postgres
     - mode: 0644
     - require:
-      - cmd: postgresql-server.cluster
+      - cmd: postgresql.cluster
 
-postgresql-server.pg_hba.conf:
+postgresql.pg_hba.conf:
   file.managed:
     - name: /etc/postgresql/{{ postgresql.version }}/main/pg_hba.conf
-    - source: salt://db-pgsql/postgres/pg_hba.conf.jinja
+    - source: salt://postgresql/postgres/pg_hba.conf.jinja
     - template: jinja
     - user: postgres
     - group: postgres
     - mode: 0600
     - require:
-      - cmd: postgresql-server.cluster
+      - cmd: postgresql.cluster
 
-db-pgsql.local.etc.pgsql:
+postgresql.local.etc.pgsql:
   file.managed:
     - name: /usr/local/ubiquitous/etc/ubiquitous-pgsql
-    - source: salt://db-pgsql/local/etc/ubiquitous-pgsql.jinja
+    - source: salt://postgresql/local/etc/ubiquitous-pgsql.jinja
     - template: jinja
     - user: root
     - group: root
@@ -72,10 +71,10 @@ db-pgsql.local.etc.pgsql:
     - require:
       - file: ubiquitous-cli.etc
 
-db-pgsql.local.bin.pgsql-cluster:
+postgresql.local.bin.pgsql-cluster:
   file.managed:
     - name: /usr/local/ubiquitous/bin/ubiquitous-pgsql-cluster
-    - source: salt://db-pgsql/local/bin/ubiquitous-pgsql-cluster
+    - source: salt://postgresql/local/bin/ubiquitous-pgsql-cluster
     - user: root
     - group: root
     - mode: 0755
@@ -92,7 +91,7 @@ moodle.{{ domain }}.postgres:
     - password: {{ platform['pgsql']['user']['password'] }}
 {% if pillar['systemd']['apply'] %}
     - require:
-      - service: postgresql-server.service
+      - service: postgresql.service
 {% endif %}
   postgres_database.present:
     - user: postgres
@@ -103,7 +102,7 @@ moodle.{{ domain }}.postgres:
     - require:
       - postgres_user: moodle.{{ domain }}.postgres
 {% if pillar['systemd']['apply'] %}
-      - service: postgresql-server.service
+      - service: postgresql.service
 {% endif %}
 {% endif %}
 {% endfor %}

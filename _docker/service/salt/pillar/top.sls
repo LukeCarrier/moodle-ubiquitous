@@ -2,6 +2,6 @@ base:
   '*':
     - base
     - app
-    - db-pgsql
+    - postgresql
     - moodle
     - selenium

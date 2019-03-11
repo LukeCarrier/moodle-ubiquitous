@@ -17,7 +17,7 @@ containers=(
     ubiquitous/moodle-app:admin,app-moodle,app-moodle-default-release:salt://app-base/macros.sls
     ubiquitous/moodle-app-debug:admin,app-moodle,app-moodle-debug,app-moodle-default-release:salt://app-base/macros.sls
 
-    ubiquitous/db-pgsql:admin,db-pgsql
+    ubiquitous/postgresql:admin,postgresql
 
     ubiquitous/selenium-hub:admin,selenium-hub
     ubiquitous/selenium-node-chrome:admin,selenium-node-chrome

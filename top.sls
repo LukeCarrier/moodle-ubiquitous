@@ -112,9 +112,9 @@ base:
     - match: grain
     - db-mssql
 
-  'roles:db-pgsql':
+  'roles:postgresql':
     - match: grain
-    - db-pgsql
+    - postgresql
 
   'roles:av-sophos':
     - match: grain

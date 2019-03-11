@@ -19,4 +19,6 @@ postgresql:
       user: all
       address: 0.0.0.0/0
       method: md5
+  config:
+    listen_addresses: '*'
   defer_creation: True

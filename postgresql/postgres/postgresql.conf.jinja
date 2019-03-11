@@ -1,4 +1,4 @@
-{% from 'db-pgsql/macros.sls' import postgresql_config_option %}
+{% from 'postgresql/macros.sls' import postgresql_config_option %}
 
 {% for key, value in config.items() %}
 {{ postgresql_config_option(key, value) }}

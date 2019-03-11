@@ -28,7 +28,7 @@
         * [GoCD agent](roles/app/addons/gocd-agent.md)
         * [Let's Encrypt](roles/app/addons/lets-encrypt.md)
         * [SSL certificates](roles/app/addons/ssl-certs.md)
-* [PostgreSQL](roles/db-pgsql.md)
+* [PostgreSQL](roles/postgresql.md)
 * [Redis](roles/redis.md)
 * [MailCatcher](roles/mail-debug.md)
 * [nftables](roles/nftables.md)

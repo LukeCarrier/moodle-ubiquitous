@@ -1,4 +1,6 @@
 postgresql:
+  config:
+    listen_addresses: '*'
   client_authentication:
     - type: host
       database: all
