@@ -1,3 +1,7 @@
+{% if has_modules %}
+include /etc/nginx/modules-enabled/*.conf;
+{% endif %}
+
 user {{ pillar['nginx']['user'] }};
 worker_processes auto;
 pid /run/nginx.pid;

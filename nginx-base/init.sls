@@ -16,6 +16,8 @@ nginx.conf:
     - name: /etc/nginx/nginx.conf
     - source: salt://nginx-base/nginx/nginx.conf.jinja
     - template: jinja
+    - context:
+      has_modules: {{ nginx.has_modules }}
     - user: root
     - group: root
     - mode: 0644
