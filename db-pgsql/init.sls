@@ -5,6 +5,7 @@
 # @copyright 2018 The Ubiquitous Authors
 #
 
+{% from "db-pgsql/map.jinja" import postgresql with context %}
 {% set cluster_user = salt['pillar.get']('postgresql:user', 'postgres') %}
 {% set cluster_group = salt['pillar.get']('postgresql:group', 'postgres') %}
 
@@ -13,10 +14,7 @@ include:
 
 postgresql-server:
   pkg.installed:
-    - pkgs:
-      - postgresql-9.5
-      - postgresql-client-common
-      - sudo
+    - pkgs: {{ postgresql.packages | yaml }}
     - allow_updates: True
 
 {% if pillar['systemd']['apply'] %}
@@ -36,13 +34,16 @@ postgresql-server.reload:
 
 postgresql-server.cluster:
   cmd.run:
-    - name: pg_createcluster 9.5 main
-    - unless: test -d /var/lib/postgresql/9.5/main
+    - name: pg_createcluster {{ postgresql.version }} main
+    - unless: test -d /var/lib/postgresql/{{ postgresql.version }}/main
 
 postgresql-server.postgresql.conf:
   file.managed:
-    - name: /etc/postgresql/9.5/main/postgresql.conf
-    - source: salt://db-pgsql/postgres/postgresql.conf
+    - name: /etc/postgresql/{{ postgresql.version }}/main/postgresql.conf
+    - source: salt://db-pgsql/postgres/postgresql.conf.jinja
+    - template: jinja
+    - context:
+      config: {{ postgresql.config | yaml }}
     - user: postgres
     - group: postgres
     - mode: 0644
@@ -51,7 +52,7 @@ postgresql-server.postgresql.conf:
 
 postgresql-server.pg_hba.conf:
   file.managed:
-    - name: /etc/postgresql/9.5/main/pg_hba.conf
+    - name: /etc/postgresql/{{ postgresql.version }}/main/pg_hba.conf
     - source: salt://db-pgsql/postgres/pg_hba.conf.jinja
     - template: jinja
     - user: postgres
