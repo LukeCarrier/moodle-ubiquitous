@@ -6,7 +6,7 @@
 #
 
 include:
-  - nginx-base
+  - nginx
 
 web-ssl-certs.dir:
   file.directory:

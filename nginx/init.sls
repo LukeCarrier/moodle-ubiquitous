@@ -5,7 +5,7 @@
 # @copyright 2018 The Ubiquitous Authors
 #
 
-{% from "nginx-base/map.jinja" import nginx with context %}
+{% from "nginx/map.jinja" import nginx with context %}
 
 nginx:
   pkg.installed:
@@ -14,7 +14,7 @@ nginx:
 nginx.conf:
   file.managed:
     - name: /etc/nginx/nginx.conf
-    - source: salt://nginx-base/nginx/nginx.conf.jinja
+    - source: salt://nginx/nginx/nginx.conf.jinja
     - template: jinja
     - context:
       has_modules: {{ nginx.has_modules }}
@@ -40,7 +40,7 @@ nginx.default-available:
 nginx.log-formats:
   file.managed:
     - name: /etc/nginx/conf.d/log-formats.conf
-    - source: salt://nginx-base/nginx/log-formats.conf.jinja
+    - source: salt://nginx/nginx/log-formats.conf.jinja
     - template: jinja
     - user: root
     - group: root
@@ -51,7 +51,7 @@ nginx.log-formats:
 nginx.ssl-params:
   file.managed:
     - name: /etc/nginx/ssl_params
-    - source: salt://nginx-base/nginx/ssl_params
+    - source: salt://nginx/nginx/ssl_params
     - user: root
     - group: root
     - mode: 0644
@@ -61,7 +61,7 @@ nginx.ssl-params:
 nginx.acme-challenge:
   file.managed:
   - name: /etc/nginx/snippets/acme-challenge.conf
-  - source: salt://nginx-base/nginx/acme-challenge.conf
+  - source: salt://nginx/nginx/acme-challenge.conf
   - user: root
   - group: root
   - mode: 0644
@@ -79,7 +79,7 @@ nginx.log.acl:
 nginx.logrotate:
   file.managed:
     - name: /etc/logrotate.d/nginx
-    - source: salt://nginx-base/logrotate/nginx.jinja
+    - source: salt://nginx/logrotate/nginx.jinja
     - template: jinja
     - user: root
     - group: root

@@ -6,7 +6,7 @@
 #
 
 include:
-  - nginx-base
+  - nginx
 
 web.nginx.sites-extra:
   file.directory:

@@ -7,7 +7,7 @@
 
 include:
   - gocd-base
-  - nginx-base
+  - nginx
 
 gocd-server.pkgs:
   pkg.installed:
