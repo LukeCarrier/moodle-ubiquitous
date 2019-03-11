@@ -57,7 +57,7 @@ app.{{ domain }}.php-fpm.log:
 app.{{ domain }}.{{ instance }}.php-fpm:
   file.managed:
     - name: /etc/php/7.0/fpm/pools-available/{{ platform['basename'] }}.{{ instance }}.conf
-    - source: salt://app-base/php-fpm/platform.conf.jinja
+    - source: salt://php/php-fpm/platform.conf.jinja
     - template: jinja
     - context:
       domain: {{ domain }}

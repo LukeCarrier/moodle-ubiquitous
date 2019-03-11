@@ -28,12 +28,12 @@ matrix:
       - |
         sudo _docker/service/build -c ubiquitous/moodle-app \
                 -m admin -m app-moodle -m app-moodle-default-release \
-                -f salt://app-base/macros.sls
+                -f salt://php/macros.sls
       - |
         sudo _docker/service/build -c ubiquitous/moodle-app-debug \
                 -m admin -m app-moodle -m app-moodle-debug \
                 -m app-moodle-default-release \
-                -f salt://app-base/macros.sls
+                -f salt://php/macros.sls
       - |
         sudo _docker/service/build -c ubiquitous/db-pgsql \
                 -m admin -m db-pgsql

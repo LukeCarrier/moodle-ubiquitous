@@ -6,7 +6,7 @@
 #
 
 include:
-  - app-base
+  - php
 
 app-tideways.repo:
   pkgrepo.managed:

@@ -6,11 +6,11 @@
 # @copyright 2018 The Ubiquitous Authors
 #
 
-{% from 'app-base/macros.sls' import app_platform, app_restarts %}
+{% from 'php/macros.sls' import app_platform, app_restarts %}
 {% from 'web-lets-encrypt/macros.sls' import lets_encrypt_all %}
 
 include:
-  - app-base
+  - php
   - ubiquitous-cli-base
 
 #

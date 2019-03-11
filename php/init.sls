@@ -5,6 +5,8 @@
 # @copyright 2018 The Ubiquitous Authors
 #
 
+{% from 'php/map.jinja' import php with context %}
+
 app.php.packages:
   pkg.installed:
     - pkgs:
@@ -28,7 +30,7 @@ app.php.packages:
 app.php-fpm.php-fpm.conf:
   file.managed:
     - name: /etc/php/7.0/fpm/php-fpm.conf
-    - source: salt://app-base/php-fpm/php-fpm.conf.jinja
+    - source: salt://php/php-fpm/php-fpm.conf.jinja
     - template: jinja
     - user: root
     - group: root
@@ -65,7 +67,7 @@ app.php-fpm.pool.d:
 app.php-fpm.pools-available.__default__:
   file.managed:
     - name: /etc/php/7.0/fpm/pools-available/__default__.conf
-    - source: salt://app-base/php-fpm/__default__.conf.jinja
+    - source: salt://php/php-fpm/__default__.conf.jinja
     - template: jinja
     - user: root
     - group: root
@@ -112,7 +114,7 @@ app.php-fpm.log.acl:
 app.php-fpm.logrotate:
   file.managed:
     - name: /etc/logrotate.d/php7.0-fpm
-    - source: salt://app-base/logrotate/php7.0-fpm.jinja
+    - source: salt://php/logrotate/php7.0-fpm.jinja
     - template: jinja
     - user: root
     - group: root
@@ -183,7 +185,7 @@ app.php.sqlsrv.{{ extension }}.pecl:
 app.php.sqlsrv.{{ extension }}.ini.available:
   file.managed:
     - name: /etc/php/7.0/mods-available/{{ extension }}.ini
-    - source: salt://app-base/php/extension.ini.jinja
+    - source: salt://php/php/extension.ini.jinja
     - template: jinja
     - context:
       extension: {{ extension }}

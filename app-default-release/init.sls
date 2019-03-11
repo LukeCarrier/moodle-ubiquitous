@@ -6,7 +6,7 @@
 #
 
 include:
-  - app-base
+  - php
 
 {% for domain, platform in salt['pillar.get']('platforms', {}).items() %}
 {% if 'default_release' in platform %}

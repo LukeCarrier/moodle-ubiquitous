@@ -6,7 +6,7 @@
 #
 
 include:
-  - app-base
+  - php
 
 app-debug.php.xdebug:
   pkg.installed:
