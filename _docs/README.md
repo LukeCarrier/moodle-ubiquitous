@@ -24,7 +24,7 @@ The technical specifications of the environment are as follows:
 * Configuration management with [Salt](https://saltstack.com/)
 * Continuous delivery with [GoCD](https://www.gocd.io/)
 * Static file serving with [nginx](http://nginx.org/)
-* [PHP 7.0](http://php.net/), with the FPM SAPI and OPcache
+* [PHP](http://php.net/), with the FPM SAPI and OPcache
 * [PostgreSQL 9.5](http://www.postgresql.org/)
 * [Selenium](http://www.seleniumhq.org/) Hub and nodes
 

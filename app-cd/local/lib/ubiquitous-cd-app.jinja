@@ -7,12 +7,12 @@
 # @copyright 2018 The Ubiquitous Authors
 #
 
-export UBIQUITOUS_PHPFPM_SERVICE="php7.0-fpm"
-export UBIQUITOUS_PHPFPM_LINK_FMT="/etc/php/7.0/fpm/pools-enabled/%s.conf"
-export UBIQUITOUS_PHPFPM_LINK_GLOB="/etc/php/7.0/fpm/pools-enabled/%s.+(blue|green).conf"
-export UBIQUITOUS_PHPFPM_DIR="/etc/php/7.0/fpm/pools-available"
+export UBIQUITOUS_PHPFPM_SERVICE="php{{ php.version }}-fpm"
+export UBIQUITOUS_PHPFPM_LINK_FMT="/etc/php/{{ php.version }}/fpm/pools-enabled/%s.conf"
+export UBIQUITOUS_PHPFPM_LINK_GLOB="/etc/php/{{ php.version }}/fpm/pools-enabled/%s.+(blue|green).conf"
+export UBIQUITOUS_PHPFPM_DIR="/etc/php/{{ php.version }}/fpm/pools-available"
 export UBIQUITOUS_PHPFPM_CONF="${UBIQUITOUS_PHPFPM_DIR}/%s.%s.conf"
-export UBIQUITOUS_PHPFPM_SOCK="/var/run/php/php7.0-fpm-%s.sock"
+export UBIQUITOUS_PHPFPM_SOCK="/var/run/php/php{{ php.version }}-fpm-%s.sock"
 
 require_app() {
     local domain="$1"

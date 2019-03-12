@@ -1,5 +1,7 @@
+{% from 'php/map.jinja' import php with context %}
+
 [__default__]
-listen = /var/run/php/php7.0-fpm-__default__.sock
+listen = /var/run/php/php{{ php.version }}-fpm-__default__.sock
 listen.backlog = 128
 listen.allowed_clients = 127.0.0.1
 listen.owner = {{ salt['pillar.get']('php:fpm:socket_owner', 'www-data') }}

@@ -1,7 +1,9 @@
+{% from 'php/map.jinja' import php with context %}
+
 [global]
 
-{% for option, value in salt['pillar.get']('php:fpm:global', {'error_log': '/var/log/php7.0-fpm/fpm.log'}).items() %}
+{% for option, value in salt['pillar.get']('php:fpm:global', {'error_log': '/var/log/php' + php.version + '-fpm/fpm.log'}).items() %}
 {{ option }} = {{ value }}
 {% endfor %}
 
-include = /etc/php/7.0/fpm/pools-enabled/*.conf
+include = /etc/php/{{ php.version }}/fpm/pools-enabled/*.conf

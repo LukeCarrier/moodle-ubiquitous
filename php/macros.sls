@@ -5,6 +5,8 @@
 # @copyright 2018 The Ubiquitous Authors
 #
 
+{% from 'php/map.jinja' import php with context %}
+
 {% macro app_platform(app, domain) %}
 {% set platform = salt['pillar.get']('platforms:' + domain) %}
 
@@ -48,7 +50,7 @@ app.{{ domain }}.releases:
 
 app.{{ domain }}.php-fpm.log:
   file.directory:
-    - name: /var/log/php7.0-fpm/{{ platform['basename'] }}
+    - name: /var/log/php{{ php.version }}-fpm/{{ platform['basename'] }}
     - user: {{ platform['user']['name'] }}
     - group: {{ platform['user']['name'] }}
     - mode: 0750
@@ -56,7 +58,7 @@ app.{{ domain }}.php-fpm.log:
 {% for instance in ['blue', 'green'] %}
 app.{{ domain }}.{{ instance }}.php-fpm:
   file.managed:
-    - name: /etc/php/7.0/fpm/pools-available/{{ platform['basename'] }}.{{ instance }}.conf
+    - name: /etc/php/{{ php.version }}/fpm/pools-available/{{ platform['basename'] }}.{{ instance }}.conf
     - source: salt://php/php-fpm/platform.conf.jinja
     - template: jinja
     - context:
@@ -66,7 +68,7 @@ app.{{ domain }}.{{ instance }}.php-fpm:
     - group: root
     - mode: 0644
     - require:
-      - pkg: app.php.packages
+      - pkg: php.pkgs
 {% if pillar['systemd']['apply'] %}
     - onchanges_in:
       - service: app-{{ app }}.php-fpm.reload
@@ -78,7 +80,7 @@ app.{{ domain }}.{{ instance }}.php-fpm:
 app-{{ app }}.php-fpm.reload:
 {% if pillar['systemd']['apply'] %}
   cmd.run:
-    - name: systemctl reload php7.0-fpm || systemctl restart php7.0-fpm
+    - name: systemctl reload php{{ php.version }}-fpm || systemctl restart php{{ php.version }}-fpm
 {% else %}
   test.succeed_without_changes: []
 {% endif %}

@@ -64,6 +64,10 @@ base:
     - match: grain
     - app-saml
 
+  'roles:php.sqlsrv':
+    - match: grain
+    - php.sqlsrv
+
   'roles:web-cd':
     - match: grain
     - web-cd

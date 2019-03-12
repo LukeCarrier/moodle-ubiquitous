@@ -5,8 +5,8 @@ system:
 php:
   fpm:
     global:
-      pid: /run/php/php7.0-fpm.pid
-      error_log: /var/log/php7.0-fpm/fpm.log
+      pid: /run/php/php7.2-fpm.pid
+      error_log: /var/log/php7.2-fpm/fpm.log
 
 php-fpm:
   status_clients:

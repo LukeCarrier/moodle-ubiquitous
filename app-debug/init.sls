@@ -5,6 +5,8 @@
 # @copyright 2018 The Ubiquitous Authors
 #
 
+{% from 'php/map.jinja' import php with context %}
+
 include:
   - php
 
@@ -17,7 +19,7 @@ app-debug.php.xdebug:
 {% set behat_faildump = platform['user']['home'] + '/data/behat-faildump' %}
 app-debug.{{ domain }}.php-fpm:
   file.managed:
-    - name: /etc/php/7.0/fpm/pools-extra/{{ platform['basename'] }}.debug.conf
+    - name: /etc/php/{{ php.version }}/fpm/pools-extra/{{ platform['basename'] }}.debug.conf
     - source: salt://app-debug/php-fpm/platform.debug.conf.jinja
     - template: jinja
     - context:
@@ -34,5 +36,5 @@ app-debug.{{ domain }}.php-fpm:
 {% if pillar['systemd']['apply'] %}
 app-debug.php-fpm.reload:
   cmd.run:
-    - name: systemctl reload php7.0-fpm || systemctl restart php7.0-fpm
+    - name: systemctl reload php{{ php.version }}-fpm || systemctl restart php{{ php.version }}-fpm
 {% endif %}

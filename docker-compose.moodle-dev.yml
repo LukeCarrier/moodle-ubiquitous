@@ -18,7 +18,7 @@ services:
       - --nodaemonize
       - --allow-to-run-as-root
       - --fpm-config
-      - /etc/php/7.0/fpm/php-fpm.conf
+      - /etc/php/7.2/fpm/php-fpm.conf
     volumes:
       - ../Moodle:/root/releases/docker
       - ../MoodleData/Data:/root/data

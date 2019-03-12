@@ -5,6 +5,8 @@
 # @copyright 2018 The Ubiquitous Authors
 #
 
+{% from 'php/map.jinja' import php with context %}
+
 include:
   - php
 
@@ -26,13 +28,13 @@ app-tideways.pkgs:
   {% if pillar['systemd']['apply'] and reload_printed is not defined %}
 app-tideways.php-fpm.reload:
   cmd.run:
-    - name: systemctl reload php7.0-fpm || systemctl restart php7.0-fpm
+    - name: systemctl reload php{{ php.version }}-fpm || systemctl restart php{{ php.version }}-fpm
     {% set reload_printed = True %}
   {% endif %}
 
 app-tideways.{{ domain }}.php-fpm:
   file.managed:
-    - name: /etc/php/7.0/fpm/pools-extra/{{ platform['basename'] }}.tideways.conf
+    - name: /etc/php/{{ php.version }}/fpm/pools-extra/{{ platform['basename'] }}.tideways.conf
     - source: salt://app-tideways/php-fpm/platform.tideways.conf.jinja
     - template: jinja
     - context:

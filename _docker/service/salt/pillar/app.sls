@@ -6,7 +6,7 @@ nginx:
 php:
   fpm:
     global:
-      pid: /run/php/php7.0-fpm.pid
+      pid: /run/php/php7.2-fpm.pid
       error_log: /dev/stderr
 
 system:

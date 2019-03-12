@@ -1,6 +1,6 @@
 # Application servers
 
-Application servers run an HTTP server ([nginx](https://nginx.org/) 1.10.x) and dispatch dynamic requests to [PHP-FPM](http://php.net/manual/en/install.fpm.php) 7.0.x. They can host one or more platforms, each of which receives its own nginx `server {}` block and PHP-FPM `[pool]`.
+Application servers run an HTTP server ([nginx](https://nginx.org/) 1.10.x) and dispatch dynamic requests to [PHP-FPM](http://php.net/manual/en/install.fpm.php). They can host one or more platforms, each of which receives its own nginx `server {}` block and PHP-FPM `[pool]`.
 
 ```mermaid
 graph TB
@@ -56,7 +56,7 @@ Per-platform user accounts contain a directory structure like the following:
 
 The nginx configuration follows the Debian convention, with per-platform configuration stored in `/etc/nginx/sites-available`. These configuration files are symlinked to `/etc/nginx/sites-enabled`, where nginx sources _enabled_ site configuration. Each platform will also source additional configuration from `/etc/nginx/sites-extra/<platform basename>.*.conf`.
 
-The PHP-FPM configuration emulates this configuration. Configuration files are stored in `/etc/php/7.0/fpm/pools-available` and linked to `/etc/php/7.0/fpm/pools-enabled`. Each pool sources additional configuration from `/etc/php/7.0/fpm/pools-extra`.
+The PHP-FPM configuration emulates this configuration. Configuration files are stored in `/etc/php/<version>/fpm/pools-available` and linked to `/etc/php/<version>/fpm/pools-enabled`. Each pool sources additional configuration from `/etc/php/<version>/fpm/pools-extra`.
 
 This configuration facilitates blue/green deployments by simply adding links and reloading the appropriate service.
 
@@ -74,13 +74,13 @@ Each platform receives its own dedicated log files:
 
 * Access logs are written to `/var/log/nginx/<platform basename>/access.log`.
 * Web server error logs (e.g. missing files, failed dynamic requests) are written to `/var/log/nginx/<platform basename>/error.log`.
-* PHP errors are written to `/var/log/php7.0-fpm/<platform basename>/pool.log`, configured via the PHP `error_log`.
+* PHP errors are written to `/var/log/php<version>-fpm/<platform basename>/pool.log`, configured via the PHP `error_log`.
 
 Requests to domains not associated with any platform will be be recorded in the "default" nginx access and error logs:
 * `/var/log/nginx/access.log`
 * `/var/log/nginx/error.log`
 
-PHP-FPM service events and configuration issues are logged to the PHP-FPM log, located at `/var/log/php7.0-fpm/fpm.log`.
+PHP-FPM service events and configuration issues are logged to the PHP-FPM log, located at `/var/log/php<version>-fpm/fpm.log`.
 
 ### 503 Gateway Timeout
 
@@ -105,5 +105,5 @@ $ sudo -u www-data \
         REQUEST_METHOD=GET \
         SCRIPT_NAME=/status \
         SCRIPT_FILENAME=/status \
-        cgi-fcgi -bind -connect /var/run/php/php7.0-fpm-vagrant.sock
+        cgi-fcgi -bind -connect /var/run/php/php<version>-fpm-vagrant.sock
 ```

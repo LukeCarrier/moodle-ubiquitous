@@ -19,6 +19,15 @@ admin.group:
     - name: admin
     - system: True
 
+{% for home_directory in salt['pillar.get']('system:home_directories', []) %}
+admin.homes.{{ home_directory }}:
+  file.directory:
+    - name: {{ home_directory }}
+    - user: root
+    - group: root
+    - mode: 755
+{% endfor %}
+
 {% for username, user in salt['pillar.get']('users', {}).items() %}
 admin.user.{{ username }}:
   user.present:

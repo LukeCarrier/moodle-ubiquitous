@@ -5,6 +5,8 @@
 # @copyright 2018 The Ubiquitous Authors
 #
 
+{% from 'php/map.sls' import php with context %}
+
 include:
   - php
 
@@ -36,8 +38,8 @@ app-default-release.{{ domain }}.current:
 
 app-default-release.{{ domain }}.php-fpm.blue:
   file.symlink:
-    - name: /etc/php/7.0/fpm/pools-enabled/{{ platform['basename'] }}.blue.conf
-    - target: /etc/php/7.0/fpm/pools-available/{{ platform['basename'] }}.blue.conf
+    - name: /etc/php/{{ php.version }}/fpm/pools-enabled/{{ platform['basename'] }}.blue.conf
+    - target: /etc/php/{{ php.version }}/fpm/pools-available/{{ platform['basename'] }}.blue.conf
 {% if pillar['systemd']['apply'] %}
     - onchanges_in:
       - cmd: app-default-release.php-fpm.reload
@@ -48,5 +50,5 @@ app-default-release.{{ domain }}.php-fpm.blue:
 {% if pillar['systemd']['apply'] %}
 app-default-release.php-fpm.reload:
   cmd.run:
-    - name: systemctl reload php7.0-fpm || systemctl restart php7.0-fpm
+    - name: systemctl reload php{{ php.version }}-fpm || systemctl restart php{{ php.version }}-fpm
 {% endif %}

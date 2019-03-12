@@ -5,13 +5,18 @@
 # @copyright 2018 The Ubiquitous Authors
 #
 
+{% from 'php/map.jinja' import php with context %}
+
 include:
   - ubiquitous-cli-base
 
 app-cd.lib.ubiquitous-cd-app:
   file.managed:
     - name: /usr/local/ubiquitous/lib/ubiquitous-cd-app
-    - source: salt://app-cd/local/lib/ubiquitous-cd-app
+    - source: salt://app-cd/local/lib/ubiquitous-cd-app.jinja
+    - template: jinja
+    - context:
+      php: {{ php | yaml }}
     - user: root
     - group: root
     - mode: 644
