@@ -1,5 +1,5 @@
 {% from 'redis/macros.sls' import redis_config_option %}
 
 {%- for dict in pillar['redis'] %}
-{{ redis_config_option((dict.keys() | list)[0], (dict.values() | list)[0]) }}
+{{ redis_config_option(dict.keys() | first, dict.values() | first) }}
 {%- endfor -%}

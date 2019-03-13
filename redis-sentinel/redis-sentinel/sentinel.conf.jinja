@@ -1,13 +1,13 @@
 {% from 'redis/macros.sls' import redis_config_option %}
 
 {%- for dict in pillar['redis-sentinel'] %}
-{%-   set key = dict.keys()[0] -%}
+{%-   set key = dict.keys() | list | first -%}
 {%-   if key == 'sentinel' -%}
-{%-     for sentinel_dict in dict.values()[0] %}
+{%-     for sentinel_dict in dict.values() | first %}
 {{ redis_config_option(
-        'sentinel ' + sentinel_dict.keys()[0], sentinel_dict.values()[0]) }}
+        'sentinel ' + sentinel_dict.keys() | first, sentinel_dict.values() | first) }}
 {%-     endfor %}
 {%-   else %}
-{{ redis_config_option(key, dict.values()[0]) }}
+{{ redis_config_option(key, dict.values() | first) }}
 {%-   endif -%}
 {% endfor -%}
