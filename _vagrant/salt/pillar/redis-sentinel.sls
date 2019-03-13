@@ -1,13 +1,13 @@
 redis-sentinel:
   - daemonize: yes
-  - pidfile: /var/run/redis/redis-sentinel.pid
+  - pidfile: /var/run/sentinel/redis-sentinel.pid
 
   - port: 26379
 
   - dir: /var/lib/redis
 
   - sentinel:
-    - monitor: master 192.168.120.61 6379 2
+    - monitor: master 192.168.120.50 6379 2
 
     - config-epoch: master 0
     - leader-epoch: master 13
