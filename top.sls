@@ -112,9 +112,9 @@ base:
     - match: grain
     - app-tideways
 
-  'roles:db-mssql':
+  'roles:mssql':
     - match: grain
-    - db-mssql
+    - mssql
 
   'roles:postgresql':
     - match: grain

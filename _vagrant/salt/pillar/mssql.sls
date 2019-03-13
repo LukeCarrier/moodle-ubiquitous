@@ -1,4 +1,4 @@
-db-mssql:
+mssql:
   packages:
     - tools
   setup:
