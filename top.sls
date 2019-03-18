@@ -71,12 +71,6 @@ base:
   'roles:web-cd':
     - match: grain
     - web-cd
-  'roles:web-debug':
-    - match: grain
-    - web-debug
-  'roles:web-moodle-debug':
-    - match: grain
-    - web-moodle-debug
   'roles:web-default-release':
     - match: grain
     - web-default-release
@@ -93,12 +87,6 @@ base:
   'roles:app-crontab':
     - match: grain
     - app-crontab
-  'roles:app-debug':
-    - match: grain
-    - app-debug
-  'roles:app-moodle-debug':
-    - match: grain
-    - app-moodle-debug
   'roles:app-cd':
     - match: grain
     - app-cd

@@ -1,5 +1,0 @@
-{% set platform = pillar['platforms'][domain] %}
-
-location /data/profiling {
-    alias {{ platform['user']['home'] }}/data/profiling;
-}
