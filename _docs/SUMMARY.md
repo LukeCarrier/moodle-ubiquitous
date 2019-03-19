@@ -21,7 +21,6 @@
     * [Moodle](roles/app/moodle.md)
     * [SAML](roles/app/saml.md)
     * Addons
-        * [Default release](roles/app/addons/default-release.md)
         * [Error pages](roles/app/addons/error-pages.md)
         * [GoCD agent](roles/app/addons/gocd-agent.md)
         * [Let's Encrypt](roles/app/addons/lets-encrypt.md)

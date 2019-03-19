@@ -18,21 +18,19 @@ matrix:
                 -m admin -m moodle-componentmgr -m nvm
       - |
         sudo _docker/service/build -c ubiquitous/moodle-web \
-                -m admin -m web-moodle -m web-default-release \
+                -m admin -m web-moodle \
                 -f salt://web-base/macros.sls
       - |
         sudo _docker/service/build -c ubiquitous/moodle-web-debug \
                 -m admin -m web-moodle -m web-moodle-debug \
-                -m web-default-release \
                 -f salt://web-base/macros.sls
       - |
         sudo _docker/service/build -c ubiquitous/moodle-app \
-                -m admin -m app-moodle -m app-moodle-default-release \
+                -m admin -m app-moodle \
                 -f salt://php/macros.sls
       - |
         sudo _docker/service/build -c ubiquitous/moodle-app-debug \
                 -m admin -m app-moodle -m app-moodle-debug \
-                -m app-moodle-default-release \
                 -f salt://php/macros.sls
       - |
         sudo _docker/service/build -c ubiquitous/db-pgsql \

@@ -5,7 +5,6 @@ platforms:
     name: Local test site
     email: root@localhost
     lang: en
-    default_release: vagrant
     user:
       name: vagrant
       home: /home/vagrant

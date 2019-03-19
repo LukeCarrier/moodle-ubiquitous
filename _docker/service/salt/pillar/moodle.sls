@@ -6,7 +6,6 @@ platforms:
   dev.local:
     basename: moodle-dev
     role: moodle
-    default_release: docker
     user:
       name: root
       home: /root

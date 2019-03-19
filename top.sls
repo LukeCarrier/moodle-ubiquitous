@@ -71,9 +71,6 @@ base:
   'roles:web-cd':
     - match: grain
     - web-cd
-  'roles:web-default-release':
-    - match: grain
-    - web-default-release
   'roles:web-error-pages':
     - match: grain
     - web-error-pages
@@ -90,12 +87,6 @@ base:
   'roles:app-cd':
     - match: grain
     - app-cd
-  'roles:app-default-release':
-    - match: grain
-    - app-default-release
-  'roles:app-moodle-default-release':
-    - match: grain
-    - app-moodle-default-release
   'roles:app-tideways':
     - match: grain
     - app-tideways
