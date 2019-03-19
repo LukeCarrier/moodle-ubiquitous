@@ -1,7 +1,6 @@
 {%
   set php = salt['grains.filter_by']({
     '16.04': {
-      'version': '7.0',
       'packages': [
         'php7.0-dev',
         'php7.0-cli',
@@ -20,8 +19,11 @@
         'php7.0-xmlrpc',
         'php7.0-zip',
       ],
+      'fpm': {
+        'log_acl': [],
+      },
       'sqlsrv': {
-        'pkgs': [
+        'packages': [
           'msodbcsql',
           'msodbcsql17',
         ],
@@ -40,9 +42,13 @@
           },
         },
       },
+      'versions': {
+        '7.0': {
+          'extension_api_version': '20151012',
+        },
+      },
     },
     '18.04': {
-      'version': '7.2',
       'packages': [
         'php7.2-dev',
         'php7.2-cli',
@@ -61,8 +67,11 @@
         'php7.2-xmlrpc',
         'php7.2-zip',
       ],
+      'fpm': {
+        'log_acl': [],
+      },
       'sqlsrv': {
-        'pkgs': [
+        'packages': [
           'msodbcsql17',
         ],
         'debconf': {
@@ -72,6 +81,11 @@
               'value': True,
             },
           },
+        },
+      },
+      'versions': {
+        '7.2': {
+          'extension_api_version': '20170718',
         },
       },
     },

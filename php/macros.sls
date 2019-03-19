@@ -50,7 +50,7 @@ app.{{ domain }}.releases:
 
 app.{{ domain }}.php-fpm.log:
   file.directory:
-    - name: /var/log/php{{ php.version }}-fpm/{{ platform['basename'] }}
+    - name: /var/log/php{{ platform.php.version }}-fpm/{{ platform['basename'] }}
     - user: {{ platform['user']['name'] }}
     - group: {{ platform['user']['name'] }}
     - mode: 0750
@@ -58,7 +58,7 @@ app.{{ domain }}.php-fpm.log:
 {% for instance in ['blue', 'green'] %}
 app.{{ domain }}.{{ instance }}.php-fpm:
   file.managed:
-    - name: /etc/php/{{ php.version }}/fpm/pools-available/{{ platform['basename'] }}.{{ instance }}.conf
+    - name: /etc/php/{{ platform.php.version }}/fpm/pools-available/{{ platform['basename'] }}.{{ instance }}.conf
     - source: salt://php/php-fpm/platform.conf.jinja
     - template: jinja
     - context:
@@ -71,17 +71,39 @@ app.{{ domain }}.{{ instance }}.php-fpm:
       - pkg: php.pkgs
 {% if pillar['systemd']['apply'] %}
     - onchanges_in:
-      - service: app-{{ app }}.php-fpm.reload
+      - service: app-{{ app }}.{{ platform.php.version }}.php.fpm.reload
 {% endif %}
 {% endfor %}
 {% endmacro %}
 
 {% macro app_restarts(app) %}
-app-{{ app }}.php-fpm.reload:
-{% if pillar['systemd']['apply'] %}
+  {% for version in php.versions.keys() %}
+app-{{ app }}.{{ version }}.php.fpm.reload:
+    {% if pillar['systemd']['apply'] %}
   cmd.run:
-    - name: systemctl reload php{{ php.version }}-fpm || systemctl restart php{{ php.version }}-fpm
-{% else %}
+    - name: systemctl reload php{{ version }}-fpm || systemctl restart php{{ version }}-fpm
+    {% else %}
   test.succeed_without_changes: []
-{% endif %}
+    {% endif %}
+  {% endfor %}
+{% endmacro %}
+
+{% macro php_pecl_extension(php_version, extension) %}
+{% set php_ext_api_version = php.versions[php_version].extension_api_version %}
+php.{{ php_version }}.pecl-ext.{{ extension }}:
+  cmd.run:
+    - name: |
+        pecl \
+            -d php_bin=/usr/bin/php{{ php_version }} \
+            -d php_dir=/usr/share/php/{{ php_version }} \
+            -d doc_dir=/usr/share/php/{{ php_version }}/docs \
+            -d data_dir=/usr/share/php/{{ php_version }}/data \
+            -d test_dir=/usr/share/php/{{ php_version }}/tests \
+            -d www_dir=/usr/share/php/{{ php_version }}/www \
+            -d ext_dir=/usr/lib/php/{{ php_ext_api_version }} \
+            -d php_suffix={{ php_version }} \
+            install {{ extension }}
+    - env:
+      - PHP_PEAR_METADATA_DIR: /usr/share/php{{ php_version }}
+    - unless: test -f /usr/lib/php/{{ php_ext_api_version }}/{{ extension }}.so
 {% endmacro %}

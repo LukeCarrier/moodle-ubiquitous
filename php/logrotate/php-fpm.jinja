@@ -1,4 +1,4 @@
-/var/log/php{{ php.version }}-fpm/*.log /var/log/php{{ php.version }}-fpm/*/*.log {
+/var/log/php{{ version }}-fpm/*.log /var/log/php{{ version }}-fpm/*/*.log {
     weekly
     rotate 12
     missingok
@@ -8,9 +8,9 @@
 
     sharedscripts
     postrotate
-        /usr/lib/php/php{{ php.version }}-fpm-reopenlogs
-{% for acl in salt['pillar.get']('php:fpm:log_acl', []) %}
-        setfacl -R -m {{ acl['acl_type'] }}:{{ acl['acl_name'] }}:{{ acl['perms'] }} /var/log/php{{ php.version }}-fpm
+        /usr/lib/php/php{{ version }}-fpm-reopenlogs
+{% for acl in config.fpm.log_acl %}
+        setfacl -R -m {{ acl['acl_type'] }}:{{ acl['acl_name'] }}:{{ acl['perms'] }} /var/log/php{{ version }}-fpm
 {% endfor %}
     endscript
 }

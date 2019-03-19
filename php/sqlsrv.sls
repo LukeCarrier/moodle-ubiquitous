@@ -1,4 +1,5 @@
 {% from 'php/map.jinja' import php with context %}
+{% from 'php/macros.sls' import php_pecl_extension %}
 
 include:
   - php
@@ -38,35 +39,35 @@ php.sqlsrv.deps:
 # See https://connect.microsoft.com/SQLServer/Feedback/Details/3105172
 php.sqlsrv.pkgs:
   cmd.run:
-    - name: apt-get install --assume-yes {{ php.sqlsrv.pkgs | join(' ') }}
+    - name: apt-get install --assume-yes {{ php.sqlsrv.packages | join(' ') }}
     - env:
       - ACCEPT_EULA: Y
-    - unless: [ $(dpkg -l | grep -E '\b({{ php.sqlsrv.pkgs | join('|') }})\b' | wc -l) -eq {{ php.sqlsrv.pkgs | length }} ]
+    - unless: [ $(dpkg -l | grep -E '\b({{ php.sqlsrv.packages | join('|') }})\b' | wc -l) -eq {{ php.sqlsrv.packages | length }} ]
     - require:
       - pkg: php.sqlsrv.deps
 
-{% for extension, priority in {'sqlsrv': 20, 'pdo_sqlsrv': 20}.items() %}
-php.sqlsrv.{{ extension }}.pecl:
-  pecl.installed:
-    - name: {{ extension }}
+{% for version in php.versions.keys() %}
+  {% for extension, priority in {'sqlsrv': 20, 'pdo_sqlsrv': 20}.items() %}
+{{ php_pecl_extension(version, extension) }}
 
-php.sqlsrv.{{ extension }}.ini.available:
+php.sqlsrv.{{ version }}.{{ extension }}.ini.available:
   file.managed:
-    - name: /etc/php/{{ php.version }}/mods-available/{{ extension }}.ini
+    - name: /etc/php/{{ version }}/mods-available/{{ extension }}.ini
     - source: salt://php/php/extension.ini.jinja
     - template: jinja
     - context:
       extension: {{ extension }}
       priority: {{ priority }}
 
-{% for sapi in ['cli', 'fpm'] %}
-php.sqlsrv.{{ extension }}.ini.enabled.{{ sapi }}:
+    {% for sapi in ['cli', 'fpm'] %}
+php.sqlsrv.{{ version }}.{{ extension }}.ini.enabled.{{ sapi }}:
   file.symlink:
-    - name: /etc/php/{{ php.version }}/{{ sapi }}/conf.d/{{ priority }}-{{ extension }}.ini
-    - target: /etc/php/{{ php.version }}/mods-available/{{ extension }}.ini
-{% if pillar['systemd']['apply'] %}
+    - name: /etc/php/{{ version }}/{{ sapi }}/conf.d/{{ priority }}-{{ extension }}.ini
+    - target: /etc/php/{{ version }}/mods-available/{{ extension }}.ini
+      {% if pillar['systemd']['apply'] %}
     - onchanges_in:
-      - service: php.fpm.restart
-{% endif %}
-{% endfor %}
+      - service: php.{{ version }}.fpm.restart
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
 {% endfor %}

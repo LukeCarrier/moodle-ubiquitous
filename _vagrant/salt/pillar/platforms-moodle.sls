@@ -91,6 +91,7 @@ platforms:
           dd6tiI/AFygmxGOUhCrdjRM=
           -----END PRIVATE KEY-----
     php:
+      version: '7.2'
       fpm:
         listen: 9000
         pm: dynamic

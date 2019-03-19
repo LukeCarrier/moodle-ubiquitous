@@ -35,7 +35,7 @@ ping.path = /ping
 ping.response = pong
 
 {% if 'request_slowlog_timeout' in platform['php']['fpm'] %}
-slowlog = /var/log/php{{ php.version }}-fpm/{{ platform['basename'] }}/slow.log
+slowlog = /var/log/php{{ platform.php.version }}-fpm/{{ platform['basename'] }}/slow.log
 request_slowlog_timeout = {{ platform['php']['fpm']['request_slowlog_timeout'] }}
 {% endif %}
 
@@ -45,7 +45,7 @@ request_terminate_timeout = {{ platform['php']['fpm']['request_terminate_timeout
 
 catch_workers_output = no
 php_flag[log_errors] = On
-php_value[error_log] = /var/log/php{{ php.version }}-fpm/{{ platform['basename'] }}/pool.log
+php_value[error_log] = /var/log/php{{ platform.php.version }}-fpm/{{ platform['basename'] }}/pool.log
 
 security.limit_extensions = .php
 
@@ -69,4 +69,4 @@ php_value[{{ option }}] = {{ value }}
 {% endfor %}
 {% endif %}
 
-include=/etc/php/{{ php.version }}/fpm/pools-extra/{{ platform['basename'] }}.*.conf
+include=/etc/php/{{ platform.php.version }}/fpm/pools-extra/{{ platform['basename'] }}.*.conf
