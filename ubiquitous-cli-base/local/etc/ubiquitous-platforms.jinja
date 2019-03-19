@@ -1,3 +1,0 @@
-{% for domain, platform in salt['pillar.get']('platforms', {}).items() %}
-{{ domain }}:{{ platform['basename'] }}:{{ platform['role'] }}:{{ platform['user']['name'] }}:{{ platform['user']['home'] }}
-{% endfor %}

@@ -14,20 +14,6 @@ include:
   - ubiquitous-cli-base
 
 #
-# Configuration installation
-#
-
-app-saml.install-config:
-  file.managed:
-    - name: /usr/local/ubiquitous/bin/ubiquitous-install-config-saml
-    - source: salt://app-saml/local/bin/ubiquitous-install-config-saml
-    - user: root
-    - group: root
-    - mode: 0755
-    - require:
-      - file: ubiquitous-cli.bin
-
-#
 # SimpleSAMLphp platforms
 #
 

@@ -68,9 +68,6 @@ base:
     - match: grain
     - php.sqlsrv
 
-  'roles:web-cd':
-    - match: grain
-    - web-cd
   'roles:web-error-pages':
     - match: grain
     - web-error-pages
@@ -84,9 +81,6 @@ base:
   'roles:app-crontab':
     - match: grain
     - app-crontab
-  'roles:app-cd':
-    - match: grain
-    - app-cd
   'roles:app-tideways':
     - match: grain
     - app-tideways

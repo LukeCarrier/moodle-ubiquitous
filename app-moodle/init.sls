@@ -22,20 +22,6 @@ app-moodle.dependencies:
       - unoconv
 
 #
-# Configuration installation
-#
-
-app-moodle.install-config:
-  file.managed:
-    - name: /usr/local/ubiquitous/bin/ubiquitous-install-config-moodle
-    - source: salt://app-moodle/local/bin/ubiquitous-install-config-moodle
-    - user: root
-    - group: root
-    - mode: 0755
-    - require:
-      - file: ubiquitous-cli.bin
-
-#
 # Moodle platforms
 #
 
