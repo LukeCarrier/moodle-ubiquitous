@@ -45,3 +45,7 @@ sshd:
 
 systemd:
   apply: True
+
+sudoers:
+  passwordless:
+    - '%sudo ALL=(ALL:ALL) NOPASSWD: ALL'
