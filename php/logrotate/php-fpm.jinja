@@ -9,7 +9,7 @@
     sharedscripts
     postrotate
         /usr/lib/php/php{{ version }}-fpm-reopenlogs
-{% for acl in config.fpm.log_acl %}
+{% for acl in config.fpm.get('log_acl', []) %}
         setfacl -R -m {{ acl['acl_type'] }}:{{ acl['acl_name'] }}:{{ acl['perms'] }} /var/log/php{{ version }}-fpm
 {% endfor %}
     endscript

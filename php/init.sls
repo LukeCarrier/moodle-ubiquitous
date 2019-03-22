@@ -93,7 +93,7 @@ php.{{ version }}.fpm.log:
     - group: root
     - mode: 0755
 
-  {% for acl in config.fpm.log_acl %}
+  {% for acl in config.fpm.get('log_acl', []) %}
 php.{{ version }}.fpm.log.acl:
   acl.present:
     - name: /var/log/php{{ version }}-fpm
