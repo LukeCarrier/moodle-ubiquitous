@@ -88,7 +88,7 @@ app-{{ app }}.{{ version }}.php.fpm.reload:
   {% endfor %}
 {% endmacro %}
 
-{% macro php_pecl_extension(php_version, extension) %}
+{% macro php_pecl_extension(php_version, extension, configure_options={}) %}
 {% set php_ext_api_version = php.versions[php_version].extension_api_version %}
 php.{{ php_version }}.pecl-ext.{{ extension }}:
   cmd.run:
@@ -102,8 +102,26 @@ php.{{ php_version }}.pecl-ext.{{ extension }}:
             -d www_dir=/usr/share/php/{{ php_version }}/www \
             -d ext_dir=/usr/lib/php/{{ php_ext_api_version }} \
             -d php_suffix={{ php_version }} \
-            install {{ extension }}
+            install {% if configure_options %}-D '{% for option, value in configure_options.items() %}{{ option }}={{ value | yaml_dquote }} {% endfor %}'{% endif %} {{ extension }}
     - env:
       - PHP_PEAR_METADATA_DIR: /usr/share/php{{ php_version }}
     - unless: test -f /usr/lib/php/{{ php_ext_api_version }}/{{ extension }}.so
+{% endmacro %}
+
+{% macro php_extension_available(php_version, extension, priority) %}
+php.{{ php_version }}.ext.{{ extension }}.available:
+  file.managed:
+    - name: /etc/php/{{ php_version }}/mods-available/{{ extension }}.ini
+    - source: salt://php/php/extension.ini.jinja
+    - template: jinja
+    - context:
+      extension: {{ extension }}
+      priority: {{ priority }}
+{% endmacro %}
+
+{% macro php_extension_enabled(php_version, sapi, extension, priority) %}
+php.{{ php_version }}.ext.{{ extension }}.enabled.{{ sapi }}:
+  file.symlink:
+    - name: /etc/php/{{ php_version }}/{{ sapi }}/conf.d/{{ priority }}-{{ extension }}.ini
+    - target: /etc/php/{{ php_version }}/mods-available/{{ extension }}.ini
 {% endmacro %}

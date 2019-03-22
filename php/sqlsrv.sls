@@ -1,5 +1,5 @@
 {% from 'php/map.jinja' import php with context %}
-{% from 'php/macros.sls' import php_pecl_extension %}
+{% from 'php/macros.sls' import php_pecl_extension, php_extension_available, php_extension_enabled %}
 
 include:
   - php
@@ -47,23 +47,11 @@ php.sqlsrv.pkgs:
       - pkg: php.sqlsrv.deps
 
 {% for version in php.versions.keys() %}
-  {% for extension, priority in {'sqlsrv': 20, 'pdo_sqlsrv': 20}.items() %}
+  {% for extension in ['sqlsrv', 'pdo_sqlsrv'] %}
 {{ php_pecl_extension(version, extension) }}
-
-php.sqlsrv.{{ version }}.{{ extension }}.ini.available:
-  file.managed:
-    - name: /etc/php/{{ version }}/mods-available/{{ extension }}.ini
-    - source: salt://php/php/extension.ini.jinja
-    - template: jinja
-    - context:
-      extension: {{ extension }}
-      priority: {{ priority }}
-
+{{ php_extension_available(version, extension, 20) }}
     {% for sapi in ['cli', 'fpm'] %}
-php.sqlsrv.{{ version }}.{{ extension }}.ini.enabled.{{ sapi }}:
-  file.symlink:
-    - name: /etc/php/{{ version }}/{{ sapi }}/conf.d/{{ priority }}-{{ extension }}.ini
-    - target: /etc/php/{{ version }}/mods-available/{{ extension }}.ini
+{{ php_extension_enabled(version, sapi, extension, 20) }}
       {% if pillar['systemd']['apply'] %}
     - onchanges_in:
       - service: php.{{ version }}.fpm.restart
