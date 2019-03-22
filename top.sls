@@ -64,6 +64,12 @@ base:
     - match: grain
     - app-saml
 
+  'roles:php.igbinary':
+    - match: grain
+    - php.igbinary
+  'roles:php.redis':
+    - match: grain
+    - php.redis
   'roles:php.sqlsrv':
     - match: grain
     - php.sqlsrv
