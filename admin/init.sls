@@ -5,6 +5,12 @@
 # @copyright 2018 The Ubiquitous Authors
 #
 
+{% for repo in pillar.get('repositories', []) %}
+admin.repositories.{{ repo.humanname | default(loop.index0) }}:
+  pkgrepo.managed:
+    {{ repo | yaml }}
+{% endfor %}
+
 {% if 'packages' in pillar %}
 admin.packages:
   pkg.installed:
