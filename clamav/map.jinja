@@ -1,0 +1,25 @@
+{%
+  set clamav = {
+    'packages': [
+      'clamav',
+      'clamav-daemon',
+      'clamav-freshclam',
+    ],
+    'service_names': {
+      'daemon': 'clamav-daemon',
+      'freshclam': 'clamav-freshclam',
+    },
+    'services': {
+      'daemon': True,
+      'freshclam': True,
+    },
+    'config_files': {
+      'daemon': '/etc/clamav/clamd.conf',
+      'freshclam': '/etc/clamav/freshclam.conf',
+    },
+    'config': {
+      'daemon': {},
+      'freshclam': {},
+    },
+  }
+%}

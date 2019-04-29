@@ -99,6 +99,10 @@ base:
     - match: grain
     - postgresql
 
+  'roles:clamav':
+    - match: grain
+    - clamav
+
   'roles:datadog-agent':
     - match: grain
     - datadog-agent
