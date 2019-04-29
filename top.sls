@@ -99,10 +99,6 @@ base:
     - match: grain
     - postgresql
 
-  'roles:av-sophos':
-    - match: grain
-    - av-sophos
-
   'roles:datadog-agent':
     - match: grain
     - datadog-agent
