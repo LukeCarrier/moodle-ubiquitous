@@ -28,6 +28,7 @@ app.{{ domain }}.user:
     - fullname: {{ domain }}
     - shell: /bin/bash
     - home: {{ platform['user']['home'] }}
+    - groups: {{ platform['user'].get('groups', []) | yaml }}
 
 app.{{ domain }}.home:
   file.directory:
