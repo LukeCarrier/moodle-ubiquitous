@@ -30,6 +30,11 @@ app.{{ domain }}.user:
     - home: {{ platform['user']['home'] }}
     - groups: {{ platform['user'].get('groups', []) | yaml }}
 
+app.{{ domain }}.group_members:
+  group.present:
+    - name: {{ platform['user']['name'] }}
+    - addusers: {{ platform['user'].get('group_members', []) | yaml }}
+
 app.{{ domain }}.home:
   file.directory:
     - name: {{ platform['user']['home'] }}
