@@ -111,9 +111,9 @@ base:
     - match: grain
     - mount-cifs
 
-  'roles:mail-debug':
+  'roles:mailcatcher':
     - match: grain
-    - mail-debug
+    - mailcatcher
 
   'roles:postfix':
     - match: grain

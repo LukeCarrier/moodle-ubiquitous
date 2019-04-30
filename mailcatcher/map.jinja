@@ -1,0 +1,10 @@
+{%
+  set mailcatcher = salt['grains.filter_by']({
+    '16.04': {
+      'ruby_version': '2.3.0',
+    },
+    '18.04': {
+      'ruby_version': '2.5.0',
+    },
+  }, grain='osrelease', merge=salt['pillar.get']('mailcatcher'))
+%}

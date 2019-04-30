@@ -5,7 +5,7 @@ After=network.service
 [Service]
 User=mailcatcher
 Group=mailcatcher
-ExecStart=/var/mailcatcher/.gem/ruby/2.3.0/bin/mailcatcher --foreground --ip 0.0.0.0
+ExecStart=/var/mailcatcher/.gem/ruby/{{ ruby_version }}/bin/mailcatcher --foreground --ip 0.0.0.0
 
 [Install]
 WantedBy=multi-user.target

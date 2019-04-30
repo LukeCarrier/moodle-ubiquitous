@@ -27,7 +27,7 @@
         * [SSL certificates](roles/app/addons/ssl-certs.md)
 * [PostgreSQL](roles/postgresql.md)
 * [Redis](roles/redis.md)
-* [MailCatcher](roles/mail-debug.md)
+* [MailCatcher](roles/mailcatcher.md)
 * [nftables](roles/nftables.md)
 * [CIFS mounts](roles/mount-cifs.md)
 * [BIND](roles/named.md)
