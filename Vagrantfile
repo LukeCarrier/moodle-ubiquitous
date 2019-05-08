@@ -18,6 +18,7 @@ def provision_master(v)
     "--auto-accept-minions",
     "--",
     "-x", "python3",
+    "git", "develop",
   ]
 
   v.vm.synced_folder ".", "/srv/salt", type: "rsync"
@@ -38,6 +39,7 @@ def provision_minion(v, master, roles)
   args.concat([
     "--",
     "-x", "python3",
+    "git", "develop",
   ])
 
   v.vm.synced_folder "./_vagrant", "/vagrant", type: "rsync"
