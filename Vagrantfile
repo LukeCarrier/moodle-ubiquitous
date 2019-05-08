@@ -14,11 +14,17 @@ def configure_network(v, hostname, ip_offset)
 end
 
 def provision_master(v)
+  args = [
+    "--auto-accept-minions",
+    "--",
+    "-x", "python3",
+  ]
+
   v.vm.synced_folder ".", "/srv/salt", type: "rsync"
   v.vm.synced_folder SALT_PILLAR_DIR, "/srv/pillar", type: "rsync"
 
   v.vm.provision "salt-master", type: "shell", path: "./_vagrant/salt/bootstrap-master",
-                 args: [ "--auto-accept-minions" ]
+                 args: args
 end
 
 def provision_minion(v, master, roles)
@@ -29,6 +35,10 @@ def provision_minion(v, master, roles)
     "--grain-environment", "dev",
   ]
   (DEFAULT_ROLES + roles).each { |r| args.push("--grain-role", r) }
+  args.concat([
+    "--",
+    "-x", "python3",
+  ])
 
   v.vm.synced_folder "./_vagrant", "/vagrant", type: "rsync"
   v.vm.provision(
