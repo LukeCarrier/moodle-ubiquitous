@@ -16,6 +16,7 @@ mailcatcher.ruby:
 
 mailcatcher.user:
   user.present:
+    - name: mailcatcher
     - fullname: MailCatcher user
     - shell: /bin/bash
     - home: /var/mailcatcher
