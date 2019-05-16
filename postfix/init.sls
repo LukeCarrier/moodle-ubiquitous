@@ -82,6 +82,8 @@ postfix.main:
   {% for name, value in pillar['postfix']['main'].items() %}
         {{ name }}: {{ postfix_normalise_main_option(name, main_props.get(name, {}), value) }}
   {% endfor %}
+    - require:
+      - pkg: postfix.pkgs
     - onchanges_in:
       - cmd: postfix.reload
 {% endif %}
@@ -95,10 +97,14 @@ postfix.sasl-passwords.source:
     - user: root
     - group: root
     - mode: 0600
+    - require:
+      - pkg: postfix.pkgs
 
 postfix.sasl-passwords.postmap:
   cmd.run:
     - name: postmap /etc/postfix/sasl_passwd
+    - require:
+      - pkg: postfix.pkgs
     - onchanges:
       - file: postfix.sasl-passwords.source
     - onchanges_in:
