@@ -11,6 +11,10 @@ oracle-java.ppa:
     - ppa: webupd8team/java
     - keyserver: hkp://pool.sks-keyservers.net:80
 
+oracle-java.debconf:
+  pkg.latest:
+    - name: debconf-utils
+
 oracle-java.license.select:
   debconf.set:
     - name: 'oracle-java8-installer'
@@ -18,6 +22,7 @@ oracle-java.license.select:
         'shared/accepted-oracle-license-v1-1': { 'type': 'boolean', 'value': True }
     - require:
       - pkgrepo: oracle-java.ppa
+      - pkg: oracle-java.debconf
 
 oracle-java.java8:
   pkg.installed:

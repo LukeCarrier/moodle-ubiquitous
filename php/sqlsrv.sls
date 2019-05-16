@@ -11,17 +11,26 @@ php.sqlsrv.repo:
     - name: deb [arch=amd64] https://packages.microsoft.com/ubuntu/{{ grains['lsb_distrib_release'] }}/prod {{ grains['lsb_distrib_codename'] }} main
     - key_url: https://packages.microsoft.com/keys/microsoft.asc
 
-{% for pkg, settings in php.sqlsrv.debconf.items() %}
+{% if php.sqlsrv.debconf | length %}
+php.sqlsrv.debconf:
+  pkg.latest:
+    - name: debconf-utils
+
+  {% for pkg, settings in php.sqlsrv.debconf.items() %}
 php.sqlsrv.{{ pkg }}.debconf:
   debconf.set:
     - name: {{ pkg }}
     - data:
-  {% for name, setting in settings.items() %}
+    {% for name, setting in settings.items() %}
         {{ name }}:
           type: {{ setting.type }}
           value: {{ setting.value }}
+    {% endfor %}
+    - require:
+      - pkg: php.sqlsrv.debconf
   {% endfor %}
-{% endfor %}
+{% endif %}
+
 php.sqlsrv.deps:
   pkg.latest:
     - pkgs:

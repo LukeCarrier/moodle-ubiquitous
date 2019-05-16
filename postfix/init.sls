@@ -40,28 +40,38 @@ postfix.pkgs:
     - pkgs:
       - libsasl2-modules
       - postfix
+{% if 'debconf' in salt['pillar.get']('postfix', {}) %}
     - require:
-      - debconf: postfix.debconf
+      - debconf: postfix.debconf.debconf
+{% endif %}
+
+postfix.debconf:
+  pkg.latest:
+    - name: debconf-utils
 
 {% if 'debconf' in salt['pillar.get']('postfix', {}) %}
-postfix.debconf:
+postfix.debconf.debconf:
   debconf.set:
     - name: postfix
     - data:
   {% for name, value in salt['pillar.get']('postfix:debconf', {}).items() %}
     {{ postfix_debconf_option(name, debconf_main_map, debconf_props, main_props, value) }}
   {% endfor %}
+    - require:
+      - pkg: postfix.debconf
 {% endif %}
 
 
 {% for name, value in salt['pillar.get']('postfix:main', {}).items() %}
   {% if name in main_debconf_map %}
     {% set debconf_name = main_debconf_map[name] %}
-postfix.debconf.{{ debconf_name }}:
+postfix.debconf.main.{{ debconf_name }}:
   debconf.set:
     - name: postfix
     - data:
     {{ postfix_debconf_option(debconf_name, debconf_main_map, debconf_props, main_props, value) }}
+    - require:
+      - pkg: postfix.debconf
   {% endif %}
 {% endfor %}
 
