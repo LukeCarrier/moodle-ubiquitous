@@ -38,6 +38,8 @@ web.{{ domain }}.nginx.log:
     - user: www-data
     - group: adm
     - mode: 0750
+    - require:
+      - pkg: nginx.pkgs
 
 {% for name, contents in platform['nginx'].get('extra', {}).items() %}
 web.{{ domain }}.nginx.extra.{{ name }}:

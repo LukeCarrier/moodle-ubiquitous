@@ -31,7 +31,7 @@ app-saml.{{ domain }}.nginx.available:
     - group: root
     - mode: 0644
     - require:
-      - pkg: nginx
+      - pkg: nginx.pkgs
 {% if pillar['systemd']['apply'] %}
     - onchanges_in:
       - service: app-saml.nginx.restart

@@ -37,7 +37,7 @@ web-error-pages.snippet:
     - group: root
     - mode: 0644
     - require:
-      - nginx
+      - pkg: nginx.pkgs
 
 {% for lang, pages in salt['pillar.get']('web-error-pages:translated', {}).items() %}
 web-error-pages.page.lang.{{ lang }}:

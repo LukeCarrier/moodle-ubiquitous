@@ -7,7 +7,7 @@
 
 {% from "nginx/map.jinja" import nginx with context %}
 
-nginx:
+nginx.pkgs:
   pkg.installed:
     - pkgs: {{ nginx.packages | yaml }}
 
@@ -22,20 +22,20 @@ nginx.conf:
     - group: root
     - mode: 0644
     - require:
-      - pkg: nginx
+      - pkg: nginx.pkgs
 
 nginx.default-enabled:
   file.absent:
     - name: /etc/nginx/sites-enabled/default
     - require:
-      - pkg: nginx
+      - pkg: nginx.pkgs
 
 nginx.default-available:
   file.absent:
     - name: /etc/nginx/sites-available/default
     - require:
       - file: nginx.default-enabled
-      - pkg: nginx
+      - pkg: nginx.pkgs
 
 nginx.log-formats:
   file.managed:
@@ -46,7 +46,7 @@ nginx.log-formats:
     - group: root
     - mode: 0644
     - require:
-      - pkg: nginx
+      - pkg: nginx.pkgs
 
 nginx.ssl-params:
   file.managed:
@@ -56,7 +56,7 @@ nginx.ssl-params:
     - group: root
     - mode: 0644
     - require:
-      - pkg: nginx
+      - pkg: nginx.pkgs
 
 nginx.acme-challenge:
   file.managed:
@@ -65,6 +65,8 @@ nginx.acme-challenge:
   - user: root
   - group: root
   - mode: 0644
+  - require:
+    - pkg: nginx.pkgs
 
 {% for acl in salt['pillar.get']('nginx:log_acl', []) %}
 nginx.log.acl:
@@ -91,7 +93,7 @@ nginx.service:
     - name: nginx
     - enable: True
     - require:
-      - pkg: nginx
+      - pkg: nginx.pkgs
 
 nginx.reload:
   cmd.run:
