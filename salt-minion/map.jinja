@@ -1,0 +1,18 @@
+{%
+  set salt_minion = salt['grains.filter_by']({
+    '16.04': {
+      'variant': 'py3',
+      'nearest_lts': {
+        'oscodename': 'xenial',
+        'osrelease': '16.04',
+      },
+    },
+    '18.04': {
+      'variant': 'py3',
+      'nearest_lts': {
+        'oscodename': 'bionic',
+        'osrelease': '18.04',
+      },
+    },
+  }, grain='osrelease', merge=salt['pillar.get']('salt-minion'))
+%}
