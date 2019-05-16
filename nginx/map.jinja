@@ -20,5 +20,16 @@
       ],
       'log_acl': [],
     },
+    '19.04': {
+      'packages': [
+        'nginx',
+        'libnginx-mod-http-headers-more-filter',
+      ],
+      'has_modules': True,
+      'modules-enabled': [
+        'mod-http-headers-more-filter',
+      ],
+      'log_acl': [],
+    },
   }, grain='osrelease', merge=salt['pillar.get']('nginx'))
 %}
