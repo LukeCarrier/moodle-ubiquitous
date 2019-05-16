@@ -64,6 +64,7 @@ web.{{ domain }}.home.acl:
     - perms: rx
     - require:
       - file: web.{{ domain }}.home
+      - pkg: web.homes.acl
 
 web.{{ domain }}.home.acl.default:
   acl.present:

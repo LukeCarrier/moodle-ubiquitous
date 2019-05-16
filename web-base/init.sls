@@ -24,6 +24,10 @@ web.homes.{{ home_directory }}:
     - mode: 755
 
 {% if pillar['acl']['apply'] %}
+web.homes.acl:
+  pkg.latest:
+    - name: acl
+
 web.homes.{{ home_directory }}.acl:
   acl.present:
     - name: {{ home_directory }}
@@ -32,5 +36,6 @@ web.homes.{{ home_directory }}.acl:
     - perms: rx
     - require:
       - file: web.homes.{{ home_directory }}
+      - pkg: web.homes.acl
 {% endif %}
 {% endfor %}

@@ -5,7 +5,7 @@
 # @copyright 2018 The Ubiquitous Authors
 #
 
-{% from "nginx/map.jinja" import nginx with context %}
+{% from 'nginx/map.jinja' import nginx with context %}
 
 nginx.pkgs:
   pkg.installed:
@@ -68,7 +68,12 @@ nginx.acme-challenge:
   - require:
     - pkg: nginx.pkgs
 
-{% for acl in salt['pillar.get']('nginx:log_acl', []) %}
+{% if nginx.log_acl | length > 0 %}
+nginx.acl:
+  pkg.latest:
+    - name: acl
+
+  {% for acl in nginx.log_acl %}
 nginx.log.acl:
   acl.present:
     - name: /var/log/nginx
@@ -76,7 +81,10 @@ nginx.log.acl:
     - acl_name: {{ acl['acl_name'] }}
     - perms: {{ acl['perms'] }}
     - recurse: True
-{% endfor %}
+    - require:
+      - pkg: nginx.acl
+  {% endfor %}
+{% endif %}
 
 nginx.logrotate:
   file.managed:

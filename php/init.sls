@@ -93,7 +93,12 @@ php.{{ version }}.fpm.log:
     - group: root
     - mode: 0755
 
-  {% for acl in config.fpm.get('log_acl', []) %}
+  {% if config.fpm.get('log_acl', []) | length > 0 %}
+php.{{ version }}.acl:
+  pkg.latest:
+    - name: acl
+
+    {% for acl in config.fpm.get('log_acl', []) %}
 php.{{ version }}.fpm.log.acl:
   acl.present:
     - name: /var/log/php{{ version }}-fpm
@@ -101,7 +106,10 @@ php.{{ version }}.fpm.log.acl:
     - acl_name: {{ acl['acl_name'] }}
     - perms: {{ acl['perms'] }}
     - recurse: True
-  {% endfor %}
+    - require:
+      - pkg: php.{{ version }}.acl
+    {% endfor %}
+  {% endif %}
 
 php.{{ version }}.fpm.logrotate:
   file.managed:
