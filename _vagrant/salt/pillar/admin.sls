@@ -6,6 +6,16 @@ users:
       - sudo
     home: /home/vagrant
 
+repositories:
+  -
+    - humanname: Ubiquitous
+    - file: /etc/apt/sources.list.d/avado-sre-ubuntu-moodle-ubiquitous-{{ grains.oscodename }}.list
+    - name: |
+        deb http://ppa.launchpad.net/avado-sre/moodle-ubiquitous/ubuntu {{ grains.oscodename }} main
+        # deb-src http://ppa.launchpad.net/avado-sre/moodle-ubiquitous/ubuntu {{ grains.oscodename }} main
+    - keyserver: keyserver.ubuntu.com
+    - keyid: 730D31D3C2E1968B
+
 packages:
   - git
   - htop
