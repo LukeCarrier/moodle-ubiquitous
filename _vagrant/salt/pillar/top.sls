@@ -14,7 +14,6 @@ base:
   'roles:.+-moodle':
     - match: grain_pcre
     - platforms-moodle
-    - platforms-moodle-logos
 
   'roles:.+-saml':
     - match: grain_pcre
