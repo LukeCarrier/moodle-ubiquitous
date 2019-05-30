@@ -9,6 +9,9 @@ base:
   'roles:admin':
     - match: grain
     - admin
+  'roles:pam':
+    - match: grain
+    - pam
 
   'roles:nftables':
     - match: grain

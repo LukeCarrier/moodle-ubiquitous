@@ -1,0 +1,10 @@
+{%
+  set pam = salt['grains.filter_by']({
+    '19.04': {
+      'packages': [
+        'libpam-modules',
+      ],
+      'services': {},
+    },
+  }, grain='osrelease', merge=salt['pillar.get']('pam'))
+%}
