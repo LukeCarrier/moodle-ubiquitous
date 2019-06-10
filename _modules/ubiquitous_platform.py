@@ -5,6 +5,9 @@ from os.path import islink, join
 
 APP_INSTALL_CONFIG = 'ubiquitous_platform_{}.install_config'
 
+NGINX_EXTRA_CONFIG = '/etc/nginx/sites-extra/{basename}.{config}.conf'
+
+PHP_FPM_EXTRA_CONFIG = '/etc/php/{php_version}/fpm/pools-extra/{basename}.{config}.conf'
 PHP_FPM_VARIANT_AVAILABLE = '/etc/php/{php_version}/fpm/pools-available/{basename}.{variant}.conf'
 PHP_FPM_VARIANT_ENABLED = '/etc/php/{php_version}/fpm/pools-enabled/{basename}.{variant}.conf'
 PHP_FPM_SERVICE = 'php{}-fpm'
