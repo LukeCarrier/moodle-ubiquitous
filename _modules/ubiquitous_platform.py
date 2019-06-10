@@ -185,6 +185,10 @@ def php_fpm_rollover(basename):
     service = PHP_FPM_SERVICE.format(platform['php']['version'])
     variants = _php_fpm_pool_variants(basename)
 
+    if not __salt__['service.status'](service):
+        log.warn('service {} was not in the running state; aborting'.format(service))
+        return
+
     # Handle the two corner cases:
     # 1. Multiple active variants, probably caused by the failure of a previous
     #    rollover attempt. Remove "enabled" links for all but the first
