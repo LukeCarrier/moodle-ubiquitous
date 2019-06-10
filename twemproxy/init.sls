@@ -19,7 +19,7 @@ twemproxy.config:
     - mode: 0640
     - require:
       - pkg: twemproxy.pkgs
-    - onchanges:
+    - onchanges_in:
       - cmd: twemproxy.reload
 
 twemproxy.service:
