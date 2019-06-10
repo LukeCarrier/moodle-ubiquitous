@@ -1,5 +1,17 @@
 {%
   set pam = salt['grains.filter_by']({
+    '16.04': {
+      'packages': [
+        'libpam-modules',
+      ],
+      'services': {},
+    },
+    '18.04': {
+      'packages': [
+        'libpam-modules',
+      ],
+      'services': {},
+    },
     '19.04': {
       'packages': [
         'libpam-modules',
