@@ -21,7 +21,13 @@ These scripts use a configuration file maintained by the Salt states that descri
 
 ## Security and sudoers
 
-In order to reload service configuration, the `go` user must be able to escalate its privileges. The state configures passwordless `sudo` for the release management scripts.
+In order to reload service configuration, the `go` user must be able to escalate its privileges. The `admin` state can be used to `sudo` for passwordless sudo:
+
+```yaml
+sudoers:
+  gocd:
+    - '%go ALL=(ALL) NOPASSWD: /usr/bin/salt-call ubiquitous_platform.*'
+```
 
 ## Sample configuration
 
