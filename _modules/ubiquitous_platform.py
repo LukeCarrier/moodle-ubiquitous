@@ -120,8 +120,9 @@ def get_config(basename):
     :param str basename: Platform basename.
     :return dict: Pillar configuration.
     """
-    for config in __salt__['pillar.get']('platforms', {}).values():
+    for domain, config in __salt__['pillar.get']('platforms', {}).items():
         if config['basename'] == basename:
+            config['domain'] = domain
             return config
 
     raise KeyError('no platform with basename {}'.format(basename))
