@@ -3,6 +3,8 @@ from os import chown, unlink
 from os.path import islink, join
 
 
+RELEASE_DIR = '{home_dir}/releases/{release}'
+
 APP_INSTALL_CONFIG = 'ubiquitous_platform_{}.install_config'
 
 NGINX_EXTRA_CONFIG = '/etc/nginx/sites-extra/{basename}.{config}.conf'
@@ -134,7 +136,8 @@ def get_release_dir(basename, release):
     :return str: Release directory path.
     """
     platform = get_config(basename)
-    return "{}/releases/{}".format(platform['user']['home'], release)
+    return RELEASE_DIR.format(
+            home_dir=platform['user']['home'], release=release)
 
 
 def install_release(basename, release, source):
@@ -150,7 +153,7 @@ def install_release(basename, release, source):
     platform = get_config(basename)
     install_config = __salt__[APP_INSTALL_CONFIG.format(platform['role'])]
     dest = get_release_dir(basename, release)
-    
+
     __salt__['file.copy'](source, dest, recurse=True, remove_existing=True)
     install_config(basename, release)
 
@@ -199,7 +202,7 @@ def php_fpm_rollover(basename):
     # 2. No active variants, probably because it's our first time setting the
     #    active variant for this platform.
     active_variants = 0
-    for variant, status in variants.items(): 
+    for variant, status in variants.items():
         if status:
             active_variants += 1
         if active_variants > 1:
