@@ -156,11 +156,11 @@ def install_release(basename, release, source):
     dest = get_release_dir(basename, release)
 
     __salt__['file.copy'](source, dest, recurse=True, remove_existing=True)
-    install_config(basename, release)
 
     _chown_r(dest, platform['user']['name'], platform['user']['name'])
     _find_chmod(platform['user']['name'], dest, 'd', '0770')
     _find_chmod(platform['user']['name'], dest, 'f', '0750')
+    install_config(basename, release)
     return True
 
 

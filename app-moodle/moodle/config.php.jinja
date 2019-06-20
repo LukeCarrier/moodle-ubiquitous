@@ -35,16 +35,12 @@ $CFG->admin    = {{ cfg['admin'] | yaml_squote }};
 $CFG->dataroot             = {{ cfg['dataroot'] | yaml_squote }};
 $CFG->directorypermissions = {{ cfg['directorypermissions'] }};
 
-{% if 'pre_bootstrap' in cfg %}
-{{ cfg['pre_bootstrap'] }}
-{% endif %}
+{{ pre_bootstrap }}
 
 // Bootstrap
 require_once __DIR__ . '/lib/setup.php';
 
-{% if 'post_bootstrap' in cfg %}
-{{ cfg['post_bootstrap'] }}
-{% endif %}
+{{ post_bootstrap }}
 
 // There is no php closing tag in this file,
 // it is intentional because it prevents trailing whitespace problems!

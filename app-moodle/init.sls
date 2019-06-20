@@ -45,17 +45,6 @@ app-moodle.{{ domain }}.localcache:
     - mode: 0770
     - require:
       - file: app-moodle.{{ domain }}.data
-
-app-moodle.{{ domain }}.config:
-  file.managed:
-    - name: {{ platform['user']['home'] }}/config.php
-    - source: salt://app-moodle/moodle/config.php.jinja
-    - template: jinja
-    - context:
-      domain: {{ domain }}
-    - user: {{ platform['user']['name'] }}
-    - group: {{ platform['user']['name'] }}
-    - mode: 0660
 {% endfor %}
 
 {{ app_restarts('moodle') }}
