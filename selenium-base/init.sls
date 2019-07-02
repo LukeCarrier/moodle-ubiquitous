@@ -5,9 +5,6 @@
 # @copyright 2018 The Ubiquitous Authors
 #
 
-include:
-  - java-base
-
 selenium.root:
   file.directory:
     - name: /opt/selenium

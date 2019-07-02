@@ -34,8 +34,6 @@
 * [Postfix](roles/postfix.md)
 * [Selenium](roles/selenium.md)
 * [systemd](roles/systemd.md)
-* Utilities
-    * [Java](roles/utilities/java-base.md)
 
 ## Developing Ubiquitous
 

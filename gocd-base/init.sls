@@ -5,9 +5,6 @@
 # @copyright 2018 The Ubiquitous Authors
 #
 
-include:
-  - java-base
-
 gocd.key:
   cmd.run:
     - name: apt-key adv --keyserver hkp://pool.sks-keyservers.net:80 --recv-keys 8816C449
