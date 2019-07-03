@@ -91,7 +91,7 @@ admin.locales.default:
 {% endif %}
 
 {% for group in salt['pillar.get']('sudoers', {}).keys() %}
-admin.suders.{{ group }}:
+admin.sudoers.{{ group }}:
   file.managed:
     - name: /etc/sudoers.d/{{ group }}
     - contents_pillar: sudoers:{{ group }}
