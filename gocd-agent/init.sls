@@ -35,4 +35,10 @@ gocd-agent.service:
     - require:
       - pkg: gocd-agent.pkgs
       - file: gocd-agent.defaults
+
+gocd-agent.restart:
+  cmd.run:
+    - name: systemctl restart go-agent
+    - onchanges:
+      - file: gocd-agent.defaults
 {% endif %}
