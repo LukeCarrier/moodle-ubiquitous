@@ -148,3 +148,14 @@ platforms:
       wwwroot: http://192.168.120.50
       sslproxy: false
       admin: admin
+
+nfs:
+  common:
+    default:
+      NEED_IDMAPD: 'yes'
+  imports:
+    vagrant:
+      mountpoint: /home/vagrant/data/base
+      mountpoint_user: vagrant
+      mountpoint_group: vagrant
+      device: 192.168.120.75:vagrant

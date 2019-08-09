@@ -68,3 +68,7 @@ base:
   'roles:twemproxy':
     - match: grain
     - twemproxy
+
+  'roles:nfs.server':
+    - match: grain
+    - storage
