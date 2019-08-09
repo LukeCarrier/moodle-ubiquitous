@@ -47,6 +47,9 @@ base:
     - match: grain
     - moodle-ci
 
+  'roles:drbd':
+    - match: grain
+    - drbd
 
   'roles:nfs.client':
     - match: grain

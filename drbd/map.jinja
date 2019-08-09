@@ -1,0 +1,22 @@
+{%
+  set drbd = salt['grains.filter_by']({
+    'default': {
+      'packages': [
+        'drbd-utils',
+      ],
+      'drbd.conf': [
+        'include "drbd.d/global_common.conf";',
+        'include "drbd.d/*.res";',
+      ],
+    },
+    'drbd.d': {
+      'global_common.conf': [
+        'global {',
+        '  usage-count no;',
+        '}',
+      ],
+    },
+  }, grain='osrelease', merge=salt['pillar.get']('drbd'))
+%}
+
+
