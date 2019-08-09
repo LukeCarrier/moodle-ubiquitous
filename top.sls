@@ -48,6 +48,9 @@ base:
     - moodle-ci
 
 
+  'roles:nfs.client':
+    - match: grain
+    - nfs.client
   'roles:nfs.server':
     - match: grain
     - nfs.server
