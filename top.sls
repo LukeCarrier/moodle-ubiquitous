@@ -47,6 +47,10 @@ base:
     - match: grain
     - moodle-ci
 
+
+  'roles:nfs.server':
+    - match: grain
+    - nfs.server
   'roles:tcpwrappers':
     - match: grain
     - tcpwrappers

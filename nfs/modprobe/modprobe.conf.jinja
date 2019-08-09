@@ -1,0 +1,3 @@
+{%- for module, options in values.items() -%}
+options {{ module }}{% for option in options %} {{ option }}{% endfor %}
+{% endfor %}

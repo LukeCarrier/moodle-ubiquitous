@@ -1,0 +1,6 @@
+{% for section, options in values.items() %}
+[{{ section }}]
+  {% for option, value in options.items() %}
+{{ option }} = {{ value }}
+  {% endfor %}
+{% endfor %}
