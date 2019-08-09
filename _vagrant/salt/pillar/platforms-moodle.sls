@@ -135,7 +135,7 @@ platforms:
     moodle:
       dbtype: pgsql
       dblibrary: native
-      dbhost: 192.168.120.150
+      dbhost: 192.168.120.40
       dbname: vagrant
       dbuser: vagrant
       dbpass: gibberish
@@ -145,7 +145,7 @@ platforms:
         dbport: 5432
       dataroot: /home/vagrant/data/base
       directorypermissions: '0777'
-      wwwroot: http://192.168.120.50
+      wwwroot: http://192.168.120.80
       sslproxy: false
       admin: admin
 

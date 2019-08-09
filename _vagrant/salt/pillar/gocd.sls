@@ -1,5 +1,5 @@
 gocd-agent:
-  server: https://192.168.120.10:8154/go
+  server: https://192.168.120.20:8154/go
 
 gocd-server:
   users:
