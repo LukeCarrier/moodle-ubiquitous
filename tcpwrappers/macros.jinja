@@ -1,0 +1,14 @@
+{% macro tcpwrappers_access_file(basename) %}
+  {% for name, section in salt['pillar.get']('tcpwrappers:' + basename, {}).items() %}
+tcpwrappers.{{ basename }}:
+  file.blockreplace:
+    - name: /etc/{{ basename }}
+    - marker_start: '# start:tcpwrappers_access_file:{{ basename }}:{{ name }}'
+    - marker_end: '# end:tcpwrappers_access_file:{{ basename }}:{{ name }}'
+    - append_if_not_found: True
+    - content: |
+        {{ section | join("\n") | indent(8) }}
+    - require:
+      - pkg: tcpwrappers.pkgs
+  {% endfor %}
+{% endmacro %}
