@@ -13,6 +13,10 @@
 * [In test/integration](getting-started/test.md)
 * [In production](getting-started/production.md)
 
+## Workloads
+
+* [High availability NFS](workloads/ha-nfs.md)
+
 ## Roles
 
 * [Salt](roles/salt.md)
