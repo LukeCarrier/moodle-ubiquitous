@@ -50,6 +50,9 @@ base:
   'roles:drbd':
     - match: grain
     - drbd
+  'roles:pacemaker':
+    - match: grain
+    - pacemaker
 
   'roles:nfs.client':
     - match: grain

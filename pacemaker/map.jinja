@@ -1,0 +1,22 @@
+{%
+  set pacemaker = salt['grains.filter_by']({
+    'default': {
+      'packages': [
+        'pacemaker',
+        'pcs',
+        'fence-agents',
+        'resource-agents',
+      ],
+      'user': {
+        'name': 'hacluster',
+        'gid': 'haclient',
+        'fullname': '',
+        'home': '/var/lib/pacemaker',
+        'shell': '/usr/sbin/nologin',
+      },
+      'cluster_setup': [],
+      'properties': [],
+      'resources': {},
+    },
+  }, grain='osrelease', merge=salt['pillar.get']('pacemaker'))
+%}
