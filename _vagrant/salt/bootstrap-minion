@@ -64,7 +64,7 @@ IFS=$'\n\t'
 echo 'Installing Salt minion via Salt Bootstrap...'
 export DEBIAN_FRONTEND=noninteractive
 if [ $salt_bootstrap -ne 0 ]; then
-    curl -qL https://bootstrap.saltstack.com | sh -s -- -x python3 >/dev/null
+    curl -qsLS https://bootstrap.saltstack.com | sh -s -- -x python3 >/dev/null
 fi
 
 echo 'Writing configuration...'
