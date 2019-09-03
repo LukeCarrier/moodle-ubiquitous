@@ -5,5 +5,7 @@ gocd-server:
   users:
     lcarrier: sumK1vbrhQjdahTPpwS61/Bfb7E=
 
-gocd:
-  - '%go ALL=(ALL) NOPASSWD: /usr/bin/salt-call ubiquitous_platform.*'
+admin:
+  sudoers:
+    gocd:
+      - '%go ALL=(ALL) NOPASSWD: /usr/bin/salt-call ubiquitous_platform.*'

@@ -8,7 +8,3 @@ php:
     global:
       pid: /run/php/php7.2-fpm.pid
       error_log: /dev/stderr
-
-system:
-  home_directories:
-    - /home

@@ -1,7 +1,3 @@
-system:
-  home_directories:
-    - /home
-
 web-error-pages:
   error-pages:
     - 400
@@ -130,7 +126,7 @@ haproxy:
       log /dev/log local1 notice
 
       chroot /var/lib/haproxy
-      
+
       user haproxy
       group haproxy
       daemon
@@ -153,7 +149,7 @@ haproxy:
       timeout connect 5000
       timeout client  50000
       timeout server  50000
-      
+
       errorfile 400 /etc/haproxy/errors/400.http
       errorfile 403 /etc/haproxy/errors/403.http
       errorfile 408 /etc/haproxy/errors/408.http
@@ -172,7 +168,7 @@ haproxy:
       mode tcp
       server app0 192.168.120.30:9000 check
       server app1 192.168.120.31:9000 check
-      
+
       option tcp-check
       tcp-check send-binary         01 # Protocol version (FCGI_VERSION_1)
       tcp-check send-binary         01 # Record type (FCGI_BEGIN_REQUEST)

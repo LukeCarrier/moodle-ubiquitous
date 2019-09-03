@@ -1,7 +1,3 @@
-system:
-  home_directories:
-    - /home
-
 php:
   versions:
     '7.2':

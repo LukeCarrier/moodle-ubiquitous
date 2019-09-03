@@ -39,7 +39,7 @@ admin.user.{{ username }}.ssh:
 admin.user.{{ username }}.ssh.authorized_keys:
   file.managed:
     - name: {{ user['home'] }}/.ssh/authorized_keys
-    - contents_pillar: users:{{ username }}:authorized_keys
+    - contents_pillar: admin:users:users:{{ username }}:authorized_keys
     - user: {{ username }}
     - group: {{ username }}
     - mode: 0600
