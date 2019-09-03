@@ -1,0 +1,24 @@
+{%
+  set admin = salt['grains.filter_by']({
+    'default': {
+      'locales': {
+        'packages': ['locales'],
+        'present': [
+          'en_AU.UTF-8 UTF-8',
+          'en_GB.UTF-8 UTF-8',
+          'en_US.UTF-8 UTF-8',
+        ],
+        'default': 'en_GB.UTF-8 UTF-8',
+      },
+      'packages': {
+        'repositories': [],
+        'packages': [],
+      },
+      'users': {
+        'home_directories': [],
+        'users': [],
+      },
+      'sudoers': {},
+    },
+  }, grain='osrelease', merge=salt['pillar.get']('admin'))
+%}
