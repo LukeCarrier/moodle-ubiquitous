@@ -50,6 +50,9 @@ base:
   'roles:drbd':
     - match: grain
     - drbd
+  'roles:lvm':
+    - match: grain
+    - lvm
   'roles:pacemaker':
     - match: grain
     - pacemaker
