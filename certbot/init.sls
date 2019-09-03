@@ -5,16 +5,9 @@
 # @copyright 2018 The Ubiquitous Authors
 #
 
-certbot.repo:
-  pkgrepo.managed:
-    - ppa: certbot/certbot
-    - keyserver: hkp://pool.sks-keyservers.net:80
-
 certbot.pkg:
   pkg.installed:
     - name: certbot
-    - require:
-      - pkgrepo: certbot.repo
 
 # Work around Salt's acme execution module, whose __virtual__ function doesn't
 # yet accommodate the letsencrypt-auto => certbot name change and doesn't
