@@ -5,6 +5,8 @@
 # @copyright 2018 The Ubiquitous Authors
 #
 
+{% from 'web-base/map.sls' import web with context %}
+
 include:
   - nginx
 
@@ -15,7 +17,7 @@ web.nginx.sites-extra:
     - group: root
     - mode: 755
 
-{% for home_directory in pillar['system']['home_directories'] %}
+{% for home_directory in web.home_directories %}
 web.homes.{{ home_directory }}:
   file.directory:
     - name: {{ home_directory }}
