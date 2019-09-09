@@ -72,3 +72,7 @@ base:
   'roles:nfs.server':
     - match: grain
     - storage
+
+  'roles:haproxy':
+    - match: grain
+    - lb
