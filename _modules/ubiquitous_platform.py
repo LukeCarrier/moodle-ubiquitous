@@ -1,8 +1,11 @@
 from logging import getLogger
-from os import chown, unlink
+from operator import itemgetter
+from os import chown, scandir, unlink
 from os.path import islink, join
+from shutil import rmtree
 
 
+RELEASE_ROOT = '{home_dir}/releases'
 RELEASE_DIR = '{home_dir}/releases/{release}'
 
 APP_INSTALL_CONFIG = 'ubiquitous_platform_{}.install_config'
@@ -150,7 +153,6 @@ def install_release(basename, release, source):
     :param str source: Source directory path.
     :return bool: True on success, else False.
     """
-
     platform = get_config(basename)
     install_config = __salt__[APP_INSTALL_CONFIG.format(platform['role'])]
     dest = get_release_dir(basename, release)
@@ -162,6 +164,19 @@ def install_release(basename, release, source):
     _find_chmod(platform['user']['name'], dest, 'f', '0750')
     install_config(basename, release)
     return True
+
+
+def get_current_release(basename):
+    """
+    Get the current release name.
+
+    :param str basename: Platform basename.
+    :return str: Release name.
+    """
+    platform = get_config(basename)
+    current = join(platform['user']['home'], 'current')
+    release_dir = __salt__['file.readlink'](current)
+    return __salt__['file.basename'](release_dir)
 
 
 def set_current_release(basename, release):
@@ -229,3 +244,43 @@ def php_fpm_rollover(basename):
     #        out how to atomically switch between releases on the web server.
     _php_fpm_pool_disable_variant(basename, old_variant)
     _reload_or_restart_service(service)
+
+
+def prune_releases(basename, keep_releases, dry_run=False):
+    """
+    Prune old releases.
+
+    Remove non-current releases that are installed under the specified
+    platform's release repository. Can be used to free up disk space. The
+    current release is always exempt from removal.
+
+    :param str basename: Platform basename.
+    :param int keep_releases: Number of releases to retain.
+    :param bool dry_run: Plan which releases would be removed, but don't do it.
+    """
+    if keep_releases < 0:
+        raise ValueError("Number of releases to keep must be >= 0")
+
+    platform = get_config(basename)
+    release_dir = RELEASE_ROOT.format(home_dir=platform['user']['home'])
+    current_release = get_current_release(basename)
+
+    log.debug('release directory is {}, current release is {}'.format(
+            release_dir, current_release))
+
+    installed_releases = [(d.name, d.stat().st_ctime) for d in scandir(release_dir)]
+    removal_candidates = [name for name, ctime in sorted(installed_releases, key=itemgetter(1))]
+    log.debug('installed releases are {}'.format(removal_candidates))
+
+    removal_candidates.remove(current_release)
+
+    to_remove = removal_candidates if keep_releases == 0 else removal_candidates[:-keep_releases]
+    log.debug('removing releases {}'.format(to_remove))
+
+    if not dry_run:
+        for release in to_remove:
+            release_dir = get_release_dir(basename, release)
+            log.info('removing release dir {}'.format(release_dir))
+            rmtree(release_dir)
+
+    return to_remove
