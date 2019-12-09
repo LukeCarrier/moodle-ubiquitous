@@ -4,7 +4,7 @@ A sample [Moodle](https://moodle.org/) and [SimpleSAMLphp](https://simplesamlphp
 
 * [Ubuntu 16.04.2 LTS](https://www.ubuntu.com/)
 * Configuration management with [Salt](https://saltstack.com/)
-* Continuous delivery with [GoCD](https://www.gocd.io/)
+* Continuous delivery with [GoCD](https://www.gocd.org/)
 * Static file serving with [nginx](http://nginx.org/)
 * [PHP 7.0](http://php.net/), with the FPM SAPI and OPcache
 * [PostgreSQL 9.5](http://www.postgresql.org/)

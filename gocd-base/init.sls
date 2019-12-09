@@ -12,7 +12,7 @@ gocd.key:
 
 gocd.repo:
   pkgrepo.managed:
-    - name: deb https://download.gocd.io /
+    - name: deb https://download.gocd.org /
     - file: /etc/apt/sources.list.d/gocd.list
     - require:
       - cmd: gocd.key
