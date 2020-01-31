@@ -4,7 +4,7 @@ __pycache__/
 # Vagrant
 /.vagrant/
 
-# Local Vagrantfie
+# Local Vagrantfile
 /Vagrantfile.local
 
 # npm
