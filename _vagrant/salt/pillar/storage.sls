@@ -28,8 +28,8 @@ lvm:
           cache_file_prefix = ""
           write_cache_state = 0
 
-          filter = [ "a|^/dev/drbd[0-9]+$|", "r|.*|" ]
-          global_filter = [ "a|^/dev/drbd[0-9]+$|", "r|.*|" ]
+          filter = [ "a|^/dev/drbd_vd[a-z]+[0-9]+$|", "r|.*|" ]
+          global_filter = [ "a|^/dev/drbd_vd[a-z]+[0-9]+$|", "r|.*|" ]
 
           sysfs_scan = 1
           multipath_component_detection = 1
@@ -204,14 +204,33 @@ drbd:
         }
         on storage0 {
           address 192.168.120.70:7790;
-          device /dev/drbd0;
-          disk /dev/vda1;
+          device /dev/drbd_vda1 minor 0;
+          disk /dev/mapper/crypt_vda1;
           meta-disk internal;
         }
         on storage1 {
           address 192.168.120.71:7790;
-          device /dev/drbd0;
-          disk /dev/vda1;
+          device /dev/drbd_vda1 minor 0;
+          disk /dev/mapper/crypt_vda1;
+          meta-disk internal;
+        }
+      }
+
+      resource export-data-vdb {
+        protocol C;
+        disk {
+          on-io-error detach;
+        }
+        on storage0 {
+          address 192.168.120.70:7791;
+          device /dev/drbd_vdb1 minor 1;
+          disk /dev/mapper/crypt_vdb1;
+          meta-disk internal;
+        }
+        on storage1 {
+          address 192.168.120.71:7791;
+          device /dev/drbd_vdb1 minor 1;
+          disk /dev/mapper/crypt_vdb1;
           meta-disk internal;
         }
       }
