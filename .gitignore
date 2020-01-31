@@ -3,6 +3,7 @@ __pycache__/
 
 # Vagrant
 /.vagrant/
+/_vagrant/disks/
 
 # Local Vagrantfile
 /Vagrantfile.local
