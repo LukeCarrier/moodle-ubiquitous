@@ -1,0 +1,22 @@
+# Templated systemd unit allowing spawning multiple tideways-daemon instances
+# on a single machine.
+
+[Unit]
+Description=Tideways Proxy %i
+ConditionPathExists=/etc/default/tideways-proxy.%i
+PartOf=tideways-proxy.service
+ReloadPropagatedFrom=tideways-proxy.service
+Before=tideways-proxy.service
+
+[Service]
+Type=simple
+User=tideways
+Environment=TIDEWAYS_PROXY_LOGFILE=/var/log/tideways/proxy.%i.log
+EnvironmentFile=-/etc/default/tideways-proxy.%i
+ExecStart=/usr/bin/tideways-proxy --log=${TIDEWAYS_PROXY_LOGFILE} $TIDEWAYS_PROXY_EXTRA
+ExecStartPre=+/bin/mkdir -p /var/run/tideways
+ExecStartPre=+/bin/chown tideways: /var/run/tideways
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

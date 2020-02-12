@@ -96,6 +96,9 @@ base:
   'roles:php.sqlsrv':
     - match: grain
     - php.sqlsrv
+  'roles:php.tideways':
+    - match: grain
+    - php.tideways
 
   'roles:web-error-pages':
     - match: grain
@@ -110,9 +113,13 @@ base:
   'roles:app-crontab':
     - match: grain
     - app-crontab
-  'roles:app-tideways':
+
+  'roles:tideways.daemon':
     - match: grain
-    - app-tideways
+    - tideways.daemon
+  'roles:tideways.proxy':
+    - match: grain
+    - tideways.proxy
 
   'roles:mssql':
     - match: grain

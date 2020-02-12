@@ -1,0 +1,15 @@
+# Simple systemd unit allowing easy start, stop and reload of all "enabled"
+# Tideways proxy instances. See tideways-proxy@.service for details.
+
+[Unit]
+Description=Tideways Proxy
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/true
+ExecReload=/bin/true
+RemainAfterExit=on
+
+[Install]
+WantedBy=multi-user.targettideways.proxy.systemd.unit

@@ -1,0 +1,26 @@
+{%
+  set tideways = salt['grains.filter_by']({
+    'default': {
+      'repo': {
+        'source': 'deb http://s3-eu-west-1.amazonaws.com/tideways/packages debian main',
+        'key': {
+          'server': 'hkp://pool.sks-keyservers.net:80',
+          'id': 'EEB5E8F4',
+        },
+      },
+      'proxy': {
+        'packages': [
+          'tideways-proxy',
+        ],
+        'flags': {},
+      },
+      'daemon': {
+        'packages': [
+          'tideways-daemon',
+          'tideways-php',
+        ],
+        'flags': {},
+      },
+    },
+  }, grain='osrelease', merge=salt['pillar.get']('tideways'))
+%}
