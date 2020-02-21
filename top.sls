@@ -12,6 +12,9 @@ base:
   'roles:pam':
     - match: grain
     - pam
+  'roles:logrotate':
+    - match: grain
+    - logrotate
 
   'roles:nftables':
     - match: grain
