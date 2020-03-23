@@ -1,12 +1,15 @@
 from logging import getLogger
 from operator import itemgetter
 from os import chown, scandir, unlink
-from os.path import islink, join
+from os.path import exists, islink, join
 from shutil import rmtree
 
 
 RELEASE_ROOT = '{home_dir}/releases'
 RELEASE_DIR = '{home_dir}/releases/{release}'
+SCM_PATHS = [
+    '.git',
+]
 
 APP_INSTALL_CONFIG = 'ubiquitous_platform_{}.install_config'
 
@@ -36,6 +39,7 @@ def _chown_r(target, user, group=None):
         'chown', '-R', ownership, target,
     ])
     return ret['retcode'] == 0
+
 
 def _reload_or_restart_service(service):
     """
@@ -158,6 +162,13 @@ def install_release(basename, release, source):
     dest = get_release_dir(basename, release)
 
     __salt__['file.copy'](source, dest, recurse=True, remove_existing=True)
+
+    for path in SCM_PATHS:
+        qualified_path = join(dest, path)
+        if not exists(qualified_path):
+            continue
+        log.warning('Removing detected SCM path {}'.format(qualified_path))
+        __salt__['file.remove'](qualified_path)
 
     _chown_r(dest, platform['user']['name'], platform['user']['name'])
     _find_chmod(platform['user']['name'], dest, 'd', '0770')
